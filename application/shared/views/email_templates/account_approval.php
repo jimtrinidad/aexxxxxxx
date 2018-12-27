@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+	</head>
+	<body style="width: 1024px;margin: 0 auto;">
+		<br>
+		<a href="https://platform.mgov.ph"><img src="<?php echo public_url(); ?>resources/images/welcome-header.png"></a>
+		<div style="padding: 30px 40px 30px 70px;color: #756f6f;font-size: 20px;font-family: arial;line-height: 1.2">
+			Hi <b><?php echo $account->FirstName . ' ' . $account->LastName; ?></b>,
+			<br>
+			<p>
+				<a style="font-size: 30px;color: #03438b;font-weight: bold;" href="https://platform.mgov.ph">>> Tap here to access your Mabuhay Account</a>
+			</p>
+			<p>
+				MabuhayFilipino is a cloud-based eGovernment Service Platform that connects citizens and government through internet data that process millions and billions of government transactions real-time.  By just only two taps, Mabuhay App provides every citizen direct access and processes via mobile, thousands of services the government provide based on the citizens’ needed assistance and support.
+			</p>
+			<p>
+				MabuhayFilipino App full-packed system features will also make sure that each municipal and barangay services provided is carried and reported through real-time statistics and live-feed, synchronized and standardized nationwide.
+			</p>
+			<br>
+			<p>Your account application has been appproved.</p>
+			<p>Your Mabuhay ID is: <b><?php echo $account->MabuhayID ?></b>, and your password is: <i><?php echo $password ?></i></p>
+		</div>
+		<img src="<?php echo public_url(); ?>resources/images/welcome-footer.png">
+	</body>
+</html>

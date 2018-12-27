@@ -1,0 +1,27 @@
+login remember me
+forgot password page
+main navigation (other links are hidden)
+
+-livefeed
+transaction feeds
+advertisments
+
+content, action and page access level/restriction
+
+ADMIN
+ - no restriction for now (assume admin)
+ - should restrict visible department using PR location scope
+ - limit who can assign on functions base on user level
+ - account filter
+ - service update (including requirements, functions, officers, additional field)
+ - automatic scope and location selection base on creator location
+
+
+
+ Application
+  - existing document option
+  - skipping function for existing document
+
+
+
+  CSRF TOKEN FOR SECURITY 
