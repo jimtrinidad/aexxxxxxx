@@ -10,15 +10,15 @@ class Account extends CI_Controller
 	}
 
     public function test() {
-        /*echo generate_mabuhay_id('De Guzman');
-        var_dump(lookup('function_type'));
+        // echo generate_mabuhay_id('De Guzman');
+        // var_dump(lookup('function_type'));
         $data = array(
             'from'  => array('info@mgov.ph', 'MGov Info'),
             'to'    => array('jimtrinidad002@gmail.com'),
-            'subject'   => 'This another is a test',
+            'subject'   => 'This another is a test ' . date('Y-m-d H:i:s'),
             'message'   => 'This is a new <b>test</b> message from info smtp'
         );
-        send_email($data, true);*/
+        send_email($data, false);exit;
 
         // die(compute_expiration_date($this->uri->segment(3)));
 
