@@ -246,7 +246,7 @@ class Message extends CI_Controller
 
                 print " ";
 
-                syslog(LOG_INFO, "message {$i},  {$user_id}, {$thread_id}, {$timestamp} - " . connection_aborted());
+                syslog(LOG_INFO, "message {$i},  {$user_id}, {$thread_id}, {$timestamp} - " . connection_status());
 
                 $messages = $this->mahana_model->get_thread_messages($user_id, $thread_id, $timestamp);
                 
