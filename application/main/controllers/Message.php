@@ -154,64 +154,57 @@ class Message extends CI_Controller
 
         try {
 
-            $time = time();
-            while($i++ < $limit) {
+            while(true) {
 
                 $total_unread   = 0;
                 $message_count  = 0;
 
-                // only do query every seconds
-                // used time because sleep will pause execution time limit
-                // if ($time < time()) {
+                $threads = array();
+                $rsp = $this->mahana_messaging->get_all_threads_grouped($user_id);
+                foreach ($rsp['retval'] as $item) {
+                    $unread         = $this->mahana_model->get_thread_msg_count($user_id, $item['thread_id'], MSG_STATUS_UNREAD);
+                    $participants   = $this->mahana_model-> get_participant_list($item['thread_id'], $user_id);
+                    $total_unread  += $unread;
+                    $message_count += count($item['messages']);
+                    $threads[] = array(
+                        'id'        => $item['thread_id'],
+                        'msg_count' => count($item['messages']),
+                        'unread'    => $unread,
+                        'participants'  => $participants
+                    );
+                }
 
-                    $threads = array();
-                    $rsp = $this->mahana_messaging->get_all_threads_grouped($user_id);
-                    foreach ($rsp['retval'] as $item) {
-                        $unread         = $this->mahana_model->get_thread_msg_count($user_id, $item['thread_id'], MSG_STATUS_UNREAD);
-                        $participants   = $this->mahana_model-> get_participant_list($item['thread_id'], $user_id);
-                        $total_unread  += $unread;
-                        $message_count += count($item['messages']);
-                        $threads[] = array(
-                            'id'        => $item['thread_id'],
-                            'msg_count' => count($item['messages']),
-                            'unread'    => $unread,
-                            'participants'  => $participants
-                        );
-                    }
+                if ($old_count != $message_count || $last_unread != $total_unread) {
 
-                    if ($old_count != $message_count || $last_unread != $total_unread) {
-
-                        foreach ($threads as &$thread) {
-                            foreach ($thread['participants'] as &$participant) {
-                                $participant['photo'] = get_user_photo($participant['user_id']);
-                            }
+                    foreach ($threads as &$thread) {
+                        foreach ($thread['participants'] as &$participant) {
+                            $participant['photo'] = get_user_photo($participant['user_id']);
                         }
-                        response_json(array(
-                            'status'    => true,
-                            'unread'    => $total_unread,
-                            'count'     => $message_count,
-                            'data'      => $threads
-                        ));
-                        break;
-
                     }
+                    response_json(array(
+                        'status'    => true,
+                        'unread'    => $total_unread,
+                        'count'     => $message_count,
+                        'data'      => $threads
+                    ));
+                    break;
 
-                    // $time = time()+2;
+                }
 
-                    if ((time() - $start) > $limit) {
-                        response_json(array(
-                            'status'    => false,
-                            'message'   => 'nothing new.'
-                        ));
-                        break;
-                    }
+                if ($i >= $limit) {
+                    response_json(array(
+                        'status'    => false,
+                        'message'   => 'nothing new.'
+                    ));
+                    break;
+                }
 
-                    if (connection_aborted()) {
-                        exit('aborted');
-                    }
-                // }
+                if (connection_aborted()) {
+                    exit('aborted');
+                }
 
                 sleep(1);
+                $i++;
 
             }
 
@@ -232,7 +225,7 @@ class Message extends CI_Controller
         $timestamp      = get_post('timestamp');
 
         $start = time();
-        $limit = 100;
+        $limit = 10;
         $i = 0;
 
         session_write_close();
@@ -243,8 +236,6 @@ class Message extends CI_Controller
 
             $time = time();
             while(true) {
-
-                echo "\n";
 
                 syslog(LOG_INFO, "message {$i},  {$user_id}, {$thread_id}, {$timestamp} - " . connection_status());
 
@@ -269,7 +260,6 @@ class Message extends CI_Controller
                 $last = end($messages);
 
                 if (count($messages)) {
-                    ob_clean();
                     response_json(array(
                         'status'    => true,
                         'timestamp' => strtotime($last['cdate']),
@@ -278,7 +268,7 @@ class Message extends CI_Controller
                     break;
                 }
 
-                if ($i > $limit) {
+                if ($i >= $limit) {
                     response_json(array(
                         'status'    => false,
                         'message'   => 'nothing new.'
