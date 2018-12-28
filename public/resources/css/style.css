@@ -92,7 +92,7 @@ html, body { height: 100%; margin: 0; font-size: 14px;}
 
 
 /*Side bar*/
-.top-gov-services{ background: #d8d8d8; padding: 10px;  }
+.top-gov-services{ background: #d8d8d8; padding: 10px;min-height: 150px;}
 .top-gov-services h2{ text-transform: uppercase; color: #475f68; font-weight: bold; border-bottom: 5px solid #475f68; padding-bottom: 5px; margin-bottom: 10px; font-size: 14px; }
 .top-gov-services ul li{ font-size: 13px; color: #145598; font-weight: bold; line-height: 18px; }
 
