@@ -244,8 +244,7 @@ class Message extends CI_Controller
             $time = time();
             while(true) {
 
-                print " ";
-                syslog(LOG_INFO, "message {$user_id}, {$thread_id}, {$timestamp} - " . connection_aborted());
+                syslog(LOG_INFO, "message {$i},  {$user_id}, {$thread_id}, {$timestamp} - " . connection_aborted());
 
                 $messages = $this->mahana_model->get_thread_messages($user_id, $thread_id, $timestamp);
                 
@@ -268,7 +267,6 @@ class Message extends CI_Controller
                 $last = end($messages);
 
                 if (count($messages)) {
-                    ob_clean ();
                     response_json(array(
                         'status'    => true,
                         'timestamp' => strtotime($last['cdate']),
