@@ -236,7 +236,7 @@ class Message extends CI_Controller
         $i = 0;
 
         session_write_close();
-        // ignore_user_abort(false);
+        ignore_user_abort(true);
         set_time_limit($limit);
 
         try {
