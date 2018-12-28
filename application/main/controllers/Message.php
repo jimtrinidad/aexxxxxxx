@@ -235,7 +235,7 @@ class Message extends CI_Controller
         $limit = 100;
         $i = 0;
 
-        // session_write_close();
+        session_write_close();
         // ignore_user_abort(false);
         set_time_limit($limit);
 
@@ -244,6 +244,7 @@ class Message extends CI_Controller
             $time = time();
             while(true) {
 
+                print " ";
                 syslog(LOG_INFO, "message {$user_id}, {$thread_id}, {$timestamp} - " . connection_aborted());
 
                 $messages = $this->mahana_model->get_thread_messages($user_id, $thread_id, $timestamp);
@@ -267,6 +268,8 @@ class Message extends CI_Controller
                 $last = end($messages);
 
                 if (count($messages)) {
+                    flush ();
+                    ob_flush ();
                     response_json(array(
                         'status'    => true,
                         'timestamp' => strtotime($last['cdate']),
