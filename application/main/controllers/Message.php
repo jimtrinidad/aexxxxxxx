@@ -237,49 +237,43 @@ class Message extends CI_Controller
 
         session_write_close();
         // ignore_user_abort(false);
-        // set_time_limit(10 + $limit);
+        set_time_limit($limit);
 
         try {
 
             $time = time();
-            while($i++ < $limit) {
+            while(true) {
 
-                // only do query every seconds
-                // used time because sleep will pause execution time limit
-                // if ($time < time()) {
-
-                    $messages = $this->mahana_model->get_thread_messages($user_id, $thread_id, $timestamp);
-                    
-                    $user_cache = array();
-                    foreach ($messages as &$message) {
-                        // mark message as read upon fetch
-                        if ($message['status'] != MSG_STATUS_READ && get_post('read')) {
-                            $this->mahana_messaging->update_message_status($message['id'], $user_id, MSG_STATUS_READ);
-                        }
-
-                        // get sender photo
-                        // if (!isset($user_cache[$message['sender_id']])) {
-                        //     $user_cache[$message['sender_id']] = get_user_photo($message['sender_id']);
-                        //     $message['photo'] = $user_cache[$message['sender_id']];
-                        // } else {
-                        //     $message['photo'] = $user_cache[$message['sender_id']];
-                        // }
+                $messages = $this->mahana_model->get_thread_messages($user_id, $thread_id, $timestamp);
+                
+                $user_cache = array();
+                foreach ($messages as &$message) {
+                    // mark message as read upon fetch
+                    if ($message['status'] != MSG_STATUS_READ && get_post('read')) {
+                        $this->mahana_messaging->update_message_status($message['id'], $user_id, MSG_STATUS_READ);
                     }
 
-                    $last = end($messages);
+                    // get sender photo
+                    // if (!isset($user_cache[$message['sender_id']])) {
+                    //     $user_cache[$message['sender_id']] = get_user_photo($message['sender_id']);
+                    //     $message['photo'] = $user_cache[$message['sender_id']];
+                    // } else {
+                    //     $message['photo'] = $user_cache[$message['sender_id']];
+                    // }
+                }
 
-                    if (count($messages)) {
-                        response_json(array(
-                            'status'    => true,
-                            'timestamp' => strtotime($last['cdate']),
-                            'data'      => $messages
-                        ));
-                        break;
-                    }
-                    // $time = time()+2;
-                // }
+                $last = end($messages);
 
-                if ((time() - $start) > $limit) {
+                if (count($messages)) {
+                    response_json(array(
+                        'status'    => true,
+                        'timestamp' => strtotime($last['cdate']),
+                        'data'      => $messages
+                    ));
+                    break;
+                }
+
+                if ($i > $limit) {
                     response_json(array(
                         'status'    => false,
                         'message'   => 'nothing new.'
@@ -292,6 +286,7 @@ class Message extends CI_Controller
                 }
 
                 sleep(1);
+                $i++;
 
             }
 
