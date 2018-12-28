@@ -244,7 +244,7 @@ class Message extends CI_Controller
             $time = time();
             while(true) {
 
-                print " ";
+                echo "\n";
 
                 syslog(LOG_INFO, "message {$i},  {$user_id}, {$thread_id}, {$timestamp} - " . connection_status());
 
