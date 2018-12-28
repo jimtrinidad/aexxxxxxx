@@ -268,8 +268,7 @@ class Message extends CI_Controller
                 $last = end($messages);
 
                 if (count($messages)) {
-                    flush ();
-                    ob_flush ();
+                    ob_clean ();
                     response_json(array(
                         'status'    => true,
                         'timestamp' => strtotime($last['cdate']),
