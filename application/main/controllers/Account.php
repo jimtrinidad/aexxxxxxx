@@ -39,8 +39,8 @@ class Account extends CI_Controller
         //             echo '<pre>';print_r($emailData);
 
         // var_dump(get_department_service_provided(17, array(17 => 5)));exit;
-        print_data(get_service_providers(1, array()));
-        print_data(user_account_details(), true); exit;
+        // print_data(get_service_providers(1, array()));
+        // print_data(user_account_details(), true); exit;
 
         $data['userData']       = user_account_details();
         $data['extraFields']    = json_decode('{"HxODTWeU":"main pet name","ihOfLUPQ":"desc","QqrsxG":"the <b>brgy</b> purpose"}', true);
