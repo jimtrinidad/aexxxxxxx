@@ -15,6 +15,7 @@ function Mgovph() {
         self.set_events();
         self.set_configs();
         self.load_govt_ranking();
+        self.load_trending_service();
 
     },
 
@@ -61,28 +62,57 @@ function Mgovph() {
     */
     this.load_govt_ranking = function()
     {
-        $('#govt-ranking-cont').LoadingOverlay("show");
-        $.ajax({
-            url  : window.base_url('get/performance_ranking'),
-            type : 'get',
-            success : function(response) {
-                if (response.status) {
-                    var dept_rows = '';
-                    $.each(response.data.department, function(i, e) {
-                        dept_rows += '<li>'+ e.code +'<span>'+ e.count +'</span></li>';
-                    });
-                    $('#govt-ranking-cont-dept').html(dept_rows);
-                    var city_rows = '';
-                    $.each(response.data.city, function(i, e) {
-                        city_rows += '<li>'+ e.name +'<span>'+ e.count +'</span></li>';
-                    });
-                    $('#govt-ranking-cont-city').html(city_rows);
+        if ($('#govt-ranking-cont').length) {
+            $('#govt-ranking-cont').LoadingOverlay("show");
+            $.ajax({
+                url  : window.base_url('get/performance_ranking'),
+                type : 'get',
+                cache: true,
+                success : function(response) {
+                    if (response.status) {
+                        var dept_rows = '';
+                        $.each(response.data.department, function(i, e) {
+                            dept_rows += '<li>'+ e.code +'<span>'+ e.count +'</span></li>';
+                        });
+                        $('#govt-ranking-cont-dept').html(dept_rows);
+                        var city_rows = '';
+                        $.each(response.data.city, function(i, e) {
+                            city_rows += '<li>'+ e.name +'<span>'+ e.count +'</span></li>';
+                        });
+                        $('#govt-ranking-cont-city').html(city_rows);
+                    }
+                },
+                complete: function() {
+                    $('#govt-ranking-cont').LoadingOverlay("hide");
                 }
-            },
-            complete: function() {
-                $('#govt-ranking-cont').LoadingOverlay("hide");
-            }
-        });
+            });
+        }
+    }
+
+    /**
+    * get and set government performance ranking
+    */
+    this.load_trending_service = function()
+    {
+        if ($('#trending-service-cont').length) {
+            $('#trending-service-cont').LoadingOverlay("show");
+            $.ajax({
+                url  : window.base_url('get/get_trending_services'),
+                type : 'get',
+                success : function(response) {
+                    if (response.status) {
+                        var rows = '';
+                        $.each(response.data, function(i, e) {
+                            rows += '<li><a href="'+public_url('services?v=' + e.Code)+'">'+ e.Name + '</a></li>';
+                        });
+                        $('#trending-service-items').html(rows);
+                    }
+                },
+                complete: function() {
+                    $('#trending-service-cont').LoadingOverlay("hide");
+                }
+            });
+        }
     }
 
     /**
@@ -214,7 +244,7 @@ function Mgovph() {
     /**
     * find and get services
     */
-    this.getServices = function()
+    this.getServices = function(selectedService = false)
     {
         var params = {
             'keyword'    : $('#searchForm #keyword').val(),
@@ -280,7 +310,14 @@ function Mgovph() {
 
                         });
 
-                    }, 200);
+                    }, 50);
+
+                    if (selectedService) {
+                        setTimeout(function(){
+                            $('#LoadMainBody').hide();
+                            $('#service-item-' + selectedService).click();
+                        }, 100);
+                    }
 
                 } else {
                     // clear content, add empty message
@@ -306,7 +343,7 @@ function Mgovph() {
     */
     this.openServiceDetails = function(elem)
     {
-        $.LoadingOverlay("show", {zIndex: 999});
+        $('#LoadMainBody').LoadingOverlay("show", {zIndex: 999});
         $.ajax({
             url: window.base_url('services/view/' + $(elem).data('code')),
             type: 'GET',
@@ -391,7 +428,7 @@ function Mgovph() {
                 }
             },
             complete: function() {
-                $.LoadingOverlay("hide");
+                $('#LoadMainBody').LoadingOverlay("hide");
             }
         });
     }

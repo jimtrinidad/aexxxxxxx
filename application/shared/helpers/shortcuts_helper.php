@@ -169,6 +169,7 @@ function send_email($emailParams, $background = true, $smtpConfig = 'info')
 
 		$ci->email->send(!$background);
 
+		// var_dump($ci->email->print_debugger());
 	}
 }
 

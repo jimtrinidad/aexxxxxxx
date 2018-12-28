@@ -59,6 +59,6 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    Mgovph.getServices();
+    Mgovph.getServices(<?php echo get_post('v') ?>);
   });
 </script>

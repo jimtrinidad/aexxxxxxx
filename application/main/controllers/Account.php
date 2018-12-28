@@ -14,7 +14,7 @@ class Account extends CI_Controller
         // var_dump(lookup('function_type'));
         $data = array(
             'from'  => array('info@mgov.ph', 'MGov Info'),
-            'to'    => array('jimtrinidad002@gmail.com'),
+            'to'    => array('info@mgov.ph'),
             'subject'   => 'This another is a test ' . date('Y-m-d H:i:s'),
             'message'   => 'This is a new <b>test</b> message from info smtp'
         );

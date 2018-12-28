@@ -29,20 +29,9 @@
     </div>
   </div>
   <?php }} ?>
-  <div class="col-md-12 top-gov-services offset-bottom-10">
+  <div class="col-md-12 top-gov-services offset-bottom-10" id="trending-service-cont">
     <h2>Trending: TOP GOV SERVICES</h2>
-    <ul>
-      <li>Barangay Clearance</li>
-      <li>Birth Certificate</li>
-      <li>Business Permit</li>
-      <li>Driver’s License Application</li>
-      <li>Employment Applications</li>
-      <li>Health Care Services</li>
-      <li>Housing Loan</li>
-      <li>Marriage License</li>
-      <li>Passport Application</li>
-      <li>Scholarship Grants</li>
-      <li>Student Financial Assistance</li>
+    <ul id="trending-service-items">
     </ul>
   </div>
   <div class="col-md-12 top-performance-services offset-bottom-5" id="govt-ranking-cont">

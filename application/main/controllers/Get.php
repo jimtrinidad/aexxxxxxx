@@ -462,4 +462,47 @@ class Get extends CI_Controller
 
     }
 
+    /**
+    * get trending* services for user
+    */
+    public function get_trending_services()
+    {
+        if (isGuest()) {
+            // only get national
+            $sql = "SELECT ss.id,ss.Code,ss.Name FROM Service_Services ss
+                    WHERE ss.deletedAt IS NULL
+                    AND ss.LocationScopeID = 1
+                    AND ss.Status = 1
+                    LIMIT 10";
+        } else {
+            $userID = current_user();
+            $sql = "SELECT ss.id,ss.Code,ss.Name FROM Service_Services ss
+                    JOIN UserAccountInformation ua ON (
+                    ua.id = {$userID} AND (
+                        (ss.LocationScopeID = 1) OR
+                        (ss.RegionalID = ua.RegionalID AND ss.LocationScopeID = 2) OR 
+                        (ss.ProvincialID = ua.ProvincialID AND ss.LocationScopeID = 3) OR
+                        (ss.MunicipalityCityID = ua.MunicipalityCityID AND (ss.LocationScopeID = 4 OR ss.LocationScopeID = 5)) OR
+                        (ss.BarangayID = ua.BarangayID AND ss.LocationScopeID = 6)
+                        )
+                    )
+                    WHERE ss.deletedAt IS NULL
+                    AND ss.Status = 1
+                    LIMIT 10";
+        }
+
+        $results = $this->db->query($sql)->result_array();
+        if (count($results)) {
+            response_json(array(
+                'status'    => true,
+                'data'      => $results
+            ), 300);
+        } else {
+            response_json(array(
+                'status'    => false,
+                'data'      => 'No service found.'
+            ));
+        }
+    }
+
 }
