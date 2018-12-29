@@ -469,14 +469,17 @@ class Get extends CI_Controller
     {
         if (isGuest()) {
             // only get national
-            $sql = "SELECT ss.id,ss.Code,ss.Name FROM Service_Services ss
+            $sql = "SELECT ss.id,ss.Code,ss.Name,COUNT(sa.id) AS Applications FROM Service_Services ss
+                    LEFT OUTER JOIN Service_Applications sa ON sa.ServiceID = ss.id
                     WHERE ss.deletedAt IS NULL
                     AND ss.LocationScopeID = 1
                     AND ss.Status = 1
+                    GROUP BY ss.id
+                    ORDER BY Applications DESC
                     LIMIT 10";
         } else {
             $userID = current_user();
-            $sql = "SELECT ss.id,ss.Code,ss.Name FROM Service_Services ss
+            $sql = "SELECT ss.id,ss.Code,ss.Name,COUNT(sa.id) AS Applications FROM Service_Services ss
                     JOIN UserAccountInformation ua ON (
                     ua.id = {$userID} AND (
                         (ss.LocationScopeID = 1) OR
@@ -486,8 +489,11 @@ class Get extends CI_Controller
                         (ss.BarangayID = ua.BarangayID AND ss.LocationScopeID = 6)
                         )
                     )
+                    LEFT OUTER JOIN Service_Applications sa ON sa.ServiceID = ss.id
                     WHERE ss.deletedAt IS NULL
                     AND ss.Status = 1
+                    GROUP BY ss.id
+                    ORDER BY Applications DESC
                     LIMIT 10";
         }
 
