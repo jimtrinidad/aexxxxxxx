@@ -47,50 +47,32 @@
 		<div class="bg-light-gray">
 			<div class="bg-red text-white padding-10 text-bold">Pending Applications</div>
 			<div class="padding-10">
-				<div class="row offset-bottom-5">
-					<div class="col-sm-4 text-bold text-blue">
-						HLURB Housing
-					</div>
-					<div class="col-sm-2 text-italic small-text">
-						Pending
-					</div>
-					<div class="col-sm-4 text-italic small-text">
-						Applied:  July 27, 2016
-					</div>
-					<div class="col-sm-2 text-bold text-red">
-						Follow Up
-					</div>
-				</div>
-				
-				<div class="row offset-bottom-5">
-					<div class="col-sm-4 text-bold text-blue">
-						Livelihood Loan
-					</div>
-					<div class="col-sm-2 text-italic small-text">
-						Pending
-					</div>
-					<div class="col-sm-4 text-italic small-text">
-						Applied:  July 27, 2016
-					</div>
-					<div class="col-sm-2 text-bold text-red">
-						Follow Up
-					</div>
-				</div>
-				
-				<div class="row offset-bottom-5">
-					<div class="col-sm-4 text-bold text-blue">
-						Vitamins & Supplements
-					</div>
-					<div class="col-sm-2 text-italic small-text">
-						Pending
-					</div>
-					<div class="col-sm-4 text-italic small-text">
-						Applied:  July 27, 2016
-					</div>
-					<div class="col-sm-2 text-bold text-red">
-						Follow Up
-					</div>
-				</div>
+				<?php
+					if (count($pending_applications)) {
+						foreach ($pending_applications as $item) {
+							echo '<div class="row offset-bottom-5">
+									<div class="col-xs-7 text-bold text-blue">
+										'. $item['ServiceName'] .'
+									</div>
+									<div class="col-xs-2 text-italic small-text">
+										'. lookup('service_application_status', $item['Status']) .'
+									</div>
+									<div class="col-xs-3 text-italic small-text">
+										'.date('M d, Y', strtotime($item['DateApplied'])).'
+									</div>
+									<div class="hide col-xs-2 text-bold text-red">
+										Follow Up
+									</div>
+								</div>';
+						}
+					} else {
+						echo '<div class="row offset-bottom-5">
+								<div class="col-sm-12 text-orange text-bold">
+									You have no pending applications at the moment.
+								</div>
+							</div>';
+					}
+				?>
 				
 			</div>
 		</div>
@@ -101,151 +83,59 @@
 	<div class="col-sm-12">
 		<div class="bg-light-gray">
 			<div class="bg-yellow text-white text-bold padding-10">
-				My Completed Documents and Credentials
+				My Completed Documents, Credentials and Applications
 			</div>
 			<div class="padding-10">
 				
 				<div class="row gutter-5">
-					<div class="col-sm-6">
-						<div class="row offset-bottom-5 gutter-5">
-							<div class="col-sm-4 text-bold text-blue">
-								Mabuhay ID
-							</div>
-							<div class="col-sm-4 text-italic small-text">
-								Completed
-							</div>
-							<div class="col-sm-4 text-italic small-text">
-								Applied:  July 27, 2016
-							</div>
-						</div>
-						
-						<div class="row offset-bottom-5 gutter-5">
-							<div class="col-sm-4 text-bold text-blue">
-								Brgy. Clearance
-							</div>
-							<div class="col-sm-4 text-italic small-text">
-								Completed
-							</div>
-							<div class="col-sm-4 text-italic small-text">
-								Applied:  July 27, 2016
-							</div>
-						</div>
-						
-						<div class="row offset-bottom-5 gutter-5">
-							<div class="col-sm-4 text-bold text-blue">
-								Police Clearance
-							</div>
-							<div class="col-sm-4 text-italic small-text">
-								Completed
-							</div>
-							<div class="col-sm-4 text-italic small-text">
-								Applied:  July 27, 2016
-							</div>
-						</div>
-						
-						<div class="row offset-bottom-5 gutter-5">
-							<div class="col-sm-4 text-bold text-blue">
-								Business Permit
-							</div>
-							<div class="col-sm-4 text-italic small-text">
-								Completed
-							</div>
-							<div class="col-sm-4 text-italic small-text">
-								Applied:  July 27, 2016
-							</div>
-						</div>
-					</div>
-					
-					<div class="col-sm-6">
-						<div class="row offset-bottom-5 gutter-5">
-							<div class="col-sm-4 text-bold text-blue">
-								Drivers License
-							</div>
-							<div class="col-sm-4 text-italic small-text">
-								Completed
-							</div>
-							<div class="col-sm-4 text-italic small-text">
-								Applied:  July 27, 2016
-							</div>
-						</div>
-						
-						<div class="row offset-bottom-5 gutter-5">
-							<div class="col-sm-4 text-bold text-blue">
-								SSS ID
-							</div>
-							<div class="col-sm-4 text-italic small-text">
-								Completed
-							</div>
-							<div class="col-sm-4 text-italic small-text">
-								Applied:  July 27, 2016
-							</div>
-						</div>
-						
-						<div class="row offset-bottom-5 gutter-5">
-							<div class="col-sm-4 text-bold text-blue">
-								Philhealth ID
-							</div>
-							<div class="col-sm-4 text-italic small-text">
-								Completed
-							</div>
-							<div class="col-sm-4 text-italic small-text">
-								Applied:  July 27, 2016
-							</div>
-						</div>
-						
-						<div class="row offset-bottom-5 gutter-5">
-							<div class="col-sm-4 text-bold text-blue">
-								GSIS ID
-							</div>
-							<div class="col-sm-4 text-italic small-text">
-								Completed
-							</div>
-							<div class="col-sm-4 text-italic small-text">
-								Applied:  July 27, 2016
-							</div>
-						</div>
-					</div>
+
+					<?php
+						if (count($completed_applications)) {
+							foreach ($completed_applications as $item) {
+								echo '<div class="col-sm-6">
+										<div class="row offset-bottom-5 gutter-5">
+											<div class="col-xs-6 text-bold text-blue">
+												'. $item['ServiceName'] .'
+											</div>
+											<div class="col-xs-3 text-italic small-text">
+												Completed
+											</div>
+											<div class="col-xs-3 text-italic small-text">
+												'.date('M d, Y', strtotime($item['DateCompleted'])).'
+											</div>
+										</div>
+									</div>';
+							}
+						} else {
+							echo '<div class="row offset-bottom-5">
+									<div class="col-sm-12 text-orange text-bold">
+										You currently dont have any completed applications.
+									</div>
+								</div>';
+						}
+					?>
 					
 				</div>
 				
 				<!-- Logo -->
-				<div class="row offset-bottom-20 gutter-5">
-					<div class="col-sm-3 text-center">
-						<img src="<?php echo public_url(); ?>resources/images/LTO.png" class="center-block" width="80"/>
-						<p class="text-bold text-blue">Land Transportation Office Driver’s License</p>
-					</div>
-					<div class="col-sm-3 text-center">
-						<img src="<?php echo public_url(); ?>resources/images/BIR.png" class="center-block" width="80" />
-						<p class="text-bold text-blue">Bureau of Internal Revenue - TIN ID</p>
-					</div>
-					<div class="col-sm-3 text-center">
-						<img src="<?php echo public_url(); ?>resources/images/NBI.png" class="center-block" width="80" />
-						<p class="text-bold text-blue">National Bureau of Investigation - NBI Clearance</p>
-					</div>
-					<div class="col-sm-3 text-center">
-						<img src="<?php echo public_url(); ?>resources/images/PSA.png" class="center-block" width="80" />
-						<p class="text-bold text-blue">National Statistics Office - Certificate of Live Birth</p>
-					</div>
-				</div>
-				
-				<div class="row offset-bottom-20 gutter-5">
-					<div class="col-sm-3 text-center">
-						<img src="<?php echo public_url(); ?>resources/images/DFA.png" class="center-block" width="80"/>
-						<p class="text-bold text-blue">Department of Foreign Affairs - Passport</p>
-					</div>
-					<div class="col-sm-3 text-center">
-						<img src="<?php echo public_url(); ?>resources/images/city-of-mandaluyong.png" class="center-block" width="80" />
-						<p class="text-bold text-blue">Department of Interior and Local Government Revenue - Brgy. Clearance</p>
-					</div>
-					<div class="col-sm-3 text-center">
-						<img src="<?php echo public_url(); ?>resources/images/logo-1.png" class="center-block" width="80" />
-						<p class="text-bold text-blue">Office of the President - Scholarship Grant</p>
-					</div>
-					<div class="col-sm-3 text-center">
-						<img src="<?php echo public_url(); ?>resources/images/PNP.png" class="center-block" width="80" />
-						<p class="text-bold text-blue">National Police Commission - Police Clearance</p>
-					</div>
-				</div>
+				<?php
+					if (count($completed_applications)) {
+						echo '<div class="row equal offset-bottom-20 gutter-5 offset-top-10">';
+						foreach ($completed_applications as $item) {
+							$logo  	 	= $item['ddLogo'];
+							$deptName 	= $item['ddName'];
+							if (!empty($item['dcID'])) {
+								$logo  	 	= $item['dcLogo'];
+								$deptName 	= $item['dcName'];
+							}
+							echo '<div class="col-sm-3 text-center offset-top-10">
+									<img src="' . public_url() . 'assets/logo/' . logo_filename($logo) . '" class="center-block" width="60"/>
+									<p class="text-bold text-blue small offset-top-5">'.$deptName.' - ' . $item['ServiceName'] . '</p>
+								</div>';
+						}
+						echo '</div>';
+					}
+				?>
 				
 			</div>
 		</div>

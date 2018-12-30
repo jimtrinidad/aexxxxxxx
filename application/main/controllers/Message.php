@@ -160,7 +160,7 @@ class Message extends CI_Controller
                 $message_count  = 0;
 
                 $threads = array();
-                $rsp = $this->mahana_messaging->get_all_threads_grouped($user_id);
+                $rsp = $this->mahana_messaging->get_all_threads_grouped($user_id, false, 'desc');
                 foreach ($rsp['retval'] as $item) {
                     $unread         = $this->mahana_model->get_thread_msg_count($user_id, $item['thread_id'], MSG_STATUS_UNREAD);
                     $participants   = $this->mahana_model-> get_participant_list($item['thread_id'], $user_id);
@@ -181,6 +181,7 @@ class Message extends CI_Controller
                             $participant['photo'] = get_user_photo($participant['user_id']);
                         }
                     }
+
                     response_json(array(
                         'status'    => true,
                         'unread'    => $total_unread,

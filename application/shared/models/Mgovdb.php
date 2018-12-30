@@ -271,5 +271,43 @@ class Mgovdb extends CI_Model {
 		return $this->db->query($query)->result_array();
 	}
 
+	/**
+	* get service applications with service info
+	*/
+	public function getServiceApplications($where = false, $order = false)
+	{
+
+		$this->db->select('sa.id ID,
+					sa.ApplicantID,
+					sa.Code ApplicationCode,
+					sa.ServiceCode,
+					sa.LastUpdate LastUpdate,
+					sa.Status Status,
+					sa.DateCompleted,
+					sa.DateApplied,
+					ss.Name ServiceName,
+					ss.Logo sLogo,
+                    dd.id ddID,
+                    dd.Name ddName,
+                    dd.Logo ddLogo,
+                    dc.id dcID,
+                    dc.Name dcName,
+                    dc.Logo dcLogo')
+				->from('Service_Applications AS sa')
+				->join('Service_Services AS ss', 'ss.id = sa.ServiceID', 'left')
+				->join('Dept_Departments AS dd', 'dd.id = ss.DepartmentID', 'left')
+				->join('Dept_ChildDepartment AS dc', 'dc.id = ss.SubDepartmentID', 'left outer');
+
+		if ($where) {
+			$this->db->where($where);
+		}
+
+		if ($order) {
+			$this->db->order_by($order);
+		}
+
+		return $this->db->get()->result_array();
+	}
+
 
 }

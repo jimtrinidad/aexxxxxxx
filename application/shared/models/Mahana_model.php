@@ -234,7 +234,7 @@ class Mahana_model extends CI_Model
             $sql .= ' AND m.cdate >= p.cdate';
         }
 
-        $sql .= ' ORDER BY t.id ' . $order_by. ', m.cdate '. $order_by;
+        $sql .= ' ORDER BY m.cdate '. $order_by;
 
         $query = $this->db->query($sql, array($user_id, $user_id));
 
