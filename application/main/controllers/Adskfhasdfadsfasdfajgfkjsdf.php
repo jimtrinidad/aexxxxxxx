@@ -26,7 +26,6 @@ class Adskfhasdfadsfasdfajgfkjsdf extends CI_Controller
 
 	public function jasdfgkjgkjgasd()
 	{
-		echo 'called';
 		$this->email->send_queue();
 	}
 
@@ -35,4 +34,3 @@ class Adskfhasdfadsfasdfajgfkjsdf extends CI_Controller
 		$this->email->retry_queue();
 	}
 }
-
