@@ -26,7 +26,7 @@
 										<i class="fa fa-sign-in"></i> <strong>Log in</strong>
 										</button>
 										
-										<label style="padding-top: 0;"> <input type="checkbox"> Remember me </label>
+										<label> <input type="checkbox"> Remember me </label>
 										
 										<a href="<?php echo site_url('account/signup')?>" class="btn btn-default btn-sm text-uc m-t-n-xs hide">
 										<i class="fa fa-plus"></i> Create an account</a>
