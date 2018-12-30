@@ -161,8 +161,12 @@ class MY_Email extends CI_Email
             $this->subject($email->subject);
             $this->message($email->message);
 
+            $to      = $email->to;
+            $subject = $email->subject;
+
             if ($this->send(TRUE)) {
                 $status = 'sent';
+                syslog(LOG_INFO, "Queue Email Sent: [{$to}][{$subject}]");
             } else {
                 $status = 'failed';
             }
