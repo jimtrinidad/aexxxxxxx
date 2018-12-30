@@ -11,8 +11,8 @@ class Adskfhasdfadsfasdfajgfkjsdf extends CI_Controller
 		//i cant run email via command line
 		// i'll just call via curl and change class and method to random name
 
-		// if (! $this->input->is_cli_request())
-		// 	show_404();
+		if (! $this->input->is_cli_request())
+			show_404();
 
 		$this->load->library('email');
 
