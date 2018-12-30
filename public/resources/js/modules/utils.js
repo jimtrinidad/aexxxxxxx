@@ -49,7 +49,7 @@ function Utils() {
         });
 
 
-        $('.mak-id').click(function(){
+        $('.open-mak-id').click(function(){
             $('.id-overlay').show();
             $('#mak-id').show();
         });

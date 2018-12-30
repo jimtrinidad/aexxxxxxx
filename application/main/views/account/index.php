@@ -37,7 +37,7 @@
 		<div class="bg-light-gray">
 			<div class="bg-cyan text-white padding-10 text-bold">Secure My Account</div>
 			<div class="padding-10 text-blue">
-				<p>My ID: <?php echo $accountInfo->MabuhayID ?></p>
+				<p>My ID: <a href="javascript:;" class="open-mak-id"><?php echo $accountInfo->MabuhayID ?></a></p>
 				<p class="lh-20"><a href="javascript:;" onclick="Account.changePasswordOpen()">Change Password</a></p>
 				<!-- <p>My Connections</p> -->
 			</div>

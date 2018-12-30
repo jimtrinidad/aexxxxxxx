@@ -45,8 +45,8 @@
         <div class="clearfix">
           <div class="mak-id col-sm-9 col-xs-8">
             <div class="col-sm-5 hidden-xs text-right"><span>Mabuhay ID</span></div>
-            <div class="col-xs-3 visible-xs text-right"><span>MID</span></div>
-            <div class="col-sm-7 col-xs-9 text-left" style="cursor: pointer;"><?php echo $accountInfo->MabuhayID; ?> <!--16-000-000-106--> </div>
+            <div class="col-xs-3 visible-xs text-right open-mak-id"><span>MID</span></div>
+            <div class="col-sm-7 col-xs-9 text-left open-mak-id" style="cursor: pointer;"><?php echo $accountInfo->MabuhayID; ?> <!--16-000-000-106--> </div>
           </div>
           <div class="col-sm-3 col-xs-4 mak-settings">
             <?php
