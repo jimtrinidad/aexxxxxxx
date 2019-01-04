@@ -11,7 +11,7 @@ $config['account_registration'] = array(
 		array(
 	        'regex_match' => '%s has invalid characters. Letters and space only.'
 	    )),
-	array('LastName', 'Last name', 'trim|required|regex_match[/^[a-zA-Z ]+$/]',
+	array('LastName', 'Last name', 'trim|required|regex_match[/^[a-zA-Z. ]+$/]',
 		array(
 	        'regex_match' => '%s has invalid characters. Letters and space only.'
 	    )),
