@@ -33,13 +33,13 @@
 									</div>
 									
 								</form>
-								<div class="visible-sm visible-xs padding-top-10">
-									<img src="<?php echo public_url(); ?>resources/images/login-min.png" class="img-responsive" />
-								</div>
-								<div class="text-center padding-top-10 text-yellow">
+								<div class="text-center padding-top-5 text-yellow">
 									<a href="<?php echo site_url('account/forgot')?>"><b>Forgot Password</b></a> | <a href="<?php echo site_url('account/signup')?>"><b>Create New Account</b></a>
 								</div>
-								<p class="text-muted text-center" style="padding-left:20px; padding-right:20px;margin-top: 5px;">
+								<div class="visible-sm visible-xs padding-top-15">
+									<img src="<?php echo public_url(); ?>resources/images/login-min.png" class="img-responsive" />
+								</div>
+								<p class="text-muted text-center" style="padding-left:20px; padding-right:20px;margin-top: 10px;">
 									<img src="<?php echo public_url(); ?>resources/images/tagline.png" class="img-responsive" />
 								</p>
 							</div>
