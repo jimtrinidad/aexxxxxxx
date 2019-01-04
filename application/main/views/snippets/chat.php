@@ -452,13 +452,6 @@
 								<span>Start<span class="hidden-xs"> Conversation</span></span>
 							</div>
 							<menu class="list-friends recent-threads">
-								<!-- <li class="active">
-									<img width="40" height="40" src="http://cs625730.vk.me/v625730358/1126a/qEjM1AnybRA.jpg">
-									<div class="info">
-										<div class="user">Jim Trinidad</div>
-										<div class="status on"> online</div>
-									</div>
-								</li> -->
 							</menu>
 					    </div>
 					</div>
@@ -468,7 +461,7 @@
 					<div class="top">
 						<content class="hide">
 							<div class="avatar">
-								<img width="50" height="50" src="http://cs625730.vk.me/v625730358/1126a/qEjM1AnybRA.jpg">
+								<img width="50" height="50" src="">
 							</div>
 							<div class="info">
 								<div class="name">Juan Dela Cruz</div>
