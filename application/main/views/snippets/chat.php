@@ -422,6 +422,16 @@
 		}
 	}
 
+	@media screen and ( max-height: 500px ){
+		.chatbubble {
+			transform: translateY(320px);
+		}
+		.chatbubble .expanded,
+		.chatbubble .ui {
+			height: 320px;
+		}
+	}
+
 </style>
 <div class="table-responsive">
 	<div class="chatbubble">
