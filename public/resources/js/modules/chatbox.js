@@ -126,10 +126,22 @@ function Chatbox() {
 
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             setTimeout(function() {
-                $(".chatbubble .list-friends").height('470');
-            }, 1);
+                if ($(".chatbubble").height() > 500) {
+                    $(".chatbubble .list-friends").height($(".chatbubble").height() - 200);
+                } else {
+                    $(".chatbubble .list-friends").height($(".chatbubble").height() - 150);
+                }
+            }, 10);
         });
         $('a[data-toggle="tab"]:last').tab('show');
+
+        $(window).resize(function(){
+            if ($(".chatbubble").height() > 500) {
+                $(".chatbubble .list-friends").height($(".chatbubble").height() - 200);
+            } else {
+                $(".chatbubble .list-friends").height($(".chatbubble").height() - 150);
+            }
+        });
 
         setInterval(function(){
             if ($('.chatbubble').hasClass('opened') && self.activeThread && self.isTabActive) {
