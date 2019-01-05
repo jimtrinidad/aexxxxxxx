@@ -163,28 +163,28 @@
                     <div class="col-md-12">
                       <strong class="text-cyan">Please enter checked two valid government ID to be presented in your barangay to validate your registration.</strong>
                       <div class="row">
-                        <div class="col-md-3 col-sm-6">
+                        <div class="col-md-3 col-xs-6">
                           <div class="checkbox text-white">
                             <label>
                               <input name="GovernmentID[]" value="1" type="checkbox"> Voters ID
                             </label>
                           </div>
                         </div>
-                        <div class="col-md-3 col-sm-6">
+                        <div class="col-md-3 col-xs-6">
                           <div class="checkbox text-white">
                             <label>
                               <input name="GovernmentID[]" value="2" type="checkbox"> BIR
                             </label>
                           </div>
                         </div>
-                        <div class="col-md-3 col-sm-6">
+                        <div class="col-md-3 col-xs-6">
                           <div class="checkbox text-white">
                             <label>
                               <input name="GovernmentID[]" value="3" type="checkbox"> SSS
                             </label>
                           </div>
                         </div>
-                        <div class="col-md-3 col-sm-6">
+                        <div class="col-md-3 col-xs-6">
                           <div class="checkbox text-white">
                             <label>
                               <input name="GovernmentID[]" value="4" type="checkbox"> DRIVERS
