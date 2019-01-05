@@ -5,8 +5,7 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-sm-12">
-            <h3 class="m-t-none m-b">Register</h3>
-              <div class="login-container col-md-12">
+              <div class="login-container col-md-12 padding-top-10">
                 <div class="row">
                   <div class="col-sm-2"></div>
                   <div class="col-sm-8 text-center center-block float-none">
@@ -24,7 +23,7 @@
                     <div class="col-md-3 col-md-push-9">
                       <div class="image-upload-container padding-top-20">
                         <img class="image-preview" src="<?php echo public_url(); ?>assets/profile/avatar_default.jpg" alt="...">
-                        <span class="hiddenFileInput">
+                        <span class="hiddenFileInput hide">
                           <input type="file" accept="image/*" class="image-upload-input" id="avatarFile" name="avatarFile"/>
                         </span>
                       </div>
@@ -45,7 +44,7 @@
                             <input type="text" id="LastName" name="LastName" class="form-control" placeholder="">
                           </div>
                         </div>
-                        <div class="row padding-top-10">
+                        <div class="row">
                           <div class="col-md-4">
                             <label class="text-white padding-bottom-5">Gender</label>
                             <select id="GenderID" name="GenderID" class="form-control">
@@ -68,7 +67,7 @@
                             <input type="text" id="ContactNumber" name="ContactNumber" class="form-control" placeholder="">
                           </div>
                         </div>
-                        <div class="row padding-top-10">
+                        <div class="row">
                           <div class="col-md-12">
                             <label class="text-white padding-bottom-5">Email Address</label>
                             <input type="text" id="EmailAddress" name="EmailAddress" class="form-control" placeholder="">
@@ -78,7 +77,7 @@
                     </div>
                   </div>
 
-                  <div class="row padding-top-10">
+                  <div class="row">
                     <div class="col-md-4">
                       <label class="text-white padding-bottom-5">Marital Status</label>
                       <select id="MaritalStatusID" name="MaritalStatusID" class="form-control">
@@ -113,7 +112,7 @@
                       </select>
                     </div>
                   </div>
-                  <div class="row padding-top-10">
+                  <div class="row">
                     <div class="col-md-12">
                       <label class="text-white padding-bottom-5">City or Municipality</label>
                       <select id="MunicipalityCityID" name="MunicipalityCityID" class="form-control" onChange="Account.loadBarangayOptions(BarangayID, this)">
@@ -126,7 +125,7 @@
                       </select>
                     </div>
                   </div>
-                  <div class="row padding-top-10">
+                  <div class="row">
                     <div class="col-md-12" id="LoadBarangay">
                       <label class="text-white padding-bottom-5">Barangay</label>
                       <select id="BarangayID" disabled="disabled" name="BarangayID" class="form-control">
@@ -134,13 +133,13 @@
                       </select>
                     </div>
                   </div>
-                  <div class="row padding-top-10">
+                  <div class="row">
                     <div class="col-md-12">
                       <label class="text-white padding-bottom-5">Building, Street, etc..</label>
                       <input type="text" id="StreetPhase" name="StreetPhase" class="form-control">
                     </div>
                   </div>
-                  <div class="row padding-top-10">
+                  <div class="row">
                     <div class="col-md-12">
                       <label class="text-white padding-bottom-5">Organization</label>
                       <select id="OrganizationID" name="OrganizationID" class="form-control">
@@ -164,28 +163,28 @@
                     <div class="col-md-12">
                       <strong class="text-cyan">Please enter checked two valid government ID to be presented in your barangay to validate your registration.</strong>
                       <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-sm-6">
                           <div class="checkbox text-white">
                             <label>
                               <input name="GovernmentID[]" value="1" type="checkbox"> Voters ID
                             </label>
                           </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-sm-6">
                           <div class="checkbox text-white">
                             <label>
                               <input name="GovernmentID[]" value="2" type="checkbox"> BIR
                             </label>
                           </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3 col-sm-6">
                           <div class="checkbox text-white">
                             <label>
                               <input name="GovernmentID[]" value="3" type="checkbox"> SSS
                             </label>
                           </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-sm-6">
                           <div class="checkbox text-white">
                             <label>
                               <input name="GovernmentID[]" value="4" type="checkbox"> DRIVERS
@@ -197,7 +196,7 @@
                     
                   </div>
 
-                <div class="row">
+                <div class="row padding-top-10">
                   <div class="col-xs-6" style="padding-right:1px;">
                     <a class="btn btn-sm btn-danger btn-block" href="<?php echo site_url('account/signin')?>" ><i class="fa fa-ban"></i> CANCEL</a>
                   </div>
@@ -208,7 +207,7 @@
               
               </form>
                 
-              <div class="row" style="padding-top:5px;">
+              <div class="row padding-top-10">
                 <div class="col-sm-3"></div>
                 <div class="col-sm-6 text-center float-none center-block">
                   <img src="<?php echo public_url(); ?>resources/images/tagline.png" class="img-responsive" />
@@ -223,6 +222,13 @@
       <!-- /.modal-content -->
     </div>
   </div>
+
+  <style type="text/css">
+    .checkbox{
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+  </style>
 
   <!-- Select2 -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
