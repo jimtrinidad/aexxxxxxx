@@ -6,8 +6,7 @@
 				<div class="box-content modal-content" style="background-color:transparent;">
 					<div class="modal-body">
 						<div class="row">
-							<div class="col-sm-12">
-								<h3 class="m-t-none m-b">Sign in</h3>
+							<div class="col-sm-12 padding-top-10">
 								<p class="text-muted text-center">
 									<img src="<?php echo public_url(); ?>resources/images/mak-logo.png" class="img-responsive" />
 								</p>
