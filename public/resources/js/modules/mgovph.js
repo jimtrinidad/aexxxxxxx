@@ -101,6 +101,7 @@ function Mgovph() {
                 type : 'get',
                 success : function(response) {
                     if (response.status) {
+                        $('#trending-service-cont').removeClass('hide');
                         var rows = '';
                         $.each(response.data, function(i, e) {
                             rows += '<li><a href="'+public_url('services?v=' + e.Code)+'">'+ e.Name + '</a></li>';
