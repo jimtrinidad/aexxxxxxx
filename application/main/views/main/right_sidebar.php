@@ -29,7 +29,7 @@
     </div>
   </div>
   <?php }} ?>
-  <div class="col-md-12 top-gov-services offset-bottom-10" id="trending-service-cont">
+  <div class="col-md-12 top-gov-services offset-bottom-10 hide" id="trending-service-cont">
     <h2>Trending: TOP GOV SERVICES</h2>
     <ul id="trending-service-items">
     </ul>
