@@ -131,7 +131,7 @@ class Message extends CI_Controller
         } else {
             $return_data = array(
                 'status'    => false,
-                'message'   => 'Mabuhay ID not found.'
+                'message'   => 'Cannot find this Mabuhay ID.'
             );
         }
 
@@ -292,5 +292,32 @@ class Message extends CI_Controller
                 'error'     => $e->getMessage()
             ));
         }
+    }
+
+    public function find_user()
+    {   
+        $query = get_post('q');
+        $where =  'deletedAt IS NULL' .
+                    'AND (CONCAT(FirstName, " ", LastName) LIKE "%' . $query . '%")' .
+                    'AND AccountTypeID IN(1,2,3)';
+        $users = $this->mgovdb->getRecords('UserAccountInformation', $where);
+        $items = array();
+        foreach ($users as $user) {
+            $items[] = array(
+                'id'        => $user['id'],
+                'firstname' => $user['FirstName'],
+                'lastname'  => $user['LastName'],
+                'fullname'  => $user['FirstName'] . ' ' . $user['LastName'],
+                'mabuhayID' => $user['MabuhayID'],
+                'email'     => $user['EmailAddress'],
+                'contact'   => $user['ContactNumber'],
+                'gender'    => lookup('gender', $user['GenderID']),
+                'address'   => array_values(array_reverse(lookup_address($user))),
+                'photo'     => photo_filename($user['Photo']),
+                'actype'    => lookup('account_type', $user['AccountTypeID']),
+                'aclevel'   => lookup_db('UserAccountLevel', 'LevelName', $user['AccountLevelID'])
+            );
+        }
+        response_json($items);
     }
 }

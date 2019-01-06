@@ -370,6 +370,14 @@
 		display: inline;
 	}
 
+	.chatbubble .tt-menu {
+	  min-width: 300px !important;
+	}
+
+	.chatbubble .small, .chatbubble small {
+	    font-size: 85%;
+	}
+
 	@media (max-width: 768px) {
 		.chatbubble.opened .expanded {
 			width: 400px;
@@ -484,9 +492,9 @@
 						<div class="row">
 							<div class="col-xs-10 col-xs-offset-1">
 								<div class="form-group findUserGroup">
-									<label class="text-bold">Mabuhay ID</label>
+									<label class="text-bold">Mabuhay ID or Search by Name</label>
 									<input class="form-control" type="text" id="findUser" placeholder="Mabuhay ID">
-									<span class="help-block findUserHelp small pull-right">Press enter to search.</span>
+									<span class="help-block findUserHelp small pull-right">Press enter to start conversation.</span>
 								</div>
 							</div>
 						</div>
@@ -519,5 +527,6 @@
 	</div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/nicescroll/3.5.4/jquery.nicescroll.js"></script>
 <script type="text/javascript" src="<?php echo public_url(); ?>resources/js/modules/chatbox.js?<?php echo time()?>"></script>

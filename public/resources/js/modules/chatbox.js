@@ -25,6 +25,7 @@ function Chatbox() {
         self.set_events();
         self.set_configs();
         self.getThreads();
+        self.userFinder("#findUser");
 
         self.currentUser = $('#chat_current_user').val();
     }
@@ -78,6 +79,7 @@ function Chatbox() {
         // new or find thread
         $('.chatbubble .new-message').click(function(){
             self.clearThread();
+            self.userFinder("#findUser");
         });
 
         // send message via enter
@@ -377,7 +379,7 @@ function Chatbox() {
         $('.chatbubble .recent-threads li').removeClass('active');
         $('#findUser').val('');
         $('.findUserGroup').removeClass('has-error');
-        $('.chatbubble .findUserHelp').text('Press enter to search.');
+        $('.chatbubble .findUserHelp').text('Press enter to start conversation.');
         $('.chatbubble .finder').removeClass('hide');
         self.activeThread = false;
         self.receiverID = false;
@@ -552,6 +554,50 @@ function Chatbox() {
 
             self.claerResizeScroll();
         })
+    }
+
+    this.userFinder = function(elem)
+    {   
+        try { $(elem).typeahead('destroy'); } catch(e) {}
+        $(elem).typeahead({
+            hint: false,
+            minLength: 5,
+        },
+        {
+            templates: {
+                empty: [
+                    '<div class="padding-left-10 empty-message">',
+                      'No match found.',
+                    '</div>'
+                ].join('\n'),
+                suggestion: function (item) {
+                    item.address.pop();
+                    return '<div class="row gutter-0">' +
+                                '<div class="col-xs-2">' +
+                                    '<span>' +
+                                    '<img style="width:45px;height:45px;margin: 0 auto;" src="' + window.public_url() + "assets/profile/"+item.photo+'">' +
+                                    '</span></div>' +
+                                '<div class="col-xs-10 small" style="padding-left: 10px;">' +
+                                    '<div>'+ item.mabuhayID +'<small> - '+ item.fullname + '</small></div>' +
+                                    '<div><small>'+ item.aclevel +'</small></div>' +
+                                    '<div><small>'+ item.address.join(', ') +'</small></div>' +
+                                '</div>' +
+                            '</div>';
+                }
+            },
+            name: 'user',
+            display: 'mabuhayID',
+            source: function(query, syncResults, asyncResults) {
+                try {clearTimeout(typeaheadTimeout);} catch (e) {}
+                typeaheadTimeout = setTimeout(function (){
+                    $.get(window.base_url('message/find_user') + "?q=" + query, function(responseData) {
+                        asyncResults(responseData);
+                    });
+                }, 500);
+            }
+        }).bind('typeahead:select', function(ev, item) {
+            var id = $(ev.target).prop('id');
+        });
     }
 
 }
