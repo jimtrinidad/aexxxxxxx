@@ -275,6 +275,10 @@ function Mgovph() {
 
                 if (response.status) {
 
+                    if (selectedService) {
+                        $('#LoadMainBody').hide();
+                    }
+
                     setTimeout(function(){
 
                         $.each(response.data, function(i, e){
