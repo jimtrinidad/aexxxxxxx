@@ -3,6 +3,11 @@
         <div class="box box-primary">
 
             <div class="box-header with-border">
+                <?php
+                // if (isset($returnUrl)) {
+                    echo '<a class="btn btn-sm btn-danger" style="margin-top: -4px;margin-right: 5px;" href="' . site_url('services') . '"><i class="fa fa-arrow-left"></i> Back</a>';
+                // }
+                ?>
                 <h3 class="box-title">
                     <span>Service Code | <b class="text-red"><?php echo $serviceCode; ?></b></span>
                 </h3>
@@ -24,20 +29,20 @@
                                         <div class="row">
                                             <div class="col-sm-12 col-lg-4 col-lg-push-8 logo padding-top-10">
                                                 <div class="image-upload-container">
-                                                  <img class="image-preview" src="<?php echo public_url(); ?>assets/logo/blank-logo.png">
+                                                  <img class="image-preview" src="<?php echo public_url() . 'assets/logo/' . (isset($serviceData) ? logo_filename($serviceData->Logo) : 'blank-logo.png')?>">
                                                   <span class="hiddenFileInput hide">
-                                                    <input type="file" data-default="<?php echo public_url(); ?>assets/logo/blank-logo.png" accept="image/*" class="image-upload-input" id="Logo" name="Logo"/>
+                                                    <input type="file" data-default="<?php echo public_url() . 'assets/logo/' . (isset($serviceData) ? logo_filename($serviceData->Logo) : 'blank-logo.png')?>" accept="image/*" class="image-upload-input" id="Logo" name="Logo"/>
                                                   </span>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-12 col-lg-8 col-lg-pull-4">
+                                            <div class="col-sm-12 col-lg-8 col-lg-pull-4">  
                                                 <div class="form-group">
                                                     <label for="ServiceType">Service Type</label>
                                                     <select class="form-control" name="ServiceType" id="ServiceType">
                                                         <option value="">--</option>
                                                          <?php
                                                           foreach (lookup('service_type') as $k => $v) {
-                                                            echo "<option value='{$k}'>{$v}</option>";
+                                                            echo "<option ".(isset($serviceData) && $serviceData->ServiceType == $k ? 'selected="selected"' : '')." value='{$k}'>{$v}</option>";
                                                           }
                                                         ?>
                                                     </select>
@@ -48,7 +53,7 @@
                                                         <option value="">--</option>
                                                          <?php
                                                           foreach (lookup('location_scope') as $k => $v) {
-                                                            echo "<option value='{$k}'>{$v}</option>";
+                                                            echo "<option ".(isset($serviceData) && $serviceData->LocationScopeID == $k ? 'selected="selected"' : '')." value='{$k}'>{$v}</option>";
                                                           }
                                                         ?>
                                                     </select>
@@ -57,11 +62,11 @@
                                         </div>
                                         <div class="form-group hide" id="citySelectorCont">
                                             <label for="citySelector">City/Muni</label>
-                                            <select class="form-control" id="citySelector" onchange="ServiceSetup.loadBarangayOptions(LocationCode, this)">
+                                            <select class="form-control" id="citySelector" onchange="ServiceSetup.loadBarangayOptions('#LocationCode', this)">
                                                 <option value="">--</option>
                                                 <?php
                                                 foreach (lookup_muni_city(null, false) as $v) {
-                                                echo "<option value='" . $v['citymunCode'] . "'>" . $v['provDesc'] . ' | ' . $v['citymunDesc'] . "</option>";
+                                                echo "<option ".(isset($serviceData) && $serviceData->LocationScopeID == 6 && $serviceData->MunicipalityCityID == $v['citymunCode'] ? 'selected="selected"' : '')."  value='" . $v['citymunCode'] . "'>" . $v['provDesc'] . ' | ' . $v['citymunDesc'] . "</option>";
                                                 }
                                                 ?>
                                             </select>
@@ -80,11 +85,11 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="Name">Name</label>
-                                            <input type="text" class="form-control" name="Name" id="Name" placeholder="Service name">
+                                            <input type="text" class="form-control" name="Name" id="Name" placeholder="Service name" value="<?php echo (isset($serviceData) ? $serviceData->Name : '')?>">
                                         </div>
                                         <div class="form-group">
                                             <label for="Limit">Service Limit</label>
-                                            <input type="text" class="form-control" name="Limit" id="Limit" placeholder="Leave blank if not applicable">
+                                            <input type="text" class="form-control" name="Limit" id="Limit" placeholder="Leave blank if not applicable" value="<?php echo (isset($serviceData) && $serviceData->Limit ? $serviceData->Limit : '')?>">
                                             <span class="help-block">Max number of services that can be provided.</span>
                                         </div>
                                         <div class="form-group">
@@ -93,7 +98,7 @@
                                                 <option value="">--</option>
                                                  <?php
                                                   foreach (lookup('cycle_interval') as $k => $v) {
-                                                    echo "<option value='{$k}'>{$v}</option>";
+                                                    echo "<option ".(isset($serviceData) && $serviceData->CycleInterval == $k ? 'selected="selected"' : '')." value='{$k}'>{$v}</option>";
                                                   }
                                                 ?>
                                             </select>
@@ -110,26 +115,26 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="Description">Description</label>
-                                            <textarea rows="3" class="form-control" name="Description" id="Description"></textarea>
+                                            <textarea rows="3" class="form-control" name="Description" id="Description"><?php echo (isset($serviceData) ? $serviceData->Description : '')?></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="TermsCondition">Terms and Condition</label>
-                                            <textarea rows="3" class="form-control" name="TermsCondition" id="TermsCondition"></textarea>
+                                            <textarea rows="3" class="form-control" name="TermsCondition" id="TermsCondition"><?php echo (isset($serviceData) ? $serviceData->TermsCondition : '')?></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="Objectives">Objectives</label>
-                                            <textarea rows="3" class="form-control" name="Objectives" id="Objectives"></textarea>
+                                            <textarea rows="3" class="form-control" name="Objectives" id="Objectives"><?php echo (isset($serviceData) ? $serviceData->Objectives : '')?></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="Qualifications">Qualifications</label>
-                                            <textarea rows="3" class="form-control" name="Qualifications" id="Qualifications"></textarea>
+                                            <textarea rows="3" class="form-control" name="Qualifications" id="Qualifications"><?php echo (isset($serviceData) ? $serviceData->Qualifications : '')?></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="Tags">Tags</label>
                                             <select class="form-control" multiple="" name="Tags[]" id="Tags">
                                                  <?php
                                                   foreach (lookup('service_tags') as $k => $v) {
-                                                    echo "<option value='{$k}'>{$v}</option>";
+                                                    echo "<option  ".(isset($serviceData) && in_array($k, json_decode($serviceData->Tags, true))? 'selected="selected"' : '')." value='{$k}'>{$v}</option>";
                                                   }
                                                 ?>
                                             </select>
@@ -153,7 +158,39 @@
                                         <th style="width: 30px;"></th>
                                     </thead>
                                     <tbody id="createdFields">
-                                        
+                                        <?php
+                                        if (isset($extraFields) && is_array($extraFields)) {
+                                            foreach ($extraFields as $item) {
+                                                $groupOptions = '';
+                                                foreach (lookup('field_class') as $k => $v) {
+                                                    $groupOptions .= "<option ".($k == $item['FieldGroup'] ? 'selected="selected"' : '')." value='{$k}'>{$v}</option>";
+                                                }
+                                                $typeOptions = '';
+                                                foreach (lookup('field_type') as $k => $v) {
+                                                    $typeOptions .= "<option ".($k == $item['FieldType'] ? 'selected="selected"' : '')." value='{$k}'>{$v}</option>";
+                                                }
+                                                echo '<tr class="sortable-row" id="'.$item['FieldID'].'">
+                                                        <td><i class="drag-handle fa fa-arrows"></i></td>
+                                                        <td>
+                                                            <select class="form-control fieldGroup input-sm fGroup" name="Field['.$item['FieldID'].'][Group]" title="">'
+                                                               . $groupOptions .
+                                                            '</select>
+                                                        </td>
+                                                        <td>
+                                                            <select class="form-control fieldType input-sm fType" name="Field['.$item['FieldID'].'][Type]" title="">'
+                                                                . $typeOptions .
+                                                            '</select>
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control fieldLabel input-sm fLabel" placeholder="Field label" autocomplete="off" name="Field['.$item['FieldID'].'][Label]" title="" value="'.$item['FieldLabel'].'">
+                                                            <input type="hidden" class="item-order" name="Field['.$item['FieldID'].'][Ordering]" value="'.$item['Ordering'].'" title=""></td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-danger btn-sm" onclick="ServiceSetup.removeFieldRow(this)"><i class="fa fa-trash"></i></button>
+                                                            </td>
+                                                    </tr>';
+                                            }
+                                        }
+                                        ?>
                                     </tbody>
                                     <tfoot id="addFormFields">
                                         <tr class="info">
@@ -201,7 +238,20 @@
                                         <th style="width: 30px;"></th>
                                     </thead>
                                     <tbody id="createdRequirements">
-                                        
+                                        <?php
+                                        // if (isset($requirements) && is_array($requirements)) {
+                                        //     foreach ($requirements as $item) {
+                                        //         echo '<tr class="" id="'.$item['id'].'">
+                                        //                 <td></td>
+                                        //                 <td style="padding-top: 13px;"><input type="hidden" name="Requirement['.$item['id'].'][DocID]" value="'.$item['DocumentID'].'"><b>'.$item['Document'].'</b></td>
+                                        //                 <td>
+                                        //                     <textarea rows="1" class="requirementDesc form-control input-sm" placeholder="Requirement description" autocomplete="off" name="Requirement['.$item['id'].'][Desc]"></textarea>
+                                        //                 </td>
+                                        //                 <td><button type="button" class="btn btn-danger btn-sm" onclick="ServiceSetup.removeRequirementRow(this)"><i class="fa fa-trash"></i></button></td>
+                                        //             </tr>';
+                                        //     }
+                                        // }
+                                        ?>
                                     </tbody>
                                     <tfoot id="addRequirementsRow">
                                         <tr class="info">
@@ -285,6 +335,13 @@
                     </div>
 
                     <input type="hidden" name="Code" value="<?php echo $serviceCode; ?>">
+
+                    <?php
+                    if (isset($serviceData)) {
+                        echo '<input type="hidden" id="edit-mode" value="1">';
+                    }
+                    ?>
+
                     <div id="assignedOfficersHidden"></div>
                 </form>
             </div>
@@ -304,5 +361,60 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $("input, textarea").attr('autocomplete', 'off');
+
+        setTimeout(function(){
+            <?php 
+            if (isset($serviceData)) {
+                echo 'ServiceSetup.setLocationSelector($("#LocationScope"), "'. $serviceData->LocationCode .'", "'. $serviceData->MunicipalityCityID .'", function() {
+                    ServiceSetup.setDepartmentSelector('. $serviceData->DepartmentLocationID .');
+                });';
+
+                if ($serviceData->LocationScopeID == 6) {
+                    echo 'ServiceSetup.loadBarangayOptions("#LocationCode", "#citySelector", '. $serviceData->BarangayID .', function() {
+                        ServiceSetup.setDepartmentSelector('. $serviceData->DepartmentLocationID .');
+                    });';
+                }
+
+                // set requirement rows
+                if (isset($requirements) && is_array($requirements)) {
+                    foreach ($requirements as $item) {
+                        echo "ServiceSetup.addRequirementRow({
+                            docid: '{$item['DocumentID']}',
+                            desc: '{$item['Description']}',
+                            docname: '{$item['Document']}',
+                            id: '{$item['id']}'
+                        });";
+                    }
+                }
+
+                // set function rows
+                if (isset($processOrder['orderedProcess']) && is_array($processOrder['orderedProcess'])) {
+                    foreach ($processOrder['orderedProcess'] as $item) {
+                        $fortext = 'Main Service';
+                        if ($item['For'] != 'Main') {
+                            $fortext = $requirements[$item['For']]['Document'];
+                        }
+                        echo "ServiceSetup.addFunctionRow({
+                            fncfor: '{$item['For']}',
+                            fnctype: '{$item['FunctionTypeID']}',
+                            fncdesc: '{$item['Description']}',
+                            fortxt: '{$fortext}',
+                            typetxt: '{$item['FunctionName']}',
+                            id: '{$item['id']}'
+                        });";
+                    }
+                }
+
+                if (isset($officers) && is_array($officers)) {
+                    foreach ($officers as $functionID => $assign_officers) {
+                        foreach ($assign_officers as $assign_officer) {
+                            echo "ServiceSetup.officerFinderSelected[{$functionID}] = " . json_encode($assign_officer['userData']) . ';';
+                            echo "ServiceSetup.addOfficer({$functionID});";
+                        }
+                    }
+                }
+            }
+            ?>
+        }, 100);
     })
 </script>

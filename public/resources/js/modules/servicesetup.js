@@ -28,7 +28,16 @@ function ServiceSetup() {
     {
         $(self.form).submit(function(e) {
             e.preventDefault();
-            self.saveService(this);
+            var form = this;
+            if ($(self.form).find('#edit-mode').length) {
+                bootbox.confirm('Are you sure you want to apply changes made?', function(r){
+                    if (r) {
+                        self.saveService(form);
+                    }
+                });
+            } else {
+                self.saveService(form);
+            }
         });
     }
 
@@ -96,7 +105,7 @@ function ServiceSetup() {
     /**
     * get city barangay
     */
-    this.loadBarangayOptions = function(target, e, selected = false)
+    this.loadBarangayOptions = function(target, e, selected = false, callback = false)
     {
         $(self.form).find('#LocationCode').html('').prop('disabled', true);
         if ($(self.form).find('#LocationCode').hasClass("select2-hidden-accessible")) {
@@ -116,6 +125,11 @@ function ServiceSetup() {
                 $(target).html(options).prop('disabled', false).select2({
                     width: '100%'
                 });
+
+                if (callback) {
+                    callback();
+                }
+
             } else {
                 $(target).html(window.emptySelectOption);
             }
@@ -126,7 +140,7 @@ function ServiceSetup() {
     /**
     * set location dropdown by scope
     */
-    this.setLocationSelector = function(e)
+    this.setLocationSelector = function(e, defaultLocation = false, defaultCity = false, callback = false)
     {   
 
         // Regional to barangay
@@ -142,7 +156,7 @@ function ServiceSetup() {
         if (scope > 1) {
             if (scope == 6) {
                 $('#citySelectorCont').removeClass('hide');
-                $('#citySelector').val('').select2({
+                $('#citySelector').val(defaultCity).select2({
                     width: '100%'
                 });
             } else {
@@ -174,14 +188,22 @@ function ServiceSetup() {
                         }
 
                         if (key != false) {
-                            options += '<option value="' + key + '">' + value + '</option> \n';
+                            options += '<option value="' + key + '" '+ (defaultLocation == key ? 'selected="selected"' : '') +'>' + value + '</option> \n';
                         }
                     });
                     $(self.form).find('#LocationCode').html(options).prop('disabled', false).select2({
                         width: '100%'
                     });
+
+                    if (callback) {
+                        callback();
+                    }
                     $(self.form).LoadingOverlay("hide");
                 });
+            }
+        } else if (scope == 1) {
+            if (callback) {
+                callback();
             }
         }
     }
@@ -190,7 +212,7 @@ function ServiceSetup() {
     /**
     * set available department base on scope and location
     */
-    this.setDepartmentSelector = function()
+    this.setDepartmentSelector = function(selectedDept = false)
     {
         var locationCode = $(self.form).find('#LocationCode').val();
         var scope        = $(self.form).find('#LocationScope').val();
@@ -209,7 +231,7 @@ function ServiceSetup() {
                     var key = e.id;
                     var value = e.parent.Name;
                     var data = 'data-logo="' + e.parent.Logo + '"';
-                    options += '<option value="' + key + '" '+data+'>' + value + '</option> \n';
+                    options += '<option value="' + key + '" '+data+' '+ (selectedDept == key ? 'selected="selected"' : '') +'>' + value + '</option> \n';
                 });
                 $(self.form).find('#DepartmentScope').html(options).prop('disabled', false).select2({
                     width: '100%',
@@ -278,9 +300,9 @@ function ServiceSetup() {
             clone.removeClass('info').addClass('sortable-row');
             clone.prop('id', itemID);
             clone.find('td:first-child').prepend('<i class="drag-handle fa fa-arrows"></i>');
-            clone.find('.fieldGroup').val(group).prop('name', 'Field['+itemID+'][Group]').addClass('Group');
-            clone.find('.fieldType').val(type).prop('name', 'Field['+itemID+'][Type]').addClass('Type');
-            clone.find('.fieldLabel').val(label).prop('name', 'Field['+itemID+'][Label]').addClass('Label').closest('td').append('<input type="hidden" class="item-order" name="Field['+itemID+'][Ordering]" value="'+(count + 1)+'">');
+            clone.find('.fieldGroup').val(group).prop('name', 'Field['+itemID+'][Group]').addClass('fGroup');
+            clone.find('.fieldType').val(type).prop('name', 'Field['+itemID+'][Type]').addClass('fType');
+            clone.find('.fieldLabel').val(label).prop('name', 'Field['+itemID+'][Label]').addClass('fLabel').closest('td').append('<input type="hidden" class="item-order" name="Field['+itemID+'][Ordering]" value="'+(count + 1)+'">');
             clone.find('td:last-child').html('<button type="button" class="btn btn-danger btn-sm" onClick="ServiceSetup.removeFieldRow(this)"><i class="fa fa-trash"></i></button>');
             $(self.form).find('#createdFields').append(clone);
 
@@ -308,17 +330,25 @@ function ServiceSetup() {
     /**
     * add service requirement
     */
-    this.addRequirementRow = function()
+    this.addRequirementRow = function(params = false)
     {
         var form    = $(self.form).find('#addRequirementsRow');
-        var docid   = form.find('.requirementDoc').val();
-        var desc    = form.find('.requirementDesc').val();
+
+        if (params != false) {
+            var docid   = params.docid;
+            var desc    = params.desc;
+            var docName = params.docname;
+            var itemID  = params.id;
+        } else {
+            var docid   = form.find('.requirementDoc').val();
+            var desc    = form.find('.requirementDesc').val();
+            var docName = form.find('.requirementDoc option:selected').text();
+            var itemID  = Utils.generateString();
+        }
 
         if (docid != '' && !~$.inArray(docid, self.currentRequirements)) {
             self.currentRequirements.push(docid);
-            var clone  = form.children().clone();
-            var itemID = Utils.generateString();
-            var docName = form.find('.requirementDoc option:selected').text();
+            var clone   = form.children().clone();
 
             clone.removeClass('info');
             clone.prop('id', itemID)
@@ -366,12 +396,25 @@ function ServiceSetup() {
     /**
     * add function row
     */
-    this.addFunctionRow = function()
+    this.addFunctionRow = function(params = false)
     {
         var form    = $(self.form).find('#addFunctionRow');
-        var fncFor  = form.find('.functionFor').val();
-        var fncType = form.find('.functionType').val();
-        var fncDesc = form.find('.functionDesc').val(); 
+
+        if (params != false) {
+            var fncFor  = params.fncfor;
+            var fncType = params.fnctype;
+            var fncDesc = params.fncdesc;
+            var forTxt  = params.fortxt;
+            var typeTxt = params.typetxt;
+            var itemID  = params.id;
+        } else {
+            var fncFor  = form.find('.functionFor').val();
+            var fncType = form.find('.functionType').val();
+            var fncDesc = form.find('.functionDesc').val();
+            var forTxt  = form.find('.functionFor option:selected').text();
+            var typeTxt = form.find('.functionType option:selected').text(); 
+            var itemID  = Utils.generateString();
+        }
 
         if (fncFor != '' && fncType != '' && !~$.inArray(fncType, self.currentRequirementFunctions[fncFor])) {
             if (typeof(self.currentRequirementFunctions[fncFor]) == 'undefined') {
@@ -380,10 +423,7 @@ function ServiceSetup() {
             self.currentRequirementFunctions[fncFor].push(fncType);
 
             var clone  = form.children().clone();
-            var itemID = Utils.generateString();
             var count  = $(self.form).find('#createdFunctions').children().length;
-            var forTxt = form.find('.functionFor option:selected').text();
-            var typeTxt = form.find('.functionType option:selected').text();
 
             clone.removeClass('info').addClass('sortable-row');
             clone.prop('id', itemID)
@@ -721,26 +761,32 @@ function ServiceSetup() {
             data: formData,
             success: function (response) {
                 if (response.status) {
-                    bootbox.confirm({
-                        message: response.message + ' Do you want to add another one?',
-                        buttons: {
-                            confirm: {
-                                label: 'Yes',
-                                className: 'btn-success'
+                    if (response.type == 'new') {
+                        bootbox.confirm({
+                            message: response.message + ' Do you want to add another one?',
+                            buttons: {
+                                confirm: {
+                                    label: 'Yes',
+                                    className: 'btn-success'
+                                },
+                                cancel: {
+                                    label: 'Return to services list',
+                                    className: 'btn-info'
+                                }
                             },
-                            cancel: {
-                                label: 'Return to services list',
-                                className: 'btn-info'
+                            callback: function(r){
+                                if (r) {
+                                    window.location = window.base_url('services/setup'); 
+                                } else {
+                                    window.location = window.base_url('services'); 
+                                }
                             }
-                        },
-                        callback: function(r){
-                            if (r) {
-                                window.location = window.base_url('services/setup'); 
-                            } else {
-                                window.location = window.base_url('services'); 
-                            }
-                        }
-                    });
+                        });
+                    } else {
+                        bootbox.alert(response.message, function(){
+                            location.reload();
+                        });
+                    }
                 } else {
                     // bootbox.alert(response.message);
                     $(form).find('#error_message_box .error_messages').append('<p><b>' + response.message + '</b></p>');

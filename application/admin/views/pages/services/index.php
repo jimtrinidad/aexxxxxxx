@@ -45,7 +45,7 @@
                                 <button type="button" class="btn btn-xs btn-success" title="Approve service" onClick="Services.approveService('.$item['id'].')"><i class="fa fa-check"></i><span class="visible-lg-inline"> Approve</span></button>'
                               : '' 
                             )
-                              . '<button type="button" class="btn btn-xs btn-default hidden" title="View details" onClick="Services.editService('.$item['id'].')"><i class="fa fa-pencil"></i></button>
+                              . '<a href="'.base_url('services/setup/' . $item['Code']).'" class="btn btn-xs btn-default" title="View details"><i class="fa fa-pencil"></i></a>
                               	<button type="button" class="btn btn-xs btn-danger" title="Delete" onClick="Services.deleteService('.$item['id'].')"><i class="fa fa-trash"></i></button>
                             </div>
                           </div>

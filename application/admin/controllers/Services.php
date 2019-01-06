@@ -26,7 +26,7 @@ class Services extends CI_Controller
             ),
         );
 
-        $page_limit = 20;
+        $page_limit = 50;
         $page_start = (int) $this->uri->segment(3);
 
         $where = array(
@@ -76,9 +76,67 @@ class Services extends CI_Controller
 
         if ($serviceCode == null) {
             $serviceCode = microsecID();
+        } else {
+            $service = $this->mgovdb->getRowObject('Service_Services', $serviceCode, 'Code');
+            if ($service) {
+                $extraFields     = $this->mgovdb->getRecords('Service_ExtraFormFields', array('ServiceID' => $service->id), 'Ordering');
+                $rawrequirements = $this->mgovdb->getRecords('Service_Requirements', array('ServiceID' => $service->id), 'Ordering');
+                $rawfunctions    = $this->mgovdb->getRecords('Service_Functions', array('ServiceID' => $service->id), 'Ordering');
+                $requirements    = array();
+                $functions       = array();
+                $officers        = array();
+
+                foreach ($rawrequirements as $requirement) {
+                    $requirement['Document'] = lookup_db('Doc_Templates', 'Name', $requirement['DocumentID']);
+                    $requirements[$requirement['id']] = $requirement;
+                }
+
+                foreach ($rawfunctions as $function) {
+                    if ($function['FuntionFor'] == 'Requirement') {
+                        $function['Requirement'] = $requirements[$function['RequirementID']]['Document'];
+                    }
+                    $functions[$function['id']] = $function;
+                    $officers[$function['id']] = $this->mgovdb->getRecords('Service_FunctionOfficers', array('FunctionID' => $function['id']));
+                    foreach ($officers[$function['id']] as &$officer) {
+
+                        $user = $this->mgovdb->getRowObject('UserAccountInformation', $officer['AccountID'], 'id');
+                        if ($user) {
+                            $user = (array) $user;
+                            $userData = array(
+                                'id'        => $user['id'],
+                                'firstname' => $user['FirstName'],
+                                'lastname'  => $user['LastName'],
+                                'fullname'  => $user['FirstName'] . ' ' . $user['LastName'],
+                                'mabuhayID' => $user['MabuhayID'],
+                                'email'     => $user['EmailAddress'],
+                                'contact'   => $user['ContactNumber'],
+                                'gender'    => lookup('gender', $user['GenderID']),
+                                'address'   => array_values(array_reverse(lookup_address($user))),
+                                'photo'     => photo_filename($user['Photo']),
+                                'actype'    => lookup('account_type', $user['AccountTypeID']),
+                                'aclevel'   => lookup_db('UserAccountLevel', 'LevelName', $user['AccountLevelID'])
+                            );
+                            $officer['userData'] = $userData;
+                        }
+                    }
+                }
+
+                $processOrder = get_service_process_order($service->id);
+
+                $viewData['serviceData']    = $service;
+                $viewData['extraFields']    = $extraFields;
+                $viewData['requirements']   = $requirements;
+                $viewData['functions']      = $functions;
+                $viewData['officers']       = $officers;
+                $viewData['processOrder']   = $processOrder;
+
+                $viewData['returnUrl']      = (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : site_url('services'));
+            }
         }
 
         $viewData['serviceCode'] = $serviceCode;
+
+        // print_data($viewData);
 
         view('pages/services/setupwizard', $viewData, 'templates/mgovadmin');
     }
@@ -86,7 +144,7 @@ class Services extends CI_Controller
 
     public function save_setup()
     {
-        
+
         if (validate('service_base_setup') == FALSE) {
             $return_data = array(
                 'status'    => false,
@@ -256,7 +314,7 @@ class Services extends CI_Controller
                                     'Tags'              => (get_post('Tags') ? json_encode(get_post('Tags')) : ''),
                                     'Limit'             => get_post('Limit'),
                                     'CycleInterval'     => get_post('CycleInterval'),
-                                    'LastUpdate'        => get_post('LastUpdate'),
+                                    'LastUpdate'        => date('Y-m-d H:i:s'),
                                 );
 
                                 if (!empty($_FILES['Logo']['name'])) {
@@ -275,13 +333,32 @@ class Services extends CI_Controller
                                     'mainFunctions'=> $main_service_functions
                                 );
 
-                                $codeExists = $this->mgovdb->getRowObject('Service_Services', get_post('Code'), 'Code');
-                                if ($codeExists) {
+                                $serviceExists = $this->mgovdb->getRowObject('Service_Services', get_post('Code'), 'Code');
+                                if ($serviceExists) {
                                     // update
-                                    $return_data = array(
-                                        'status'    => false,
-                                        'message'   => 'Service already exists.'
-                                    );
+                                    $saveData['ServiceID'] = $serviceExists->id;
+                                    $saveData['information']['id'] = $serviceExists->id;
+                                    
+                                    if ($this->servicesdb->updateService($saveData)) {
+                                        $return_data = array(
+                                            'status'    => true,
+                                            'type'      => 'edit',
+                                            'message'   => 'Service setup has been updated successfully.'
+                                        );
+
+                                        // delete old logo if changed
+                                        if ($serviceExists !== false && isset($infoData['Logo'])) {
+                                            @unlink(LOGO_DIRECTORY . $serviceExists->Logo);
+                                        }
+
+                                    } else {
+                                        $return_data = array(
+                                            'status'    => false,
+                                            'message'   => 'Updating service setup failed. Please try again.'
+                                        );
+                                        @unlink($uploadData['full_path']);
+                                    }
+
                                 } else {
                                     // new record
                                     $saveData['information']['CreatorID'] = current_user();
@@ -290,6 +367,7 @@ class Services extends CI_Controller
                                     if ($this->servicesdb->addNewService($saveData)) {
                                         $return_data = array(
                                             'status'    => true,
+                                            'type'      => 'new',
                                             'message'   => 'Service has been setup successfully.'
                                         );
                                     } else {
@@ -297,6 +375,7 @@ class Services extends CI_Controller
                                             'status'    => false,
                                             'message'   => 'Saving service data failed. Please try again.'
                                         );
+                                        @unlink($uploadData['full_path']);
                                     }
                                 }
 

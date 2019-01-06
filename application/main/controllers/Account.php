@@ -12,24 +12,24 @@ class Account extends CI_Controller
     public function test() {
         // echo generate_mabuhay_id('De Guzman');
         // var_dump(lookup('function_type'));
-        $data = array(
-            'from'  => array('info@mgov.ph', 'MGov Info'),
-            'to'    => array('jimtrinidad002@gmail.com'),
-            'subject'   => 'This another is a test ' . date('Y-m-d H:i:s'),
-            'message'   => 'This is a new <b>test</b> message from info smtp'
-        );
-        print_r($data);
-        send_email($data, false);exit;
+        // $data = array(
+        //     'from'  => array('info@mgov.ph', 'MGov Info'),
+        //     'to'    => array('jimtrinidad002@gmail.com'),
+        //     'subject'   => 'This another is a test ' . date('Y-m-d H:i:s'),
+        //     'message'   => 'This is a new <b>test</b> message from info smtp'
+        // );
+        // print_r($data);
+        // send_email($data, false);exit;
 
         // die(compute_expiration_date($this->uri->segment(3)));
 
-        // $accountData = $this->mgovdb->getRowObject('UserAccountInformation', 66, 'id');
-        // $emailTemplateData = array(
-        //                 'account'   => $accountData,
-        //                 'password'  => random_password()
-        //             );
+        $accountData = $this->mgovdb->getRowObject('UserAccountInformation', 66, 'id');
+        $emailTemplateData = array(
+                        'account'   => $accountData,
+                        'password'  => random_password()
+                    );
 
-        // echo view('email_templates/account_approval', $emailTemplateData, null, true); exit;
+        echo view('email_templates/account_approval', $emailTemplateData, null, true); exit;
         //             $emailData = array(
         //                 'from'      => array('info@mgov.ph', 'MGov Info'),
         //                 'to'        => array($accountData->EmailAddress),
