@@ -127,8 +127,10 @@ function ServiceSetup() {
                 });
 
                 if (callback) {
-                    console.log('call callback');
-                    callback();
+                    setTimeout(function(){
+                        console.log('call callback');
+                        callback();
+                    }, 10);
                 }
 
             } else {
