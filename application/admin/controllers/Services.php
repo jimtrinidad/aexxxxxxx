@@ -346,11 +346,6 @@ class Services extends CI_Controller
                                             'message'   => 'Service setup has been updated successfully.'
                                         );
 
-                                        // delete old logo if changed
-                                        if ($serviceExists !== false && isset($infoData['Logo'])) {
-                                            @unlink(LOGO_DIRECTORY . $serviceExists->Logo);
-                                        }
-
                                     } else {
                                         $return_data = array(
                                             'status'    => false,
