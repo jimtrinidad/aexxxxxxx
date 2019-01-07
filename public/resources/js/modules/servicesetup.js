@@ -127,6 +127,7 @@ function ServiceSetup() {
                 });
 
                 if (callback) {
+                    console.log('call callback');
                     callback();
                 }
 
