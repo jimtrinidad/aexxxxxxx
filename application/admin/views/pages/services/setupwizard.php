@@ -370,7 +370,7 @@
                 });';
 
                 if ($serviceData->LocationScopeID == 6) {
-                    echo 'ServiceSetup.loadBarangayOptions("#LocationCode", "#citySelector", '. $serviceData->BarangayID .', function() {
+                    echo 'ServiceSetup.loadBarangayOptions("#LocationCode", "#citySelector", "'. $serviceData->BarangayID .'", function() {
                         ServiceSetup.setDepartmentSelector('. $serviceData->DepartmentLocationID .');
                         console.log("called");
                     });';
