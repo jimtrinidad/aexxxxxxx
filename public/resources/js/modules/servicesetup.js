@@ -128,9 +128,8 @@ function ServiceSetup() {
 
                 if (callback) {
                     setTimeout(function(){
-                        console.log('call callback');
                         callback();
-                    }, 1000);
+                    }, 1);
                 }
 
             } else {
@@ -250,7 +249,6 @@ function ServiceSetup() {
                     }
                 });
                 $(self.form).LoadingOverlay("hide");
-                console.log('dept loaded', data);
             });
         }
     }
