@@ -4,9 +4,9 @@
 
             <div class="box-header with-border">
                 <?php
-                // if (isset($returnUrl)) {
-                    echo '<a class="btn btn-sm btn-danger" style="margin-top: -4px;margin-right: 5px;" href="' . site_url('services') . '"><i class="fa fa-arrow-left"></i> Back</a>';
-                // }
+                if (isset($returnUrl)) {
+                    echo '<a class="btn btn-sm btn-danger" style="margin-top: -4px;margin-right: 5px;" href="' . $returnUrl . '"><i class="fa fa-arrow-left"></i> Back</a>';
+                }
                 ?>
                 <h3 class="box-title">
                     <span>Service Code | <b class="text-red"><?php echo $serviceCode; ?></b></span>

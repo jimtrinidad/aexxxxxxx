@@ -130,7 +130,7 @@ class Services extends CI_Controller
                 $viewData['officers']       = $officers;
                 $viewData['processOrder']   = $processOrder;
 
-                $viewData['returnUrl']      = (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : site_url('services'));
+                $viewData['returnUrl']      = (isset($_SERVER['HTTP_REFERER']) && stripos($_SERVER['HTTP_REFERER'], 'index') !== false ? $_SERVER['HTTP_REFERER'] : site_url('services'));
             }
         }
 
