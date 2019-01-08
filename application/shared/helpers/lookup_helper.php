@@ -243,11 +243,18 @@ function lookup_get_location_breakdown($scope, $locCode)
 
     if ($scope == 1) {
         // National
+        $items['RegionalID'] = null;
+        $items['ProvincialID'] = null;
+        $items['MunicipalityCityID'] = null;
+        $items['BarangayID'] = null;
     } elseif ($scope == 2) {
         // Regional
         $tableData = lookup_row('UtilLocRegion', $locCode, 'regCode');
         if ($tableData) {
             $items['RegionalID'] = $tableData->regCode;
+            $items['ProvincialID'] = null;
+            $items['MunicipalityCityID'] = null;
+            $items['BarangayID'] = null;
         }
     } else if ($scope == 3) {
         // Provincial
@@ -255,6 +262,8 @@ function lookup_get_location_breakdown($scope, $locCode)
         if ($tableData) {
             $items['RegionalID'] = $tableData->regCode;
             $items['ProvincialID'] = $tableData->provCode;
+            $items['MunicipalityCityID'] = null;
+            $items['BarangayID'] = null;
         }
     } else if ($scope == 4 || $scope == 5) {
         // City || Municipal
@@ -263,6 +272,7 @@ function lookup_get_location_breakdown($scope, $locCode)
             $items['RegionalID'] = $tableData->regCode;
             $items['ProvincialID'] = $tableData->provCode;
             $items['MunicipalityCityID'] = $tableData->citymunCode;
+            $items['BarangayID'] = null;
         }
     } else if ($scope == 6) {
         // Barangay

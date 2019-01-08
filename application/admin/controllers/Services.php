@@ -34,6 +34,41 @@ class Services extends CI_Controller
         );
         $order = 'DateAdded';
 
+        // SET SEARCH FILTER
+        $filters = array(
+            'search_code',
+            'search_name',
+            'search_scope',
+        );
+        foreach ($filters as $filter) {
+
+            $$filter           = false;
+
+            if (get_post($filter) !== null) {
+                $$filter            = get_post($filter);
+                $this->session->set_userdata('service_' . $filter, $$filter);
+            } else {
+                if (isset($_SERVER['HTTP_REFERER']) && stripos($_SERVER['HTTP_REFERER'], 'services') !== false && $this->session->has_userdata('service_' . $filter)) {
+                    $$filter    = $this->session->userdata('service_' . $filter);
+                } else {
+                    $this->session->unset_userdata('service_' . $filter);
+                }
+            }
+
+            if ($filter == 'search_name' && $$filter != false) {
+                $where['CONCAT(Name, Description) LIKE ']  = "%{$$filter}%";
+            } else if ($filter == 'search_code' && $$filter != false) {
+                $where['Code']  = $$filter;
+            } else if ($filter == 'search_scope' && $$filter != false) {
+                $where['LocationScopeID']  = $$filter;
+            }
+
+
+            // search params
+            $viewData[$filter] = $$filter;
+
+        }
+
         $paginatationData = $this->mgovdb->getPaginationData('Service_Services', $page_limit, $page_start, $where, $order);
 
         // prepare data
@@ -49,6 +84,8 @@ class Services extends CI_Controller
             'per_page'      => $page_limit,
             'full_tag_open' => '<ul class="pagination pagination-sm no-margin pull-right">'
         );
+
+        // print_data($services);
 
         $viewData['services']   = $services;
         $viewData['pagination'] = paginate($paginationConfig);

@@ -5,7 +5,27 @@
       <div class="box-header">
         <h3 class="box-title">Services List</h3>
         <div class="box-tools">
-          <a href="<?php echo base_url('services/setup'); ?>" class="btn btn-sm btn-success" title="Add Department"><i class="fa fa-plus"></i> Add</a>
+          <form action="<?php echo site_url('services') ?>" method="post" class="form-inline">
+            <div class="form-group">
+              <select id="search_scope" name="search_scope" class="form-control input-sm">
+                <option value="">-- any scope --</option>
+                <?php
+                  foreach (lookup('location_scope') as $k => $v) {
+                    echo "<option ". ($search_scope == $k ? 'selected="selected"' : '') ."  value='{$k}'>{$v}</option>";
+                  }
+                ?>
+              </select>
+            </div>
+            <div class="form-group">
+              <input type="text" autocomplete="off" id="search_code" name="search_code" value="<?php echo $search_code ?>" class="form-control input-sm" placeholder="Service Code">
+            </div>
+            <div class="form-group">
+              <input type="text" autocomplete="off" id="search_name" name="search_name" value="<?php echo $search_name ?>" class="form-control input-sm" placeholder="Keyword">
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-sm btn-info">Search</button>
+            </div>
+          </form>
         </div>
       </div>
       <!-- /.box-header -->
@@ -17,11 +37,14 @@
             <th>Name</th>
             <th class="visible-lg">Description</th>
             <th>Scope</th>
+            <th>Location</th>
             <th>Type</th>
+            <!-- <th>Status</th> -->
             <th>Department</th>
-            <th>Status</th>
             <th class="visible-lg">Date Added</th>
-            <th class="c"></th>
+            <th class="text-right">
+              <a href="<?php echo base_url('services/setup'); ?>" class="btn btn-xs btn-success" title="Add Department"><i class="fa fa-plus"></i> Add</a>
+            </th>
           </thead>
           <tbody>
             <?php
@@ -29,12 +52,13 @@
               echo "<tr class='text-left'>";
                 echo '<td>' . $item['Code'] . '</td>';
                 echo '<td>' . $item['Name'] . '</td>';
-                echo '<td class="visible-lg">' . $item['Description'] . '</td>';
+                echo '<td class="visible-lg" title="'. $item['Description'] .'">' . substr($item['Description'], 0, 60) . (strlen($item['Description']) > 60 ? '...' : '') . '</td>';
                 echo '<td>' . $item['Scope'] . '</td>';
+                echo '<td>' . strtoupper(preg_replace('~\([^()]*\)~', '', implode(', ', array_reverse(array_slice($item['Location'], -2, 2))))) . '</td>';
                 echo '<td>' . $item['Type'] . '</td>';
-                echo '<td>' . $item['Department']->Code . '</td>';
-                echo '<td>' . lookup('service_status', $item['Status']) . '</td>';
-                echo '<td class="visible-lg">' . $item['DateAdded'] . '</td>';
+                // echo '<td>' . lookup('service_status', $item['Status']) . '</td>';
+                echo '<td>' . $item['Department']->Code . ($item['SubDepartment'] ? ' / ' . $item['SubDepartment']->Code : '') . '</td>';
+                echo '<td class="visible-lg">' . date('M d, Y', strtotime($item['DateAdded'])) . '</td>';
                 echo '<td>
                         <div class="box-tools">
                           <div class="input-group pull-right" style="width: 10px;">
