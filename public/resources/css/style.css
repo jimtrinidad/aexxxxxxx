@@ -139,9 +139,12 @@ html, body { height: 100%; margin: 0; font-size: 14px;}
 	.post-items .transaction-date, .post-items .transaction-rate{ text-align: left;}
 }
 
-/*@media (max-width: 400px) {
+/*smaller width*/
+@media (max-width: 500px) {
 	.mak-id span{ display: none; }
-}*/
+	.post-items .transaction-provider-pic img{ width: 20px; height: 20px;}
+	.post-items .transaction-rate {font-size: 90%;text-align: right;}
+}
 
 /* Position */
 .relative{ position:relative; }
