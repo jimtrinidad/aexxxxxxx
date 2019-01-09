@@ -135,15 +135,15 @@ html, body { height: 100%; margin: 0; font-size: 14px;}
 	.tagline-holder img {display: none;}
 	/*.header-bar h1{ display: none; }*/
 	.mak-settings{ text-align: right; }
-	.post-items h2{ font-size: 12px; line-height: 18px;}	
-	.post-items .transaction-date, .post-items .transaction-rate{ text-align: right;}
+	.post-items h2{ font-size: 12px; line-height: 18px;}
 }
 
 /*smaller width*/
 @media (max-width: 500px) {
 	.mak-id span{ display: none; }
+	.post-items .transaction-provider {font-size: 9px;}
 	.post-items .transaction-provider-pic img{ width: 20px; height: 20px;}
-	.post-items .transaction-rate {font-size: 90%;text-align: right;}
+	.post-items .transaction-rate {font-size: 90%;}
 }
 
 /* Position */
