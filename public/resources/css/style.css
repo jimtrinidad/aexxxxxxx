@@ -136,7 +136,7 @@ html, body { height: 100%; margin: 0; font-size: 14px;}
 	/*.header-bar h1{ display: none; }*/
 	.mak-settings{ text-align: right; }
 	.post-items h2{ font-size: 12px; line-height: 18px;}	
-	.post-items .transaction-date, .post-items .transaction-rate{ text-align: left;}
+	.post-items .transaction-date, .post-items .transaction-rate{ text-align: right;}
 }
 
 /*smaller width*/
