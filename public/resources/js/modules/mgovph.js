@@ -142,7 +142,7 @@ function Mgovph() {
 
         if (firstload) {
             $('#LoadMainBody').html(''); //reset content
-            $('#LoadMainBody').css('height', '70px').LoadingOverlay("show", {
+            $('#LoadMainBody').css('min-height', '70px').LoadingOverlay("show", {
                 backgroundClass: 'bg-grey', 
                 text: 'Loading feeds...', 
                 textClass: 'text-gray',
@@ -254,7 +254,7 @@ function Mgovph() {
         };
 
         $('#LoadMainBody').html(''); //reset content
-        $('#LoadMainBody').css('height', '70px').LoadingOverlay("show", {
+        $('#LoadMainBody').css('min-height', '70px').LoadingOverlay("show", {
             backgroundClass: 'bg-grey', 
             text: 'Loading services...', 
             textClass: 'text-gray',
