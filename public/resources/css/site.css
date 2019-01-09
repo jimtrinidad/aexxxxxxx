@@ -190,6 +190,11 @@ bootbox overwrite
 .bootbox .modal-footer {padding: 5px 10px;}
 .bootbox .modal-footer .btn {padding: 1px 5px;font-size: 13px;}
 
+.feedItem .serviceLogo, .serviceItem .serviceLogo {float: right;}
+
+@media (max-width: 768px) {
+  .feedItem .serviceLogo, .serviceItem .serviceLogo {float: none;text-align: left;}  
+}
 
 .serviceItem .DepartmentLogo {
   margin: 0 auto;

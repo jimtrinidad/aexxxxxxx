@@ -1,8 +1,8 @@
 <!-- Filter Services-->
-<div class="bg-grey padding-10 offset-bottom-10">
+<div class="bg-grey padding-top-10 padding-left-10 padding-right-10 offset-bottom-10">
 	<div class="row">
 		<div class="col-sm-6 text-bold text-white padding-top-10 padding-bottom-5">Government Performance Report</div>
-		<div class="col-sm-3">
+		<div class="col-sm-3 padding-bottom-5">
 			<select id="gov_report_region_selector" class="form-control">
 				<option value="">Select Region</option>
 				<?php 
@@ -12,7 +12,7 @@
 				?>
 			</select>
 		</div>
-		<div class="col-sm-3">
+		<div class="col-sm-3 padding-bottom-10">
 			<select id="gov_report_province_selector" disabled="disabled" class="form-control">
 				<option value="">Select Province</option>
 			</select>

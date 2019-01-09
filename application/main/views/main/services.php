@@ -7,15 +7,15 @@
          </div>
       </div>
     </div>
-    <div class="row padding-top-10 padding-bottom-10">
+    <div class="row padding-bottom-5">
       <!--div class="col-sm-4">
          <button class="btn bg-blue text-white btn-block">Search by Category</button>
          </div-->
-      <div class="col-sm-7">
+      <div class="col-sm-7 padding-top-5">
          <!--input type="text" name="" class="form-control bg-green text-white" value="Department"-->
          <select class="form-control bg-green text-white" id="DepartmentID" name="DepartmentID" onChange="">
             <!-- input-sm GetAgencyOffice();-->
-            <option value="">--Select Department--</option>
+            <option value="">--Search By Department--</option>
             <?php
                foreach(lookup_all('Dept_Departments', false, 'Name') as $item) {
                 echo '<option value="' . $item['id'] . '">' . $item['Name'] . '</option>';
@@ -23,10 +23,10 @@
             ?>
          </select>
       </div>
-      <div class="col-sm-3">
+      <div class="col-sm-3 padding-top-5">
          <select class="form-control bg-green text-white" id="LocationScopeID" name="LocationScopeID">
             <!-- input-sm-->
-            <option value="">--</option>
+            <option value="">--Search By Location--</option>
             <?php
               foreach (lookup('location_scope') as $k => $v) {
                 echo "<option value='{$k}'>{$v}</option>";
@@ -34,7 +34,7 @@
             ?>
          </select>
       </div>
-      <div class="col-sm-2">
+      <div class="col-sm-2 padding-top-5">
          <button class="btn bg-cyan text-white btn-block" onClick="Mgovph.getServices()">Search</button>
       </div>
     </div>
