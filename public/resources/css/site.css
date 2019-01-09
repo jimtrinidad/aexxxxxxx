@@ -192,8 +192,8 @@ bootbox overwrite
 
 .feedItem .serviceLogo, .serviceItem .serviceLogo {float: right;}
 
-@media (max-width: 768px) {
-  .feedItem .serviceLogo, .serviceItem .serviceLogo {float: right;text-align: right;}  
+@media (max-width: 500px) {
+  .feedItem .serviceLogo, .serviceItem .serviceLogo {float: none;text-align: left;}  
 }
 
 .serviceItem .DepartmentLogo {
