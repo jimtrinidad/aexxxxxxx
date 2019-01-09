@@ -22,11 +22,11 @@
             </div>
             <div class="col-sm-3 col-xs-12">
                <div class="row">
-                  <div class="col-md-12 col-sm-12 col-xs-4 padding-bottom-5">
+                  <div class="col-md-12 col-sm-12 col-xs-3 padding-bottom-5">
                      <img src="" class="serviceLogo img-responsive" style="max-width: 70px;">
                      <div class="clearfix"></div>
                   </div>
-                  <div class="col-md-12 col-sm-12 col-xs-4">
+                  <div class="col-md-12 col-sm-12 col-xs-5">
                      <div class="transaction-rate">
                         <i class="fa fa-star text-yellow" aria-hidden="true"></i>
                         <i class="fa fa-star text-yellow" aria-hidden="true"></i>
