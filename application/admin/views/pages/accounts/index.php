@@ -15,6 +15,8 @@
                   }
                 ?>
               </select>
+            </div>
+            <div class="form-group">
               <select class="form-control input-sm" id="search_account_level" name="search_account_level">
                 <option value="">Account Level</option>
                 <?php
@@ -34,7 +36,6 @@
               <button type="submit" class="btn btn-sm btn-success">Search</button>
             </div>
           </form>
-          
         </div>
       </div>
       <!-- /.box-header -->

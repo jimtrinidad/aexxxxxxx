@@ -37,7 +37,7 @@
     <!-- Form End-->
     <!-- Actions and Commands -->
     <div class="padding-top-20">
-      <strong class="text-yellow">Actions and Commands:</strong>
+      <strong class="text-yellow padding-bottom-5">Actions and Commands:</strong> <br class="visible-xs"><br class="visible-xs">
       <span class="text-white offset-right-5">
         <i class="fa fa-check padding-5 bg-cyan text-white offset-right-5" aria-hidden="true"></i> Approve
       </span>

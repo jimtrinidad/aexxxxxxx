@@ -1,4 +1,90 @@
 <div class="serviceItem hide post-items bg-white padding-10">
+   <div class="row gutter-5">
+      <div class="col-sm-2 col-xs-3">
+         <img src="" class="img-responsive DepartmentLogo">
+      </div>
+      <div class="col-sm-10 col-xs-9">
+         <div class="row padding-bottom-5">
+            <div class="col-xs-12">
+               <h2 class="text-bold DepartmentName">Dept name</h2>
+            </div>
+         </div>
+         <div class="DepartmentServices">
+            <div class="row DepartmentService padding-top-5">
+               <div class="col-sm-9 col-xs-12">
+                  <div class="row gutter-5">
+                     <div class="col-xs-12">
+                        <h2><span class="text-bold text-green ServiceName">Service name</span></h2>
+                        <span class="ServiceDesc" style="font-family:Trebuchet MS; font-size:12px;">Service description</span>
+                        <h5><span class="text-blue ServiceZone" style="font-family:Trebuchet MS; font-size:10px;">Zone</span></h5>
+                     </div>
+                     <div class="col-sm-12 col-xs-8">
+                        <div style="margin-top: 5px;" class="transaction-counter">
+                           Service Code: <span class="ServiceCode">ServiceCode</span> <br class="visible-xs">
+                           Total Services Provided:  <span class="serviceProvided">2,005,009,997</span>
+                           <div class="transaction-rate visible-xs" style="text-align: left;">
+                              <i class="fa fa-star text-yellow" aria-hidden="true"></i>
+                              <i class="fa fa-star text-yellow" aria-hidden="true"></i>
+                              <i class="fa fa-star text-yellow" aria-hidden="true"></i>
+                              <i class="fa fa-star text-yellow" aria-hidden="true"></i>
+                              <i class="fa fa-star text-yellow" aria-hidden="true"></i>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-xs-4 visible-xs">
+                        <div class="row gutter-5">
+                           <div class="col-md-12 padding-bottom-5">
+                              <img src="" class="serviceLogo img-responsive" style="max-width: 60px;">
+                              <div class="clearfix"></div>
+                           </div>
+                           <div class="col-md-12">
+                              <div class="transaction-provider">
+                                 Service Provided by
+                              </div>
+                              <div class="transaction-provider-pic">
+                                 <img src="<?php echo public_url(); ?>resources/images/provider-1.png">
+                                 <img src="<?php echo public_url(); ?>resources/images/provider-1.png">
+                                 <img src="<?php echo public_url(); ?>resources/images/provider-1.png">
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-sm-3 hidden-xs">
+                  <div class="row gutter-5">
+                     <div class="col-md-12 padding-bottom-5">
+                        <img src="" class="serviceLogo img-responsive" style="max-width: 60px;">
+                        <div class="clearfix"></div>
+                     </div>
+                     <div class="col-md-12">
+                        <div class="transaction-rate">
+                           <i class="fa fa-star text-yellow" aria-hidden="true"></i>
+                           <i class="fa fa-star text-yellow" aria-hidden="true"></i>
+                           <i class="fa fa-star text-yellow" aria-hidden="true"></i>
+                           <i class="fa fa-star text-yellow" aria-hidden="true"></i>
+                           <i class="fa fa-star text-yellow" aria-hidden="true"></i>
+                        </div>
+                     </div>
+                     <div class="col-md-12">
+                        <div class="transaction-provider">
+                           Service Provided by
+                        </div>
+                        <div class="transaction-provider-pic">
+                           <img src="<?php echo public_url(); ?>resources/images/provider-1.png">
+                           <img src="<?php echo public_url(); ?>resources/images/provider-1.png">
+                           <img src="<?php echo public_url(); ?>resources/images/provider-1.png">
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!-- <div class="serviceItem hide post-items bg-white padding-10">
    <div class="row">
       <div class="col-sm-2 col-xs-3">
          <img src="" class="img-responsive DepartmentLogo">
@@ -47,7 +133,7 @@
          </div>
       </div>
    </div>
-</div>
+</div> -->
 
 <div class="hide serviceDetailsTemplate">
    <!-- Filter Services-->

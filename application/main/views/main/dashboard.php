@@ -8,13 +8,15 @@
          </div>
       </div>
    </div>
-   <div class="row padding-bottom-5">
-      <!--div class="col-sm-4">
-         <button class="btn bg-blue text-white btn-block">Search by Category</button>
-         </div-->
+   <div class="row gutter-5 padding-bottom-5">
+
+      <div class="col-sm-2 padding-top-5 visible-xs">
+         <button class="btn bg-cyan text-white btn-block text-bold" onClick="Mgovph.getServices()">Search</button>
+      </div>
+
       <div class="col-sm-7 padding-top-5">
          <!--input type="text" name="" class="form-control bg-green text-white" value="Department"-->
-         <select class="form-control bg-green text-white" id="DepartmentID" name="DepartmentID" onChange="">
+         <select class="form-control bg-green text-white" id="DepartmentID" name="DepartmentID" onChange="Mgovph.getServices()">
             <!-- input-sm GetAgencyOffice();-->
             <option value="">--Search By Department--</option>
             <?php
@@ -25,7 +27,7 @@
          </select>
       </div>
       <div class="col-sm-3 padding-top-5">
-         <select class="form-control bg-green text-white" id="LocationScopeID" name="LocationScopeID">
+         <select class="form-control bg-green text-white" id="LocationScopeID" name="LocationScopeID" onchange="Mgovph.getServices()">
             <!-- input-sm-->
             <option value="">--Search By Location--</option>
             <?php
@@ -35,8 +37,8 @@
             ?>
          </select>
       </div>
-      <div class="col-sm-2 padding-top-5">
-         <button class="btn bg-cyan text-white btn-block" onClick="Mgovph.getServices()">Search</button>
+      <div class="col-sm-2 padding-top-5 hidden-xs">
+         <button class="btn bg-cyan text-white btn-block text-bold" onClick="Mgovph.getServices()">Search</button>
       </div>
    </div>
 </form>
