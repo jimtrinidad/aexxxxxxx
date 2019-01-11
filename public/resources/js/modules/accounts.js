@@ -91,7 +91,7 @@ function Accounts() {
             // set data
             $('#AccountForm .mabuhay-id').text(data.mabuhay_id);
             $('#AccountForm #id').val(data.id);
-            $('#AccountForm .image-preview').prop('src',window.public_url() + "assets/profile/" + data.photo);
+            $('#AccountForm .image-preview').prop('src',window.public_url() + "assets/profile/" + data.photo + "?" + Date.now());
             $('#AccountForm #FirstName').val(data.firstname);
             $('#AccountForm #LastName').val(data.lastname);
             $('#AccountForm #MiddleName').val(data.middlename);
