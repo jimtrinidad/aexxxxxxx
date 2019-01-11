@@ -93,7 +93,7 @@ class Get extends CI_Controller
 
             $userData       = user_account_details($v['ApplicantID'], 'id');
 
-            $v['userFullname']  = user_full_name($userData);
+            $v['userFullname']  = user_full_name($userData, '');
             $v['userAddress']   = user_full_address($userData);
             $v['userAvatar']    = public_url('assets/profile/') . photo_filename($userData->Photo);
             if ($v['SubDepartmentID']) {

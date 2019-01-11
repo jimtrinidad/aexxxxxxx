@@ -12,10 +12,10 @@
                   <div class="col-xs-12 padding-bottom-5">
                      <h2 class="text-bold">
                         <span class="text-blue userFullname">fullname</span>  from
-                        <span class="text-green userAddress">address</span>  has
-                        <span class="text-blue">Applied for a</span>
+                        <span class="text-green userAddress">address</span>
+                        <span class=""> has received a service which is </span>
                         <span class="text-yellow feedServiceName">service name</span> from
-                        <span class="feedDepartmentName">dept name</span>
+                        <span class="text-blue feedDepartmentName">dept name</span>
                      </h2>
                   </div>
                   <div class="col-sm-12 col-xs-8">
