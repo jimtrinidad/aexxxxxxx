@@ -14,19 +14,19 @@
          <button class="btn bg-cyan text-white btn-block text-bold" onClick="Mgovph.getServices()">Search</button>
       </div>
 
-      <div class="col-sm-7 padding-top-5">
+      <div class="col-sm-9 padding-top-5">
          <!--input type="text" name="" class="form-control bg-green text-white" value="Department"-->
          <select class="form-control bg-green text-white" id="DepartmentID" name="DepartmentID" onChange="Mgovph.getServices()">
             <!-- input-sm GetAgencyOffice();-->
             <option value="">--Search By Department--</option>
             <?php
-               foreach(lookup_all('Dept_Departments', false, 'Name') as $item) {
+               foreach(lookup_trending_departments() as $item) {
                 echo '<option value="' . $item['id'] . '">' . $item['Name'] . '</option>';
                }
             ?>
          </select>
       </div>
-      <div class="col-sm-3 padding-top-5">
+      <div class="col-sm-3 padding-top-5 hide">
          <select class="form-control bg-green text-white" id="LocationScopeID" name="LocationScopeID" onchange="Mgovph.getServices()">
             <!-- input-sm-->
             <option value="">--Search By Location--</option>
@@ -37,7 +37,7 @@
             ?>
          </select>
       </div>
-      <div class="col-sm-2 padding-top-5 hidden-xs">
+      <div class="col-sm-3 padding-top-5 hidden-xs">
          <button class="btn bg-cyan text-white btn-block text-bold" onClick="Mgovph.getServices()">Search</button>
       </div>
    </div>

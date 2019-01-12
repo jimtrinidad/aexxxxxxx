@@ -155,6 +155,8 @@ class Mahana_messaging
                 if ( ! isset($threads[$msg['thread_id']]))
                 {
                     $threads[$msg['thread_id']]['thread_id'] = $msg['thread_id'];
+                    $threads[$msg['thread_id']]['thread_type'] = $msg['type'];
+                    $threads[$msg['thread_id']]['key'] = $msg['key'];
                     $threads[$msg['thread_id']]['messages']  = array($msg);
                 }
                 else
@@ -230,12 +232,12 @@ class Mahana_messaging
 
         if ( ! $this->ci->mahana_model->valid_new_participant($thread_id, $user_id))
         {
-            $this->_particpant_error(MSG_ERR_PARTICIPANT_EXISTS);
+            return $this->_participant_error(MSG_ERR_PARTICIPANT_EXISTS);
         }
 
         if ( ! $this->ci->mahana_model->application_user($user_id))
         {
-            $this->_particpant_error(MSG_ERR_PARTICIPANT_NONSYSTEM);
+            return $this->_participant_error(MSG_ERR_PARTICIPANT_NONSYSTEM);
         }
 
         if ($this->ci->mahana_model->add_participant($thread_id, $user_id ))
@@ -289,7 +291,7 @@ class Mahana_messaging
      * @param   integer  $priority
      * @return  array
      */
-    function send_new_message($sender_id, $recipients, $subject = '', $body = '', $priority = PRIORITY_NORMAL)
+    function send_new_message($sender_id, $recipients, $subject = '', $body = '', $priority = PRIORITY_NORMAL, $type = 0, $key = null, $client = null)
     {
         if (empty($sender_id))
         {
@@ -305,7 +307,7 @@ class Mahana_messaging
             );
         }
 
-        if ($thread_id = $this->ci->mahana_model->send_new_message($sender_id, $recipients, $subject, $body, $priority))
+        if ($thread_id = $this->ci->mahana_model->send_new_message($sender_id, $recipients, $subject, $body, $priority, $type, $key, $client))
         {
             return $this->_success($thread_id, MSG_MESSAGE_SENT);
         }

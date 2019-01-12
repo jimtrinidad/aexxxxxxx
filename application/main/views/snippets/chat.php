@@ -138,7 +138,7 @@
 	.ui .avatar > img,
 	.ui .list-friends img {
 	  border-radius: 50%;
-	  border: 3px solid #72c0d8;
+	  border: 2px solid #72c0d8;
 	}
 	.ui .list-friends {
 	  list-style: none;
@@ -162,17 +162,30 @@
 		background: #134684;
 	}
 
+	.ui .support-thread {
+		background: #1985a0;
+	}
+
+	.ui li.support-thread.active {
+		background: #089dc2;
+	}
+
 	.ui .list-friends .info {
 	  flex: 1;
+	  padding: 5px 0;
 	}
 	.ui .list-friends .user {
 	  color: #fff;
-	  margin-top: 12px;
+	  margin-top: 5px;
 	}
 	.ui .list-friends .status {
 	  position: relative;
 	  /*margin-left: 14px;*/
 	  color: #a8adb3;
+	}
+	.ui .list-friends.support-list .user {
+	  color: #fff;
+	  margin-top: 10px;
 	}
 	/*.ui .list-friends .off:after,
 	.ui .list-friends .on:after {
@@ -460,7 +473,10 @@
 					<!-- Tab panes -->
 					<div class="tab-content">
 					    <div role="tabpanel" class="tab-pane" id="friends"></div>
-					    <div role="tabpanel" class="tab-pane" id="support"></div>
+					    <div role="tabpanel" class="tab-pane" id="support">
+					    	<menu class="list-friends support-list">
+							</menu>
+					    </div>
 					    <div role="tabpanel" class="tab-pane" id="recent">
 					    	<!-- <form action="#" class="search">
 								<input placeholder="search..." type="search" name="" id="">

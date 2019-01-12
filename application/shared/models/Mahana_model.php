@@ -12,9 +12,9 @@ class Mahana_model extends CI_Model
      * @param   integer  $priority
      * @return  integer  $new_thread_id
      */
-    function send_new_message($sender_id, $recipients, $subject, $body, $priority)
+    function send_new_message($sender_id, $recipients, $subject, $body, $priority, $type = 0, $key = null, $client = null)
     {
-        $match_thread = $this->get_thread_by_participants($sender_id, $recipients);
+        $match_thread = $this->get_thread_by_participants($sender_id, $recipients, $type, $key);
         if (count($match_thread)) {
             
             $thread_id = $match_thread[0]['thread_id'];
@@ -24,7 +24,7 @@ class Mahana_model extends CI_Model
             
             $this->db->trans_start();
 
-            $thread_id = $this->_insert_thread($subject);
+            $thread_id = $this->_insert_thread($subject, $type, $key, $client);
             $msg_id    = $this->_insert_message($thread_id, $sender_id, $body, $priority);
 
             // Create batch inserts
@@ -163,7 +163,7 @@ class Mahana_model extends CI_Model
      */
     function get_message($msg_id, $user_id)
     {
-        $sql = 'SELECT m.*, s.status, t.subject, ' . USER_TABLE_USERNAME .
+        $sql = 'SELECT m.*, s.status, t.subject, t.type, t.key, t.client, ' . USER_TABLE_USERNAME .
         ' FROM ' . $this->db->dbprefix . 'msg_messages m ' .
         ' JOIN ' . $this->db->dbprefix . 'msg_threads t ON (m.thread_id = t.id) ' .
         ' JOIN ' . $this->db->dbprefix . USER_TABLE_TABLENAME . ' ON (' . USER_TABLE_ID . ' = m.sender_id) '.
@@ -188,7 +188,7 @@ class Mahana_model extends CI_Model
      */
     function get_full_thread($thread_id, $user_id, $full_thread = FALSE, $order_by = 'asc')
     {
-        $sql = 'SELECT m.*, s.status, t.subject, '.USER_TABLE_USERNAME .
+        $sql = 'SELECT m.*, s.status, t.subject, t.type, t.key, t.client, '.USER_TABLE_USERNAME .
         ' FROM ' . $this->db->dbprefix . 'msg_participants p ' .
         ' JOIN ' . $this->db->dbprefix . 'msg_threads t ON (t.id = p.thread_id) ' .
         ' JOIN ' . $this->db->dbprefix . 'msg_messages m ON (m.thread_id = t.id) ' .
@@ -221,7 +221,7 @@ class Mahana_model extends CI_Model
      */
     function get_all_threads($user_id, $full_thread = FALSE, $order_by = 'asc')
     {
-        $sql = 'SELECT m.*, s.status, t.subject, '.USER_TABLE_USERNAME .
+        $sql = 'SELECT m.*, s.status, t.subject, t.type, t.key, t.client, '.USER_TABLE_USERNAME .
         ' FROM ' . $this->db->dbprefix . 'msg_participants p ' .
         ' JOIN ' . $this->db->dbprefix . 'msg_threads t ON (t.id = p.thread_id) ' .
         ' JOIN ' . $this->db->dbprefix . 'msg_messages m ON (m.thread_id = t.id) ' .
@@ -252,7 +252,7 @@ class Mahana_model extends CI_Model
      */
     function get_thread_messages($user_id, $thread_id, $from_time = false, $status = false, $order_by = 'asc')
     {
-        $sql = 'SELECT m.*, s.status, t.subject, '.USER_TABLE_USERNAME .
+        $sql = 'SELECT m.*, s.status, t.subject, t.type, t.key, t.client, '.USER_TABLE_USERNAME .
         ' FROM ' . $this->db->dbprefix . 'msg_participants p ' .
         ' JOIN ' . $this->db->dbprefix . 'msg_threads t ON (t.id = p.thread_id) ' .
         ' JOIN ' . $this->db->dbprefix . 'msg_messages m ON (m.thread_id = t.id) ' .
@@ -464,7 +464,7 @@ class Mahana_model extends CI_Model
     /**
     * get thread id by exact participants
     */
-    function get_thread_by_participants($sender_id, $recipients)
+    function get_thread_by_participants($sender_id, $recipients, $type = 0, $key = null)
     {
         if (is_array($recipients)) {
             $participants = $recipients;
@@ -480,23 +480,31 @@ class Mahana_model extends CI_Model
         $count      = count($participants);
         $imploded   = implode('', $participants);
         $sql = "SELECT 
-                    thread_id
+                    thread_id,
+                    grouped.type,
+                    grouped.key
                 FROM
                     (SELECT 
                         thread_id,
+                        t.type,
+                        t.key,
                             GROUP_CONCAT(user_id
                                 ORDER BY user_id
                                 SEPARATOR '') AS imploded
                     FROM
-                        msg_threads
-                    JOIN msg_participants ON msg_threads.id = msg_participants.thread_id
+                        msg_threads t
+                    JOIN msg_participants ON t.id = msg_participants.thread_id
                     GROUP BY msg_participants.thread_id
                     HAVING COUNT(msg_participants.user_id) = ?) AS grouped
-                WHERE
-                    grouped.imploded = ?";
+                WHERE grouped.imploded = ?
+                    AND grouped.type = ?";
+
+        if ($key) {
+            $sql .= " AND grouped.key = {$key}";
+        }
 
 
-        $query = $this->db->query($sql, array($count, $imploded));
+        $query = $this->db->query($sql, array($count, $imploded, $type));
 
         return $query->result_array();
     }
@@ -511,9 +519,17 @@ class Mahana_model extends CI_Model
      * @param   string  $subject
      * @return  integer
      */
-    private function _insert_thread($subject)
+    private function _insert_thread($subject, $type, $key, $client)
     {
-        $insert_id = $this->db->insert('msg_threads', array('subject' => $subject));
+        $data = array(
+            'subject' => $subject,
+        );
+        if ($type) {
+            $data['type']   = $type;
+            $data['key']    = $key;
+            $data['client'] = $client;
+        }
+        $insert_id = $this->db->insert('msg_threads', $data);
 
         return $this->db->insert_id();
     }

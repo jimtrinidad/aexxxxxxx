@@ -15,6 +15,8 @@ function Chatbox() {
     this.findRequest;
     this.threadRequest;
     this.receiverID;
+    this.serviceID;
+    this.new_support_thread = false;
 
     /**
      * Initialize events
@@ -25,6 +27,7 @@ function Chatbox() {
         self.set_events();
         self.set_configs();
         self.getThreads();
+        self.get_service_supports();
         self.userFinder("#findUser");
 
         self.currentUser = $('#chat_current_user').val();
@@ -74,6 +77,11 @@ function Chatbox() {
         // select thread
         $('.chatbubble .recent-threads').on('click', 'li', function(){
             self.selectThread(this);
+        });
+
+        // select support
+        $('.chatbubble .support-list').on('click', 'li', function(){
+            self.selectSupport(this);
         });
 
         // new or find thread
@@ -283,6 +291,8 @@ function Chatbox() {
                     vData.thread_id = self.activeThread;
                 } else if (self.receiverID) {
                     vData.receiver = self.receiverID;
+                } else if (self.new_support_thread && self.serviceID) {
+                    vData.service_id = self.serviceID;
                 }
 
                 $.ajax({
@@ -291,11 +301,19 @@ function Chatbox() {
                     data : vData,
                     success : function(response) {
                         if (response.status) {
-                            if (response.type == 2) {
+                            if (response.type == 2 || response.type == 3) {
 
                                 // set new message as active thread
                                 self.activeThread = response.data;
                                 self.lastTime = 0
+
+                                // reload service support list
+                                if (response.type == 3) {
+                                    self.get_service_supports();
+                                }
+
+                                $('.chatbubble menu.support-list li').removeClass('active');
+                                $('.nav-tabs a[href="#recent"]').tab('show');
 
                                 // refresh thread
                                 self.getThreads();
@@ -383,6 +401,7 @@ function Chatbox() {
         $('.chatbubble .finder').removeClass('hide');
         self.activeThread = false;
         self.receiverID = false;
+        this.new_support_thread = false;
     }
 
     /**
@@ -393,6 +412,7 @@ function Chatbox() {
     {
         self.abortRequest();
         self.activeThread = false;
+        this.new_support_thread = false;
         self.receiverID = false;
         $('.chatbubble').addClass('opened');
         $(".chatbubble .list-friends").show();
@@ -455,14 +475,8 @@ function Chatbox() {
         var recent_holder = $('menu.recent-threads');
         recent_holder.html('');
         $.each(data, function (i,e){
-            var recentImg = window.public_url('assets/profile/' + e.participants[0].photo);
-            var recentName = e.participants[0].user_name;
-            if (e.participants.length > 2) {
-                recentName += ', +' + (e.participants.length - 1) + ' Others';
-            } else if (e.participants.length == 2) {
-                // recentName += ', ' + e.participants[1].user_name;
-                recentName += ', +' + (e.participants.length - 1) + ' Other';
-            }
+            var recentImg = e.photo;
+            var recentName = e.name;
             var recentNote = e.msg_count + ' messages';
             var badge = '';
             if (e.unread > 0) {
@@ -475,7 +489,7 @@ function Chatbox() {
                 $('.chatbubble .top .info .count').text(e.msg_count + ' messages found');
             }
             recent_holder.append(
-                '<li id="thread_'+e.id+'" class="'+isactive+'" data-thread_id="'+e.id+'"> \
+                '<li id="thread_'+e.id+'" class="'+isactive + (e.type == 1 ? ' support-thread' : '') +'" data-thread_id="'+e.id+'"> \
                     <img width="40" height="40" src="'+recentImg+'" title="'+recentName+'"> \
                     <span class="xs-only">'+badge+'</span> \
                     <div class="info"> \
@@ -495,17 +509,20 @@ function Chatbox() {
         var $this = $(elem);
         if (!$this.hasClass('active')) {
             var data = self.get_thread_data($this.data('thread_id'));
-            $('.chatbubble .recent-threads li').removeClass('active');
+            $('.chatbubble menu li').removeClass('active');
             $this.addClass('active');
 
             // set info
-            $('.chatbubble .top .avatar img').prop('src', window.public_url('assets/profile/' + data.participants[0].photo));
+            $('.chatbubble .top .avatar img').prop('src', data.photo);
             var participants = [];
             $.each(data.participants, function(i, e) {
                 participants.push(e.user_name);
             });
-            $('.chatbubble .top .info .name').text(participants.join(', '));
-            // $('.chatbubble .top .info .name').text($this.find('.user').text());
+            if (data.type == 0) {
+                $('.chatbubble .top .info .name').text(participants.join(', '));
+            } else {
+                $('.chatbubble .top .info .name').text(data.name);
+            }
             $('.chatbubble .top .info .count').text(data.msg_count + ' messages found');
             $('.chatbubble .top content').removeClass('hide');
             $('.chatbubble .write-form').removeClass('hide');
@@ -515,6 +532,7 @@ function Chatbox() {
             $(".chatbubble .messages").html('').removeClass('hide').LoadingOverlay("show", {zIndex: 9999999});
 
             self.receiverID = false;
+            this.new_support_thread = false;
             self.activeThread  = data.id;
             self.lastTime = 0;
             self.getMessages(1);
@@ -598,6 +616,68 @@ function Chatbox() {
         }).bind('typeahead:select', function(ev, item) {
             var id = $(ev.target).prop('id');
         });
+    }
+
+
+    /**
+    * get services support list
+    */
+    this.get_service_supports = function()
+    {
+        $.ajax({
+            url  : window.base_url('message/services'),
+            type : 'get',
+            success : function(response) {
+                var support_holder = $('menu.support-list');
+                support_holder.html('');
+                if (response.status) {
+                    $.each(response.data, function(i,e){
+                        var img = window.public_url('assets/logo/' + e.Logo);
+                        var name = e.Name;
+                        support_holder.append(
+                            '<li id="service_'+e.Code+'" data-code="'+e.Code+'" data-id="'+e.id+'" data-logo="'+e.Logo+'" data-thread_id="'+e.thread_id+'"> \
+                                <img width="40" height="40" src="'+img+'" title="'+name+'"> \
+                                <div class="info"> \
+                                    <div class="user">'+name+'</div> \
+                                </div> \
+                            </li>'
+                        );
+                    });
+                }
+            }
+        });
+    }
+
+    this.selectSupport = function(elem)
+    {
+        var $this = $(elem);
+        if (!$this.hasClass('active')) {
+            var data = $(elem).data();
+            if(data.thread_id && $('.chatbubble .recent-threads li#thread_' + data.thread_id)) {
+                $('.nav-tabs a[href="#recent"]').tab('show');
+                $('.chatbubble .recent-threads li#thread_' + data.thread_id).click();
+                return false;
+            }
+            $('.chatbubble menu li').removeClass('active');
+            $this.addClass('active');
+
+            // set info
+            $('.chatbubble .top .avatar img').prop('src', window.public_url('assets/logo/' + data.logo));
+            $('.chatbubble .top .info .name').text($this.find('.user').text());
+            $('.chatbubble .top .info .count').text('');
+            $('.chatbubble .top content').removeClass('hide');
+            $('.chatbubble .write-form').removeClass('hide');
+            
+            $(".chatbubble .write-form .textMessageHelp").text('');
+            $(".chatbubble .finder").addClass('hide');
+            $(".chatbubble .messages").html('').removeClass('hide');
+
+            self.receiverID = false;
+            self.serviceID  = data.code;
+            this.new_support_thread = true;
+            self.activeThread  = data.thread_id;
+            self.lastTime = 0;
+        }
     }
 
 }

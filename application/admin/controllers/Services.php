@@ -547,4 +547,124 @@ class Services extends CI_Controller
         response_json($return_data);
     }
 
+
+    /**
+    * assign service support
+    */
+    public function add_support($code)
+    {
+        if ($code) {
+            $service = $this->mgovdb->getRowObject('Service_Services', $code, 'Code');
+            if ($service) {
+                $supports = json_decode($service->Supports, true);
+                $officer  = get_post('officer');
+                if (!in_array($officer, $supports)) {
+                    $supports[] = $officer;
+                    $updateData = array(
+                        'id'         => $service->id,
+                        'Supports'   => json_encode(array_values($supports)),
+                        'LastUpdate' => date('Y-m-d H:i:s')
+                    );
+                    if ($this->mgovdb->saveData('Service_Services', $updateData)) {
+
+                        $this->load->library('mahana_messaging');
+
+                        // add officer to exising message threads
+                        $threads    = $this->mgovdb->getRecords('msg_threads', array('key' => $service->Code));
+                        foreach ($threads as $thread) {
+                            // remove first to clear previous message if exists
+                            $this->mahana_messaging->remove_participant($thread['id'], $officer);
+                            
+                            $this->mahana_messaging->add_participant($thread['id'], $officer);
+                        }
+
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Service support has been assigned.'
+                        );
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Assigning service support failed.'
+                        );
+                    }
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Support already assigned.'
+                    );
+                }
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Invalid service code.'
+                );
+            }
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Invalid service code.'
+            );
+        }
+
+        response_json($return_data);
+    }
+
+    /**
+    * remove support
+    */
+    public function remove_support($code)
+    {
+        if ($code) {
+            $service = $this->mgovdb->getRowObject('Service_Services', $code, 'Code');
+            if ($service) {
+                $supports = json_decode($service->Supports, true);
+                $officer  = get_post('officer');
+
+                if (($key = array_search($officer, $supports)) !== false) {
+                    unset($supports[$key]);
+                }
+
+                $updateData = array(
+                    'id'         => $service->id,
+                    'Supports'   => json_encode(array_values($supports)),
+                    'LastUpdate' => date('Y-m-d H:i:s')
+                );
+                if ($this->mgovdb->saveData('Service_Services', $updateData)) {
+
+                    $this->load->library('mahana_messaging');
+
+                    // remove officer to exising message threads
+                    $threads    = $this->mgovdb->getRecords('msg_threads', array('key' => $service->Code));
+                    foreach ($threads as $thread) {
+                        $this->mahana_messaging->remove_participant($thread['id'], $officer);
+                    }
+
+                    $return_data = array(
+                        'status'    => true,
+                        'message'   => 'Service support has been removed.'
+                    );
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Removing service support failed.'
+                    );
+                }
+
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Invalid service code.'
+                );
+            }
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Invalid service code.'
+            );
+        }
+
+        response_json($return_data);
+    }
+
 }

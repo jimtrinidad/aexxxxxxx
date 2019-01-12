@@ -320,3 +320,21 @@ function lookup_all_departments_and_offices($where = false, $order = false, $exc
 
     return $all_deparments;
 }
+
+
+/**
+* get department order by most applications
+*/
+function lookup_trending_departments()
+{
+
+    $ci =& get_instance();
+    $sql = "SELECT d.id, d.Name, COUNT(sa.DepartmentID) AS ApplicationCount
+            FROM Dept_Departments d
+            LEFT OUTER JOIN Service_Applications sa ON d.id = sa.DepartmentID
+            WHERE d.deletedAt IS NULL
+            GROUP BY d.id
+            ORDER BY ApplicationCount DESC, d.Name";
+
+    return $ci->db->query($sql)->result_array();
+}

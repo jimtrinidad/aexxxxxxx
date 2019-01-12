@@ -299,6 +299,24 @@ function prepare_service_data($raw, $getcomponents = false)
 	$data['Location'] 		= lookup_address($data);
 	$data['Tags'] 			= $raw->Tags ? lookup('service_tags', json_decode($raw->Tags, true)) : array();
 
+	$support_ids = json_decode($data['Supports'], true);
+	$supports 	 = array();
+	foreach ($support_ids as $support_id) {
+		$user = $ci->mgovdb->getRowObject('UserAccountInformation', $support_id, 'id');
+		if ($user) {
+			$supports[] = array(
+				'id'		=> $user->id,
+				'MabuhayID'	=> $user->MabuhayID,
+				'FirstName'	=> $user->FirstName,
+				'LastName'	=> $user->LastName,
+				'AccountLevel'	=> lookup_db('UserAccountLevel', 'LevelName', $user->AccountLevelID),
+				'Photo'		=> photo_filename($user->Photo)
+			);
+		}
+	}
+
+	$data['Supports'] = $supports;
+
 	if ($getcomponents) {
 		// get requirements, extra fields
 		

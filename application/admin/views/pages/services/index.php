@@ -67,7 +67,9 @@
                               $item['Status'] == 0
                               ? '
                                 <button type="button" class="btn btn-xs btn-success" title="Approve service" onClick="Services.approveService('.$item['id'].')"><i class="fa fa-check"></i><span class="visible-lg-inline"> Approve</span></button>'
-                              : '' 
+                              : '
+                                <button class="btn btn-xs btn-info" title="Supports" onClick="Services.showSupports('.$item['id'].')">( '.count($item['Supports']).' ) <i class="fa fa-users"></i><span class="visible-lg-inline"> Supports</span></button>
+                              ' 
                             )
                               . '<a href="'.base_url('services/setup/' . $item['Code']).'" class="btn btn-xs btn-default" title="View details"><i class="fa fa-pencil"></i></a>
                               	<button type="button" class="btn btn-xs btn-danger" title="Delete" onClick="Services.deleteService('.$item['id'].')"><i class="fa fa-trash"></i></button>
@@ -89,6 +91,8 @@
     </div>
   </div>
 </div>
+
+<?php view('pages/services/modals.php'); ?>
 
 <script type="text/javascript">
   $(document).ready(function(){

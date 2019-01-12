@@ -19,24 +19,27 @@ class Message extends CI_Controller
     public function index()
     {
         // $msg = $this->mahana_messaging->get_all_threads(66);
-        // $msg = $this->mahana_messaging->get_all_threads_grouped(66);
+        $msg = $this->mahana_messaging->get_all_threads_grouped(66);
         // $msg = $this->mahana_messaging->get_participant_list(1);
         // $msg = $this->mahana_messaging->get_msg_count(1192);
         // $msg = $this->mahana_messaging->get_thread_msg_count(66, 2);
         // $msg = $this->mahana_messaging->send_new_message(66, 1192, 'Test New Subject', 'tet New Message test');
         // $msg = $this->mahana_messaging->reply_to_message(1, 1192, Reply to message 1');
-        $msg = $this->mahana_messaging->reply_to_thread(2, 1192, 'mabilis pa din naman e');
+        // $msg = $this->mahana_messaging->reply_to_thread(2, 1192, 'mabilis pa din naman e');
         // $msg = $this->mahana_messaging->add_participant(1, 67);
         // $msg = $this->mahana_model->get_thread_by_participants(66, array(1192, 67));
         // $msg = $this->mahana_model->get_thread_messages(66, null);
         print_data($msg);
+        $this->output->delete_cache('/message/services');
     }
 
     public function send()
     {
+
         $user_id        = current_user();
         $thread_id      = get_post('thread_id');
         $receiver       = get_post('receiver');
+        $service_id     = get_post('service_id');
         $message        = get_post('message');
         $type           = 1;
 
@@ -47,12 +50,22 @@ class Message extends CI_Controller
             } else if ($receiver && $receiver != $user_id) {
                 $rsp = $this->mahana_messaging->send_new_message($user_id, $receiver, '', $message);
                 $type = 2; // new
+            } else if ($service_id) {
+                $serviceData = $this->mgovdb->getRowObject('Service_Services', $service_id, 'Code');
+                $receiver = json_decode($serviceData->Supports, true);
+                $rsp = $this->mahana_messaging->send_new_message($user_id, $receiver, ($serviceData->Name . ' Support'), $message, PRIORITY_NORMAL, 1, $serviceData->Code, $user_id);
+                $type = 3; // new support service
             }
 
             if ($receiver && $receiver == $user_id) {
                 response_json(array(
                     'status'    => false,
                     'message'   => 'Cannot send message to yourself.'
+                ));
+            } else if ($service_id && !isset($serviceData)) {
+                response_json(array(
+                    'status'    => false,
+                    'message'   => 'Cannot find service.'
                 ));
             } else {
 
@@ -114,13 +127,27 @@ class Message extends CI_Controller
                                 'photo' => photo_filename($userData->Photo)
                             );
             if (count($match_thread)) {
-                $thread_id   = $match_thread[0]['thread_id'];
-                $return_data = array(
-                    'status'    => true,
-                    'code'      => 2,
-                    'receiver'  => $receiver,
-                    'thread_id' => $thread_id
-                );
+                $found = false;
+                foreach ($match_thread as $match) {
+                    if ($match['type'] == 0) {
+                        $found = true;
+                        $thread_id   = $match['thread_id'];
+                        $return_data = array(
+                            'status'    => true,
+                            'code'      => 2,
+                            'receiver'  => $receiver,
+                            'thread_id' => $thread_id
+                        );
+                        break;
+                    }
+                }
+                if ($found == false) {
+                    $return_data = array(
+                        'status'    => true,
+                        'code'      => 1,
+                        'receiver'  => $receiver
+                    );
+                }
             } else {
                 $return_data = array(
                     'status'    => true,
@@ -166,19 +193,48 @@ class Message extends CI_Controller
                     $participants   = $this->mahana_model-> get_participant_list($item['thread_id'], $user_id);
                     $total_unread  += $unread;
                     $message_count += count($item['messages']);
+
+                    if ($item['thread_type'] == 1 && ($serviceData = $this->mgovdb->getRowObject('Service_Services', $item['key'], 'Code'))) {
+                        // print_r($serviceData);
+                        $name  = $serviceData->Name;
+                        $photo = public_url('assets/logo/') . logo_filename($serviceData->Logo);
+                        $supports = json_decode($serviceData->Supports, true);
+                        if (in_array($user_id, $supports)) {
+                            foreach ($participants as $i) {
+                                if (!in_array($i['user_id'], $supports)) {
+                                    $name = $i['user_name'] . ' - ' . $name;
+                                    $photo = public_url('assets/profile/') . photo_filename(get_user_photo($i['user_id']));
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
+                        $name   = $participants[0]['user_name'];
+                        $photo  = '';
+                        if (count($participants) > 2) {
+                            $name .= ', +' . (count($participants) - 1) + ' Others';
+                        } else if (count($participants) == 2){
+                            $name .= ', + 1 Other';
+                        }
+                    }
+
                     $threads[] = array(
                         'id'        => $item['thread_id'],
                         'msg_count' => count($item['messages']),
                         'unread'    => $unread,
-                        'participants'  => $participants
+                        'type'      => $item['thread_type'],
+                        'key'       => $item['key'],
+                        'participants'  => $participants,
+                        'name'      => $name,
+                        'photo'     => $photo,
                     );
                 }
 
                 if ($old_count != $message_count || $last_unread != $total_unread) {
 
                     foreach ($threads as &$thread) {
-                        foreach ($thread['participants'] as &$participant) {
-                            $participant['photo'] = get_user_photo($participant['user_id']);
+                        if ($thread['type'] == 0) {
+                            $thread['photo'] = public_url('assets/profile/') . photo_filename(get_user_photo($participants[0]['user_id']));
                         }
                     }
 
@@ -256,6 +312,13 @@ class Message extends CI_Controller
                     // } else {
                     //     $message['photo'] = $user_cache[$message['sender_id']];
                     // }
+
+                    if ($message['type'] == 1 && ($serviceData = $this->mgovdb->getRowObject('Service_Services', $message['key'], 'Code'))) {
+                        $support = json_decode($serviceData->Supports, true);
+                        if (in_array($message['sender_id'], $support)) {
+                            $message['user_name'] = $serviceData->Name;
+                        }
+                    }
                 }
 
                 $last = end($messages);
@@ -319,5 +382,49 @@ class Message extends CI_Controller
             );
         }
         response_json($items);
+    }
+
+
+    // get user services that he is not part of the support team
+    public function services()
+    {
+        $user_id = current_user();
+        $sql = "SELECT ss.id,ss.Code,ss.Name,Supports,Logo,t.id AS thread_id FROM Service_Services ss
+                    JOIN UserAccountInformation ua ON (
+                        ua.id = {$user_id} AND (
+                            (ss.LocationScopeID = 1) OR
+                            (ss.RegionalID = ua.RegionalID AND ss.LocationScopeID = 2) OR 
+                            (ss.ProvincialID = ua.ProvincialID AND ss.LocationScopeID = 3) OR
+                            (ss.MunicipalityCityID = ua.MunicipalityCityID AND (ss.LocationScopeID = 4 OR ss.LocationScopeID = 5)) OR
+                            (ss.BarangayID = ua.BarangayID AND ss.LocationScopeID = 6)
+                        )
+                    )
+                    LEFT OUTER JOIN msg_threads t ON (t.key = ss.Code AND t.type = 1 AND t.client = {$user_id})
+                    WHERE ss.deletedAt IS NULL
+                    AND Supports NOT LIKE '%\"{$user_id}\"%'
+                    AND ss.Status = 1";
+
+        $results = $this->db->query($sql)->result_array();
+        if (count($results)) {
+            $items = array();
+            foreach ($results as &$result) {
+                $supports = json_decode($result['Supports'], true);
+                if (count($supports)) {
+                    $result['Logo']     = logo_filename($result['Logo']);
+                    $result['Supports'] = json_decode($result['Supports'], true);
+
+                    $items[] = $result;
+                }
+            }
+            response_json(array(
+                'status'    => true,
+                'data'      => $items
+            ));
+        } else {
+            response_json(array(
+                'status'    => false,
+                'data'      => 'No service found.'
+            ));
+        }
     }
 }
