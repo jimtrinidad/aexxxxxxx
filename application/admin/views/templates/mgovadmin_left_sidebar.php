@@ -15,7 +15,7 @@
   <ul class="sidebar-menu" data-widget="tree">
     <li class="header">Main Menu</li>
     <!-- Optionally, you can add icons to the links -->
-    <li><a href="#"><i class="fa fa-link"></i> <span>Dashboard</span></a></li>
+    <li><a href="<?php echo site_url() ?>"><i class="fa fa-link"></i> <span>Dashboard</span></a></li>
     <li class="active treeview">
       <a href="#"><i class="fa fa-link"></i> <span>Settings</span>
         <span class="pull-right-container">
@@ -23,12 +23,12 @@
         </span>
       </a>
       <ul class="treeview-menu">
-        <li><a href="<?php echo base_url('accounts') ?>"><i class="fa fa-link"></i> Accounts</a></li>
-        <li><a href="<?php echo base_url('department') ?>"><i class="fa fa-link"></i> Department</a></li>
-        <li><a href="<?php echo base_url('department/officers') ?>"><i class="fa fa-link"></i> Dept Location & Officers</a></li>
-        <li><a href="<?php echo base_url('services') ?>"><i class="fa fa-link"></i> Services</a></li>
-        <li><a href="<?php echo base_url('documents') ?>"><i class="fa fa-link"></i> Documents</a></li>
-        <li><a href="<?php echo base_url('zones') ?>"><i class="fa fa-link"></i> Zones</a></li>
+        <li><a href="<?php echo site_url('accounts') ?>"><i class="fa fa-link"></i> Accounts</a></li>
+        <li><a href="<?php echo site_url('department') ?>"><i class="fa fa-link"></i> Department</a></li>
+        <li><a href="<?php echo site_url('department/officers') ?>"><i class="fa fa-link"></i> Dept Location & Officers</a></li>
+        <li><a href="<?php echo site_url('services') ?>"><i class="fa fa-link"></i> Services</a></li>
+        <li><a href="<?php echo site_url('documents') ?>"><i class="fa fa-link"></i> Documents</a></li>
+        <li><a href="<?php echo site_url('zones') ?>"><i class="fa fa-link"></i> Zones</a></li>
       </ul>
     </li>
   </ul>

@@ -35,6 +35,19 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+    <style type="text/css">
+        .content-wrapper {
+          margin-top: -1px;
+          background: #101928 url('<?php echo public_url(); ?>resources/images/admin/dashboard_04.gif') no-repeat; background-size: cover;
+        }
+        .content-header>h1{
+          color: white;
+        }
+        .content-header>.breadcrumb>li>a{
+          color: white;
+        }
+    </style>
+
   </head>
 
   <body class="hold-transition skin-blue sidebar-mini">
@@ -52,7 +65,9 @@
 
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
+        
         <!-- Content Header (Page header) -->
+        <?php if (!isset($content_header) || (isset($content_header) && $content_header)): ?> 
         <section class="content-header">
           <h1>
           <?php echo $pageTitle; ?>
@@ -62,10 +77,13 @@
             <li><a href="#"><i class="fa fa-dashboard"></i> <?php echo ucfirst($this->uri->segment(1)); ?></a></li>
           </ol>
         </section>
+        <?php endif; // content-header ?>
+        
         <!-- Main content -->
         <section class="content container-fluid">
           <?php echo $templateContent;?>
         </section>
+
         <!-- /.content -->
       </div>
       <!-- /.content-wrapper -->

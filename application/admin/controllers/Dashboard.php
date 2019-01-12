@@ -17,6 +17,7 @@ class Dashboard extends CI_Controller
         $viewData = array(
             'pageTitle'         => 'Dashboard',
             'pageDescription'   => '',
+            'content_header'    => false,
             'accountInfo'       => user_account_details()
         );
 
