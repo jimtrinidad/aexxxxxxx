@@ -15,11 +15,11 @@
 			<!-- Profile Data -->
 			<div class="padding-top-10 text-white">
 				<p class="lh-20"><?php echo user_full_address($accountInfo, true, true) ?></p>
-				<div style="position: relative;min-height: 65px;">
+				<div style="position: relative;min-height: 60px;">
 					<p class="text-bold offset-top-10 lh-20"><?php echo lookup('education', $accountInfo->EducationalAttainmentID) ?></p>
 					<p class="text-bold lh-20"><?php echo $accountInfo->EmailAddress ?></p>
 					<p class="text-bold lh-20"><?php echo $accountInfo->ContactNumber ?></p>
-					<img class="visible-sm" src="<?php echo public_url() . 'assets/qr/' . $accountInfo->QR ?>" style="width: 100%;max-width: 60px;background: white;margin: 10px auto 0;position: absolute;bottom: 0;right: 0;"/>
+					<img class="visible-sm" src="<?php echo public_url() . 'assets/qr/' . $accountInfo->QR ?>" style="width: 100%;max-width: 60px;background: white; position: absolute;bottom: 0;right: 0;"/>
 				</div>
 			</div>
 
