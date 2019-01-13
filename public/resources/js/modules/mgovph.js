@@ -228,7 +228,9 @@ function Mgovph() {
             },
             complete : function() {
                 if (firstload) {
-                    $('#LoadMainBody').LoadingOverlay("hide");
+                    setTimeout(function(){
+                        $('#LoadMainBody').LoadingOverlay("hide");
+                    }, 300);
                 }
 
                 if (interval != false) {
