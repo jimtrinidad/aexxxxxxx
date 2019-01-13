@@ -1,10 +1,11 @@
 <!-- My Account Profile -->
 <div class="col-sm-12 visible-sm visible-xs padding-15">
-	<div class="row">
+	<div class="row gutter-5">
 		<div class="col-xs-3">
 			<!-- Profile Menu-->
 			<div class="profile-img">
 				<img style="width: 100%;max-width: 170px;margin: 0 auto;" src="<?php echo public_url(); ?>assets/profile/<?php echo $accountInfo->Photo ?>" class="img-responsive"/>
+				<img class="visible-xs" src="<?php echo public_url() . 'assets/qr/' . $accountInfo->QR ?>" style="width: 100%;max-width: 60px;background: white;margin-top: 10px;"/>
 			</div>
 		</div>
 		<div class="col-xs-9">
@@ -12,11 +13,12 @@
 				<strong class="text-white text-bold"><?php echo user_full_name($accountInfo, 1); ?></strong>
 			</div>
 			<!-- Profile Data -->
-			<div class="padding-top-10 text-white">
+			<div class="padding-top-10 text-white" style="position: relative;">
 				<p class="lh-20"><?php echo user_full_address($accountInfo, true, true) ?></p>
 				<p class="text-bold offset-top-10 lh-20"><?php echo lookup('education', $accountInfo->EducationalAttainmentID) ?></p>
 				<p class="text-bold lh-20"><?php echo $accountInfo->EmailAddress ?></p>
 				<p class="text-bold lh-20"><?php echo $accountInfo->ContactNumber ?></p>
+				<img class="visible-sm" src="<?php echo public_url() . 'assets/qr/' . $accountInfo->QR ?>" style="width: 100%;max-width: 60px;background: white;margin: 10px auto 0;position: absolute;bottom: 0;right: 0;"/>
 			</div>
 
 			<!-- Mak ID -->

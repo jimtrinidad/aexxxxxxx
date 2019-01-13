@@ -46,9 +46,13 @@
 					<!-- Profile Data -->
 					<div class="padding-top-10 text-white">
 						<p class="lh-20"><?php echo user_full_address($accountInfo, true, true) ?></p>
-						<p class="text-bold offset-top-20 lh-20"><?php echo lookup('education', $accountInfo->EducationalAttainmentID) ?></p>
+						<p class="text-bold offset-top-10 lh-20"><?php echo lookup('education', $accountInfo->EducationalAttainmentID) ?></p>
 						<p class="text-bold lh-20"><?php echo $accountInfo->EmailAddress ?></p>
 						<p class="text-bold lh-20"><?php echo $accountInfo->ContactNumber ?></p>
+					</div>
+
+					<div class="padding-top-10">
+						<img src="<?php echo public_url() . 'assets/qr/' . $accountInfo->QR ?>" style="width: 100%;max-width: 60px;background: white;">
 					</div>
 					
 					<!-- Mak ID -->

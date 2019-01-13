@@ -85,7 +85,7 @@ function Account() {
             if (response.status) {
                 // $('html').css('background', 'white').find('.modal-overs').remove();
                 $('#error_message_box').text(response.message).addClass('hide');
-                window.location = window.base_url('account'); 
+                window.location = window.base_url(); 
             } else {
                 $('#password').val('');
                 $('#error_message_box').text(response.message).removeClass('hide');
