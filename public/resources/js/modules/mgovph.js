@@ -230,7 +230,7 @@ function Mgovph() {
                 if (firstload) {
                     setTimeout(function(){
                         $('#LoadMainBody').LoadingOverlay("hide");
-                    }, 300);
+                    }, 200);
                 }
 
                 if (interval != false) {
