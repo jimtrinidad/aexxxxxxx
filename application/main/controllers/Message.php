@@ -203,7 +203,7 @@ class Message extends CI_Controller
                             foreach ($participants as $i) {
                                 if (!in_array($i['user_id'], $supports)) {
                                     $name = $i['user_name'] . ' - ' . $name;
-                                    $photo = public_url('assets/profile/') . photo_filename(get_user_photo($i['user_id']));
+                                    $photo = public_url('assets/profile/') . get_user_photo($i['user_id']);
                                     break;
                                 }
                             }
@@ -234,7 +234,7 @@ class Message extends CI_Controller
 
                     foreach ($threads as &$thread) {
                         if ($thread['type'] == 0) {
-                            $thread['photo'] = public_url('assets/profile/') . photo_filename(get_user_photo($participants[0]['user_id']));
+                            $thread['photo'] = public_url('assets/profile/') . get_user_photo($thread['participants'][0]['user_id']);
                         }
                     }
 
