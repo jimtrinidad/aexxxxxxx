@@ -138,7 +138,7 @@
               </div>
             </div>
             <input type="hidden" id="id" name="id">
-            <input type="hidden" id="Code" name="Code" value="<?php echo $documentData['Code']?>">
+            <input type="hidden" id="Code" name="Code" value="<?php echo (isset($documentData['Code']) ? $documentData['Code'] : '')?>">
           </div>
         </div>
         <div class="modal-footer">
