@@ -205,7 +205,7 @@ function Mgovph() {
 
                         });
 
-                    }, 200);
+                    }, 10);
 
                     setTimeout(function(){
                         $('#LoadMainBody .feedItem').removeClass('bg-cyan');
