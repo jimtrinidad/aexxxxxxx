@@ -36,8 +36,95 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <style type="text/css">
+
+        .main-header {
+          background: #e6e6e7;
+        }
+
+        .skin-blue .main-header .navbar .nav>li>a {
+            color: #5f6060;
+        }
+        .skin-blue .main-header .navbar .sidebar-toggle {
+            color: #5f6060;
+        }
+
+        .skin-blue .main-header .logo:hover {
+            background-color: #e6e6e7;
+        }
+
+        .skin-blue .main-header .logo {
+            background-color: #e6e6e7;
+            color: #5f6060;
+        }
+
+        .skin-blue .main-header .navbar {
+            background-color: #e6e6e7;
+        }
+
+        .skin-blue .main-header .navbar .sidebar-toggle:hover {
+            background-color: #e6e6e7;
+        }
+
+        .skin-blue .main-header .navbar .sidebar-toggle:hover {
+            color: #5f6060;
+        }
+
+        .main-sidebar .user-panel{
+            background: #0d2f5d;
+        }
+
+        .skin-blue .wrapper, .skin-blue .main-sidebar, .skin-blue .left-side {
+            background-color: #d9d9da;
+        }
+
+        .skin-blue .sidebar-menu>li.header {
+            background: #8e211f;
+            color: #8e211f;
+        }
+
+        .skin-blue .sidebar-menu>li.active>a {
+            border-left-color: #e2a334;
+        }
+
+        .skin-blue .sidebar-menu>li:hover>a, .skin-blue .sidebar-menu>li.active>a, .skin-blue .sidebar-menu>li.menu-open>a {
+            color: #fff;
+            background: #fda43c;
+        }
+
+        .skin-blue .sidebar-menu>li>.treeview-menu {
+            background: #d9d9da;
+        }
+
+        .skin-blue .sidebar a {
+            color: #4d5055;
+        }
+
+        .skin-blue .sidebar-menu .treeview-menu>li>a {
+            color: #4d5055;
+        }
+
+        .skin-blue .sidebar-menu .treeview-menu>li.active>a, .skin-blue .sidebar-menu .treeview-menu>li>a:hover {
+            color: #eaa14b;
+            font-weight: bold;
+        }
+
+        .skin-blue .main-header li.user-header {
+            background-color: #cfd0d0;
+        }
+
+        .navbar-nav>.user-menu>.dropdown-menu>li.user-header>p {
+            color: rgba(41, 40, 40, 0.8);
+        }
+
+        .main-footer {
+            background: #8e211f;
+            color: #fcfbfb;
+            border-top: 0;
+            font-size: 17px;
+        }
+
         .content-wrapper {
-          margin-top: -1px;
+
           background: #101928 url('<?php echo public_url(); ?>resources/images/admin/dashboard_04.gif') no-repeat; background-size: cover;
         }
         .content-header>h1{

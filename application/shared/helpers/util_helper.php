@@ -27,6 +27,40 @@ function generate_mabuhay_id($lastname, $suffix_length = 6)
     return $id;
 }
 
+function current_controller()
+{
+    $ci =& get_instance();
+    return $ci->router->fetch_class();
+}
+
+function current_method()
+{
+    $ci =& get_instance();
+    return $ci->router->fetch_method();
+}
+
+function is_current_url($controller, $method = false)
+{
+    if (current_controller() != $controller) {
+        return false;
+    }
+
+    if ($method && current_method() != $method) {
+        return false;
+    }
+
+    return true;
+}
+
+function is_setting_page()
+{
+    if (in_array(current_controller(), array('accounts','department','documents','services','zones'))) {
+        return true;
+    }
+
+    return false;
+}
+
 function random_number($length)
 {
     return join('', array_map(function($value) { return mt_rand(0, 9); }, range(1, $length)));

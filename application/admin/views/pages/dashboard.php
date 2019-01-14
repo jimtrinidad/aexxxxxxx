@@ -1,8 +1,4 @@
 <style type="text/css">
-	.content-wrapper {
-		margin-top: -1px;
-		background: #101928 url('<?php echo public_url(); ?>resources/images/admin/dashboard_04.gif') no-repeat; background-size: cover;
-	}
 
 	.dashboard-head {
 		background: url('<?php echo public_url(); ?>resources/images/admin/dashboard-bg.png') repeat;
@@ -15,10 +11,10 @@
 		margin-top: 150px;
 	}
 
-	.style4 {min-height: 190px;margin-bottom: 20px;}
-	.style5 {width: 105px;height: 105px;}
-	.style6 {font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 28px; color: #FF9900; padding: 0;line-height: 1.2}
-	.style9 {font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: #FFFFFF; text-align: center;margin: 0 auto;padding: 10px;}
+	.style4 {min-height: 190px;margin-bottom: 20px;margin-top: 20px;}
+	.style5 {width: 80px;height: 80px;}
+	.style6 {font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 24px; color: #FF9900; padding: 0;line-height: 1.2}
+	.style9 {font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #FFFFFF; text-align: center;margin: 0 auto;padding: 10px;}
 
 	/*small*/
 	@media (max-width: 768px) {
