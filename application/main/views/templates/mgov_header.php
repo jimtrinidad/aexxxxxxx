@@ -43,7 +43,7 @@
         <h1><span class="text-blue visible-lg-inline visible-md-inline visible-sm-block visible-xs-block">Mabuhay Filipino Citizen!</span> Enjoy One Touch Government Services Processing!</h1>
       </div>
       <div class="col-md-5 col-sm-6">
-        <div class="clearfix">
+        <div class="row">
           <div class="mak-id col-sm-9 col-xs-8">
             <div class="col-sm-5 hidden-xs hidden-sm text-right"><span>Mabuhay ID</span></div>
             <div class="col-xs-3 visible-sm text-right open-mak-id"><span>MID</span></div>

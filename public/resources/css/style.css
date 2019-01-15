@@ -250,7 +250,11 @@ html, body { height: 100%; margin: 0; font-size: 14px;}
 	.left-content{
 		padding-top: 10px;
 		padding-left: 10px;
-	}	
+	}
+
+	.header-bar {
+	    padding: 5px 0;
+	}
 }
 
 @media (max-width: 766px) {
