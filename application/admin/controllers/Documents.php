@@ -19,7 +19,7 @@ class Documents extends CI_Controller
     public function index()
     {
         $viewData = array(
-            'pageTitle'         => 'Document Manager',
+            'pageTitle'         => 'Digital Document Manager',
             'accountInfo'       => user_account_details(),
             'jsModules'         => array(
                 'utils',

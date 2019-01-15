@@ -9,8 +9,8 @@
         <div class="row">
           <div class="col-xs-12">
             <div class="box box-primary">
-              <div class="box-header" style="height: 30px;">
-                <div class="box-tools">
+              <div class="box-header">
+                <div class="box-tools" style="margin-top: 0;">
                   <div class="input-group input-group-sm" style="max-width: 300px;">
                     <input type="text" autocomplete="off" id="findOfficerBox" name="findOfficerBox" class="form-control pull-right" placeholder="Find Officer">
                     <div class="input-group-btn">

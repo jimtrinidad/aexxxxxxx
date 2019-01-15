@@ -46,7 +46,7 @@ class Department extends CI_Controller
     public function officers()
     {
         $viewData = array(
-            'pageTitle'         => 'Department Location & Officer Manager',
+            'pageTitle'         => 'Activation of Departments By Location',
             'pageDescription'   => 'Manage department location scope and officers.',
             'jsModules'         => array(
                 'department',
