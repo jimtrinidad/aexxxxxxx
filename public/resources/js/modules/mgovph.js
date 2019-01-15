@@ -298,7 +298,7 @@ function Mgovph() {
                                 serviceItem.data('id', v.id);
                                 serviceItem.data('code', v.Code);
                                 serviceItem.prop('id', 'service-item-' + v.Code);
-                                serviceItem.find('span.ServiceName').text(v.Name);
+                                serviceItem.find('span.ServiceName').text(v.Name + ' - ' + $global.location_scope[v.LocationScopeID]);
                                 serviceItem.find('span.ServiceDesc').text(v.Description);
                                 serviceItem.find('span.ServiceZone').text(v.AddressInfo.join(' > '));
                                 serviceItem.find('span.ServiceCode').text(v.Code);

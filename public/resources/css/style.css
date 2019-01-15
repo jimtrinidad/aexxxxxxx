@@ -2,7 +2,7 @@ body { font-family: 'Open Sans', sans-serif; margin: 0px; padding: 0px; backgrou
 html, body { height: 100%; margin: 0; font-size: 14px;}
 
 /* Wrapper */
-.wrapper{ width: 1024px; margin: 0 auto; min-width: 400px;}
+.wrapper{ width: 1024px; margin: 0 auto;}
 .big-wrapper { width: 90% }
 
 /* Header */
@@ -131,6 +131,7 @@ html, body { height: 100%; margin: 0; font-size: 14px;}
 }
 
 @media (max-width: 768px) {
+	.wrapper{width: 97%;}
 	/*.logo-holder{ text-align: center; }	*/
 	.tagline-holder img {display: none;}
 	/*.header-bar h1{ display: none; }*/

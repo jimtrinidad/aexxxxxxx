@@ -20,6 +20,7 @@
 	window.emptySelectOption = '<option value="">--</option>';
 
 	var $global = {
+		location_scope: <?php echo json_encode(lookup("location_scope"), JSON_HEX_TAG);?>,
 		livefeed_limit: 100, // max visible item
 		livefeed_interval: 20000, // mili sec
 	}
