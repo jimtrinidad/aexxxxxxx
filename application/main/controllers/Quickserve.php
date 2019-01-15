@@ -49,6 +49,8 @@ class Quickserve extends CI_Controller
             $item['applicationStatus']  = lookup('service_application_status', $item['saStatus']);
             $item['functionStatus']     = lookup('service_application_status', $item['safStatus']);
 
+            $item['Barangay']           = lookup_row('UtilLocBrgy', $item['BarangayID'], 'brgyCode')->brgyDesc;
+
             // completed function
             if ($item['safStatus'] >= 2) {
                 $item['duration']           = time_ago($item['StartedTime'], $item['EndedTime']);

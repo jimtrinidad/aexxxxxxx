@@ -1,6 +1,6 @@
 <div class="quickserve row padding-top-20">
   <div class="col-md-12">
-    <h1>QuickServe</h1>
+    <h1>Mobile Government Integrated System QuickServe Platform</h1>
     
     <!-- Form -->
     <form method="">
@@ -60,8 +60,9 @@
     <thead class="bg-blue text-white">
       <tr>
         <td>#</td>
-        <td>Transation #</td>
+        <td>Transaction #</td>
         <td>Mabuhay ID</td>
+        <td>Barangay</td>
         <td>Status</td>
         <td>Service</td>
         <td>For</td>
@@ -80,6 +81,7 @@
           echo '<td>' . ($k+1) . '</td>';
           echo '<td>' . $item['ApplicationCode'] . '</td>';
           echo '<td>' . $item['MabuhayID'] . '</td>';
+          echo '<td>' . strtolower($item['Barangay']) . '</td>';
           echo '<td>' . $item['functionStatus'] . '</td>';
           echo '<td>' . $item['ServiceName'] . '</td>';
           echo '<td>' . $item['documentName'] . '</td>';
