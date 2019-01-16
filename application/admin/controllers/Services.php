@@ -508,6 +508,54 @@ class Services extends CI_Controller
     }
 
     /**
+    * update service status
+    */
+    public function status($code)
+    {
+        if ($code) {
+            $service = $this->mgovdb->getRowObject('Service_Services', $code, 'Code');
+            if ($service) {
+                $status = get_post('status');
+                if ($status == 'true' || $status == 'false') {
+                    $updateData = array(
+                        'id'          => $service->id,
+                        'Status'      => ($status == 'true' ? 1 : 2),
+                        'LastUpdate'  => date('Y-m-d H:i:s')
+                    );
+                    if ($this->mgovdb->saveData('Service_Services', $updateData)) {
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Service status has been updated.'
+                        );
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Updating service status failed.'
+                        );
+                    }
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Invalid service status.'
+                    );
+                }
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Invalid service code.'
+                );
+            }
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Invalid service code.'
+            );
+        }
+
+        response_json($return_data);
+    }
+
+    /**
     * delete service
     */
     public function delete($code)

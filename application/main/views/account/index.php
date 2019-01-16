@@ -132,7 +132,7 @@
 								$logo  	 	= $item['dcLogo'];
 								$deptName 	= $item['dcName'];
 							}
-							echo '<div class="col-sm-3 text-center offset-top-10">
+							echo '<div class="col-sm-3 col-xs-6 text-center offset-top-10">
 									<img src="' . public_url() . 'assets/logo/' . logo_filename($logo) . '" class="center-block" width="60"/>
 									<p class="text-bold text-blue small offset-top-5">'.$deptName.' - ' . $item['ServiceName'] . '</p>
 								</div>';

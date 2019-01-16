@@ -39,9 +39,9 @@
             <th>Scope</th>
             <th>Location</th>
             <th>Type</th>
-            <!-- <th>Status</th> -->
             <th>Department</th>
             <th class="visible-lg">Date Added</th>
+            <th>Status</th>
             <th class="text-right">
               <a href="<?php echo base_url('services/setup'); ?>" class="btn btn-xs btn-success" title="Add Department"><i class="fa fa-plus"></i> Add</a>
             </th>
@@ -56,9 +56,24 @@
                 echo '<td>' . $item['Scope'] . '</td>';
                 echo '<td>' . strtoupper(preg_replace('~\([^()]*\)~', '', implode(', ', array_reverse(array_slice($item['Location'], -2, 2))))) . '</td>';
                 echo '<td>' . $item['Type'] . '</td>';
-                // echo '<td>' . lookup('service_status', $item['Status']) . '</td>';
                 echo '<td>' . $item['Department']->Code . ($item['SubDepartment'] ? ' / ' . $item['SubDepartment']->Code : '') . '</td>';
                 echo '<td class="visible-lg">' . date('M d, Y', strtotime($item['DateAdded'])) . '</td>';
+                // echo '<td>' . lookup('service_status', $item['Status']) . '</td>';
+                
+                echo '<td>';
+                  if ($item['Status'] == 0) {
+                    echo 'Pending';
+                  } else {
+                    echo '<input class="serviceStatusToggle" type="checkbox" '. ($item['Status'] == 1 ? 'checked' : '') .' 
+                          data-code="' . $item['Code'] . '"
+                          data-toggle="toggle" 
+                          data-on="Active" 
+                          data-off="Disabled" 
+                          data-size="mini" 
+                          data-width="70">';
+                  }
+                echo '</td>';
+
                 echo '<td>
                         <div class="box-tools">
                           <div class="input-group pull-right" style="width: 10px;">
@@ -93,6 +108,9 @@
 </div>
 
 <?php view('pages/services/modals.php'); ?>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" />
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
 <script type="text/javascript">
   $(document).ready(function(){

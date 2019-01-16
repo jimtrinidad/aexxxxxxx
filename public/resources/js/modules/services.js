@@ -31,7 +31,9 @@ function Services() {
     */
     this.set_configs = function()
     {
-        
+        $('.serviceStatusToggle').change(function(e){
+            self.updateServiceStatus(this);
+        });
     }
 
     this.getService = function(id)
@@ -45,6 +47,26 @@ function Services() {
         });
 
         return match;
+    }
+
+    this.updateServiceStatus = function(elem)
+    {
+        var checkbox    = $(elem);
+        var data        = checkbox.data();
+        var status      = checkbox.is(":checked");
+        $.ajax({
+            url: window.base_url('services/status/' + data.code),
+            type: 'post',
+            data: {'status' : status},
+            success: function (response) {
+                if (!response.status) {
+                    // failed
+                    bootbox.alert(response.message, function(){
+                        location.reload();
+                    })
+                }
+            }
+        });
     }
 
     /**
