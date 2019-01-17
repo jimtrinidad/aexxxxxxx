@@ -40,7 +40,7 @@
 	<div class="col-sm-3 offset-top-10">
 		<div class="bg-light-gray">
 			<div class="bg-cyan text-white padding-10 text-bold">Secure My Account</div>
-			<div class="padding-10 text-blue">
+			<div class="bg-white padding-10 text-blue">
 				<p>My ID: <a href="javascript:;" class="open-mak-id"><?php echo $accountInfo->MabuhayID ?></a></p>
 				<p class="lh-20"><a href="javascript:;" onclick="Account.changePasswordOpen()">Change Password</a></p>
 				<!-- <p>My Connections</p> -->
@@ -50,7 +50,7 @@
 	<div class="col-sm-9 offset-top-10">
 		<div class="bg-light-gray">
 			<div class="bg-red text-white padding-10 text-bold">Pending Applications</div>
-			<div class="padding-10">
+			<div class="bg-white padding-10">
 				<?php
 					if (count($pending_applications)) {
 						foreach ($pending_applications as $item) {
@@ -89,7 +89,7 @@
 			<div class="bg-yellow text-white text-bold padding-10">
 				My Completed Documents, Credentials and Applications
 			</div>
-			<div class="padding-10">
+			<div class="bg-white padding-10">
 				
 				<div class="row gutter-5">
 
@@ -132,7 +132,7 @@
 								$logo  	 	= $item['dcLogo'];
 								$deptName 	= $item['dcName'];
 							}
-							echo '<div class="col-sm-3 col-xs-6 text-center offset-top-10">
+							echo '<div class="col-sm-3 col-xs-6 text-center offset-top-10" style="min-height: 110px;">
 									<img src="' . public_url() . 'assets/logo/' . logo_filename($logo) . '" class="center-block" width="60"/>
 									<p class="text-bold text-blue small offset-top-5">'.$deptName.' - ' . $item['ServiceName'] . '</p>
 								</div>';
