@@ -149,6 +149,7 @@ class Services extends CI_Controller
                                                     'extraFields'   => $validation['fields'],
                                                     'uploadedFiles' => $validation['uploads']
                                                 )),
+                            'LastUpdate'    => date('Y-m-d H:i:s'),
                             'DateApplied'   => date('Y-m-d H:i:s')
                         );
                     }
