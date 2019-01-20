@@ -223,3 +223,14 @@ function compute_expiration_date($validity, $from = 'now')
     return false;
 
 }
+
+
+/**
+* number to words
+*/
+function number_to_words($number)
+{
+    $f = new NumberFormatter("en_US", NumberFormatter::SPELLOUT);
+    $f->setTextAttribute(NumberFormatter::DEFAULT_RULESET, "%spellout-numbering-verbose");
+    return $f->format($number);
+}

@@ -784,3 +784,61 @@ function get_service_providers($serviceID, $completed = false)
 		return array();
 	}
 }
+
+
+/**
+* prepare payment receipt data
+*/
+function prepare_payment_receipt_data($paymentData)
+{
+
+	$ci =& get_instance();
+	$payorData      = user_account_details($paymentData->ApplicantID,'id', false);
+    $officerData    = user_account_details($paymentData->OfficerID,'id', false);
+    $serviceData    = $ci->mgovdb->getRowObject('Service_Services', $paymentData->ServiceID);
+
+    $scopeName = '';
+    $scopeLogo = '';
+    switch (strtolower($paymentData->scope)) {
+        case 'national':
+            break;
+        case 'regional':
+            $loc       = $ci->mgovdb->getRowObject('UtilLocRegion', $officerData->RegionalID, 'regCode');
+            $scopeName = $loc->regDesc;
+            $scopeLogo = $loc->logo;
+            break;
+        case 'provincial':
+            $loc       = $ci->mgovdb->getRowObject('UtilLocProvince', $officerData->ProvincialID, 'provCode');
+            $scopeName = $loc->provDesc;
+            $scopeLogo = $loc->logo;
+            break;
+        case 'city':
+        case 'municipality':
+            $loc       = $ci->mgovdb->getRowObject('UtilLocCityMun', $officerData->MunicipalityCityID, 'citymunCode');
+            $scopeName = $loc->citymunDesc;
+            $scopeLogo = $loc->logo;
+            break;
+        case 'barangay':
+            $cityloc   = $ci->mgovdb->getRowObject('UtilLocCityMun', $officerData->MunicipalityCityID, 'citymunCode');
+            $loc       = $ci->mgovdb->getRowObject('UtilLocBrgy', $officerData->BarangayID, 'brgyCode');
+            $scopeName = 'Barangay ' . $loc->brgyDesc;
+            $scopeLogo = (stripos($loc->logo, 'default') === false ? $loc->logo : $cityloc->logo);
+            break;
+        case 'department':
+            if ($serviceData->SubDepartmentID) {
+                $dept       = $ci->mgovdb->getRowObject('Dept_ChildDepartment', $serviceData->SubDepartmentID);
+            } else {
+                $dept       = $ci->mgovdb->getRowObject('Dept_Departments', $serviceData->DepartmentID);
+            }
+            $scopeName = $dept->Name;
+            $scopeLogo = $dept->Logo;
+            break;
+    }
+
+    return array(
+        'paymentData'   => $paymentData,
+        'payorData'     => $payorData,
+        'scopeName'     => $scopeName,
+        'scopeLogo'     => $scopeLogo
+    );
+}

@@ -237,6 +237,9 @@ class Mgovdb extends CI_Model {
 					saf.DateAdded StartedTime,
 					saf.DateCompleted EndedTime,
 					ss.Name ServiceName,
+					ss.LocationScopeID,
+					uai.FirstName,
+					uai.LastName,
 					uai.MabuhayID,
 					uai.BarangayID,
 					uai.MunicipalityCityID,
@@ -254,6 +257,7 @@ class Mgovdb extends CI_Model {
 					sa.Status saStatus,
 					sa.DateCompleted,
 					sf.FuntionFor,
+					sf.FunctionTypeID,
 					lft.Value FunctionName
 				FROM Service_FunctionOfficers AS sfo
 				JOIN Service_Application_Functions AS saf ON sfo.FunctionID = saf.FunctionID

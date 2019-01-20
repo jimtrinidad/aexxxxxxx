@@ -30,6 +30,7 @@ class Account extends CI_Controller
                     );
 
         echo view('email_templates/account_approval', $emailTemplateData, null, true); exit;
+        
         //             $emailData = array(
         //                 'from'      => array('info@mgov.ph', 'MGov Info'),
         //                 'to'        => array($accountData->EmailAddress),

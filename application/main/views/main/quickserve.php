@@ -49,6 +49,12 @@
       </span>
       <span class="text-white offset-right-5">
         <i class="fa fa-search padding-5 bg-cyan text-white offset-right-5" aria-hidden="true"></i> Details
+      </span> <br class="visible-xs">
+      <span class="text-white offset-right-5">
+        <i class="fa fa-credit-card padding-5 bg-yellow text-black offset-right-5 offset-top-5" aria-hidden="true"></i> Payment
+      </span>
+      <span class="text-white offset-right-5">
+        <i class="fa fa-comments padding-5 bg-blue text-white offset-right-5" aria-hidden="true"></i> Feedback
       </span>
     </div>
   </div>
@@ -86,11 +92,27 @@
           echo '<td>' . $item['ServiceName'] . '</td>';
           echo '<td>' . $item['documentName'] . '</td>';
           echo '<td>' . $item['FunctionName'] . '</td>';
-          echo '<td>';
-            if ($item['safStatus'] == 0) echo '<a href="javascript:;" onClick="Quickserve.approveProcess(this);"><i class="fa fa-check padding-5 bg-cyan text-white" aria-hidden="true" ></i></a> ';
-              echo '<a href="javascript:;" onClick="Chatbox.openChatbox(\'' . $item['MabuhayID'] . '\');"><i class="fa fa-envelope-o padding-5 bg-orange text-white" aria-hidden="true"></i></a> ';
-            if ($item['safStatus'] == 0) echo '<a href="javascript:;" onClick="Quickserve.declineProcess(this);"><i class="fa fa-times padding-5 bg-green text-white" aria-hidden="true"></i></a> ';
-            echo '<a href="javascript:;" onClick="Quickserve.viewDetails(this);"><i class="fa fa-search padding-5 bg-cyan text-white" aria-hidden="true" data-toggle="modal" data-target="#myModal"></i></a>';
+          echo '<td class="qs-buttons">';
+            if ($item['safStatus'] == 0) {
+              echo '<a href="javascript:;" onClick="Quickserve.approveProcess(this);"><i class="fa fa-check padding-5 bg-cyan text-white" aria-hidden="true"></i></a>';
+            }
+            
+            echo '<a href="javascript:;" onClick="Chatbox.openChatbox(\'' . $item['MabuhayID'] . '\');"><i class="fa fa-envelope-o padding-5 bg-orange text-white" aria-hidden="true"></i></a>';
+            if ($item['safStatus'] == 0) {
+              echo '<a href="javascript:;" onClick="Quickserve.declineProcess(this);"><i class="fa fa-times padding-5 bg-green text-white" aria-hidden="true"></i></a>';
+            }
+            echo '<a href="javascript:;" onClick="Quickserve.viewDetails(this);"><i class="fa fa-search padding-5 bg-cyan text-white" aria-hidden="true"></i></a>';
+            echo '<a href="javascript:;" onClick="Quickserve.viewFeedbacks(this);"><i class="fa fa-comments padding-5 bg-blue text-white" aria-hidden="true"></i></a>';
+            // payments
+            if ($item['FunctionTypeID'] == 4) {
+              if ($item['safStatus'] == 0) {
+                echo '<a href="javascript:;" onClick="Quickserve.setPayment(this);"><i class="fa fa-credit-card padding-5 bg-yellow text-black" aria-hidden="true"></i></a>';
+              } else {
+                if ($item['paymentInfo']) {
+                  echo '<a href="javascript:;" onClick="Quickserve.paymentReceipt('.$item['paymentInfo']->id.');"><i class="fa fa-file-text padding-5 bg-yellow text-black" aria-hidden="true"></i></a>';
+                }
+              }
+            }
           echo '</td>';
           echo '<td>' . $item['duration'] . '</td>';
           echo '<td>' . $item['reqProgress'] . '</td>';
@@ -103,7 +125,13 @@
   </table>
 </div>
 
+<input type="hidden" id="chat_current_user" value="<?php echo current_user() ?>">
+
 <?php view('modals/quickserve') ?>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autosize.js/4.0.2/autosize.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.min.css" />
 
 
 <script type="text/javascript">
@@ -111,3 +139,17 @@
     Quickserve.items = <?php echo json_encode($items, JSON_HEX_TAG);?>;
   });
 </script>
+<style type="text/css">
+  .qs-buttons a {margin: 2px;}
+  #feedbackModal .user_name{
+      font-size:14px;
+      font-weight: bold;
+  }
+  #feedbackModal .comments-list {
+    min-height: 100px;
+  }
+  #feedbackModal .comments-list .media{
+      border-bottom: 1px dotted #ccc;
+      padding-bottom: 10px;
+  }
+</style>

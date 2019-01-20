@@ -1,7 +1,9 @@
 function Quickserve() {
     // because this is overwritten on jquery events
     var self = this;
+
     this.items = {};
+    this.currentUser;
 
     /**
      * Initialize events
@@ -11,6 +13,8 @@ function Quickserve() {
 
         self.set_events();
 		self.set_configs();
+
+        self.currentUser = $('#chat_current_user').val();
 
     },
 
@@ -28,6 +32,21 @@ function Quickserve() {
         $('#declineForm').submit(function(e) {
             e.preventDefault();
             self.saveForm(this);
+        });
+
+        $('#paymentForm').submit(function(e) {
+            e.preventDefault();
+            self.saveForm(this);
+        });
+
+        $('#feedbackForm').submit(function(e) {
+            e.preventDefault();
+            self.addFeedback(this);
+        });
+
+        $('.paymentPreviewButton').click(function(e) {
+            e.preventDefault();
+            self.paymentReceipt($(this).data('id'));
         });
 
     }
@@ -65,14 +84,11 @@ function Quickserve() {
         var safID = $(elem).closest('tr').data('safid');
         var data = self.getItem(safID);
 
-        console.log(data);
-
         $.LoadingOverlay("show", {zIndex: 999});
         $.ajax({
             url: window.base_url('quickserve/details/' + data.ApplicationCode),
             type: 'GET',
             success: function (response) {
-                console.log(response);
                 if (response.status) {
 
                     var detailsCont = $('#detailsModal .modal-body');
@@ -222,6 +238,9 @@ function Quickserve() {
         $(form).find('input').blur();
         $(form).LoadingOverlay("show");
 
+        $(form).find('#error_message_box .error_messages').html('');
+        $(form).find('#error_message_box').addClass('hide');
+
         var formData = new FormData(form);
         
         $.ajax({
@@ -229,7 +248,7 @@ function Quickserve() {
             type: 'POST',
             data: formData,
             success: function (response) {
-            	// console.log(response);
+
                 if (response.status) {
                 	bootbox.alert(response.message, function() {
                 		location.reload(); //easy way, just reload the page
@@ -249,6 +268,282 @@ function Quickserve() {
             processData: false
         });
 
+    }
+
+
+    /**
+    * PAYMENT
+    */
+
+    this.setPayment = function(elem)
+    {
+        var safID = $(elem).closest('tr').data('safid');
+        var data = self.getItem(safID);
+
+        // reset form data
+        $('#paymentForm').trigger("reset");
+
+        //clean error box
+        $('#paymentForm').find('#error_message_box .error_messages').html('');
+        $('#paymentForm').find('#error_message_box').addClass('hide');
+
+        $('#paymentForm').find('#payor').val(data.FirstName + ' ' + data.LastName);
+        if (data.paymentInfo) {
+            var pinfo = data.paymentInfo;
+            $('#paymentForm').find('#scope').val(pinfo.scope);
+            $('#paymentForm').find('#date').val(pinfo.date);
+            $('#paymentForm').find('#type').val(pinfo.type);
+            $('#paymentForm').find('#treasurer').val(pinfo.treasurer);
+
+            var rows = ''
+            $.each(pinfo.collections, function(i, e){
+                rows += `<tr>
+                            <td><input type="text" autocomplete="off" name="collectionName[]" class="form-control input-sm" value="${e.name}"></td>
+                            <td><input type="text" autocomplete="off" name="collectionCode[]" class="form-control input-sm"  value="${e.code}"></td>
+                            <td><input type="number" step=".01" autocomplete="off" name="collectionAmount[]" class="form-control input-sm" value="${e.amount}"></td>
+                            <td style="vertical-align:middle;"></td>
+                        </tr>`;
+            });
+
+            $('#paymentForm #collectionBody').html(rows);
+
+            if ($('#paymentForm #collectionBody tr').length > 1) {
+                $.each($('#paymentForm #collectionBody tr'), function(i,e) {
+                    $(e).find('td:last-child').html('<a class="btn btn-xs btn-danger" onclick="Quickserve.removeCollectionRow(this)" href="javascript:;"><i class="fa fa-remove"><i></a>');
+                });
+            }
+
+            $('#paymentForm #paymentPreviewButtonCont').removeClass('hide');
+            $('#paymentForm .paymentPreviewButton').data('id', pinfo.id);
+
+        } else {
+            $('#paymentForm').find('#scope').val(data.Scope);
+            $('#paymentForm').find('#date').val(moment().format("MM/DD/YYYY"));
+            $('#paymentForm #collectionBody').find('tr:gt(0)').remove();
+            $('#paymentForm #collectionBody').find('tr:eq(0)').find('input').val('');
+
+            $('#paymentForm #paymentPreviewButtonCont').addClass('hide');
+        }
+        $('#paymentForm #safID').val(safID);
+
+        $('#paymentModal .modal-title .taskName').html('<b>' + data.documentName + '</b> - Payment details');
+        $('#paymentModal').modal({
+            backdrop : 'static',
+            keyboard : false
+        });
+    }
+
+    this.paymentReceipt = function(payment_id)
+    {
+
+        var _c = new Date().getTime();
+        $("#receiptModal iframe").contents().find("body").html("");
+        $("#receiptModal iframe").attr({'src':'quickserve/payment_preview/?c='+_c+'&id='+payment_id});
+
+        $('#receiptModal').modal({
+            backdrop : 'static',
+            keyboard : false,
+        });
+    }
+
+    this.addCollectionRow = function()
+    {
+        var clone = $('#paymentForm #collectionBody').find('tr:eq(0)').clone();
+        clone.find('input').val('');
+        $('#paymentForm #collectionBody').append(clone);
+        if ($('#paymentForm #collectionBody tr').length > 1) {
+            $.each($('#paymentForm #collectionBody tr'), function(i,e) {
+                $(e).find('td:last-child').html('<a class="btn btn-xs btn-danger" onclick="Quickserve.removeCollectionRow(this)" href="javascript:;"><i class="fa fa-remove"><i></a>');
+            });
+        }
+    }
+
+    this.removeCollectionRow = function(elem)
+    {   
+        $(elem).closest('tr').remove();
+        if ($('#paymentForm #collectionBody tr').length <= 1) {
+            $.each($('#paymentForm #collectionBody tr'), function(i,e) {
+                $(e).find('td:last-child').html('');
+            });
+        }
+    }
+
+    // END PAYMENT
+
+
+    /**
+    * FEEDBACK
+    */
+    this.viewFeedbacks = function(elem)
+    {
+        var safID = $(elem).closest('tr').data('safid');
+        var data = self.getItem(safID);
+
+        // reset form data
+        $('#feedbackForm').trigger("reset");
+
+        $('#feedbackModal').find('.userName').text(data.FirstName + ' ' + data.LastName);
+        $('#feedbackModal').find('#mID').val(data.MabuhayID);
+
+        $('#feedbackModal .comments-list').html('');
+
+        $('#feedbackModal').modal({
+            backdrop : 'static',
+            keyboard : false
+        });
+
+        var uploadField = document.getElementById("Attachment");
+
+        uploadField.onchange = function() {
+            if(this.files[0].size > 2097152){
+               bootbox.alert("Selected file is too big.");
+               this.value = "";
+            };
+        };
+
+        autosize($('#feedbackModal textarea'));
+
+        self.loadFeedbacks(data.MabuhayID)
+    }
+
+    this.loadFeedbacks = function(mabuhayID)
+    {
+        $('#feedbackModal .comments-list').LoadingOverlay("show");
+        $.ajax({
+            url: window.base_url('quickserve/user_feedbacks'),
+            type: 'POST',
+            data: {
+                mID: mabuhayID
+            },
+            success: function (response) {
+                if (response.status) {
+                    var tpl = '';
+                    $.each(response.data, function(i,e){
+                        tpl += self.showFeedbackItem(e);
+                    });
+                    
+                    $('#feedbackModal .comments-list').html(tpl);
+
+                    $('#feedbackModal .norecord').addClass('hide');
+                    $('#feedbackModal .comments-list').removeClass('hide');
+                } else {
+                    $('#feedbackModal .norecord').removeClass('hide');
+                    $('#feedbackModal .comments-list').addClass('hide');
+                }
+            },
+            complete: function() {
+                $('#feedbackModal .comments-list').LoadingOverlay("hide");
+            }
+        });
+    }
+
+    this.addFeedback = function(form)
+    {
+        // prenvet multiple calls
+        if ($(form).data('running')) {
+            return false;
+        }
+
+        $(form).data('running', true);
+        $(form).find('input').blur();
+        $(form).LoadingOverlay("show");
+
+        $(form).find('#error_message_box .error_messages').html('');
+        $(form).find('#error_message_box').addClass('hide');
+
+        var formData = new FormData(form);
+        
+        $.ajax({
+            url: $(form).prop('action'),
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                if (response.status) {
+                    $('#feedbackForm').trigger("reset");
+                    var tpl = self.showFeedbackItem(response.data);
+                    $('#feedbackModal .comments-list').prepend(tpl);
+
+                    autosize.update($('#feedbackForm textarea'));
+
+                    $('#feedbackModal .norecord').addClass('hide');
+                    $('#feedbackModal .comments-list').removeClass('hide');
+
+                } else {
+                    // bootbox.alert(response.message);
+                    $.each(response.fields, function(i,e){
+                        $(form).find('#'+i).prop('title', e).closest('div').addClass('has-error').find('label').removeClass('text-white').addClass('text-danger');
+                        Utils.popover($('#'+i), {
+                            t: 'hover',
+                            p: 'top',
+                            m: e
+                        });
+                        $(form).find('#error_message_box .error_messages').append('<p>' + e + '</p>');
+                    });
+                    $(form).find('#error_message_box .error_messages').append('<p><b>' + response.message + '</b></p>');
+                    $(form).find('#error_message_box').removeClass('hide');
+                }
+            },
+            complete: function() {
+                $(form).LoadingOverlay("hide");
+                $(form).data('running', false);
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    }
+
+    this.removeFeedback = function(id)
+    {
+        bootbox.confirm('Are you sure you want to remove this feedback?', function(r){
+            if (r) {
+                $('#feedbackModal .comments-list').LoadingOverlay("show");
+                $.ajax({
+                    url: window.base_url('quickserve/remove_feedback/' + id),
+                    type: 'GET',
+                    success: function (response) {
+                        if (response.status) {
+                            $('#feedback_item_' + id).fadeOut();
+                        }
+                    },
+                    complete: function() {
+                        $('#feedbackModal .comments-list').LoadingOverlay("hide");
+                    }
+                });
+            }
+        });
+    }
+
+    this.showFeedbackItem = function(e)
+    {
+        var ctime = moment(e.DateAdded).fromNow();
+        var photo = window.public_url('assets/profile/' + e.Photo);
+        var attachment = '';
+        var removeButton = '';
+
+        if (e.Attachment) {
+            var url = window.public_url('assets/etc/' + e.Attachment);
+            attachment = `<p class="padding-top-5"><small class="small">Attachment:<br><a target="_blank" href="${url}">${e.Attachment}</a></small></p>`;
+        }
+
+        if (e.PostedBy == self.currentUser) {
+            removeButton = `<div class="text-right padding-top-10"><a href="javascript:;" onclick="Quickserve.removeFeedback(${e.id})">X</a></div>`;
+        }
+
+        return `<div class="media" id="feedback_item_${e.id}">
+                    <div class="pull-right">
+                        <small>${ctime}</small>
+                        ${removeButton}
+                    </div>
+                    <a class="media-left" href="#">
+                        <img src="${photo}" style="max-width: 50px;">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading user_name">${e.Sender}</h4>
+                        ${e.Message}
+                        ${attachment}
+                    </div>
+                </div>`;
     }
 
 

@@ -61,9 +61,18 @@ class Quickserve extends CI_Controller
             $item['reqProgress']        = $item['RequirementProcessedCount'] . '/' . $item['RequirementCount'];
             $item['progress']           = round(($item['FunctionProcessedCount'] / $item['FunctionCount']) * 100);
             $item['documentName']       = ($item['documentName'] ? $item['documentName'] : 'Main Service');
-        }
 
-        // print_data($items);
+            $item['Scope']              = lookup('location_scope', $item['LocationScopeID']);
+
+            if ($item['FunctionTypeID'] == 4) {
+                $payment = $this->mgovdb->getRowObject('Service_Payments', $item['safID'], 'ApplicationFunctionID');
+                if ($payment) {
+                    $payment->collections = (array) @json_decode($payment->collections, true);
+                }
+
+                $item['paymentInfo'] = $payment;
+            }
+        }
 
         $viewData['items'] = $items;
 
@@ -156,6 +165,8 @@ class Quickserve extends CI_Controller
     * approve application function
     * complete application if all functions are processed
     * generate citizen document if requirement function is complete
+    *
+    * if function is payment and payment info has been set, send receipt email
     */
     public function approve()
     {
@@ -407,6 +418,23 @@ class Quickserve extends CI_Controller
                         $this->db->trans_rollback();
                     }
 
+
+                    // send payment receipt if success and other condition met
+                    if ($return_data['status'] === true) {
+                        $paymentData = $this->mgovdb->getRowObject('Service_Payments', $safData->id, 'ApplicationFunctionID');
+                        if ($paymentData) {
+                            // send receipt
+                            $receipt_data = prepare_payment_receipt_data($paymentData);
+                            $emailData = array(
+                                'from'      => array('info@mgov.ph', 'MGov Info'),
+                                'to'        => array($receipt_data['payorData']->EmailAddress),
+                                'subject'   => 'MGOV - Payment Receipt',
+                                'message'   => view('email_templates/payment_receipt', $receipt_data, null, true)
+                            );
+                            send_email($emailData, true);
+                        }
+                    }
+
                 } else {
                     $return_data = array(
                         'status'    => false,
@@ -561,6 +589,259 @@ class Quickserve extends CI_Controller
 
         response_json($return_data);
 
+    }
+
+
+    /**
+    * accept payment
+    */
+    public function payment()
+    {
+        $safID = get_post('safID');
+        if ($safID) {
+
+            $safData = $this->mgovdb->getRowObject('Service_Application_Functions', $safID, 'id');
+
+            if ($safData) {
+
+                $collections = array();
+                if (get_post('collectionAmount')) {
+                    $colName = get_post('collectionName');
+                    $colCode = get_post('collectionCode');
+                    $colAmount = get_post('collectionAmount');
+                    foreach ($colName as $k => $v) {
+                        if ($colAmount[$k] != '' && $v != '') {
+                            $collections[] = array(
+                                'name'  => $v,
+                                'code'  => $colCode[$k],
+                                'amount'=> $colAmount[$k]
+                            );
+                        }
+                    }
+                }
+
+                if (trim(get_post('date')) == '') {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Date field is required.'
+                    );
+                } else if (count($collections) == 0) {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Invalid collection item.'
+                    );
+                } else if (trim(get_post('treasurer')) == '') {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Treasurer field is required.'
+                    );
+                } else {
+
+                    $paymentData = array(
+                        'ServiceID'         => $safData->ServiceID,
+                        'ApplicationID'     => $safData->ApplicationID,
+                        'ApplicantID'       => $safData->ApplicantID,
+                        'ApplicationFunctionID' => $safData->id,
+                        'scope'             => get_post('scope'),
+                        'date'              => get_post('date'),
+                        'type'              => get_post('type'),
+                        'treasurer'         => get_post('treasurer'),
+                        'collections'       => json_encode($collections),
+                        'OfficerID'         => current_user(),
+                        'DateAdded'         => date('Y-m-d H:i:s')
+                    );
+
+                    $oldData = $this->mgovdb->getRowObject('Service_Payments', $safID, 'ApplicationFunctionID');
+
+                    if ($oldData) {
+                        $paymentData['id'] = $oldData->id;
+                    }
+
+                    if ($this->mgovdb->saveData('Service_Payments', $paymentData)) {
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Service payment details has been saved successfully.'
+                        );
+                        $this->db->trans_commit();
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Saving payment details failed.'
+                        );
+                    }
+
+                }
+
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Invalid application process.'
+                );
+            }
+
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Invalid request.'
+            );
+        }
+
+        response_json($return_data);
+    }
+
+    public function payment_preview()
+    {
+        $id = get_post('id');
+        $paymentData = $this->mgovdb->getRowObject('Service_Payments', $id);
+        if ($paymentData) {
+            // print_data($viewData);
+            view('email_templates/payment_receipt', prepare_payment_receipt_data($paymentData), null);
+        } else {
+            show_404();
+        }
+    }
+
+
+
+    /**
+    * get feedback on user
+    */
+    public function user_feedbacks()
+    {
+        $mid = get_post('mID');
+        $user = $this->mgovdb->getRowObject('UserAccountInformation', $mid, 'MabuhayID');
+        if ($user) {
+            $records   = $this->mgovdb->getRecords('UserFeedbacks', array('AccountID' => $user->id), 'DateAdded DESC');
+
+            foreach ($records as &$record) {
+                $sender = $this->mgovdb->getRowObject('UserAccountInformation', $record['PostedBy']);
+                $record['Sender'] = $sender->FirstName . ' ' . $sender->LastName;
+                $record['Photo']  = photo_filename($sender->Photo);  
+            }
+
+            if (count($records)) {
+                $return_data = array(
+                    'status'    => true,
+                    'data'      => $records
+                );
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'No record found.'
+                );
+            }
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'User not found.'
+            );
+        }
+
+        response_json($return_data);
+
+    }
+
+    public function add_feedback()
+    {   
+        $mid = get_post('mID');
+        $user = $this->mgovdb->getRowObject('UserAccountInformation', $mid, 'MabuhayID');
+        if ($user) {
+            if (get_post('Message') == FALSE) {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => '',
+                    'fields'    => array('Message' => 'Message field is required.')
+                );
+            } else {
+
+                // validate file upload
+                $this->load->library('upload', array(
+                    'upload_path'   => PUBLIC_DIRECTORY . 'assets/etc/',
+                    'allowed_types' => 'gif|jpg|png|doc|docx|xls|xlsx|pdf|txt|log|ppt|pptx|zip',
+                    'max_size'      => '2000', // 2mb
+                ));
+
+                if (!empty($_FILES['Attachment']['name']) && $this->upload->do_upload('Attachment') == false) {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Uploading attachment failed.',
+                        'fields'    => array('Attachment' => $this->upload->display_errors('',''))
+                    );
+                } else {
+
+                    // do save
+                    $uploadData     = $this->upload->data();
+
+                    $insertData     = array(
+                        'AccountID' => $user->id,
+                        'PostedBy'  => current_user(),
+                        'DateAdded' => date('Y-m-d H:i:s'),
+                        'Message'   => get_post('Message'),
+                        'Attachment'=> $uploadData['file_name']
+                    );
+
+                    if (($ID = $this->mgovdb->saveData('UserFeedbacks', $insertData))) {
+
+                        $senderData = user_account_details(current_user(), 'id', false);
+                        $insertData['Sender'] = $senderData->FirstName . ' ' . $senderData->LastName;
+                        $insertData['Photo'] = $senderData->Photo;
+                        $insertData['id'] = $ID;
+
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Feedback has been added successfully.',
+                            'id'        => $ID,
+                            'data'      => $insertData
+                        );
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Saving feedback. Please try again.'
+                        );
+                        @unlink($uploadData['full_path']);
+                    }
+
+                }
+            }
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'User not found.'
+            );
+        }
+        response_json($return_data);
+    }
+
+    public function remove_feedback($id = null)
+    {
+        $item = $this->mgovdb->getRowObject('UserFeedbacks', $id);
+        if ($item) {
+            if ($item->PostedBy == current_user()) {
+                if ($this->mgovdb->deleteData('UserFeedbacks', $id)) {
+                    @unlink(PUBLIC_DIRECTORY . 'assets/etc/' . $item->Attachment);
+                    $return_data = array(
+                        'status'    => true,
+                        'message'   => 'Feedback has been deleted.'
+                    );  
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Deleting feedback failed.'
+                    );    
+                }
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Cannot delete feedback.'
+                );
+            }
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Feedback not found.'
+            );
+        }
+        response_json($return_data);
     }
 
 }
