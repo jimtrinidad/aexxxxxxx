@@ -523,7 +523,7 @@ function Quickserve() {
 
         if (e.Attachment) {
             var url = window.public_url('assets/etc/' + e.Attachment);
-            attachment = `<p class="padding-top-5"><small class="small">Attachment:<br><a target="_blank" href="${url}">${e.Attachment}</a></small></p>`;
+            attachment = `<p class="padding-top-5"><small class="small">Attachment:<br><i class="fa fa-paperclip" aria-hidden="true"></i> <a target="_blank" href="${url}">${e.Attachment}</a></small></p>`;
         }
 
         if (e.PostedBy == self.currentUser) {

@@ -378,12 +378,13 @@
                 // set requirement rows
                 if (isset($requirements) && is_array($requirements)) {
                     foreach ($requirements as $item) {
-                        echo "ServiceSetup.addRequirementRow({
-                            docid: '{$item['DocumentID']}',
-                            desc: '{$item['Description']}',
-                            docname: '{$item['Document']}',
-                            id: '{$item['id']}'
-                        });";
+                        $json_params = json_encode(array(
+                            'docid'     => $item['DocumentID'],
+                            'desc'      => $item['Description'],
+                            'docname'   => $item['Document'],
+                            'id'        => $item['id']
+                        ), JSON_HEX_TAG);
+                        echo "ServiceSetup.addRequirementRow({$json_params});";
                     }
                 }
 
@@ -394,14 +395,15 @@
                         if ($item['For'] != 'Main') {
                             $fortext = $requirements[$item['For']]['Document'];
                         }
-                        echo "ServiceSetup.addFunctionRow({
-                            fncfor: '{$item['For']}',
-                            fnctype: '{$item['FunctionTypeID']}',
-                            fncdesc: '{$item['Description']}',
-                            fortxt: '{$fortext}',
-                            typetxt: '{$item['FunctionName']}',
-                            id: '{$item['id']}'
-                        });";
+                        $json_params = json_encode(array(
+                            'fncfor'     => $item['For'],
+                            'fnctype'      => $item['FunctionTypeID'],
+                            'fncdesc'   => $item['Description'],
+                            'fortxt'   => $fortext,
+                            'typetxt'   => $item['FunctionName'],
+                            'id'        => $item['id']
+                        ), JSON_HEX_TAG);
+                        echo "ServiceSetup.addFunctionRow({$json_params});";
                     }
                 }
 

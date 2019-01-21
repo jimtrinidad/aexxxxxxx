@@ -355,8 +355,8 @@
 			<div class="modal-header text-white">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 			</div>
-			<div class="modal-body text-center" id="modal-body"style="overflow: auto;padding: 0;height: 800px;">
-				<iframe frameborder="0" style="width: 500px;min-height: 790px;margin: 0 auto;"></iframe>
+			<div class="modal-body text-center" id="modal-body"style="overflow: auto;padding: 0;height: 810px;">
+				<iframe frameborder="0" style="width: 500px;min-height: 800px;margin: 0 auto;"></iframe>
 			</div>
 			<div class="modal-footer">
 				<div class="pull-right">

@@ -103,6 +103,7 @@ class Get extends CI_Controller
             }
             $v['serviceDate']   = date('F d, Y', strtotime($v['DateCompleted']));
             $v['Logo']          = public_url('assets/logo/') . logo_filename($v['Logo']);
+            $v['serviceQR']     = public_url('assets/qr/') . get_qr_file($v['ServiceCode'], 4);
 
             $providedCounts[$v['DepartmentID']] = get_department_service_provided($v['DepartmentID'], $providedCounts);
             $v['serviceProvided'] = number_format($providedCounts[$v['DepartmentID']]);
@@ -458,7 +459,7 @@ class Get extends CI_Controller
                     'department'    => array_slice($department_with_counts, 0, 10), // limit 10
                     'city'          => array_slice($city_with_counts, 0, 10)
                 )
-        ));
+        ), 30);
 
     }
 
@@ -502,7 +503,7 @@ class Get extends CI_Controller
             response_json(array(
                 'status'    => true,
                 'data'      => $results
-            ), 10);
+            ));
         } else {
             response_json(array(
                 'status'    => false,

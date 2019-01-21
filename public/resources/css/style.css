@@ -70,7 +70,7 @@ html, body { height: 100%; margin: 0; font-size: 14px;}
 .seconday-nav ul li a i{ padding: 3px 5px; }
 
 .post-items { margin-bottom: 10px; }
-.post-items h2{ line-height: 23px; font-size: 14px; }
+.post-items h2{ line-height: 18px; font-size: 14px; }
 .post-items .transaction-counter{ font-size: 11px; color: #c3c9cb; }
 .post-items .transaction-date{ color: #c3c9cb; font-size: 11px; font-weight: bold; margin-bottom: 5px; margin-top: 5px; }
 .post-items .transaction-rate{ text-align: right; margin-bottom: 5px;}
@@ -136,7 +136,7 @@ html, body { height: 100%; margin: 0; font-size: 14px;}
 	.tagline-holder img {display: none;}
 	/*.header-bar h1{ display: none; }*/
 	.mak-settings{ text-align: right; }
-	.post-items h2{ font-size: 12px; line-height: 18px;}
+	.post-items h2{ font-size: 12px; line-height: 15px;}
 }
 
 /*smaller width*/

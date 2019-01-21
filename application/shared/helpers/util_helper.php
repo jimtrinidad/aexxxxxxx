@@ -97,7 +97,7 @@ function random_letters($length = 8)
 * get qr file
 * generate new if not exists
 */
-function get_qr_file($data)
+function get_qr_file($data, $size = 3)
 {
     $extension  = 'png';
     $key        = md5($data);
@@ -115,7 +115,7 @@ function get_qr_file($data)
 
         $qrparams['data']   = $data;
         $qrparams['level']  = 'H';
-        $qrparams['size']   = 3;
+        $qrparams['size']   = $size;
         $qrparams['black']  = array(13, 54, 17);
         $qrparams['savename'] = $qr_path;
         $ci->ciqrcode->generate($qrparams);

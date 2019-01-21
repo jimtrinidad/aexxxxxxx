@@ -175,7 +175,8 @@ function Mgovph() {
 
                             var feedTemplate = $('.templates-container .feedItem').clone();
                             feedTemplate.prop('id', 'feed-' + e.ApplicationCode);
-                            feedTemplate.find('img.userAvatar').prop('src', e.userAvatar);
+                            // feedTemplate.find('img.userAvatar').prop('src', e.userAvatar);
+                            feedTemplate.find('img.userAvatar').prop('src', e.serviceQR);
                             // feedTemplate.find('span.feedID').text(e.ApplicationCode);
                             feedTemplate.find('span.userFullname').text(e.userFullname);
                             feedTemplate.find('span.userAddress').text(e.userAddress);
