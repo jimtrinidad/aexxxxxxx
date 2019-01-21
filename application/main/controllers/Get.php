@@ -503,7 +503,7 @@ class Get extends CI_Controller
             response_json(array(
                 'status'    => true,
                 'data'      => $results
-            ));
+            ), 10);
         } else {
             response_json(array(
                 'status'    => false,
