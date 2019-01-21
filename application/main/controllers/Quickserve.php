@@ -691,8 +691,6 @@ class Quickserve extends CI_Controller
 
     public function payment_preview()
     {   
-        header_remove("X-Frame-Options"); 
-        header('X-Frame-Options: SAMEORIGIN');
         $id = get_post('id');
         $paymentData = $this->mgovdb->getRowObject('Service_Payments', $id);
         if ($paymentData) {
