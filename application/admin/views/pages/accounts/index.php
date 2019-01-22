@@ -47,6 +47,7 @@
             <th>Name</th>
             <th class="hidden-xs hidden-sm">Email</th>
             <th class="hidden-xs">Contact</th>
+            <th>Location</th>
             <th class="hidden-xs">Type</th>
             <th>Level</th>
             <th>Status</th>
@@ -61,6 +62,7 @@
                 echo '<td>' . $account['fullname'] . '</td>';
                 echo '<td class="hidden-xs hidden-sm">' . $account['email'] . '</td>';
                 echo '<td class="hidden-xs">' . $account['contact'] . '</td>';
+                echo '<td>' . strtoupper(preg_replace('~\([^()]*\)~', '', implode(', ', array_reverse(array_slice($account['address'], -2, 2))))) . '</td>';
                 echo '<td class="hidden-xs">' . $account['account_type'] . '</td>';
                 echo '<td>' . $account['account_level'] . '</td>';
                 echo '<td>' . $account['account_status'] . '</td>';
