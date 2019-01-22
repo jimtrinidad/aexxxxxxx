@@ -1,11 +1,11 @@
 <div class="feedItem hide post-items bg-white padding-10">
    <div class="row gutter-5">
-      <div class="col-sm-2 col-xs-3">
+      <div class="col-sm-1 col-xs-2">
          <img src="" class="userAvatar img-responsive" style="margin: 0 auto;">
          <div class="text-center" style="font=family:Trebuchet MS; color:darkred; font-size:12px; padding-top:5px;">
          </div>
       </div>
-      <div class="col-sm-10 col-xs-9">
+      <div class="col-sm-11 col-xs-10">
          <div class="row">
             <div class="col-sm-9 col-xs-12">
                <div class="row gutter-5">
