@@ -32,7 +32,7 @@ class Services extends CI_Controller
         $where = array(
             'deletedAt' => NULL
         );
-        $order = 'DateAdded';
+        $order = 'StatusID, Name';
 
         // SET SEARCH FILTER
         $filters = array(
