@@ -123,34 +123,10 @@ function Chatbox() {
     this.set_configs = function()
     {
 
-        $(".chatbubble .list-friends").niceScroll({
-            cursorcolor: "#696c75",
-            cursorwidth: "4px",
-            cursorborder: "none"
-        });
-        $(".chatbubble .messages").niceScroll({
-            cursorcolor: "#cdd2d6",
-            cursorwidth: "4px",
-            cursorborder: "none"
-        });
-
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-            setTimeout(function() {
-                if ($(".chatbubble").height() > 500) {
-                    $(".chatbubble .list-friends").height($(".chatbubble").height() - 200);
-                } else {
-                    $(".chatbubble .list-friends").height($(".chatbubble").height() - 150);
-                }
-            }, 10);
-        });
-        $('a[data-toggle="tab"]:last').tab('show');
+        self.setScroll();
 
         $(window).resize(function(){
-            if ($(".chatbubble").height() > 500) {
-                $(".chatbubble .list-friends").height($(".chatbubble").height() - 200);
-            } else {
-                $(".chatbubble .list-friends").height($(".chatbubble").height() - 150);
-            }
+            self.resetScroll();
         });
 
         setInterval(function(){
@@ -164,6 +140,38 @@ function Chatbox() {
 
     }
 
+    this.setScroll = function()
+    {
+        $(".chatbubble .list-friends").niceScroll({
+            cursorcolor: "#696c75",
+            cursorwidth: "4px",
+            cursorborder: "none"
+        });
+        $(".chatbubble .messages").niceScroll({
+            cursorcolor: "#cdd2d6",
+            cursorwidth: "4px",
+            cursorborder: "none"
+        });
+    }
+
+    this.resetScroll = function()
+    {
+        $(".chatbubble .messages").getNiceScroll(0).remove();
+        $(".chatbubble .list-friends").getNiceScroll(0).remove();
+        $(".chatbubble .list-friends").getNiceScroll(1).remove();
+
+        if ($(".chatbubble").height() > 500) {
+            $(".chatbubble .list-friends").height(470);
+            $(".chatbubble .messages").height(396);
+        } else {
+            $(".chatbubble .list-friends").height(170);
+            $(".chatbubble .messages").height(162);
+        }
+        setTimeout(function(){
+            self.setScroll()
+        }, 10)
+    }
+
     this.openChatWindow = function(tab = false)
     {
         $('.chatbubble').addClass('opened');
@@ -172,10 +180,14 @@ function Chatbox() {
 
         if (tab != false) {
             $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+        } else {
+            $('a[data-toggle="tab"]:last').tab('show');
         }
+
+        self.resetScroll();
     }
 
-    this.claerResizeScroll = function() {
+    this.clearResizeScroll = function() {
         $(".chatbubble .messages").getNiceScroll(0).resize();
         $(".chatbubble .messages").getNiceScroll(0).doScrollTop(999999, 999);
     };
@@ -570,7 +582,7 @@ function Chatbox() {
                 );
             }
 
-            self.claerResizeScroll();
+            self.clearResizeScroll();
         })
     }
 

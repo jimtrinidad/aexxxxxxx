@@ -454,93 +454,87 @@
 	}
 
 </style>
-<div class="table-responsive">
-	<div class="chatbubble">
-	    <div class="unexpanded">
-	        <div class="title"><span class="bubble-unread hide label label-danger"></span> <i class="fa fa-comments-o" aria-hidden="true"></i> Live Support</div>
-	    </div>
-	    <div class="expanded chat-window">
-			<div class="ui">
-				<div class="left-menu">
+<div class="chatbubble">
+    <div class="unexpanded">
+        <div class="title"><span class="bubble-unread hide label label-danger"></span> <i class="fa fa-comments-o" aria-hidden="true"></i> Live Support</div>
+    </div>
+    <div class="expanded chat-window">
+		<div class="ui">
+			<div class="left-menu">
 
-					<!-- Nav tabs -->
-					<ul class="nav nav-tabs small" role="tablist">
-					    <li role="presentation"><a href="#friends" aria-controls="friends" role="tab" data-toggle="tab"><span class="not-xs">&nbsp;</span>Community</a></li>
-					    <li role="presentation"><a href="#support" aria-controls="support" role="tab" data-toggle="tab">Support</a></li>
-					    <li role="presentation"><a href="#recent" aria-controls="recent" role="tab" data-toggle="tab">Messages</a></li>
-					</ul>
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs small" role="tablist">
+				    <li role="presentation"><a href="#friends" aria-controls="friends" role="tab" data-toggle="tab"><span class="not-xs">&nbsp;</span>Community</a></li>
+				    <li role="presentation"><a href="#support" aria-controls="support" role="tab" data-toggle="tab">Support</a></li>
+				    <li role="presentation"><a href="#recent" aria-controls="recent" role="tab" data-toggle="tab">Messages</a></li>
+				</ul>
 
-					<!-- Tab panes -->
-					<div class="tab-content">
-					    <div role="tabpanel" class="tab-pane" id="friends"></div>
-					    <div role="tabpanel" class="tab-pane" id="support">
-					    	<menu class="list-friends support-list">
-							</menu>
-					    </div>
-					    <div role="tabpanel" class="tab-pane" id="recent">
-					    	<!-- <form action="#" class="search">
-								<input placeholder="search..." type="search" name="" id="">
-								<input type="submit" value="&#xf002;">
-							</form> -->
-							<div class="text-center new-message">
-								<span>Start<span class="hidden-xs"> Conversation</span></span>
-							</div>
-							<menu class="list-friends recent-threads">
-							</menu>
-					    </div>
-					</div>
-
+				<!-- Tab panes -->
+				<div class="tab-content">
+				    <div role="tabpanel" class="tab-pane" id="friends"></div>
+				    <div role="tabpanel" class="tab-pane" id="support">
+				    	<menu class="list-friends support-list">
+						</menu>
+				    </div>
+				    <div role="tabpanel" class="tab-pane" id="recent">
+						<div class="text-center new-message">
+							<span>Start<span class="hidden-xs"> Conversation</span></span>
+						</div>
+						<menu class="list-friends recent-threads">
+						</menu>
+				    </div>
 				</div>
-				<div class="chat">
-					<div class="top">
-						<content class="hide">
-							<div class="avatar">
-								<img width="50" height="50" src="">
-							</div>
-							<div class="info">
-								<div class="name">Juan Dela Cruz</div>
-								<div class="count">already 1 902 messages</div>
-							</div>
-						</content>
-						<div class="close-chat"><i class="fa fa-close"></i> Close</div>
-					</div>
-					<div class="finder">
-						<div class="row">
-							<div class="col-xs-10 col-xs-offset-1">
-								<div class="form-group findUserGroup">
-									<label class="text-bold">Mabuhay ID or Search by Name</label>
-									<input class="form-control" type="text" id="findUser" placeholder="Mabuhay ID">
-									<span class="help-block findUserHelp small pull-right">Press enter to start conversation.</span>
-								</div>
+
+			</div>
+			<div class="chat">
+				<div class="top">
+					<content class="hide">
+						<div class="avatar">
+							<img width="50" height="50" src="">
+						</div>
+						<div class="info">
+							<div class="name">Juan Dela Cruz</div>
+							<div class="count">already 1 902 messages</div>
+						</div>
+					</content>
+					<div class="close-chat"><i class="fa fa-close"></i> Close</div>
+				</div>
+				<div class="finder">
+					<div class="row">
+						<div class="col-xs-10 col-xs-offset-1">
+							<div class="form-group findUserGroup">
+								<label class="text-bold">Mabuhay ID or Search by Name</label>
+								<input class="form-control" type="text" id="findUser" placeholder="Mabuhay ID">
+								<span class="help-block findUserHelp small pull-right">Press enter to start conversation.</span>
 							</div>
 						</div>
 					</div>
-					<ul class="messages hide">
-						<!-- <li class="i">
-							<div class="head">
-								<span class="time">10:13 AM, Today</span>
-								<span class="name">Jim</span>
-							</div>
-							<div class="message">Hi</div>
-						</li>
-						<li class="friend">
-							<div class="head">
-								<span class="name">Juan</span>
-								<span class="time">10:15 AM, Today</span>
-							</div>
-							<div class="message">Yes?</div>
-						</li> -->
-					</ul>
-					<div class="write-form hide">
-						<textarea placeholder="Type your message" name="e" id="text_message"  rows="2"></textarea>
-						<span class="send"><i class="fa fa-send"></i> Send</span>
-						<span class="help-block textMessageHelp small"></span>
-					</div>
+				</div>
+				<ul class="messages hide">
+					<!-- <li class="i">
+						<div class="head">
+							<span class="time">10:13 AM, Today</span>
+							<span class="name">Jim</span>
+						</div>
+						<div class="message">Hi</div>
+					</li>
+					<li class="friend">
+						<div class="head">
+							<span class="name">Juan</span>
+							<span class="time">10:15 AM, Today</span>
+						</div>
+						<div class="message">Yes?</div>
+					</li> -->
+				</ul>
+				<div class="write-form hide">
+					<textarea placeholder="Type your message" name="e" id="text_message"  rows="2"></textarea>
+					<span class="send"><i class="fa fa-send"></i> Send</span>
+					<span class="help-block textMessageHelp small"></span>
 				</div>
 			</div>
 		</div>
-		<input type="hidden" id="chat_current_user" value="<?php echo current_user() ?>">
 	</div>
+	<input type="hidden" id="chat_current_user" value="<?php echo current_user() ?>">
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.jquery.min.js"></script>
