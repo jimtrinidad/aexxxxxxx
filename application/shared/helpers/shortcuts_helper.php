@@ -111,14 +111,14 @@ function paginate($config)
 
 	$default['full_tag_open']   = '<ul class="pagination">';
 	$default['full_tag_close']  = '</ul>';
-	$default['first_link']      = false;
-	$default['last_link']       = false;
+	$default['first_link']      = '<< First';
+	$default['last_link']       = 'Last >>';
 	$default['first_tag_open']  = '<li>';
 	$default['first_tag_close'] = '</li>';
-	$default['prev_link']       = 'Previous';
+	$default['prev_link']       = '< Previous';
 	$default['prev_tag_open']   = '<li class="prev">';
 	$default['prev_tag_close']  = '</li>';
-	$default['next_link']       = 'Next';
+	$default['next_link']       = 'Next >';
 	$default['next_tag_open']   = '<li>';
 	$default['next_tag_close']  = '</li>';
 	$default['last_tag_open']   = '<li>';
