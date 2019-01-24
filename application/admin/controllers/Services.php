@@ -351,6 +351,7 @@ class Services extends CI_Controller
                                     'Tags'              => (get_post('Tags') ? json_encode(get_post('Tags')) : ''),
                                     'Limit'             => get_post('Limit'),
                                     'CycleInterval'     => get_post('CycleInterval'),
+                                    'Fee'               => get_post('Fee'),
                                     'LastUpdate'        => date('Y-m-d H:i:s'),
                                 );
 
@@ -710,6 +711,85 @@ class Services extends CI_Controller
                 'status'    => false,
                 'message'   => 'Invalid service code.'
             );
+        }
+
+        response_json($return_data);
+    }
+
+
+    /**
+    * save service origanization
+    */
+    public function save_organization()
+    {
+        if (validate('save_service_organization') == FALSE) {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Some fields have errors.',
+                'fields'    => validation_error_array()
+            );
+        } else {
+
+            $serviceID       = get_post('ServiceID');
+
+            $service = $this->mgovdb->getRowObject('Service_Services', $serviceID);
+            if ($service) {
+
+                $insertData      = array(
+                    'MenuName'      => get_post('MenuName'),
+                    'Category'      => get_post('Category'),
+                    'Keyword'       => get_post('Keyword'),
+                    'UpdatedBy'     => current_user(),
+                    'LastUpdate'    => date('Y-m-d H:i:s')
+                );
+
+                // find loc by id
+                $orgData = $this->mgovdb->getRowObject('Service_Organization', $serviceID, 'ServiceID');
+                if ($orgData) {
+                    $insertData['id']   = $orgData->id;
+                } else {
+                    $insertData['ServiceID']        = $serviceID;
+                }
+
+                $this->db->trans_begin();
+
+                if (($ID = $this->mgovdb->saveData('Service_Organization', $insertData))) {
+
+                    // update service InOrganization Status
+                    if ($this->mgovdb->saveData('Service_Services', array(
+                                'id'              => $service->id, 
+                                'InOrganization'  => get_post('Status'),
+                                'LastUpdate'      => date('Y-m-d H:i:s')
+                        ))) {
+                        $this->db->trans_commit();
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Service organization data has been updated successfully.',
+                            'id'        => $ID,
+                            'data'      => $insertData,
+                        );
+                    } else {
+                        $this->db->trans_rollback();
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Updating service failed. Please try again.',
+                        );
+                    }
+
+                } else {
+                    $this->db->trans_rollback();
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Saving service origanization failed. Please try again.',
+                    );
+                }
+
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Invalid service.'
+                );
+            }
         }
 
         response_json($return_data);

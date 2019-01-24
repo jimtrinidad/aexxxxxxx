@@ -315,3 +315,50 @@ html, body { height: 100%; margin: 0; font-size: 14px;}
 	text-indent: 20px;
 	padding: 2px 0;
 }
+
+.organization-logo {
+	width: 100%;
+	max-width: 70px;
+	margin: 5px;
+	vertical-align: middle;
+}
+
+.organization-partner-logo {
+	width: 100%;
+	max-width: 50px;
+	margin: 5px;
+	vertical-align: middle;
+}
+
+.org-category {
+	font-weight: bolder;
+	font-size: 15px;
+	color: #336eaf;
+	padding: 10px 0 5px 10px;
+}
+
+.org-item {
+	padding: 5px;
+	min-height: 110px;
+}
+
+.org-item .image {
+	width: 70px;
+	height: 70px;
+	border-radius: 50%;
+	margin: 0 auto;
+	background: #dcdfe1;
+	background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.org-item .name {
+	text-align: center;
+	font-weight: bold;
+	color: #089dc2;
+	font-size: 12px;
+	padding: 2px;
+	cursor: pointer;
+}

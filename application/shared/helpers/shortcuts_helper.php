@@ -317,6 +317,8 @@ function prepare_service_data($raw, $getcomponents = false)
 
 	$data['Supports'] = $supports;
 
+	$data['Organization'] = $ci->mgovdb->getRowObject('Service_Organization', $raw->id, 'ServiceID');
+
 	if ($getcomponents) {
 		// get requirements, extra fields
 		

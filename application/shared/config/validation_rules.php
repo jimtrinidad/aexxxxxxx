@@ -43,6 +43,15 @@ $config['change_password'] = array(
 	)),
 );
 
+$config['account_approval'] = array(
+	array('id', 'Account ID', 'trim|required|integer'),
+	array('AccountTypeID', 'Account type', 'trim|required|integer'),
+	array('AccountLevelID', 'Account level', 'trim|required|integer'),
+);
+
+
+
+
 $config['save_department'] = array(
 	array('Code', 'Department code', 'trim|required'),
 	array('Name', 'Department name', 'trim|required'),
@@ -66,11 +75,7 @@ $config['save_department_officer'] = array(
 	array('SelectedAccountID', 'Officer ID', 'trim|required'),
 );
 
-$config['account_approval'] = array(
-	array('id', 'Account ID', 'trim|required|integer'),
-	array('AccountTypeID', 'Account type', 'trim|required|integer'),
-	array('AccountLevelID', 'Account level', 'trim|required|integer'),
-);
+
 
 
 $config['service_base_setup'] = array(
@@ -87,6 +92,15 @@ $config['service_fields_setup'] = array(
 	array('Label', 'label', 'trim|required')
 );
 
+$config['save_service_organization'] = array(
+	array('MenuName', 'Menu name', 'trim|required'),
+	array('Keyword', 'Keyword', 'trim|required'),
+	array('Category', 'Category', 'trim|required'),
+);
+
+
+
+
 $config['save_document'] = array(
 	array('Type', 'Document type', 'required'),
 	array('Name', 'Document name', 'trim|required'),
@@ -99,6 +113,9 @@ $config['save_document_extra_field'] = array(
 	array('FieldKey', 'Template keyword', 'trim|strtoupper|alpha|required'),
 	array('FieldLabel', 'label', 'trim|required'),
 );
+
+
+
 
 $config['save_zone'] = array(
 	array('Name', 'Location name', 'trim|required')

@@ -78,7 +78,7 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="DepartmentScope">Department</label>
+                                            <label for="DepartmentScope">Department / Organization</label>
                                             <select disabled class="form-control" name="DepartmentScope" id="DepartmentScope">
                                                 <option value="">--</option>
                                             </select>
@@ -104,6 +104,11 @@
                                             </select>
                                             <span class="help-block">When can a citizen apply again for this service.</span>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="Fee">Fee</label>
+                                            <input type="text" class="form-control" name="Fee" id="Fee" placeholder="Leave blank if not applicable" value="<?php echo (isset($serviceData) && $serviceData->Fee ? $serviceData->Fee : '')?>">
+                                            <span class="help-block">Service or Penalty fee.</span>
+                                        </div>
 
                                     </div>
                                     <div class="col-sm-12 col-md-6 col-lg-6">
@@ -115,19 +120,19 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="Description">Description</label>
-                                            <textarea rows="3" class="form-control" name="Description" id="Description"><?php echo (isset($serviceData) ? $serviceData->Description : '')?></textarea>
+                                            <textarea rows="4" class="form-control" name="Description" id="Description"><?php echo (isset($serviceData) ? $serviceData->Description : '')?></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="TermsCondition">Terms and Condition</label>
-                                            <textarea rows="3" class="form-control" name="TermsCondition" id="TermsCondition"><?php echo (isset($serviceData) ? $serviceData->TermsCondition : '')?></textarea>
+                                            <textarea rows="4" class="form-control" name="TermsCondition" id="TermsCondition"><?php echo (isset($serviceData) ? $serviceData->TermsCondition : '')?></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="Objectives">Objectives</label>
-                                            <textarea rows="3" class="form-control" name="Objectives" id="Objectives"><?php echo (isset($serviceData) ? $serviceData->Objectives : '')?></textarea>
+                                            <textarea rows="4" class="form-control" name="Objectives" id="Objectives"><?php echo (isset($serviceData) ? $serviceData->Objectives : '')?></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="Qualifications">Qualifications</label>
-                                            <textarea rows="3" class="form-control" name="Qualifications" id="Qualifications"><?php echo (isset($serviceData) ? $serviceData->Qualifications : '')?></textarea>
+                                            <textarea rows="4" class="form-control" name="Qualifications" id="Qualifications"><?php echo (isset($serviceData) ? $serviceData->Qualifications : '')?></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="Tags">Tags</label>

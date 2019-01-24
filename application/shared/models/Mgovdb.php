@@ -238,6 +238,7 @@ class Mgovdb extends CI_Model {
 					saf.DateCompleted EndedTime,
 					ss.Name ServiceName,
 					ss.LocationScopeID,
+					ss.Fee,
 					uai.FirstName,
 					uai.LastName,
 					uai.MabuhayID,
@@ -314,6 +315,45 @@ class Mgovdb extends CI_Model {
 		}
 
 		return $this->db->get()->result_array();
+	}
+
+
+	/**
+	* get user organization services
+	*/
+	public function getOrganizationServices($params)
+	{
+
+		$keywordFilter = '';
+		if (trim($params['keyword']) != '') {
+			$keyword = trim($params['keyword']);
+			$keywordFilter = 'AND (so.Keyword LIKE "%'.$keyword.'%" OR so.MenuName LIKE "%'.$keyword.'%" OR ss.Name LIKE "%'.$keyword.'%" OR ss.Description LIKE "%'.$keyword.'%")';
+		}
+
+		$sql = "SELECT ss.id,ss.Code,ss.Name,ss.Logo,COUNT(sa.id) AS Applications,so.MenuName,so.Category,so.Keyword FROM Service_Services ss
+                JOIN UserAccountInformation ua ON (
+                ua.id = ? AND (
+                    (ss.LocationScopeID = 1) OR
+                    (ss.RegionalID = ua.RegionalID AND ss.LocationScopeID = 2) OR 
+                    (ss.ProvincialID = ua.ProvincialID AND ss.LocationScopeID = 3) OR
+                    (ss.MunicipalityCityID = ua.MunicipalityCityID AND (ss.LocationScopeID = 4 OR ss.LocationScopeID = 5)) OR
+                    (ss.BarangayID = ua.BarangayID AND ss.LocationScopeID = 6)
+                    )
+                )
+                LEFT OUTER JOIN Service_Applications sa ON sa.ServiceID = ss.id
+                LEFT JOIN Service_Organization so ON ss.id = so.ServiceID
+                WHERE ss.deletedAt IS NULL
+                AND ss.Status = 1
+                AND ss.InOrganization = 1
+                AND ss.SubDepartmentID = ?
+                {$keywordFilter}
+                GROUP BY ss.id
+                ORDER BY Applications DESC";
+
+        return $this->db->query($sql, array(
+	        								$params['userID'],
+	        								$params['organization']
+	        							))->result_array();
 	}
 
 

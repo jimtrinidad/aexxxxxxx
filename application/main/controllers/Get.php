@@ -171,6 +171,7 @@ class Get extends CI_Controller
                 $where = array(
                     'deletedAt IS NULL',
                     'Status = 1',
+                    'InOrganization = 0',
                     'DepartmentID = ' . $department['id'],
                     'SubDepartmentID = 0'
                 );
@@ -178,6 +179,7 @@ class Get extends CI_Controller
                 $where = array(
                     'deletedAt IS NULL',
                     'Status = 1',
+                    'InOrganization = 0',
                     'DepartmentID = ' . $department['DepartmentID'],
                     'SubDepartmentID = ' . $department['id'],
                 );
@@ -475,6 +477,7 @@ class Get extends CI_Controller
                     WHERE ss.deletedAt IS NULL
                     AND ss.LocationScopeID = 1
                     AND ss.Status = 1
+                    AND ss.InOrganization = 0
                     GROUP BY ss.id
                     ORDER BY Applications DESC
                     LIMIT 10";
@@ -493,6 +496,7 @@ class Get extends CI_Controller
                     LEFT OUTER JOIN Service_Applications sa ON sa.ServiceID = ss.id
                     WHERE ss.deletedAt IS NULL
                     AND ss.Status = 1
+                    AND ss.InOrganization = 0
                     GROUP BY ss.id
                     ORDER BY Applications DESC
                     LIMIT 10";
@@ -503,7 +507,7 @@ class Get extends CI_Controller
             response_json(array(
                 'status'    => true,
                 'data'      => $results
-            ), 10);
+            ));
         } else {
             response_json(array(
                 'status'    => false,

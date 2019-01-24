@@ -23,7 +23,10 @@ function Services() {
     */
     this.set_events = function()
     {
-
+        $('#organizationForm').submit(function(e) {
+            e.preventDefault();
+            self.saveOrganization(this);
+        });
     }
 
     /**
@@ -306,6 +309,118 @@ function Services() {
                     }
                 });
             }
+        });
+    }
+
+    // END SUPPORT
+
+
+    /**
+    * Organization setup
+    */
+
+    this.showOrganization = function(id)
+    {
+        var serviceData = self.getService(id);
+        if (serviceData) {
+            console.log(serviceData);
+            // reset form data
+            $('#organizationForm').trigger("reset");
+
+            // reset input erros
+            $.each($('#organizationForm').find('input, select'), function(i,e){
+                $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger');
+                $(e).popover('destroy');
+            });
+
+            //clean error box
+            $('#organizationForm').find('#error_message_box .error_messages').html('');
+            $('#organizationForm').find('#error_message_box').addClass('hide');
+
+            $('#organizationModal .serviceLogo').prop('src', window.public_url() + "assets/logo/" + serviceData.Logo);
+
+            var org = (serviceData.SubDepartment ? serviceData.SubDepartment.Name : serviceData.Department.Name);
+            $('#organizationModal .infoBox').html(
+                '<h5><b>Service Name: </b> ' + serviceData.Name + '</h5>' +
+                '<h5><b>Organization: </b> ' + org + '</h5>' +
+                '<h5><b>Address: </b> ' + Object.values(serviceData.Location).slice(-2) + '</h5>'
+            );
+
+            if (serviceData.Organization) {
+                var org = serviceData.Organization;
+                $('#organizationForm #id').val(org.id);
+                $('#organizationForm #MenuName').val(org.MenuName);
+                $('#organizationForm #Keyword').val(org.Keyword);
+                $('#organizationForm #Category').val(org.Category);
+            }
+
+            $('#organizationForm #Status').val(serviceData.InOrganization);
+            $('#organizationForm #ServiceID').val(serviceData.id);
+
+            $('#organizationModal .serviceCode').text(serviceData.Code);
+            $('#organizationModal').modal({
+                backdrop : 'static',
+                keyboard : false
+            });
+        }
+    }
+
+    this.saveOrganization = function(form)
+    {
+        // prenvet multiple calls
+        if ($(form).data('running')) {
+            return false;
+        }
+
+        $(form).data('running', true);
+        $(form).find('input').blur();
+        $(form).LoadingOverlay("show");
+
+        var formData = new FormData(form);
+        
+        // reset input erros
+        $.each($(form).find('input, select'), function(i,e){
+            $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger').addClass('text-white');
+            $(e).popover('destroy');
+        });
+        //clean error box
+        $(form).find('#error_message_box .error_messages').html('');
+        $(form).find('#error_message_box').addClass('hide');
+
+        $.ajax({
+            url: $(form).prop('action'),
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                console.log(response);
+                if (response.status) {
+                    bootbox.alert(response.message, function(){
+                        location.reload(); //easy way, just reload the page
+                    });
+                } else {
+                    // bootbox.alert(response.message);
+                    $(form).find('#error_message_box .error_messages').append('<p><b>' + response.message + '</b></p>');
+
+                    $.each(response.fields, function(i,e){
+                        $(form).find('#'+i).prop('title', e).closest('div').addClass('has-error').find('label').addClass('text-danger');
+                        Utils.popover($('#'+i), {
+                            t: 'hover',
+                            p: 'top',
+                            m: e
+                        });
+                        $(form).find('#error_message_box .error_messages').append('<p>' + e + '</p>');
+                    });
+
+                    $(form).find('#error_message_box').removeClass('hide');
+                }
+            },
+            complete: function() {
+                $(form).LoadingOverlay("hide");
+                $(form).data('running', false);
+            },
+            cache: false,
+            contentType: false,
+            processData: false
         });
     }
 

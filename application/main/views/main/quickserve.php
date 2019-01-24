@@ -126,6 +126,7 @@
 </div>
 
 <input type="hidden" id="chat_current_user" value="<?php echo current_user() ?>">
+<input type="hidden" id="current_user_name" value="<?php echo $accountInfo->FirstName . ' ' . $accountInfo->LastName ?>">
 
 <?php view('modals/quickserve') ?>
 

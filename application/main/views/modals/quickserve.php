@@ -286,8 +286,8 @@
 		                	<div class="table-responsive">
 			                	<table class="table table-condensed">
 			                		<thead>
-			                			<th>Nature of Collection</th>
-			                			<th>Fund and Account Code</th>
+			                			<th width="40%">Nature of Collection</th>
+			                			<th width="25%">Fund and Account Code</th>
 			                			<th>Amount</th>
 			                			<th style="width: 10px;">
 			                				<button type="button" class="btn btn-sm btn-success" onclick="Quickserve.addCollectionRow()"><i class="fa fa-plus"></i></button>

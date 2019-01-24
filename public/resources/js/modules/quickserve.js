@@ -319,8 +319,21 @@ function Quickserve() {
         } else {
             $('#paymentForm').find('#scope').val(data.Scope);
             $('#paymentForm').find('#date').val(moment().format("MM/DD/YYYY"));
-            $('#paymentForm #collectionBody').find('tr:gt(0)').remove();
-            $('#paymentForm #collectionBody').find('tr:eq(0)').find('input').val('');
+            $('#paymentForm').find('#treasurer').val($('#current_user_name').val());
+
+            var amount = '';
+            if (data.Fee) {
+                amount = data.Fee;
+            }
+
+            var row = `<tr>
+                            <td><input type="text" autocomplete="off" name="collectionName[]" class="form-control input-sm" value="${data.ServiceName}"></td>
+                            <td><input type="text" autocomplete="off" name="collectionCode[]" class="form-control input-sm"  value=""></td>
+                            <td><input type="number" step=".01" autocomplete="off" name="collectionAmount[]" class="form-control input-sm" value="${amount}"></td>
+                            <td style="vertical-align:middle;"></td>
+                        </tr>`;
+
+            $('#paymentForm #collectionBody').html(row);
 
             $('#paymentForm #paymentPreviewButtonCont').addClass('hide');
         }

@@ -95,7 +95,7 @@ class Services extends CI_Controller
                 'Status'        => 0
             ));
 
-            if (count($pending_application) == 0) {
+            if (count($pending_application) == 0 || in_array($service->ServiceType, lookup('no_waiting_service_type'))) {
 
                 // load upload library for image upload
                 $this->load->library('upload');

@@ -131,11 +131,15 @@ $config['service_type'] = array(
 	10 => 'Registration',
 	11 => 'Report',
 	12 => 'Request',
-	13 => 'Security Support',
+	13 => 'Traffic Violations',
 	14 => 'Seminar / Training',
 	15 => 'Service Implementation',
-	16 => 'Endorsement Financial Assistant'
+	16 => 'Endorsement Financial Assistant',
+	17 => 'Security Support',
 );
+
+//array of service type id
+$config['no_waiting_service_type'] = array(11, 13);
 
 $config['service_tags'] = array(
 	1 => 'frequently',
@@ -161,6 +165,12 @@ $config['service_application_status'] = array(
 	2 => 'Approved',
 	3 => 'Denied',
 	4 => 'Canceled',
+);
+
+$config['service_organization_category'] = array(
+	1 => 'Traffic Violations',
+	2 => 'Licensing Services',
+	3 => 'Emergency Assistance',
 );
 
 

@@ -23,13 +23,13 @@ class Account extends CI_Controller
 
         // die(compute_expiration_date($this->uri->segment(3)));
 
-        $accountData = $this->mgovdb->getRowObject('UserAccountInformation', 66, 'id');
-        $emailTemplateData = array(
-                        'account'   => $accountData,
-                        'password'  => random_password()
-                    );
+        // $accountData = $this->mgovdb->getRowObject('UserAccountInformation', 66, 'id');
+        // $emailTemplateData = array(
+        //                 'account'   => $accountData,
+        //                 'password'  => random_password()
+        //             );
 
-        echo view('email_templates/account_approval', $emailTemplateData, null, true); exit;
+        // echo view('email_templates/account_approval', $emailTemplateData, null, true); exit;
         
         //             $emailData = array(
         //                 'from'      => array('info@mgov.ph', 'MGov Info'),
@@ -42,7 +42,7 @@ class Account extends CI_Controller
 
         // var_dump(get_department_service_provided(17, array(17 => 5)));exit;
         // print_data(get_service_providers(1, array()));
-        // print_data(user_account_details(), true); exit;
+        print_data(user_account_details(), true); exit;
 
         $data['userData']       = user_account_details();
         $data['extraFields']    = json_decode('{"HxODTWeU":"main pet name","ihOfLUPQ":"desc","QqrsxG":"the <b>brgy</b> purpose"}', true);
