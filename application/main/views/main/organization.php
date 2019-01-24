@@ -43,7 +43,7 @@
    </div>
 </div>
 
-<div class="bg-white">
+<div class="bg-white" id="LoadMainBodyCont">
   <div id="LoadMainBody" class="row">
     
   </div>

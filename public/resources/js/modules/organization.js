@@ -46,8 +46,7 @@ function Organization() {
         };
 
         $('#LoadMainBody').html(''); //reset content
-        $('#LoadMainBody').css('min-height', '70px').LoadingOverlay("show", {
-            backgroundClass: 'bg-grey', 
+        $('#LoadMainBodyCont').css('min-height', '70px').LoadingOverlay("show", {
             text: 'Loading services...', 
             textClass: 'text-gray',
             textResizeFactor: 1,
@@ -90,19 +89,19 @@ function Organization() {
 
                 } else {
                     // clear content, add empty message
-                    $('#LoadMainBody').html('<div class="feedItem post-items bg-grey padding-20"> \
+                    $('#LoadMainBody').html('<div class="col-xs-12"><div class="feedItem post-items padding-20"> \
                                                <div class="row"> \
                                                   <div class="col-xs-12 padding-20"> \
-                                                    <h2 class="text-bold text-white">No record found</h2> \
+                                                    <h2 class="text-bold text-gray">No record found</h2> \
                                                   </div> \
                                                 </div> \
-                                            </div> \
+                                            </div></div> \
                                                   ');
                 }
 
             },
             complete : function() {
-                $('#LoadMainBody').LoadingOverlay("hide");
+                $('#LoadMainBodyCont').LoadingOverlay("hide");
             }
         });
     }
