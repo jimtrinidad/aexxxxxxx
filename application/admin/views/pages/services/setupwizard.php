@@ -29,7 +29,7 @@
                                         <div class="row">
                                             <div class="col-sm-12 col-lg-4 col-lg-push-8 logo padding-top-10">
                                                 <div class="image-upload-container">
-                                                  <img class="image-preview" src="<?php echo public_url() . 'assets/logo/' . (isset($serviceData) ? logo_filename($serviceData->Logo) : 'blank-logo.png')?>">
+                                                  <img class="image-preview" src="<?php echo public_url() . 'assets/logo/' . (isset($serviceData) ? logo_filename($serviceData->Logo) . '?' . time() : 'blank-logo.png')?>">
                                                   <span class="hiddenFileInput hide">
                                                     <input type="file" data-default="<?php echo public_url() . 'assets/logo/' . (isset($serviceData) ? logo_filename($serviceData->Logo) : 'blank-logo.png')?>" accept="image/*" class="image-upload-input" id="Logo" name="Logo"/>
                                                   </span>
