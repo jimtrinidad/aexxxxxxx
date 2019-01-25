@@ -52,6 +52,30 @@
     <!-- <p>Ranking Based on completed Services</p> -->
     <a href="<?php echo site_url('statistics/govt_performance') ?>" class="btn btn-sm bg-green text-white text-center">View More</a>
   </div>
+
+  <?php if (current_controller() == 'organization') { ?>
+  <div class="offset-top-10">
+    <div class="row">
+       <div class="col-sm-12">
+         <table border="0">
+           <tr>
+             <td>
+               <?php if ($Organization->Logo && file_exists(LOGO_DIRECTORY . $Organization->Logo)) {?>
+               <img src="<?php echo public_url() . 'assets/logo/' . $Organization->Logo ?>" class="organization-logo" />
+               <?php }?>
+               <?php if ($accountInfo->CityData->logo && file_exists(LOGO_DIRECTORY . $accountInfo->CityData->logo)) {?>
+                <img src="<?php echo public_url() . 'assets/logo/' . $accountInfo->CityData->logo; ?>" class="organization-partner-logo" />
+               <?php }?>
+               <img src="<?php echo public_url() . 'resources/images/dotr-logo.png' ?>" class="organization-partner-logo" />
+               <img src="<?php echo public_url() . 'resources/images/LTO.png' ?>" class="organization-partner-logo" />
+             </td>
+           </tr>
+         </table>
+       </div>
+     </div>
+  </div>
+  <?php }?>
+
   <div class="sidebar-ads offset-top-10 hide">
     <img src="<?php echo public_url(); ?>resources/images/malacanang-banner.png" class="img-responsive" />
     <img src="<?php echo public_url(); ?>resources/images/one-stop-service.png" class="img-responsive offset-top-10" />

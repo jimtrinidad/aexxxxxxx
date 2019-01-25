@@ -657,10 +657,14 @@ class Quickserve extends CI_Controller
                         $paymentData['id'] = $oldData->id;
                     }
 
-                    if ($this->mgovdb->saveData('Service_Payments', $paymentData)) {
+                    if (($ID = $this->mgovdb->saveData('Service_Payments', $paymentData))) {
+                        if ($oldData) {
+                            $ID = $oldData->id;
+                        }
                         $return_data = array(
                             'status'    => true,
-                            'message'   => 'Service payment details has been saved successfully.'
+                            'message'   => 'Service payment details has been saved successfully.',
+                            'id'        => $ID
                         );
                         $this->db->trans_commit();
                     } else {
@@ -694,8 +698,8 @@ class Quickserve extends CI_Controller
         $id = get_post('id');
         $paymentData = $this->mgovdb->getRowObject('Service_Payments', $id);
         if ($paymentData) {
-            // print_data($viewData);
-            view('email_templates/payment_receipt', prepare_payment_receipt_data($paymentData), null);
+            $paymentData = prepare_payment_receipt_data($paymentData);
+            view('email_templates/payment_receipt', $paymentData, null);
         } else {
             show_404();
         }

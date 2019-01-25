@@ -267,7 +267,7 @@
       <div class="row gutter-0 border zeropad">
         <div class="col-xs-12 zeropad">
           <table class="table table-condensed rtable">
-            <thead>
+            <tbody>
               <tr>
                 <td width="60%">
                   <p>Received:<br />
@@ -277,24 +277,23 @@
                     <img src="<?php echo public_url() . 'resources/images/' . (strtolower($paymentData->type) == 'money order' ? 'checked-square' : 'square') ?>.png" class='img_checkbox'> Money Order
                   </p>
                 </td>
-                <td style="vertical-align: top !important;border-bottom: 0;">
+                <td rowspan="3" style="border-bottom: 0;border-top: 0;text-align: center;">
                   <p class="style14">Received the amount Field Above</p>
                   </p>
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <span class="style14">Treasury Warrant, Check, Money Order No.</span>
-                </td>
-                <td rowspan="2" style="border-bottom: 0;border-top: 0;text-align: center;">
                   <div class="style14 text-center"><b><?php echo $paymentData->treasurer; ?></b></div>
                   <div class="style14 text-center">
                     ________________________<br />
                     <?php echo ucfirst($paymentData->scope); ?> Treasurer <br>
                     Collection Officer
+                    <div class="padding-10 text-center">
+                      <img src="<?php echo public_url() . 'assets/qr/' . $serviceQR; ?>" class=" top-logo"/>
+                    </div>
                   </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="style14">Treasury Warrant, Check, Money Order No.</span>
                 </td>
               </tr>
               <tr>

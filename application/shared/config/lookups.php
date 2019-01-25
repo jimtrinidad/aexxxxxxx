@@ -168,9 +168,12 @@ $config['service_application_status'] = array(
 );
 
 $config['service_organization_category'] = array(
-	1 => 'Traffic Violations',
+	1 => 'Traffic Violation',
 	2 => 'Licensing Services',
 	3 => 'Emergency Assistance',
+	4 => 'Driving Violation',
+	5 => 'Establishment Traffic Violation',
+	6 => 'Pedestrian Traffic Violation'
 );
 
 

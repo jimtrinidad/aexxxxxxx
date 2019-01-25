@@ -22,29 +22,8 @@
    </div>
 </div>
 
-<div class="offset-bottom-10" style="background: #dcdfe1">
-  <div class="row">
-     <div class="col-sm-12">
-       <table border="0">
-         <tr>
-           <td>
-             <?php if ($Organization->Logo && file_exists(LOGO_DIRECTORY . $Organization->Logo)) {?>
-             <img src="<?php echo public_url() . 'assets/logo/' . $Organization->Logo ?>" class="organization-logo" />
-             <?php }?>
-             <?php if ($accountInfo->CityData->logo && file_exists(LOGO_DIRECTORY . $accountInfo->CityData->logo)) {?>
-              <img src="<?php echo public_url() . 'assets/logo/' . $accountInfo->CityData->logo; ?>" class="organization-partner-logo" />
-             <?php }?>
-             <img src="<?php echo public_url() . 'resources/images/dotr-logo.png' ?>" class="organization-partner-logo" />
-             <img src="<?php echo public_url() . 'resources/images/LTO.png' ?>" class="organization-partner-logo" />
-           </td>
-         </tr>
-       </table>
-     </div>
-   </div>
-</div>
-
 <div class="bg-white" id="LoadMainBodyCont">
-  <div id="LoadMainBody" class="row">
+  <div id="LoadMainBody" class="row gutter-5">
     
   </div>
 </div>

@@ -74,7 +74,7 @@ function Organization() {
 
                         $.each(e.items, function(j,k) {
                             var logo = window.public_url('assets/logo/' + k.Logo)
-                            tpl += `<div class="col-xs-4">
+                            tpl += `<div class="col-xs-3">
                                         <div class="org-item" onclick="Organization.openServiceApplication('${k.Code}')">
                                             <div class="image" style="background-image: url(${logo});"></div>
                                             <div class='name'>${k.MenuName}</div>

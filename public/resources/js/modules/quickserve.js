@@ -4,6 +4,7 @@ function Quickserve() {
 
     this.items = {};
     this.currentUser;
+    this.paymentChange;
 
     /**
      * Initialize events
@@ -36,7 +37,7 @@ function Quickserve() {
 
         $('#paymentForm').submit(function(e) {
             e.preventDefault();
-            self.saveForm(this);
+            self.savePayment(this);
         });
 
         $('#feedbackForm').submit(function(e) {
@@ -283,6 +284,8 @@ function Quickserve() {
         // reset form data
         $('#paymentForm').trigger("reset");
 
+        self.paymentChange = false;
+
         //clean error box
         $('#paymentForm').find('#error_message_box .error_messages').html('');
         $('#paymentForm').find('#error_message_box').addClass('hide');
@@ -344,11 +347,70 @@ function Quickserve() {
             backdrop : 'static',
             keyboard : false
         });
+
+        $('#paymentModal').on('hide.bs.modal', function (e) {
+            // refresh list
+            if (self.paymentChange) {
+                location.reload();
+            }
+        });
+    }
+
+    /**
+    * save approve or decline
+    */
+    this.savePayment = function(form)
+    {
+        // prenvet multiple calls
+        if ($(form).data('running')) {
+            return false;
+        }
+
+        $(form).data('running', true);
+        $(form).find('input').blur();
+        $(form).LoadingOverlay("show");
+
+        $(form).find('#error_message_box .error_messages').html('');
+        $(form).find('#error_message_box').addClass('hide');
+
+        var formData = new FormData(form);
+        
+        $.ajax({
+            url: $(form).prop('action'),
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+
+                if (response.status) {
+                    var msgtpl = `<div>
+                                    <div>Service payment details has been saved successfully. </div>
+                                    <button type="button" onclick="Quickserve.paymentReceipt(${response.id})" class="btn bg-orange btn-xs text-white offset-top-5"><i class="fa fa-file-text"></i> View Receipt</button>
+                                </div>`;
+                    bootbox.alert(msgtpl);
+
+                    self.paymentChange = true;
+
+                } else {
+                    // bootbox.alert(response.message);
+                    $(form).find('#error_message_box .error_messages').append('<p><b>' + response.message + '</b></p>');
+                    $(form).find('#error_message_box').removeClass('hide');
+                }
+            },
+            complete: function() {
+                $(form).LoadingOverlay("hide");
+                $(form).data('running', false);
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+
     }
 
     this.paymentReceipt = function(payment_id)
     {
 
+        bootbox.hideAll();
         var _c = new Date().getTime();
         $("#receiptModal iframe").contents().find("body").html("");
         $("#receiptModal iframe").attr({'src':'quickserve/payment_preview/?c='+_c+'&id='+payment_id});

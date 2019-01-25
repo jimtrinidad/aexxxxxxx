@@ -841,6 +841,7 @@ function prepare_payment_receipt_data($paymentData)
         'paymentData'   => $paymentData,
         'payorData'     => $payorData,
         'scopeName'     => $scopeName,
-        'scopeLogo'     => $scopeLogo
+        'scopeLogo'     => $scopeLogo,
+        'serviceQR'		=> get_qr_file($serviceData->Code, 4)
     );
 }
