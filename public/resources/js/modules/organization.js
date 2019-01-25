@@ -90,7 +90,7 @@ function Organization() {
 
                 } else {
                     // clear content, add empty message
-                    $('#LoadMainBody').html('<div class="col-xs-12"><div class="feedItem post-items padding-20"> \
+                    $('#LoadMainBody').html('<div class="col-xs-12"><div class="feedItem bg-white post-items padding-20"> \
                                                <div class="row"> \
                                                   <div class="col-xs-12 padding-20"> \
                                                     <h2 class="text-bold text-gray">No record found</h2> \
