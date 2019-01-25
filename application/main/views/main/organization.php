@@ -16,13 +16,13 @@
    </div>
 </form>
 
-<div class="bg-grey padding-10 offset-top-10 offset-bottom-10">
+<div class="bg-grey padding-10 offset-top-10">
    <div class="row">
       <div class="col-sm-12 text-bold text-white padding-top-10 padding-bottom-5"><?php echo $Organization->Name; ?></div>
    </div>
 </div>
 
-<div class="bg-white" id="LoadMainBodyCont">
+<div id="LoadMainBodyCont">
   <div id="LoadMainBody" class="row gutter-5">
     
   </div>
