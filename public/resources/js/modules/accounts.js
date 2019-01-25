@@ -43,7 +43,9 @@ function Accounts() {
     */
     this.set_configs = function()
     {
-        
+        $('#search_account_city').select2({
+            width: '100%'
+        });
     }
 
     this.setData = function(rawData)

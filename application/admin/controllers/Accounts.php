@@ -39,53 +39,50 @@ class Accounts extends CI_Controller
         $order = 'StatusID, FirstName';
 
         // SET SEARCH FILTER
-        $search_mid            = false;
-        $search_name           = false;
-        $search_account_status = false;
-        $search_account_level  = false;
+        $filters = array(
+            'search_mid',
+            'search_name',
+            'search_account_status',
+            'search_account_level',
+            'search_account_city'
+        );
+        foreach ($filters as $filter) {
 
-        if (get_post('search_name') !== null) {
-            $search_mid             = get_post('search_mid');
-            $search_name            = get_post('search_name');
-            $search_account_status  = get_post('search_account_status');
-            $search_account_level   = get_post('search_account_level');
-            $this->session->set_userdata('account_search_mid', $search_mid);
-            $this->session->set_userdata('account_search_name', $search_name);
-            $this->session->set_userdata('account_search_account_status', $search_account_status);
-            $this->session->set_userdata('account_search_account_level', $search_account_level);
-        } else {
-            if (isset($_SERVER['HTTP_REFERER']) && stripos($_SERVER['HTTP_REFERER'], 'accounts') !== false && $this->session->has_userdata('account_search_name')) {
-                $search_mid             = $this->session->userdata('account_search_mid');
-                $search_name            = $this->session->userdata('account_search_name');
-                $search_account_status  = $this->session->userdata('account_search_account_status');
-                $search_account_level   = $this->session->userdata('account_search_account_level');
+            $$filter           = false;
+
+            if (get_post($filter) !== null) {
+                $$filter            = get_post($filter);
+                $this->session->set_userdata('account_' . $filter, $$filter);
             } else {
-                $this->session->unset_userdata('account_search_mid');
-                $this->session->unset_userdata('account_search_name');
-                $this->session->unset_userdata('account_search_account_status');
-                $this->session->unset_userdata('account_search_account_level');
+                if (isset($_SERVER['HTTP_REFERER']) && stripos($_SERVER['HTTP_REFERER'], 'accounts') !== false && $this->session->has_userdata('account_' . $filter)) {
+                    $$filter    = $this->session->userdata('service_' . $filter);
+                } else {
+                    $this->session->unset_userdata('accounts_' . $filter);
+                }
             }
-        }
 
-        if ($search_name != false) {
-            $where['CONCAT(FirstName, " ", LastName) LIKE ']  = "%{$search_name}%";
-        }
-        if ($search_account_status != false) {
-            // 100 = pending, replace to actual value on query
-            if ($search_account_status == 100) {
-                $where['StatusID']  = 0;
-            } else {
-                $where['StatusID']  = $search_account_status;
-            }
-        }
-        if ($search_account_level != false) {
-            $where['AccountLevelID']  = $search_account_level;
-        }
+            if ($filter == 'search_name' && $$filter != false) {
+                $where['CONCAT(FirstName, " ", LastName) LIKE ']  = "%{$search_name}%";
+            } else if ($filter == 'search_mid' && $$filter != false) {
+                $where['MabuhayID']  = $search_mid;
+            } else if ($filter == 'search_account_level' && $$filter != false) {
+                $where['AccountLevelID']  = $search_account_level;
+            } else if ($filter == 'search_account_status' && $$filter != false) {
+                // 100 = pending, replace to actual value on query
+                if ($search_account_status == 100) {
+                    $where['StatusID']  = 0;
+                } else {
+                    $where['StatusID']  = $search_account_status;
+                }
+            } else if ($filter == 'search_account_city' && $$filter != false) {
+                $where['MunicipalityCityID']  = $search_account_city;
+            } 
 
-        if ($search_mid != false) {
-            $where['MabuhayID']  = $search_mid;
-        }
 
+            // search params
+            $viewData[$filter] = $$filter;
+
+        }
 
         $paginatationData = $this->mgovdb->getPaginationData('UserAccountInformation', $page_limit, $page_start, $where, $order);
 
@@ -103,13 +100,6 @@ class Accounts extends CI_Controller
             'per_page'      => $page_limit,
             'full_tag_open' => '<ul class="pagination pagination-sm no-margin pull-right">'
         );
-
-
-        // search params
-        $viewData['search_mid']             = $search_mid;
-        $viewData['search_name']            = $search_name;
-        $viewData['search_account_status']  = $search_account_status;
-        $viewData['search_account_level']   = $search_account_level;
 
         $viewData['accounts']   = $accounts;
         $viewData['pagination'] = paginate($paginationConfig);

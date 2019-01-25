@@ -17,13 +17,23 @@
               </select>
             </div>
             <div class="form-group">
-              <select class="form-control input-sm" id="search_account_level" name="search_account_level">
+              <select class="form-control input-sm" id="search_account_level" name="search_account_level" style="min-width: 150px;">
                 <option value="">Account Level</option>
                 <?php
                   foreach ($account_levels as $v) {
                     echo "<option ". ($search_account_level == $v['id'] ? 'selected="selected"' : '') ."  value='". $v['id'] ."'>". $v['LevelName'] ."</option>";
                   }
                 ?>
+              </select>
+            </div>
+            <div class="form-group">
+              <select id="search_account_city" name="search_account_city" class="form-control input-sm">
+                  <option value="">City Or Municipal&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+                  <?php
+                  foreach (lookup_muni_city(null, false) as $v) {
+                  echo "<option ". ($search_account_city == $v['citymunCode'] ? 'selected="selected"' : '') ." value='" . $v['citymunCode'] . "'>" . $v['provDesc'] . ' | ' . $v['citymunDesc'] . "</option>";
+                  }
+                  ?>
               </select>
             </div>
             <div class="form-group">
@@ -114,3 +124,16 @@
     Accounts.accountLevels = <?php echo json_encode($account_levels, JSON_HEX_TAG); ?>;
   });
 </script>
+
+<style type="text/css">
+  .box-tools .select2-container--default .select2-selection--single, .box-tools .select2-selection .select2-selection--single {
+      border: 1px solid #d2d6de;
+      border-radius: 0;
+      padding: 4px 12px;
+      height: 30px;
+  }
+
+  .box-tools .select2-container--default .select2-selection--single .select2-selection__arrow {
+      top: -1px;
+  }
+</style>
