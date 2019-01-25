@@ -339,7 +339,7 @@ html, body { height: 100%; margin: 0; font-size: 14px;}
 
 .org-item {
 	padding: 5px;
-	min-height: 75px;
+	min-height: 85px;
 }
 
 .org-item .image {
