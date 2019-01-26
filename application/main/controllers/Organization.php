@@ -32,6 +32,8 @@ class Organization extends CI_Controller
 
         $organizationData = $this->mgovdb->getRowObject('Dept_ChildDepartment', $this->user->OrganizationID);
 
+        $organizationData->Setup = $this->mgovdb->getRowObject('Dept_OrganizationSetup', $organizationData->UniqueCode, 'UniqueCode');
+
         $viewData['Organization']   = $organizationData;
         // print_data($organizationData);
         view('main/organization', $viewData, 'templates/mgov');

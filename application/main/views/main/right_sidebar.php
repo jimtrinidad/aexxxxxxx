@@ -68,6 +68,19 @@
                <?php }?>
                <img src="<?php echo public_url() . 'resources/images/dotr-logo.png' ?>" class="organization-partner-logo" />
                <img src="<?php echo public_url() . 'resources/images/LTO.png' ?>" class="organization-partner-logo" />
+
+               <?php
+                if ($Organization->Setup) {
+                  $partners = json_decode($Organization->Setup->Partners, true);
+                  foreach ($partners as $partner) {
+                    if (file_exists(PUBLIC_DIRECTORY . 'assets/etc/' . $partner['Photo'])) {
+                      echo '<a href="'.$partner['URL'].'" target="_blank">';
+                      echo '<img src="'.public_url() . 'assets/etc/'. $partner['Photo'] .'" class="organization-partner-logo" title="'.$partner['Name'].'" />';
+                      echo '</a>';
+                    }
+                  }
+                }
+               ?>
              </td>
            </tr>
          </table>

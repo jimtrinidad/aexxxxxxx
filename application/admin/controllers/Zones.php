@@ -334,7 +334,7 @@ class Zones extends CI_Controller
                     $return_data = array(
                         'status'    => false,
                         'message'   => 'Image upload error found.',
-                        'fields'    => array_merge(array1),
+                        'fields'    => $errors
                     );
 
                 } else {

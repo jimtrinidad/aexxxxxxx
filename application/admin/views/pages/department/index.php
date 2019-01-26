@@ -71,6 +71,10 @@
                           <div class="box-tools">
                             <div class="input-group pull-right" style="width: 10px;">
                               <div class="input-group-btn">
+                                '.($subDept['Type'] == 3 
+                                  ? 
+                                  '<button type="button" class="btn btn-xs btn-primary" onClick="Department.organizationSetup('.$department['id'].','.$subDept['id'].')"><i class="fa fa-sitemap"></i> Setup</button>'
+                                  : '').'
                                 <button type="button" class="btn btn-xs btn-default" onClick="Department.editSubDepartment('.$department['id'].','.$subDept['id'].')"><i class="fa fa-pencil"></i> Edit</button>
                                 <button type="button" class="btn btn-xs btn-danger" onClick="Department.deleteSubDepartment('.$department['id'].','.$subDept['id'].')"><i class="fa fa-trash"></i></button>
                               </div>
@@ -93,6 +97,8 @@
 
 <?php view('pages/department/modals.php'); ?>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.6.0/Sortable.min.js"></script>
+
 <script type="text/javascript">
   $(document).ready(function(){
     Department.departmentData = <?php echo json_encode($departments, JSON_HEX_TAG); ?>;
@@ -101,3 +107,13 @@
     }
   });
 </script>
+
+<style type="text/css">
+    #partnersTable td, #bannersTable td {
+        vertical-align: middle;
+    }
+
+    #partnersTable .form-group, #bannersTable .form-group {
+        margin-bottom: 0;
+    }
+</style>

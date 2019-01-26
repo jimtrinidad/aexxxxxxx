@@ -4,6 +4,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Department extends CI_Controller
 {
 
+    private $todelete = array();
+    private $uploaded = array();
     public function __construct()
     {
         parent::__construct();
@@ -32,7 +34,9 @@ class Department extends CI_Controller
         // if admin, get parent department and child department
         // if pr. redirect to department officers
 
-        $viewData['departments'] = $this->getDepartment(get_post('searchKeyword'));
+        $viewData['departments'] = $this->getDepartment(get_post('searchKeyword'), true);
+
+        // print_data($viewData['departments']);
 
         view('pages/department/index', $viewData, 'templates/mgovadmin');
     }
@@ -100,7 +104,7 @@ class Department extends CI_Controller
                 $getCodeWhere   = array('Code =' => get_post('Code'));
 
                 $fields         = $this->mgovdb->tableColumns('Dept_Departments');
-                $excludeField   = array('id', 'Logo', 'deletedAt');
+                $excludeField   = array('id', 'Logo', 'deletedAt', 'UniqueCode');
 
                 $existingData   = false;
                 $insertData     = array(
@@ -126,6 +130,11 @@ class Department extends CI_Controller
                 // if edit, skip code checking
                 $codeExists = $this->mgovdb->getRecords('Dept_Departments', $getCodeWhere);
                 if (count($codeExists) == 0) {
+
+                    // new record, generate uniquecode
+                    if ($existingData == false) {
+                        $insertData['UniqueCode'] = md5(get_post('Code') . microtime());
+                    }
 
                     if (($ID = $this->mgovdb->saveData('Dept_Departments', $insertData))) {
                         $return_data = array(
@@ -202,7 +211,7 @@ class Department extends CI_Controller
                 $getCodeWhere   = array('Code =' => get_post('Code'));
 
                 $fields         = $this->mgovdb->tableColumns('Dept_ChildDepartment');
-                $excludeField   = array('id', 'Logo', 'deletedAt');
+                $excludeField   = array('id', 'Logo', 'deletedAt', 'uniquecode');
 
                 $existingData   = false;
                 $insertData     = array(
@@ -228,6 +237,11 @@ class Department extends CI_Controller
                 // if edit, skip code checking
                 $codeExists = $this->mgovdb->getRecords('Dept_ChildDepartment', $getCodeWhere);
                 if (count($codeExists) == 0) {
+
+                    // new record, generate uniquecode
+                    if ($existingData == false) {
+                        $insertData['UniqueCode'] = md5(get_post('Code') . microtime());
+                    }
 
                     if (($ID = $this->mgovdb->saveData('Dept_ChildDepartment', $insertData))) {
                         $return_data = array(
@@ -836,7 +850,7 @@ class Department extends CI_Controller
     /**
     * private get departments and its subdepartment
     */
-    private function getDepartment($keyword)
+    private function getDepartment($keyword, $includeOrgSetup = false)
     {
         $mainDepartments = $this->departmentdb->getDepartment($keyword);
         $departments     = array();
@@ -850,11 +864,32 @@ class Department extends CI_Controller
             } else {
                 $subDepartments = $this->departmentdb->getChildDepartment($mainDepartment['id'], $keyword);
             }
+
+            if ($includeOrgSetup) {
+                $orgSetup = $this->mgovdb->getRowObject('Dept_OrganizationSetup', $mainDepartment['UniqueCode'], 'UniqueCode');
+                if ($orgSetup) {
+                    $mainDepartment['OrganizationSetup'] = array(
+                        'Banners'   => (array) json_decode($orgSetup->Banners, true),
+                        'Partners'  => (array) json_decode($orgSetup->Partners, true),
+                    );
+                }
+            }
             
             $mainDepartment['subDepartment'] = array();
             foreach ($subDepartments as $subDepartment) {
 
                 $subDepartment['Logo'] = logo_filename($subDepartment['Logo']);
+
+                if ($includeOrgSetup) {
+                    $orgSetup = $this->mgovdb->getRowObject('Dept_OrganizationSetup', $subDepartment['UniqueCode'], 'UniqueCode');
+                    if ($orgSetup) {
+                        $subDepartment['OrganizationSetup'] = array(
+                            'Banners'   => (array) json_decode($orgSetup->Banners, true),
+                            'Partners'  => (array) json_decode($orgSetup->Partners, true),
+                        );
+                    }
+                }
+
                 $mainDepartment['subDepartment'][$subDepartment['id']] = $subDepartment;
 
             }
@@ -865,6 +900,190 @@ class Department extends CI_Controller
         }
 
         return $departments;
+    }
+
+
+    /**
+    * save organization
+    */
+    public function save_organization_setup()
+    {
+
+        $orgSetupData = $this->mgovdb->getRowObject('Dept_OrganizationSetup', get_post('UniqueCode'), 'UniqueCode');
+
+        // load upload library for image upload
+        $this->load->library('upload');
+
+        $banners  = $this->prepare_org_data(($orgSetupData ? (array)json_decode($orgSetupData->Banners, true) : array()), 'Banners');
+        $partners = $this->prepare_org_data(($orgSetupData ? (array)json_decode($orgSetupData->Partners, true) : array()), 'Partners');
+
+        // validate and prepare servants and banners
+        if (!$partners['status'] || !$banners['status']) {
+
+            foreach ($this->uploaded as $uploadedfile) {
+                @unlink($uploadedfile);
+            }
+
+            $errors = array();
+            if (!$partners['status']) {
+                $errors = array_merge($errors, $partners['data']);
+            }
+            if (!$banners['status']) {
+                $errors = array_merge($errors, $banners['data']);
+            }
+
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Image upload error found.',
+                'fields'    => $errors
+            );
+
+        } else {
+
+            $updateData     = array(
+                'UpdatedBy'     => current_user(),
+                'LastUpdate'    => date('Y-m-d H:i:s'),
+                'Partners'      => json_encode($partners['data']),
+                'Banners'       => json_encode($banners['data'])
+            );
+
+            if ($orgSetupData) {
+                $updateData['id'] = $orgSetupData->id;
+            } else {
+                $updateData['UniqueCode']       = get_post('UniqueCode');
+                $updateData['DepartmentID']     = get_post('DepartmentID');
+                $updateData['SubDepartmentID']  = get_post('SubDepartmentID');
+            }
+
+            if (($ID = $this->mgovdb->saveData('Dept_OrganizationSetup', $updateData))) {
+                $return_data = array(
+                    'status'    => true,
+                    'message'   => 'Organization setup has been saved successfully.',
+                    'id'        => $ID,
+                    'data'      => $updateData
+                );
+
+                // delete old logo if edited
+                foreach ($this->todelete as $item) {
+                    @unlink(PUBLIC_DIRECTORY . 'assets/etc/' . $item);
+                }
+
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Saving organization setup failed. Please try again.'
+                );
+                // delete uploaded
+                foreach ($this->uploaded as $uploadedfile) {
+                    @unlink($uploadedfile);
+                }
+            }
+
+        }
+
+        response_json($return_data);
+    }
+
+    private function prepare_org_data($currentItems, $field)
+    {
+        $errors     = array();
+        $cleanItems = array();
+
+        $Images  = isset($_FILES['Images']) ? $_FILES['Images'] : array();
+
+        $items = (array) get_post($field);
+        foreach ($items as $id => $item) {
+            if (isset($item['Ordering'])) {
+                // default to current value if exist
+                if (isset($currentItems[$id]['Photo'])) {
+                    $item['Photo'] = $currentItems[$id]['Photo'];
+                }
+
+                if ($Images['name'][$id] && !empty($Images['name'][$id])) {
+                    $rsp = $this->validateAndUploadImage($id);
+                    if ($rsp['status']) {
+                        $item['Photo']   = $rsp['data']['file_name'];
+                        $this->uploaded[]  = $rsp['data']['full_path'];
+                        if (isset($currentItems[$id]['Photo'])) {
+                            $this->todelete[] = $currentItems[$id]['Photo'];
+                        }
+                    } else {
+                        $errors[$id] = $rsp['error'];
+                    }
+                }
+                $cleanItems[$id] = $item;
+            }
+        }
+
+        // check deleted
+        foreach ($currentItems as $id => $item) {
+            if (!in_array($id, array_keys($items))) {
+                $this->todelete[] = $currentItems[$id]['Photo'];
+            }
+        }
+
+        if (count($errors)) {
+            return array(
+                'status'    => false,
+                'message'   => 'Image uploads have errors',
+                'data'      => $errors
+            );
+        } else {
+            uasort($cleanItems, function($a, $b) {
+                if ($a['Ordering'] == $b['Ordering']) {
+                    return 0;
+                }
+                return ($a['Ordering'] < $b['Ordering']) ? -1 : 1;
+            });
+            return array(
+                'status'    => true,
+                'data'      => $cleanItems
+            );
+        }
+
+    }
+
+    private function validateAndUploadImage($fieldID)
+    {
+        $Images  = isset($_FILES['Images']) ? $_FILES['Images'] : array();
+
+        if (isset($Images['name'][$fieldID])) {
+
+            $randomfilename = md5($fieldID . microsecID());
+
+            $upload_options = array(
+                'upload_path'   => PUBLIC_DIRECTORY . 'assets/etc/',
+                'allowed_types' => 'gif|jpg|png',
+                'max_size'      => '2000', // 2mb
+                'overwrite'     => true,
+                'file_name'     => $randomfilename
+            );
+
+            $_FILES['imagefile']['name']    = $Images['name'][$fieldID];
+            $_FILES['imagefile']['type']    = $Images['type'][$fieldID];
+            $_FILES['imagefile']['tmp_name']= $Images['tmp_name'][$fieldID];
+            $_FILES['imagefile']['error']   = $Images['error'][$fieldID];
+            $_FILES['imagefile']['size']    = $Images['size'][$fieldID];    
+
+            $this->upload->initialize($upload_options);
+            if ($this->upload->do_upload('imagefile')) {
+                return array(
+                    'status'    => true,
+                    'data'      => $this->upload->data()
+                );
+            } else {
+                return array(
+                    'status'    => false,
+                    'error'   => $this->upload->display_errors('','')
+                );
+            }
+
+        } else {
+            return array(
+                'status'    => false,
+                'error'     => 'Invalid image.'
+            );
+        }
     }
 
 }

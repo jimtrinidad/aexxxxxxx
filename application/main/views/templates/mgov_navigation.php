@@ -1,8 +1,17 @@
  <!-- BANNERS -->
 <?php 
-  if ($accountInfo->PublicOffice) {
+  
+  $banners = array();
+  if (current_controller() == 'organization' && $Organization->Setup) {
+      $banners = json_decode($Organization->Setup->Banners, true);
+  }
+
+  // if all else fails
+  if ($accountInfo->PublicOffice && count($banners) == 0) {
     $banners = json_decode($accountInfo->PublicOffice->Banners, true);
-    if (count($banners)) {
+  }
+
+  if (count($banners)) {
 ?>
 <div id="carouselFade" class="carousel slide carousel-fade" data-ride="carousel" style="margin-top: -15px;">
     <!-- Wrapper for slides -->
@@ -33,7 +42,7 @@
         <span class="sr-only">Next</span>
     </a>
 </div>
-<?php }} ?>
+<?php } ?>
 <!-- Banners end -->
 
 <!-- Primary Navigation -->

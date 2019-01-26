@@ -7,6 +7,7 @@ function Department() {
     this.departmentData = {}
     this.officersData = {}
     this.officerChanged;
+    this.sortable = {};
 
     /**
      * Initialize events
@@ -55,6 +56,11 @@ function Department() {
                 e.preventDefault();
                 return false;
             }
+        });
+
+        $('#organizationSetupForm').submit(function(e) {
+            e.preventDefault();
+            self.saveOrganizationSetup(this);
         });
 
     }
@@ -1037,6 +1043,336 @@ function Department() {
                 });
             }
         });
+    }
+
+
+    /**
+    * ORGANIZATION SETUP
+    */
+    this.organizationSetup = function(parentID, subID)
+    {   
+        var data        = this.getSubDepartment(parentID, subID);
+        var parentData  = this.getDepartment(parentID);
+
+        if (data != false) {
+
+            console.log(data, parentData);
+
+            // reset form data
+            $('#organizationSetupForm').trigger("reset");
+
+            // reset input erros
+            $.each($('#organizationSetupForm').find('input'), function(i,e){
+                $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger').addClass('text-white');
+                $(e).popover('destroy');
+            });
+            //clean error box
+            $('#organizationSetupForm').find('#error_message_box .error_messages').html('');
+            $('#organizationSetupForm').find('#error_message_box').addClass('hide');
+
+            $('#organizationSetupForm').find('#addedBanners').html('');
+            $('#organizationSetupForm').find('#addedPartners').html('');
+
+            if (data.OrganizationSetup) {
+                var v = data.OrganizationSetup;
+
+                // banners
+                $.each(v.Banners, function (i,e){
+                    var tpl = `'<tr class="sortable-row" id="${i}">
+                                    <td><i class="drag-handle fa fa-arrows"></i></td>
+                                    <td>
+                                        <div class="banner image-upload-container">
+                                          <img class="image-preview img-responsive" src="${window.public_url('assets/etc/' + e.Photo)}">
+                                          <span class="hiddenFileInput hide">
+                                            <input type="file" accept="image/*" data-default="${window.public_url('assets/etc/placeholder-banner.png')}" class="image-upload-input fieldBanner" name="Images[${i}]"/>
+                                          </span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" name="Banners[${i}][URL]" class="form-control fieldUrl input-sm" placeholder="Link URL" value="${e.URL}">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" onClick="Department.removeBannerRow(this)"><i class="fa fa-trash"></i></button>
+                                        <input type="hidden" class="item-order" name="Banners[${i}][Ordering]" value="${e.Ordering}">
+                                    </td>
+                                </tr>'`;
+
+                    $('#organizationSetupForm').find('#addedBanners').append(tpl);
+                });
+
+                // partners
+                $.each(v.Partners, function (i,e){
+                    var tpl = `'<tr class="sortable-row" id="${i}">
+                                    <td><i class="drag-handle fa fa-arrows"></i></td>
+                                    <td>
+                                        <div class="image-upload-container">
+                                          <img class="image-preview img-responsive" src="${window.public_url('assets/etc/' + e.Photo)}">
+                                          <span class="hiddenFileInput hide">
+                                            <input type="file" accept="image/*" data-default="${window.public_url('assets/logo/blank-logo.png')}" class="image-upload-input fieldLogo" name="Images[${i}]"/>
+                                          </span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" name="Partners[${i}][Name]" class="form-control fieldName input-sm" placeholder="Name" value="${e.Name}">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" name="Partners[${i}][URL]" class="form-control fieldUrl input-sm" placeholder="Link URL" value="${e.URL}">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" onClick="Department.removePartnerRow(this)"><i class="fa fa-trash"></i></button>
+                                        <input type="hidden" class="item-order" name="Partners[${i}][Ordering]" value="${e.Ordering}">
+                                    </td>
+                                </tr>'`;
+
+                    $('#organizationSetupForm').find('#addedPartners').append(tpl);
+                });
+
+
+                self.setSortable('addedBanners');
+                self.setSortable('addedPartners');
+            }
+
+            // banners
+            var itemID = Utils.generateString();
+            var tpl = `<tr class="info" id="${itemID}">
+                          <td></td>
+                          <td>
+                              <div class="banner image-upload-container">
+                                <img class="image-preview img-responsive" src="${window.public_url('assets/etc/placeholder-banner.png')}">
+                                <span class="hiddenFileInput hide">
+                                  <input type="file" accept="image/*" data-default="${window.public_url('assets/etc/placeholder-banner.png')}" class="image-upload-input fieldBanner" name="Images[${itemID}]"/>
+                                </span>
+                              </div>
+                          </td>
+                          <td>
+                              <div class="form-group">
+                                  <input type="text" name="Banners[${itemID}][URL]" class="form-control fieldUrl input-sm" placeholder="Link URL">
+                              </div>
+                          </td>
+                          <td>
+                              <button type="button" class="btn btn-success btn-sm" onclick="Department.addBannerRow()"><i class="fa fa-plus"></i></button>
+                          </td>
+                      </tr>`;
+
+            $('#organizationSetupForm').find('#addedBanners').append(tpl);
+
+            // partners
+            var itemID = Utils.generateString();
+            var tpl2 = `<tr class="info" id="${itemID}">
+                          <td></td>
+                          <td>
+                              <div class="image-upload-container">
+                                <img class="image-preview img-responsive" src="${window.public_url('assets/logo/blank-logo.png')}">
+                                <span class="hiddenFileInput hide">
+                                  <input type="file" accept="image/*" data-default="${window.public_url('assets/logo/blank-logo.png')}" class="image-upload-input fieldLogo" name="Images[${itemID}]"/>
+                                </span>
+                              </div>
+                          </td>
+                          <td>
+                              <div class="form-group">
+                                  <input type="text" name="Partners[${itemID}][Name]" class="form-control fieldName input-sm" placeholder="Name">
+                              </div>
+                          </td>
+                          <td>
+                              <div class="form-group">
+                                  <input type="text" name="Partners[${itemID}][URL]" class="form-control fieldUrl input-sm" placeholder="Link URL">
+                              </div>
+                          </td>
+                          <td>
+                              <button type="button" class="btn btn-success btn-sm" onclick="Department.addPartnerRow()"><i class="fa fa-plus"></i></button>
+                          </td>
+                      </tr>`;
+
+            $('#organizationSetupForm').find('#addedPartners').append(tpl2);
+
+            $('#organizationSetupForm #DepartmentID').val(parentID);
+            $('#organizationSetupForm #SubDepartmentID').val(subID);
+            $('#organizationSetupForm #UniqueCode').val(data.UniqueCode);
+
+            $('#organizationSetupModal .departmentName').text(data.Name);
+            $('#organizationSetupModal').modal({
+                backdrop : 'static',
+                keyboard : false
+            });
+
+        }
+
+    }
+
+    /**
+    * add banner
+    */
+    this.addBannerRow = function()
+    {
+        var form        = $('#organizationSetupForm').find('#addedBanners tr:last');
+        var count       = ($('#organizationSetupForm').find('#addedBanners tr').length - 1);
+        var banner      = form.find('.fieldBanner').val();
+
+        if (banner) {
+            var clone  = form.clone();
+            var itemID = Utils.generateString();
+            form.removeClass('info').addClass('sortable-row').find('td:first-child').prepend('<i class="drag-handle fa fa-arrows"></i>');
+            form.find('td:last-child').html('<button type="button" class="btn btn-danger btn-sm" onClick="Department.removeBannerRow(this)"><i class="fa fa-trash"></i></button> \
+                <input type="hidden" class="item-order" name="Banners['+form.prop('id')+'][Ordering]" value="'+(count + 1)+'">');
+
+            clone.prop('id', itemID).addClass('info');
+            clone.find('.fieldUrl').prop('name', 'Banners['+itemID+'][URL]').val('');
+            clone.find('.fieldBanner').prop('name', 'Images['+itemID+']').val('').closest('div').find('.image-preview').prop('src', window.public_url('assets/etc') + '/placeholder-banner.png');
+            $('#organizationSetupForm').find('#addedBanners').append(clone);
+
+            self.setSortable('addedBanners');
+        }
+    }
+
+    /**
+    * remove banner row
+    */
+    this.removeBannerRow = function(elem)
+    {
+        var rowID   = $(elem).closest("tr").prop('id');
+        $(elem).closest("tr").fadeOut('fast', function(){
+            $(this).remove();
+            self.setSortable('addedBanners');
+        });
+    }
+
+    /**
+    * add partner
+    */
+    this.addPartnerRow = function()
+    {
+        var form        = $('#organizationSetupForm').find('#addedPartners tr:last');
+        var count       = ($('#organizationSetupForm').find('#addedPartners tr').length - 1);
+        var logo      = form.find('.fieldLogo').val();
+
+        if (logo) {
+            var clone  = form.clone();
+            var itemID = Utils.generateString();
+            form.removeClass('info').addClass('sortable-row').find('td:first-child').prepend('<i class="drag-handle fa fa-arrows"></i>');
+            form.find('td:last-child').html('<button type="button" class="btn btn-danger btn-sm" onClick="Department.removePartnerRow(this)"><i class="fa fa-trash"></i></button> \
+                <input type="hidden" class="item-order" name="Partners['+form.prop('id')+'][Ordering]" value="'+(count + 1)+'">');
+
+            clone.prop('id', itemID).addClass('info');
+            clone.find('.fieldName').prop('name', 'Partners['+itemID+'][Name]').val('');
+            clone.find('.fieldUrl').prop('name', 'Partners['+itemID+'][URL]').val('');
+            clone.find('.fieldLogo').prop('name', 'Images['+itemID+']').val('').closest('div').find('.image-preview').prop('src', window.public_url('assets/logo') + '/blank-logo.png');
+            $('#organizationSetupForm').find('#addedPartners').append(clone);
+
+            self.setSortable('addedPartners');
+        }
+    }
+
+    /**
+    * remove partner row
+    */
+    this.removePartnerRow = function(elem)
+    {
+        var rowID   = $(elem).closest("tr").prop('id');
+        $(elem).closest("tr").fadeOut('fast', function(){
+            $(this).remove();
+            self.setSortable('addedPartners');
+        });
+    }
+
+
+    /**
+    * save organization
+    */
+    this.saveOrganizationSetup = function(form)
+    {
+        // prenvet multiple calls
+        if ($(form).data('running')) {
+            return false;
+        }
+
+        $(form).data('running', true);
+        $(form).find('input').blur();
+        $(form).LoadingOverlay("show");
+
+        var formData = new FormData(form);
+        
+        // reset input erros
+        $.each($(form).find('input, select'), function(i,e){
+            $(e).prop('title', '');
+            $(e).popover('destroy');
+        });
+        //clean error box
+        $(form).find('#error_message_box .error_messages').html('');
+        $(form).find('#error_message_box').addClass('hide');
+        $(form).find('.has-error').prop('title', '').popover('destroy').removeClass('has-error').find('label').removeClass('text-danger');
+
+        $.ajax({
+            url: $(form).prop('action'),
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                if (response.status) {
+                    bootbox.alert(response.message, function(){
+                        location.reload();
+                    });
+                } else {
+                    // bootbox.alert(response.message);
+                    $(form).find('#error_message_box .error_messages').append('<p><b>' + response.message + '</b></p>');
+
+                    $.each(response.fields, function(i,e){
+                        $(form).find('#'+i).prop('title', e).closest('div').addClass('has-error').find('label').addClass('text-danger');
+                        Utils.popover($('#'+i), {
+                            t: 'hover',
+                            p: 'top',
+                            m: e
+                        });
+                        $(form).find('#error_message_box .error_messages').append('<p>' + e + '</p>');
+                    });
+
+                    $(form).find('#error_message_box').removeClass('hide');
+                }
+            },
+            complete: function() {
+                $(form).LoadingOverlay("hide");
+                $(form).data('running', false);
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    }
+
+
+        /**
+    * set group sortable
+    */
+    this.setSortable = function(elementID)
+    {
+        try {self.sortable[elementID].destroy();} catch(e) {}
+
+        var container = document.getElementById(elementID);
+
+        // refresh order on remove
+        var items = $('#' + elementID + ' > .sortable-row');
+        for (var i = 0; i < items.length; i++) {
+            $(items[i]).data('order', (i + 1));
+            $(items[i]).find('.item-order').first().val(i + 1);
+        }
+
+        self.sortable[elementID] = Sortable.create(container, {
+            animation: 150,
+            handle: '.drag-handle',
+            draggable: ".sortable-row",
+            onSort: function (e) {
+                var items = e.to.children;
+                for (var i = 0; i < items.length; i++) {
+                    $(items[i]).data('order', (i + 1));
+                    $(items[i]).find('.item-order').first().val(i + 1);
+                }
+            }
+        });
+
     }
 
 }

@@ -333,3 +333,69 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal fade" id="organizationSetupModal" tabindex="-1" role="dialog" aria-labelledby="organizationSetupModal">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <form id="organizationSetupForm" name="organizationSetupForm" action="<?php echo site_url('department/save_organization_setup') ?>" enctype="multipart/form-data">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title"><b class="departmentName"></b> | Setup</h4>
+        </div>
+        <div class="modal-body">
+          
+          <div>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active"><a href="#banners" aria-controls="banners" role="tab" data-toggle="tab">Banners</a></li>
+              <li role="presentation"><a href="#partners" aria-controls="partners" role="tab" data-toggle="tab">Partners</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+
+              <div role="tabpanel" class="tab-pane active" id="banners">
+                <table id="bannersTable" class="table table-responsive">
+                  <thead>
+                      <th style="width: 10px;"></th>
+                      <th></th>
+                      <th></th>
+                      <th style="width: 30px;"></th>
+                  </thead>
+                  <tbody id="addedBanners">
+                      
+                  </tbody>
+                </table>
+              </div>
+
+              <div role="tabpanel" class="tab-pane" id="partners">
+                <table id="partnersTable" class="table table-responsive">
+                  <thead>
+                      <th style="width: 10px;"></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th style="width: 30px;"></th>
+                  </thead>
+                  <tbody id="addedPartners">
+                      
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+
+          <input type="hidden" id="DepartmentID" name="DepartmentID">
+          <input type="hidden" id="SubDepartmentID" name="SubDepartmentID">
+          <input type="hidden" id="UniqueCode" name="UniqueCode">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
