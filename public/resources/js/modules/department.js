@@ -170,7 +170,6 @@ function Department() {
     this.deleteDepartment = function(id)
     {   
         var data = self.getDepartment(id);
-        console.log(data);
         if (data) {
             bootbox.confirm('Are you sure you want to <label class="label label-danger">delete</label> ' + data.Name, function(r){
                 if (r) {
@@ -1055,8 +1054,6 @@ function Department() {
         var parentData  = this.getDepartment(parentID);
 
         if (data != false) {
-
-            console.log(data, parentData);
 
             // reset form data
             $('#organizationSetupForm').trigger("reset");
