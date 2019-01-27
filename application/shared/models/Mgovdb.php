@@ -218,6 +218,8 @@ class Mgovdb extends CI_Model {
 
 		$query .= " ORDER BY sa.DateCompleted DESC, sa.DateApplied DESC";
 
+		$query .= " LIMIT 100";
+
 		return $this->db->query($query)->result_array();
 	}
 

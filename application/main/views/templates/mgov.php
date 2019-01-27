@@ -41,7 +41,7 @@
 	            <?php else: ?>
 
 		        	<!-- SUB CONTENT -->
-		            <div class="col-md-8 col-xs-12 padding-bottom-20">
+		            <div class="col-md-8 col-xs-12 padding-bottom-10">
 
 		            	<!-- NAVIGATION -->
 		            	<?php view('templates/mgov_navigation');?>

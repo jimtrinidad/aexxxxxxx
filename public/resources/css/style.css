@@ -70,6 +70,7 @@ html, body { height: 100%; margin: 0; font-size: 14px;}
 .seconday-nav ul li a i{ padding: 3px 5px; }
 
 .post-items { margin-bottom: 10px; }
+.post-items:last-child{margin-bottom: 0;}
 .post-items h2{ line-height: 18px; font-size: 14px; }
 .post-items .transaction-counter{ font-size: 11px; color: #c3c9cb; }
 .post-items .transaction-date{ color: #c3c9cb; font-size: 11px; font-weight: bold; margin-bottom: 5px; margin-top: 5px; }

@@ -202,7 +202,9 @@ function Mgovph() {
                                 feedTemplate.removeClass('hide').hide().fadeIn('slow');
                             }
 
-                            $('#LoadMainBody .feedItem:gt('+ $global.livefeed_limit +')').fadeOut('slow');
+                            $('#LoadMainBody .feedItem:gt('+ $global.livefeed_limit +')').fadeOut('slow', function() {
+                                $(this).remove();
+                            });
 
                         });
 
