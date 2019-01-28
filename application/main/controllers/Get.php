@@ -516,4 +516,53 @@ class Get extends CI_Controller
         }
     }
 
+    /**
+    * get user organitation ranking
+    */
+    public function organization_report_rank()
+    {
+
+        check_authentication();
+
+        $user = $this->mgovdb->getRowObject('UserAccountInformation', current_user(), 'id');
+
+        if ($user->OrganizationID) {
+
+            $organizationData = $this->mgovdb->getRowObject('Dept_ChildDepartment', $user->OrganizationID);
+
+            $sql = "SELECT COUNT(sa.id) AS Applications, ua.FirstName, ua.LastName FROM Service_Applications sa
+                    JOIN UserAccountInformation ua ON sa.ApplicantID = ua.id
+                    LEFT JOIN Service_Services ss ON sa.ServiceID = ss.id
+                    LEFT JOIN Service_Organization so ON ss.id = so.ServiceID
+                    WHERE ss.deletedAt IS NULL
+                    AND sa.Status = 2
+                    AND ss.InOrganization = 1
+                    AND ss.SubDepartmentID = ?
+                    GROUP BY ua.id
+                    ORDER BY Applications DESC
+                    LIMIT 20";
+
+            $results = $this->db->query($sql, array($user->OrganizationID))->result_array();
+
+            if (count($results)) {
+                response_json(array(
+                    'status'    => true,
+                    'name'      => $organizationData->Name,
+                    'data'      => $results
+                ));
+            } else {
+                response_json(array(
+                    'status'    => false,
+                    'data'      => 'No record found.'
+                ));
+            }
+
+        } else {
+            response_json(array(
+                'status'    => false,
+                'data'      => 'No organization found.'
+            ));
+        }
+    }
+
 }

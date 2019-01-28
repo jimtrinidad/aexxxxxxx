@@ -16,6 +16,7 @@ function Mgovph() {
         self.set_configs();
         self.load_govt_ranking();
         self.load_trending_service();
+        self.load_organization_ranking();
 
     },
 
@@ -35,6 +36,12 @@ function Mgovph() {
         $('#ServiceApplicationForm').submit(function(e){
             e.preventDefault();
             self.submitServiceApplication(this);
+        });
+
+        self.moveSidebar();
+
+        $(window).resize(function(){
+            self.moveSidebar();
         });
 
     }
@@ -113,6 +120,76 @@ function Mgovph() {
                     $('#trending-service-cont').LoadingOverlay("hide");
                 }
             });
+        }
+    }
+
+    /**
+    * get and set government performance ranking
+    */
+    this.load_organization_ranking = function()
+    {
+        var cont = $('#org-ranking-cont');
+        if (cont.length) {
+            cont.LoadingOverlay("show");
+            $.ajax({
+                url  : window.base_url('get/organization_report_rank'),
+                type : 'get',
+                cache: true,
+                success : function(response) {
+                    if (response.status) {
+                        cont.find('h2').text(response.name + ' Performance');
+                        var tpl = `<div class="col-xs-12">`;
+
+                        if (response.data.length > 10) {
+                            tpl = `<div class="col-xs-6">`;
+                        }
+
+                        tpl += `<ul>`;
+
+                        $.each(response.data, function(i,e) {
+                            tpl += `<li>${e.FirstName.substr(0, 1)}. ${e.LastName}<span>${e.Applications}</span></li>`;
+                            if (i == 9 && response.data.length > 10) {
+                                tpl += `</ul></div><div class="col-xs-6"><ul>`;
+                            }
+                        });
+
+                        tpl += `</ul></div>`;
+
+                        cont.find('div.row').html(tpl);
+
+                        cont.removeClass('hide');
+                    }
+                },
+                complete: function() {
+                    cont.LoadingOverlay("hide");
+                }
+            });
+        }
+    }
+
+    /**
+    * move sidebar on the middle of feeds or service if sm or xs viewport
+    */
+    this.moveSidebar = function()
+    {   
+        if ($('#LoadMainBody').is(':visible') && $('#LoadMainBody .post-items').length > 5) {
+            $('.side-bar-content-clone').remove();
+            var cloneCont = $('<div class="side-bar-content-clone"></div>');
+            if (Utils.isBreakpoint('sm') || Utils.isBreakpoint('xs')) {
+                if (!$('.side-bar-content-clone').length) {
+                    var clone = $('#side-bar-content').clone();
+                    $('#side-bar-content').addClass('hide');
+
+                    clone.removeClass('hide');
+                    clone.prop('id', 'side-bar-content-fake');
+                    cloneCont.html(clone);
+                    $('#LoadMainBody').children(':eq(2)').after(cloneCont);
+                }
+            } else {
+                $('#side-bar-content').removeClass('hide');
+            }
+        } else {
+            $('#side-bar-content').removeClass('hide');
         }
     }
 
@@ -233,6 +310,8 @@ function Mgovph() {
                 if (firstload) {
                     setTimeout(function(){
                         $('#LoadMainBody').LoadingOverlay("hide");
+
+                        self.moveSidebar();
                     }, 200);
                 }
 
@@ -343,7 +422,11 @@ function Mgovph() {
 
             },
             complete : function() {
-                $('#LoadMainBody').LoadingOverlay("hide");
+                setTimeout(function(){
+                    $('#LoadMainBody').LoadingOverlay("hide");
+                    
+                    self.moveSidebar();
+                }, 200);
             }
         });
     }
@@ -433,6 +516,8 @@ function Mgovph() {
                     $('#ServiceDetailsBody').html(serviceTemplate).find('.serviceDetailsTemplate').hide().removeClass('hide').fadeIn('slow');
                     $(window).scrollTop(0);
 
+                    self.moveSidebar();
+
                     // auto trigger apply, teporary!!!
                     // self.openServiceApplication(serviceTemplate.find('button'));
                 }
@@ -453,6 +538,8 @@ function Mgovph() {
         $('#ServiceDetailsBody').html('');
         $(window).scrollTop(sessionStorage.serviceScroll);
         self.selectedService = false;
+
+        self.moveSidebar();
     }
 
     /**

@@ -142,7 +142,12 @@ function Chatbox() {
 
     this.setScroll = function()
     {
-        $(".chatbubble .list-friends").niceScroll({
+        $(".chatbubble .recent-threads").niceScroll({
+            cursorcolor: "#696c75",
+            cursorwidth: "4px",
+            cursorborder: "none"
+        });
+        $(".chatbubble .support-list").niceScroll({
             cursorcolor: "#696c75",
             cursorwidth: "4px",
             cursorborder: "none"
@@ -155,10 +160,11 @@ function Chatbox() {
     }
 
     this.resetScroll = function()
-    {
-        $(".chatbubble .messages").getNiceScroll(0).remove();
-        $(".chatbubble .list-friends").getNiceScroll(0).remove();
-        $(".chatbubble .list-friends").getNiceScroll(1).remove();
+    {   
+        // console.log($(".chatbubble .messages").getNiceScroll(),$(".chatbubble .list-friends").getNiceScroll());
+        // $(".chatbubble .messages").getNiceScroll(0).remove();
+        // $(".chatbubble .recent-threads").getNiceScroll(0).remove();
+        // $(".chatbubble .support-list").getNiceScroll(0).remove();
 
         if ($(".chatbubble").height() > 500) {
             $(".chatbubble .list-friends").height(470);
@@ -168,7 +174,9 @@ function Chatbox() {
             $(".chatbubble .messages").height(162);
         }
         setTimeout(function(){
-            self.setScroll()
+            $(".chatbubble .messages").getNiceScroll(0).resize();
+            $(".chatbubble .recent-threads").getNiceScroll(0).resize();
+            $(".chatbubble .support-list").getNiceScroll(0).resize();
         }, 10)
     }
 

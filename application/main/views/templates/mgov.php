@@ -30,7 +30,7 @@
 
 		<!-- MAIN CONTENT -->
 		<div id="main-wrapper" class="wrapper <?php echo (isset($fullwidth) && $fullwidth) ? 'big-wrapper' : '' ?>">
-	        <div class="row padding-top-15 padding-bottom-20">
+	        <div class="row padding-top-15 padding-bottom-20 gutter-5">
 
 	        	<?php if (isset($nosidebar) && $nosidebar): ?>
 	        		<div class="col-xs-12 padding-bottom-20">

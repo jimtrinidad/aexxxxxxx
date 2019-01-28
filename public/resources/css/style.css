@@ -2,7 +2,7 @@ body { font-family: 'Open Sans', sans-serif; margin: 0px; padding: 0px; backgrou
 html, body { height: 100%; margin: 0; font-size: 14px;}
 
 /* Wrapper */
-.wrapper{ width: 1024px; margin: 0 auto;}
+.wrapper{ width: 1024px; margin: 0 auto; overflow: hidden;}
 .big-wrapper { width: 90% }
 
 /* Header */
@@ -93,7 +93,7 @@ html, body { height: 100%; margin: 0; font-size: 14px;}
 
 
 /*Side bar*/
-.top-gov-services{ background: #d8d8d8; padding: 10px;min-height: 150px;}
+.top-gov-services{ background: #ffffff; padding: 10px;min-height: 150px;}
 .top-gov-services h2{ text-transform: uppercase; color: #475f68; font-weight: bold; border-bottom: 5px solid #475f68; padding-bottom: 5px; margin-bottom: 10px; font-size: 14px; }
 .top-gov-services ul li{ font-size: 13px; color: #145598; font-weight: bold; line-height: 18px; }
 
@@ -142,7 +142,7 @@ html, body { height: 100%; margin: 0; font-size: 14px;}
 
 /*smaller width*/
 @media (max-width: 550px) {
-	.mak-id span{ display: none; }
+	/*.mak-id span{ display: none; }*/
 	.post-items .transaction-provider {font-size: 9px;}
 	.post-items .transaction-provider-pic img{ width: 20px; height: 20px;}
 	.post-items .transaction-rate {font-size: 90%;}
@@ -340,7 +340,7 @@ html, body { height: 100%; margin: 0; font-size: 14px;}
 
 .org-item {
 	padding: 5px;
-	min-height: 85px;
+	min-height: 90px;
 }
 
 .org-item .image {
@@ -362,4 +362,47 @@ html, body { height: 100%; margin: 0; font-size: 14px;}
 	font-size: 9px;
 	padding: 2px;
 	cursor: pointer;
+}
+
+
+#trabaho-container .panel {
+	border-radius: 0;
+	margin-bottom: 10px
+}
+#trabaho-container .panel-body {padding: 0}
+#trabaho-container .panel-body.p10 {padding: 10px}
+
+#trabaho-container .profile-pic img{
+	max-width: 45px;
+	max-height: 45px;
+	vertical-align: bottom;
+}
+#trabaho-container .profile-pic div {
+	display: inline-block;
+}
+
+#trabaho-container a:hover {
+	text-decoration: none;
+}
+
+
+@media (max-width: 766px) {
+
+
+}
+
+.full-button a{
+	padding: 12px 5px;
+    display: block;
+    color: #595959;
+    border-left: 5px solid transparent;
+}
+.full-button a > i {width: 20px;}
+
+.full-button:hover {
+	background: #ececec;
+}
+
+.full-button:hover a {
+	color: blue;
 }

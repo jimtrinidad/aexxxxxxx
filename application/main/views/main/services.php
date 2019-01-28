@@ -4,7 +4,7 @@
    <div class="row">
       <div class="col-md-12">
          <div class="bg-white padding-5">
-            <input type="text" id="keyword" autocomplete="off" class="form-control" placeholder="Search Keyword">
+            <input type="text" id="keyword" autocomplete="off" class="form-control" placeholder="Search Government Services">
          </div>
       </div>
    </div>
@@ -42,6 +42,13 @@
       </div>
    </div>
 </form>
+
+<div class="bg-grey padding-10 offset-bottom-10">
+   <div class="row">
+      <div class="col-sm-12 text-bold text-white padding-top-10 padding-bottom-5">Government and Citizens Services</div>
+      
+   </div>
+</div>
 
 <div id="LoadMainBody">
 

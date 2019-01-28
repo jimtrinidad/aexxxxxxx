@@ -1,5 +1,6 @@
-<div class="clearfix">
-  <div class="col-md-12 offset-bottom-10 small" style="background: #95c8eb;padding: 5px;" >
+<div class="clearfix offset-bottom-10" id="side-bar-content">
+
+  <div class="col-md-12 small" style="background: #95c8eb;padding: 5px;" >
     <p>
       <b style="color: #094d91;font-weight: bold;line-height: 1.4">Philippine Standard Time:</b><br>
       <span style="color: #3c718a;line-height: 1.4" id="system-time"><?php echo date('l, F d, Y, h:i:s A') ?></span>
@@ -11,7 +12,7 @@
     $firstOfficer = reset($servants);
     if ($firstOfficer && $accountInfo->PublicOffice->Message) {
   ?>
-  <div class="col-md-12 offset-bottom-10 bg-white" >
+  <div class="col-md-12 offset-top-10 bg-white" >
     <div class="row gutter-5">
       <div class="col-xs-12 text-blue" style="text-transform: uppercase;font-weight: bold;padding: 4px;">
         WELCOME REMARKS FROM <?php echo $firstOfficer['Position'] . ' ' . $firstOfficer['Firstname'] . ' ' . $firstOfficer['Lastname'] ?>
@@ -29,12 +30,12 @@
     </div>
   </div>
   <?php }} ?>
-  <div class="col-md-12 top-gov-services offset-bottom-10 hide" id="trending-service-cont">
+  <div class="col-md-12 top-gov-services offset-top-10 hide" id="trending-service-cont">
     <h2>Trending: TOP GOV SERVICES</h2>
     <ul id="trending-service-items">
     </ul>
   </div>
-  <div class="col-md-12 top-performance-services offset-bottom-5" id="govt-ranking-cont">
+  <div class="col-md-12 top-performance-services offset-top-10" id="govt-ranking-cont">
     <h2>GOVERNMENT PERFORMANCE</h2>
     <div class="row">
       <div class="col-xs-6">
@@ -48,13 +49,20 @@
     </div>
   </div>
   <!-- View All Rank Based-->
-  <div class="view-all">
+  <div class="view-all hide">
     <!-- <p>Ranking Based on completed Services</p> -->
     <a href="<?php echo site_url('statistics/govt_performance') ?>" class="btn btn-sm bg-green text-white text-center">View More</a>
   </div>
 
+  <div class="col-md-12 top-performance-services offset-top-10 hide" id="org-ranking-cont">
+    <h2 class="org-ranking-title">Organization Performance</h2>
+    <div class="row">
+      
+    </div>
+  </div>
+
   <?php if (current_controller() == 'organization') { ?>
-  <div class="offset-top-10">
+  <div class="col-md-12 offset-top-10">
     <div class="row">
        <div class="col-sm-12">
          <table border="0">
@@ -89,8 +97,9 @@
   </div>
   <?php }?>
 
-  <div class="sidebar-ads offset-top-10 hide">
+  <div class="col-md-12 sidebar-ads offset-top-10 hide">
     <img src="<?php echo public_url(); ?>resources/images/malacanang-banner.png" class="img-responsive" />
     <img src="<?php echo public_url(); ?>resources/images/one-stop-service.png" class="img-responsive offset-top-10" />
   </div>
+
 </div>
