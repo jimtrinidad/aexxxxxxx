@@ -138,17 +138,13 @@ function Mgovph() {
                 success : function(response) {
                     if (response.status) {
                         cont.find('h2').text(response.name + ' Performance');
-                        var tpl = `<div class="col-xs-12">`;
-
-                        if (response.data.length > 10) {
-                            tpl = `<div class="col-xs-6">`;
-                        }
+                        var tpl = `<div class="col-xs-6">`;
 
                         tpl += `<ul>`;
 
                         $.each(response.data, function(i,e) {
                             tpl += `<li>${e.FirstName.substr(0, 1)}. ${e.LastName}<span>${e.Applications}</span></li>`;
-                            if (i == 9 && response.data.length > 10) {
+                            if (i == 9) {
                                 tpl += `</ul></div><div class="col-xs-6"><ul>`;
                             }
                         });
