@@ -278,7 +278,7 @@
 		                <div class="col-xs-12">
 			               	<div class="form-group">
 			               		<label class="control-label text-bold" for="date">Payor</label>
-			               		<input type="text" id="payor" class="form-control input-sm" readonly>
+			               		<input type="text" id="payor" class="form-control input-sm" name="payor">
 			               	</div>
 		                </div>
 

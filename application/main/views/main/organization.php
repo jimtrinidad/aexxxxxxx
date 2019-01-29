@@ -2,12 +2,12 @@
 <form id="searchForm" onSubmit="return false;">
    <div class="row">
       <div class="col-md-12">
-         <div class="padding-5 bg-white">
+         <div class="bg-white padding-bottom-5 padding-left-5 padding-right-5">
             <div class="row gutter-5">
-              <div class="col-md-10">
+              <div class="col-sm-10 padding-top-5">
                 <input type="text" id="keyword" autocomplete="off" class="form-control" placeholder="Search Keyword of Organization Services">
               </div>
-              <div class="col-md-2">
+              <div class="col-sm-2 padding-top-5">
                 <button class="btn bg-cyan text-white btn-block text-bold" onClick="Organization.getServices()">Search</button>
               </div>
             </div>

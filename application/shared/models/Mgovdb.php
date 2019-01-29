@@ -241,6 +241,7 @@ class Mgovdb extends CI_Model {
 					ss.Name ServiceName,
 					ss.LocationScopeID,
 					ss.Fee,
+					ss.ServiceType,
 					uai.FirstName,
 					uai.LastName,
 					uai.MabuhayID,
@@ -259,6 +260,7 @@ class Mgovdb extends CI_Model {
 					sa.LastUpdate LastUpdate,
 					sa.Status saStatus,
 					sa.DateCompleted,
+					sa.ExtraFields,
 					sf.FuntionFor,
 					sf.FunctionTypeID,
 					lft.Value FunctionName

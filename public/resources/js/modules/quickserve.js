@@ -290,13 +290,22 @@ function Quickserve() {
         $('#paymentForm').find('#error_message_box .error_messages').html('');
         $('#paymentForm').find('#error_message_box').addClass('hide');
 
-        $('#paymentForm').find('#payor').val(data.FirstName + ' ' + data.LastName);
         if (data.paymentInfo) {
             var pinfo = data.paymentInfo;
             $('#paymentForm').find('#scope').val(pinfo.scope);
             $('#paymentForm').find('#date').val(pinfo.date);
             $('#paymentForm').find('#type').val(pinfo.type);
             $('#paymentForm').find('#treasurer').val(pinfo.treasurer);
+
+            if (pinfo.payor) {
+                $('#paymentForm').find('#payor').val(pinfo.payor);
+            } else {
+                if (data.isReport && typeof(data.ExtraFields[0]) != 'undefined') {
+                    $('#paymentForm').find('#payor').val(data.ExtraFields[0]);
+                } else {
+                    $('#paymentForm').find('#payor').val(data.FirstName + ' ' + data.LastName);
+                }
+            }
 
             var rows = ''
             $.each(pinfo.collections, function(i, e){
@@ -323,6 +332,12 @@ function Quickserve() {
             $('#paymentForm').find('#scope').val(data.Scope);
             $('#paymentForm').find('#date').val(moment().format("MM/DD/YYYY"));
             $('#paymentForm').find('#treasurer').val($('#current_user_name').val());
+
+            if (data.isReport && typeof(data.ExtraFields[0]) != 'undefined') {
+                $('#paymentForm').find('#payor').val(data.ExtraFields[0]);
+            } else {
+                $('#paymentForm').find('#payor').val(data.FirstName + ' ' + data.LastName);
+            }
 
             var amount = '';
             if (data.Fee) {

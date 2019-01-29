@@ -39,7 +39,6 @@
   <div class="wrapper">
     <div class="row">
       <div class="col-md-7 col-sm-6">
-        <div class="visible-md-block visible-lg-block" style="padding: 2px;"></div>
         <h1>Enjoy Mobile Government One Touch Processing</h1>
       </div>
       <div class="col-md-5 col-sm-6">

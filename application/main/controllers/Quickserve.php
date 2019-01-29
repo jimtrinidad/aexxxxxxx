@@ -51,6 +51,8 @@ class Quickserve extends CI_Controller
 
             $item['Barangay']           = lookup_row('UtilLocBrgy', $item['BarangayID'], 'brgyCode')->brgyDesc;
 
+            $item['isReport']           = in_array($item['ServiceType'], lookup('report_service_type'));
+
             // completed function
             if ($item['safStatus'] >= 2) {
                 $item['duration']           = time_ago($item['StartedTime'], $item['EndedTime']);
@@ -63,6 +65,7 @@ class Quickserve extends CI_Controller
             $item['documentName']       = ($item['documentName'] ? $item['documentName'] : 'Main Service');
 
             $item['Scope']              = lookup('location_scope', $item['LocationScopeID']);
+            $item['ExtraFields']        = array_values((array) @json_decode($item['ExtraFields'], true));
 
             if ($item['FunctionTypeID'] == 4) {
                 $payment = $this->mgovdb->getRowObject('Service_Payments', $item['safID'], 'ApplicationFunctionID');
@@ -71,8 +74,11 @@ class Quickserve extends CI_Controller
                 }
 
                 $item['paymentInfo'] = $payment;
+
             }
         }
+
+        // print_data($items);
 
         $viewData['items'] = $items;
 
@@ -419,19 +425,24 @@ class Quickserve extends CI_Controller
                     }
 
 
-                    // send payment receipt if success and other condition met
+                    // send payment receipt if success trasaction, and
+                    // if has payment details, and
+                    // not a report application
                     if ($return_data['status'] === true) {
-                        $paymentData = $this->mgovdb->getRowObject('Service_Payments', $safData->id, 'ApplicationFunctionID');
-                        if ($paymentData) {
-                            // send receipt
-                            $receipt_data = prepare_payment_receipt_data($paymentData);
-                            $emailData = array(
-                                'from'      => array('info@mgov.ph', 'MGov Info'),
-                                'to'        => array($receipt_data['payorData']->EmailAddress),
-                                'subject'   => 'MGOV - Payment Receipt',
-                                'message'   => view('email_templates/payment_receipt', $receipt_data, null, true)
-                            );
-                            send_email($emailData, true);
+                        $serviceData = $this->mgovdb->getRowObject('Service_Services', $safData->ServiceID, 'id');
+                        if ($serviceData && !in_array($serviceData->ServiceType, lookup('report_service_type'))) {
+                            $paymentData = $this->mgovdb->getRowObject('Service_Payments', $safData->id, 'ApplicationFunctionID');
+                            if ($paymentData) {
+                                // send receipt
+                                $receipt_data = prepare_payment_receipt_data($paymentData);
+                                $emailData = array(
+                                    'from'      => array('info@mgov.ph', 'MGov Info'),
+                                    'to'        => array($receipt_data['payorData']->EmailAddress),
+                                    'subject'   => 'MGOV - Payment Receipt',
+                                    'message'   => view('email_templates/payment_receipt', $receipt_data, null, true)
+                                );
+                                send_email($emailData, true);
+                            }
                         }
                     }
 
@@ -630,6 +641,11 @@ class Quickserve extends CI_Controller
                         'status'    => false,
                         'message'   => 'Invalid collection item.'
                     );
+                } else if (trim(get_post('payor')) == '') {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Payor field is required.'
+                    );
                 } else if (trim(get_post('treasurer')) == '') {
                     $return_data = array(
                         'status'    => false,
@@ -642,6 +658,7 @@ class Quickserve extends CI_Controller
                         'ApplicationID'     => $safData->ApplicationID,
                         'ApplicantID'       => $safData->ApplicantID,
                         'ApplicationFunctionID' => $safData->id,
+                        'payor'             => get_post('payor'),
                         'scope'             => get_post('scope'),
                         'date'              => get_post('date'),
                         'type'              => get_post('type'),

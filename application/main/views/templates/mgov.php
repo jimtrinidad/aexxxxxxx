@@ -84,7 +84,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-loading-overlay/2.1.6/loadingoverlay.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/iScroll/5.2.0/iscroll.min.js"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/iScroll/5.2.0/iscroll.min.js"></script> -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
 
 	<script type="text/javascript">
@@ -101,7 +101,7 @@
 		});
 	</script>
 
-	<script type="text/javascript" src="<?php echo public_url(); ?>resources/js/scripts.js"></script>
+	<script type="text/javascript" src="<?php echo public_url(); ?>resources/js/scripts.js?<?php echo time()?>"></script>
 	<script type="text/javascript" src="<?php echo public_url(); ?>resources/js/modules/utils.js?<?php echo time()?>"></script>
 	<script type="text/javascript" src="<?php echo public_url(); ?>resources/js/modules/mgovph.js?<?php echo time()?>"></script>
 

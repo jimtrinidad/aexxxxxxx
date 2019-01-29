@@ -186,7 +186,7 @@
             <tr>
               <td style="border-top: 0;">
                 <div class="style5">Payor</div>
-                <div class="centerstyle"><?php echo $payorData->FirstName . ' ' . $payorData->LastName ; ?></div>
+                <div class="centerstyle"><?php echo ($paymentData->payor ?? $payorData->FirstName . ' ' . $payorData->LastName); ?></div>
               </td>
             </tr>
           </table>
