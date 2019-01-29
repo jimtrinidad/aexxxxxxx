@@ -16,7 +16,7 @@
 
       <div class="col-sm-9 padding-top-5">
          <!--input type="text" name="" class="form-control bg-green text-white" value="Department"-->
-         <select class="form-control bg-green text-white" id="DepartmentID" name="DepartmentID" onChange="Mgovph.getServices()">
+         <select class="form-control bg-green text-white text-bold" style="text-align-last: center;" id="DepartmentID" name="DepartmentID" onChange="Mgovph.getServices()">
             <!-- input-sm GetAgencyOffice();-->
             <option value="">--Search By Department--</option>
             <?php

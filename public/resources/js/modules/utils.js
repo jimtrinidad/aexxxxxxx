@@ -75,10 +75,7 @@ function Utils() {
         $("input, textarea").attr('autocomplete', 'off');
 
         // grid breakpoint detector
-        $('body').append(`<div class="device-xs visible-xs"></div>
-                            <div class="device-sm visible-sm"></div>
-                            <div class="device-md visible-md"></div>
-                            <div class="device-lg visible-lg"></div>`);
+        $('body').append(`<div class="device-xs visible-xs"></div><div class="device-sm visible-sm"></div><div class="device-md visible-md"></div><div class="device-lg visible-lg"></div>`);
 
     }
 

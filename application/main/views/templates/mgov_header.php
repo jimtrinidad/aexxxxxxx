@@ -40,14 +40,13 @@
     <div class="row">
       <div class="col-md-7 col-sm-6">
         <div class="visible-md-block visible-lg-block" style="padding: 2px;"></div>
-        <h1><span class="text-blue">Mabuhay!</span> Enjoy Mobile Government One Touch Processing</h1>
+        <h1>Enjoy Mobile Government One Touch Processing</h1>
       </div>
       <div class="col-md-5 col-sm-6">
         <div class="row">
           <div class="mak-id col-sm-9 col-xs-8">
-            <div class="col-sm-5 hidden-xs hidden-sm text-right"><span>Mabuhay ID</span></div>
-            <div class="col-xs-3 visible-sm visible-xs text-left open-mak-id"><span>ID</span></div>
-            <div class="col-sm-7 col-xs-9 text-left open-mak-id" style="cursor: pointer;"><?php echo $accountInfo->MabuhayID; ?> <!--16-000-000-106--> </div>
+            <div class="col-md-5 hidden-xs hidden-sm text-right"><span>Mabuhay ID</span></div>
+            <div class="col-md-7 col-xs-12 text-left open-mak-id" style="cursor: pointer;"><span class="visible-xs-inline visible-sm-inline" style="padding-right: 30px;">Mabuhay ID</span><?php echo $accountInfo->MabuhayID; ?> <!--16-000-000-106--> </div>
           </div>
           <div class="col-sm-3 col-xs-4 mak-settings">
             <?php
