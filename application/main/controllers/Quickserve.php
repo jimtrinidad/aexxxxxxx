@@ -25,25 +25,38 @@ class Quickserve extends CI_Controller
             )
         );
 
+        $params = array();
         $where = array(
             'sfo.AccountID = ' . current_user()
         );
 
         if (get_post('mabuhayID')) {
-            $where[] = 'uai.MabuhayID = "' .  get_post('mabuhayID') . '"';
+            $where[] = 'uai.MabuhayID = ?';
+            $params[] = get_post('mabuhayID');
         }
         if (get_post('applicationCode')) {
-            $where[] = 'sa.Code = "' .  get_post('applicationCode') . '"';
+            $where[] = 'sa.Code = ?';
+            $params[] = get_post('applicationCode');
         }
         if (get_post('status') !== '' && in_array(get_post('status'), array(0, 1, 2))) {
-            $where[] = 'saf.Status = "' .  get_post('status') . '"';
+            $where[] = 'saf.Status = ?';
+            $params[] = (int) get_post('status');
         }
         if (get_post('date')) {
+            $where[] = '(saf.DateAdded BETWEEN ? AND ?)';
             $date = date('Y-m-d', strtotime(get_post('date')));
-            $where[] = '(saf.DateAdded BETWEEN "'.$date.' 00:00:00" AND "'.$date.' 23:59:59")';
+            $params[] = $date . ' 00:00:00';
+            $params[] = $date . ' 23:59:59';
+        }
+        if (get_post('searchQuery')) {
+            $where[] = "(sa.ExtraFields LIKE ? OR uai.FirstName LIKE ? OR uai.LastName LIKE ?)";
+            $squery = $this->db->escape_like_str(get_post('searchQuery'));
+            $params[] = "%{$squery}%";
+            $params[] = "%{$squery}%";
+            $params[] = "%{$squery}%";
         }
 
-        $items = $this->mgovdb->getAssignedFunction($where);
+        $items = $this->mgovdb->getAssignedFunction($where, $params);
 
         foreach ($items as &$item) {
             $item['applicationStatus']  = lookup('service_application_status', $item['saStatus']);

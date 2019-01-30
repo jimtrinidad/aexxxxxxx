@@ -228,7 +228,7 @@ class Mgovdb extends CI_Model {
 	* get assigned function on officer
 	* used on quickserve to get list of application functions that needs to process
 	*/
-	public function getAssignedFunction($where = array())
+	public function getAssignedFunction($where = array(), $params = array())
 	{
 		$query = "SELECT
 					saf.id safID,
@@ -280,7 +280,7 @@ class Mgovdb extends CI_Model {
 
 		$query .= " ORDER BY saf.Status ASC, saf.DateAdded ASC";
 
-		return $this->db->query($query)->result_array();
+		return $this->db->query($query, $params)->result_array();
 	}
 
 	/**
@@ -328,10 +328,20 @@ class Mgovdb extends CI_Model {
 	public function getOrganizationServices($params)
 	{
 
+		$queryParams = array(
+			$params['userID'],
+			$params['organization']
+		);
+
 		$keywordFilter = '';
 		if (trim($params['keyword']) != '') {
 			$keyword = trim($params['keyword']);
-			$keywordFilter = 'AND (so.Keyword LIKE "%'.$keyword.'%" OR so.MenuName LIKE "%'.$keyword.'%" OR ss.Name LIKE "%'.$keyword.'%" OR ss.Description LIKE "%'.$keyword.'%")';
+			$keyword = $this->db->escape_like_str(trim($params['keyword']));
+			$keywordFilter = 'AND (so.Keyword LIKE ? OR so.MenuName LIKE ? OR ss.Name LIKE ? OR ss.Description LIKE ?)';
+			$queryParams[] = "%$keyword%";
+			$queryParams[] = "%$keyword%";
+			$queryParams[] = "%$keyword%";
+			$queryParams[] = "%$keyword%";
 		}
 
 		$sql = "SELECT ss.id,ss.Code,ss.Name,ss.Logo,COUNT(sa.id) AS Applications,so.MenuName,so.Category,so.Keyword FROM Service_Services ss
@@ -354,10 +364,7 @@ class Mgovdb extends CI_Model {
                 GROUP BY ss.id
                 ORDER BY Applications DESC";
 
-        return $this->db->query($sql, array(
-	        								$params['userID'],
-	        								$params['organization']
-	        							))->result_array();
+        return $this->db->query($sql, $queryParams)->result_array();
 	}
 
 

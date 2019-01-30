@@ -5,8 +5,8 @@
     <!-- Form -->
     <form method="">
       <div class="form offset-top-10">
-        <div class="row">
-          <div class="col-md-3">
+        <div class="row gutter-5">
+          <div class="col-md-2">
             <label class="text-white text-bold padding-bottom-5">Mabuhay ID</label>
             <input type="text" name="mabuhayID" class="form-control input-sm" value="<?php echo get_post('mabuhayID')?>">
           </div>
@@ -14,7 +14,7 @@
             <label class="text-white text-bold padding-bottom-5">Date Applied</label>
             <input type="text" name="date" class="form-control input-sm" value="<?php echo get_post('date')?>">
           </div>
-          <div class="col-md-3">
+          <div class="col-md-2">
             <label class="text-white text-bold padding-bottom-5">Transaction #</label>
             <input type="text" name="applicationCode" class="form-control input-sm" value="<?php echo get_post('applicationCode')?>">
           </div>
@@ -26,6 +26,10 @@
               <option value="1" <?php echo get_post('status') == '1' ? 'selected="selected"' : ''?>>Processing</option>
               <option value="2" <?php echo get_post('status') == '2' ? 'selected="selected"' : ''?>>Completed</option>
             </select>
+          </div>
+          <div class="col-md-2">
+            <label class="text-white text-bold padding-bottom-5">Advance Search</label>
+            <input type="text" name="searchQuery" class="form-control input-sm" value="<?php echo get_post('searchQuery')?>">
           </div>
           <div class="col-md-2">
             <label class="text-white text-bold padding-bottom-5">&nbsp;</label>

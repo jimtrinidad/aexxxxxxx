@@ -67,20 +67,20 @@ class Get extends CI_Controller
             'sa.Status = 2'
         );
 
-        if ($this->input->get_post('latest')) {
-            $where[] = 'sa.DateCompleted > "' . date('Y-m-d H:i:s', $this->input->get_post('latest')) . '"';
+        if (get_post('latest')) {
+            $where[] = 'sa.DateCompleted > "' . date('Y-m-d H:i:s', get_post('latest')) . '"';
         }
 
-        if ($this->input->get_post('department')) {
-            $where[] = 'ss.DepartmentID = "' . (int) $this->input->get_post('department') . '"';
+        if (get_post('department')) {
+            $where[] = 'ss.DepartmentID = "' . (int) get_post('department') . '"';
         }
 
-        if ($this->input->get_post('locScope')) {
-            $where[] = 'ss.LocationScopeID = "' . (int) $this->input->get_post('locScope') . '"';
+        if (get_post('locScope')) {
+            $where[] = 'ss.LocationScopeID = "' . (int) get_post('locScope') . '"';
         }
 
-        if ($this->input->get_post('keyword')) {
-            $keyword = $this->input->get_post('keyword');
+        if (get_post('keyword')) {
+            $keyword = $this->db->escape_like_str(get_post('keyword'));
             $where[] = '(ss.Name LIKE "%'.$keyword.'%" OR ss.Description LIKE "%'.$keyword.'%")';   
         }
 
@@ -145,21 +145,21 @@ class Get extends CI_Controller
         // get department
         $where      = array();
         $subWhere   = array();
-        if ($this->input->get_post('department')) {
-            $where['id'] = (int) $this->input->get_post('department');
+        if (get_post('department')) {
+            $where['id'] = (int) get_post('department');
         }
 
         $all_deparments = lookup_all_departments_and_offices($where, 'Name');
         
         $keyword_search = false;
         $location_search = false;
-        if ($this->input->get_post('keyword')) {
-            $keyword = $this->input->get_post('keyword');
+        if (get_post('keyword')) {
+            $keyword = $this->db->escape_like_str(get_post('keyword'));
             $keyword_search = '(Name LIKE "%'.$keyword.'%" OR Description LIKE "%'.$keyword.'%")'; 
         }
 
-        if ($this->input->get_post('locScope')) {
-            $location_search = 'LocationScopeID = "' . (int) $this->input->get_post('locScope') . '"';
+        if (get_post('locScope')) {
+            $location_search = 'LocationScopeID = "' . (int) get_post('locScope') . '"';
         }
 
         $providedCounts = array();

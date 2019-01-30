@@ -12,6 +12,7 @@ html, body { height: 100%; margin: 0; font-size: 14px;}
 .tagline-holder img { max-width: 100%; }
 .mak-id{ background-color: #fce485; padding: 5px; color: #094988; height: 20px; font-size: 13px; line-height: 12px; font-weight: bold; margin-top: 4px;}
 .mak-settings{ text-align: right; }
+.mak-settings a {padding: 0 2px;text-decoration: none;}
 .header-bar{ line-height: 28px; }
 .header-bar h1{ font-weight: bold; font-style: italic; font-size: 14px; line-height: 1.2;padding: 2px 0;margin-top: 4px;}
 
