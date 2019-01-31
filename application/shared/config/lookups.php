@@ -117,6 +117,14 @@ $config['location_scope'] = array(
 );
 
 
+$config['department_function_type'] = array(
+	1 => 'Head of Department',
+	3 => 'Treasurer',
+	4 => 'QuickServe Observer',
+	5 => 'mGov System Integrator'
+);
+
+
 
 $config['service_type'] = array(
 	1 => 'Appointment',
@@ -197,16 +205,6 @@ $config['child_department_types'] = array(
 	2 => 'Office',
 	3 => 'Organization'
 );
-
-
-// $config['document_list'] = array(
-// 	1 => 'Cedula',
-// 	2 => 'Mayor\'s Endorsement',
-// 	3 => 'Barangay Clearance',
-// 	4 => 'Birth certificate',
-// 	5 => 'NBI Clearance',
-// 	6 => 'Police Clearance'
-// );
 
 
 $config['document_template_keywords'] = array(

@@ -428,7 +428,7 @@ function Quickserve() {
         bootbox.hideAll();
         var _c = new Date().getTime();
         $("#receiptModal iframe").contents().find("body").html("");
-        $("#receiptModal iframe").attr({'src':'quickserve/payment_preview/?c='+_c+'&id='+payment_id});
+        $("#receiptModal iframe").attr({'src': window.public_url('quickserve/payment_preview') + '/?c='+_c+'&id='+payment_id});
 
         $('#receiptModal').modal({
             backdrop : 'static',
@@ -483,15 +483,16 @@ function Quickserve() {
         });
 
         var uploadField = document.getElementById("Attachment");
-
-        uploadField.onchange = function() {
-            if(this.files[0].size > 2097152){
-               bootbox.alert("Selected file is too big.");
-               this.value = "";
+        if (uploadField) {
+            uploadField.onchange = function() {
+                if(this.files[0].size > 2097152){
+                   bootbox.alert("Selected file is too big.");
+                   this.value = "";
+                };
             };
-        };
 
-        autosize($('#feedbackModal textarea'));
+            autosize($('#feedbackModal textarea'));
+        }
 
         self.loadFeedbacks(data.MabuhayID)
     }

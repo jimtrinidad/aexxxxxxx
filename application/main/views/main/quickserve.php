@@ -1,6 +1,31 @@
 <div class="quickserve row padding-top-20">
   <div class="col-md-12">
-    <h1>Mobile Government Integrated System QuickServe Platform</h1>
+    <div class="row gutter-5">
+      <div class="col-sm-12 col-md-8 padding-top-5">        
+        <span class="h4 text-white text-bold">Mobile Government Integrated System QuickServe Platform</span>
+        <?php
+          if (is_current_url('quickserve', 'index')) {
+            echo '<div class="pull-right padding-top-5 hidden-md hidden-lg">
+                  <a href="'.site_url('quickserve/observe').'" class="text-orange text-bold">View as Observer</a>
+                </div>';
+          }
+        ?>
+      </div>
+      <div class="col-sm-12 col-md-4">
+      <?php
+        if (is_current_url('quickserve', 'observe')) {
+          echo '<div>
+                  <span class="h3 text-orange">Observer Mode</span>
+                  <a href="'.site_url('quickserve').'" class="text-cyan">Switch as Officer</a>
+                </div>';
+        } else {
+          echo '<div class="hidden-sm hidden-xs text-right padding-top-10">
+                  <a href="'.site_url('quickserve/observe').'" class="text-orange text-bold">View as Observer</a>
+                </div>';
+        }
+      ?>
+      </div>
+    </div>
     
     <!-- Form -->
     <form method="">
@@ -42,21 +67,29 @@
     <!-- Actions and Commands -->
     <div class="padding-top-20">
       <strong class="text-yellow padding-bottom-5">Actions and Commands:</strong> <br class="visible-xs"><br class="visible-xs">
+      <?php if (is_current_url('quickserve', 'index')) { ?>
       <span class="text-white offset-right-5">
         <i class="fa fa-check padding-5 bg-cyan text-white offset-right-5" aria-hidden="true"></i> Approve
       </span>
-      <span class="text-white offset-right-5">
+            <span class="text-white offset-right-5">
         <i class="fa fa-envelope-o padding-5 bg-orange text-white offset-right-5" aria-hidden="true"></i> Message
       </span>
       <span class="text-white offset-right-5">
         <i class="fa fa-times padding-5 bg-green text-white offset-right-5" aria-hidden="true"></i> Decline
       </span>
+      <?php } ?>
       <span class="text-white offset-right-5">
         <i class="fa fa-search padding-5 bg-cyan text-white offset-right-5" aria-hidden="true"></i> Details
       </span> <br class="visible-xs">
+      <?php if (is_current_url('quickserve', 'index')) { ?>
       <span class="text-white offset-right-5">
         <i class="fa fa-credit-card padding-5 bg-yellow text-black offset-right-5 offset-top-5" aria-hidden="true"></i> Payment
       </span>
+      <?php } else { ?>
+        <span class="text-white offset-right-5">
+          <i class="fa fa-file-text padding-5 bg-yellow text-cyan offset-right-5 offset-top-5" aria-hidden="true"></i> Receipt
+        </span>
+      <?php } ?>
       <span class="text-white offset-right-5">
         <i class="fa fa-comments padding-5 bg-blue text-white offset-right-5" aria-hidden="true"></i> Feedback
       </span>
@@ -97,20 +130,29 @@
           echo '<td>' . $item['documentName'] . '</td>';
           echo '<td>' . $item['FunctionName'] . '</td>';
           echo '<td class="qs-buttons">';
-            if ($item['safStatus'] == 0) {
-              echo '<a href="javascript:;" onClick="Quickserve.approveProcess(this);"><i class="fa fa-check padding-5 bg-cyan text-white" aria-hidden="true"></i></a>';
+
+            if (is_current_url('quickserve', 'index')) {
+
+              if ($item['safStatus'] == 0) {
+                echo '<a href="javascript:;" onClick="Quickserve.approveProcess(this);"><i class="fa fa-check padding-5 bg-cyan text-white" aria-hidden="true"></i></a>';
+              }
+              
+              echo '<a href="javascript:;" onClick="Chatbox.openChatbox(\'' . $item['MabuhayID'] . '\');"><i class="fa fa-envelope-o padding-5 bg-orange text-white" aria-hidden="true"></i></a>';
+
+              if ($item['safStatus'] == 0) {
+                echo '<a href="javascript:;" onClick="Quickserve.declineProcess(this);"><i class="fa fa-times padding-5 bg-green text-white" aria-hidden="true"></i></a>';
+              }
+
             }
-            
-            echo '<a href="javascript:;" onClick="Chatbox.openChatbox(\'' . $item['MabuhayID'] . '\');"><i class="fa fa-envelope-o padding-5 bg-orange text-white" aria-hidden="true"></i></a>';
-            if ($item['safStatus'] == 0) {
-              echo '<a href="javascript:;" onClick="Quickserve.declineProcess(this);"><i class="fa fa-times padding-5 bg-green text-white" aria-hidden="true"></i></a>';
-            }
+
             echo '<a href="javascript:;" onClick="Quickserve.viewDetails(this);"><i class="fa fa-search padding-5 bg-cyan text-white" aria-hidden="true"></i></a>';
             echo '<a href="javascript:;" onClick="Quickserve.viewFeedbacks(this);"><i class="fa fa-comments padding-5 bg-blue text-white" aria-hidden="true"></i></a>';
             // payments
             if ($item['FunctionTypeID'] == 4) {
               if ($item['safStatus'] == 0) {
-                echo '<a href="javascript:;" onClick="Quickserve.setPayment(this);"><i class="fa fa-credit-card padding-5 bg-yellow text-black" aria-hidden="true"></i></a>';
+                if (is_current_url('quickserve', 'index')) {
+                  echo '<a href="javascript:;" onClick="Quickserve.setPayment(this);"><i class="fa fa-credit-card padding-5 bg-yellow text-black" aria-hidden="true"></i></a>';
+                }
               } else {
                 if ($item['paymentInfo']) {
                   echo '<a href="javascript:;" onClick="Quickserve.paymentReceipt('.$item['paymentInfo']->id.');"><i class="fa fa-file-text padding-5 bg-yellow text-black" aria-hidden="true"></i></a>';
@@ -156,5 +198,10 @@
   #feedbackModal .comments-list .media{
       border-bottom: 1px dotted #ccc;
       padding-bottom: 10px;
+  }
+
+  .quickserve a:hover{
+    color: white;
+    text-decoration: none;
   }
 </style>

@@ -377,6 +377,7 @@
 			</div>
 			<div class="modal-body" id="modal-body">
 				<b class="h2"><small class="pull-right padding-top-10 feedNote hide">45 feedbacks</small> About <span class="userName"></span></b>
+				<?php if (is_current_url('quickserve', 'index')) { ?>
 				<form id="feedbackForm" action="<?php echo site_url('quickserve/add_feedback') ?>" enctype="multipart/form-data" >
 					<input type="hidden" name="mID" id="mID">
 					<div class="row padding-top-10">
@@ -400,6 +401,7 @@
 						</div>
 					</div>
 				</form>
+				<?php } ?>
 				<hr style="margin-top: 10px;margin-bottom: 10px;">
 				<div class="row">
 				  	<div class="col-xs-12">

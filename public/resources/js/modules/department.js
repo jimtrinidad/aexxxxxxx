@@ -750,7 +750,7 @@ function Department() {
                 template += '<td><img class="logo-small" src="' + window.public_url() + 'assets/profile/' + (e.Photo != '' ? e.Photo : 'avatar_default.jpg') + '"></td>';
                 template += '<td>' + e.MabuhayID + '</td>';
                 template += '<td>' + e.FirstName + ' ' + e.LastName + '</td>';
-                template += '<td><span class="officerFunction" data-pk="'+e.id+'">' + (e.FunctionTypeID > 0 ? $global.function_type[e.FunctionTypeID] : '') + '</span></td>';
+                template += '<td><span class="officerFunction" data-pk="'+e.id+'">' + (e.FunctionTypeID > 0 ? $global.department_function_type[e.FunctionTypeID] : '') + '</span></td>';
                 template += '<td><span class="officerPosition" data-pk="'+e.id+'">' + e.Position + '</span></td>';
                 template += '<td>' + e.ContactNumber + '</td>';
                 // template += '<td>' + e.Address + '</td>';
@@ -797,7 +797,7 @@ function Department() {
     {
         $element.editable({
             type: 'select',
-            source: Object.assign({0: ''}, $global.function_type),
+            source: Object.assign({0: ''}, $global.department_function_type),
             url: window.base_url('department/set_officer_function'),
             title: 'Function',
             emptytext : 'not set',
@@ -964,7 +964,7 @@ function Department() {
                                 template += '<td><img class="logo-small" src="' + window.public_url() + 'assets/profile/' + (e.Photo != '' ? e.Photo : 'avatar_default.jpg') + '"></td>';
                                 template += '<td>' + e.MabuhayID + '</td>';
                                 template += '<td>' + e.FirstName + ' ' + e.LastName + '</td>';
-                                template += '<td><span class="officerFunction" data-pk="'+e.id+'">' + (e.FunctionTypeID > 0 ? $global.function_type[e.FunctionTypeID] : '') + '</span></td>';
+                                template += '<td><span class="officerFunction" data-pk="'+e.id+'">' + (e.FunctionTypeID > 0 ? $global.department_function_type[e.FunctionTypeID] : '') + '</span></td>';
                                 template += '<td><span class="officerPosition" data-pk="'+e.id+'">' + e.Position + '</span></td>';
                                 template += '<td>' + e.ContactNumber + '</td>';
                                 // template += '<td>' + e.Address + '</td>';

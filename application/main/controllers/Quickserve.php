@@ -99,6 +99,93 @@ class Quickserve extends CI_Controller
     }
 
 
+    public function observe()
+    {
+        $viewData = array(
+            'pageTitle'     => 'QuickServe - Observe',
+            'accountInfo'   => user_account_details(),
+            'fullwidth'     => true,
+            'nosidebar'     => true,
+            'jsModules'     => array(
+                'quickserve'
+            )
+        );
+
+        $params = array();
+        $where  = array();
+
+        if (get_post('mabuhayID')) {
+            $where[] = 'uai.MabuhayID = ?';
+            $params[] = get_post('mabuhayID');
+        }
+        if (get_post('applicationCode')) {
+            $where[] = 'sa.Code = ?';
+            $params[] = get_post('applicationCode');
+        }
+        if (get_post('status') !== '' && get_post('status') !== null  && in_array(get_post('status'), array(0, 1, 2))) {
+            $where[] = 'saf.Status = ?';
+            $params[] = (int) get_post('status');
+        } else {
+            $_POST['status'] = '';
+        }
+        if (get_post('date')) {
+            $where[] = '(saf.DateAdded BETWEEN ? AND ?)';
+            $date = date('Y-m-d', strtotime(get_post('date')));
+            $params[] = $date . ' 00:00:00';
+            $params[] = $date . ' 23:59:59';
+        }
+        if (get_post('searchQuery')) {
+            $where[] = "(sa.ExtraFields LIKE ? OR uai.FirstName LIKE ? OR uai.LastName LIKE ?)";
+            $squery = $this->db->escape_like_str(get_post('searchQuery'));
+            $params[] = "%{$squery}%";
+            $params[] = "%{$squery}%";
+            $params[] = "%{$squery}%";
+        }
+
+        $items = $this->mgovdb->getObservableFunction(current_user(), $where, $params);
+
+        foreach ($items as &$item) {
+            $item['applicationStatus']  = lookup('service_application_status', $item['saStatus']);
+            $item['functionStatus']     = lookup('service_application_status', $item['safStatus']);
+
+            $item['Barangay']           = lookup_row('UtilLocBrgy', $item['BarangayID'], 'brgyCode')->brgyDesc;
+
+            $item['isReport']           = in_array($item['ServiceType'], lookup('report_service_type'));
+
+            // completed function
+            if ($item['safStatus'] >= 2) {
+                $item['duration']           = time_ago($item['StartedTime'], $item['EndedTime']);
+            } else {
+                $item['duration']           = time_ago($item['StartedTime']);    
+            }
+            
+            $item['reqProgress']        = $item['RequirementProcessedCount'] . '/' . $item['RequirementCount'];
+            $item['progress']           = round(($item['FunctionProcessedCount'] / $item['FunctionCount']) * 100);
+            $item['documentName']       = ($item['documentName'] ? $item['documentName'] : 'Main Service');
+
+            $item['Scope']              = lookup('location_scope', $item['LocationScopeID']);
+            $item['ExtraFields']        = array_values((array) @json_decode($item['ExtraFields'], true));
+
+            if ($item['FunctionTypeID'] == 4) {
+                $payment = $this->mgovdb->getRowObject('Service_Payments', $item['safID'], 'ApplicationFunctionID');
+                if ($payment) {
+                    $payment->collections = (array) @json_decode($payment->collections, true);
+                }
+
+                $item['paymentInfo'] = $payment;
+
+            }
+        }
+
+        // print_data($items, true);
+
+        $viewData['items'] = $items;
+
+        view('main/quickserve', $viewData, 'templates/mgov');
+
+    }
+
+
     /**
     * get details
     * ajax

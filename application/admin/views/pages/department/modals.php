@@ -298,7 +298,7 @@
                   <select id="FunctionTypeID" name="FunctionTypeID" class="form-control">
                     <option value="">--</option>
                     <?php
-                      foreach (lookup('function_type') as $k => $v) {
+                      foreach (lookup('department_function_type') as $k => $v) {
                         echo "<option value='{$k}'>{$v}</option>";
                       }
                     ?>

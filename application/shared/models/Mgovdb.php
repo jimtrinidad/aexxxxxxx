@@ -283,6 +283,96 @@ class Mgovdb extends CI_Model {
 		return $this->db->query($query, $params)->result_array();
 	}
 
+
+	/**
+	* get application functions for observer
+	*
+	* get the exact department location id by dept_officer using account id and functiontype 4 (observer) where user is assigned
+	* get all department location id under the initial location id
+	* get appication functions filtered by dept loc ids and other user input filter
+	*/
+	public function getObservableFunction($userID, $where, $params = array())
+	{
+
+		$department_location_ids = array();
+		// first get the exact department location where the user is assigned
+		$assigned_deptlocs = $this->db->select('DepartmentLocationID,LocationCode,do.DepartmentID,ds.SubDepartmentID,LocationScope')
+					->from('Dept_Officers do')
+					->join('Dept_ScopeLocations AS ds', 'do.DepartmentLocationID = ds.id')
+					->where('AccountID', $userID)
+					->where('FunctionTypeID', 4) // 4 = observer
+					->get()->result_array();
+
+		// get all department location id under each assigned dept loc
+		foreach ($assigned_deptlocs as $item) {
+			$items = $this->db->select('id')
+						->where('LocationScope >= ', $item['LocationScope'])
+						->where('DepartmentID', $item['DepartmentID'])
+						->where('SubDepartmentID', $item['SubDepartmentID'])
+						->like('LocationCode', $item['LocationCode'], 'after')
+						->get('Dept_ScopeLocations')->result_array();
+
+			$department_location_ids = array_merge($department_location_ids, array_column($items, 'id'));
+		}
+
+		if (count($department_location_ids)) {
+
+			$query = "SELECT saf.id safID,
+							saf.ApplicationID,
+							saf.ApplicantID,
+							saf.RequirementID,
+							saf.Status safStatus,
+							saf.DateAdded StartedTime,
+							saf.DateCompleted EndedTime,
+							ss.Name ServiceName,
+		                    ss.Code ServiceCode,
+							ss.LocationScopeID,
+							ss.Fee,
+							ss.ServiceType,
+							uai.FirstName,
+							uai.LastName,
+							uai.MabuhayID,
+							uai.BarangayID,
+							uai.MunicipalityCityID,
+							uai.ProvincialID,
+							sr.DocumentID,
+							dt.Name documentName,
+							sa.Code ApplicationCode,
+							sa.ServiceCode,
+							sa.RequirementCount,
+							sa.RequirementProcessedCount,
+							sa.FunctionCount,
+							sa.FunctionProcessedCount,
+							sa.LastUpdate LastUpdate,
+							sa.Status saStatus,
+							sa.DateCompleted,
+							sa.ExtraFields,
+							sf.FuntionFor,
+							sf.FunctionTypeID,
+							lft.Value FunctionName
+						FROM Service_Application_Functions saf
+						JOIN Service_Applications AS sa ON saf.ApplicationID = sa.id
+						JOIN Service_Services AS ss ON ss.id = saf.ServiceID
+						JOIN UserAccountInformation AS uai ON uai.id = saf.ApplicantID
+						JOIN Service_Functions AS sf ON sf.id = saf.FunctionID
+						JOIN Lookup_function_type AS lft ON sf.FunctionTypeID = lft.id
+						LEFT JOIN Service_Requirements AS sr ON sr.id = saf.RequirementID
+						LEFT JOIN Doc_Templates AS dt ON dt.id = sr.DocumentID
+						WHERE ss.DepartmentLocationID IN (".implode(',', $department_location_ids).")";
+
+			if (count($where)) {
+				$query .= ' AND ' . implode(' AND ', $where);
+			}
+
+			$query .= " ORDER BY saf.Status ASC, saf.DateAdded ASC";
+
+			return $this->db->query($query, $params)->result_array();
+
+		}
+
+		return array();
+	}
+
 	/**
 	* get service applications with service info
 	*/
