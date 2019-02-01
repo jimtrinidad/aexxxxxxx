@@ -511,7 +511,7 @@ class Get extends CI_Controller
         } else {
             response_json(array(
                 'status'    => false,
-                'data'      => 'No service found.'
+                'message'   => 'No service found.'
             ));
         }
     }
@@ -553,14 +553,56 @@ class Get extends CI_Controller
             } else {
                 response_json(array(
                     'status'    => false,
-                    'data'      => 'No record found.'
+                    'message'   => 'No record found.'
                 ));
             }
 
         } else {
             response_json(array(
                 'status'    => false,
-                'data'      => 'No organization found.'
+                'message'   => 'No organization found.'
+            ));
+        }
+    }
+
+
+    /**
+    * get currency conversion
+    */
+    public function currencies()
+    {
+        $url = 'https://api.exchangeratesapi.io/latest?base=PHP';
+        $response = json_decode(file_get_contents($url), true);
+        if (isset($response['rates'])) {
+            $items = array();
+            foreach ($response['rates'] as $cur => $rate) {
+                if ($cur != 'PHP' && ($lbl = lookup('currencies', $cur))) {
+                    $items[$cur] = array(
+                        'name'  => $lbl,
+                        'rate'  => bcdiv($rate,1, 5),
+                        'toPHP' => bcdiv(1, $rate, 5)
+                    );
+                }
+            }
+            if (count($items)) {
+                uasort($items, function($a, $b) {
+                    return $a['name'] > $b['name'];
+                });
+                response_json(array(
+                    'status'    => true,
+                    'date'      => $response['date'],
+                    'data'      => $items
+                ), 720); //cache result
+            } else {
+                response_json(array(
+                    'status'    => false,
+                    'message'   => 'No currency data found.'
+                ));
+            }
+        } else {
+            response_json(array(
+                'status'    => false,
+                'message'   => 'No currency conversion found.'
             ));
         }
     }

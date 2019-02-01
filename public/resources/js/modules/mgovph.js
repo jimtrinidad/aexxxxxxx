@@ -17,6 +17,7 @@ function Mgovph() {
         self.load_govt_ranking();
         self.load_trending_service();
         self.load_organization_ranking();
+        self.load_currencies();
 
     },
 
@@ -154,6 +155,46 @@ function Mgovph() {
                         cont.find('div.row').html(tpl);
 
                         cont.removeClass('hide');
+                    }
+                },
+                complete: function() {
+                    cont.LoadingOverlay("hide");
+                }
+            });
+        }
+    }
+
+    /**
+    * load currencies
+    */
+    this.load_currencies = function()
+    {
+        var cont = $('#currency-cont');
+        if (cont.length) {
+            cont.LoadingOverlay("show");
+            $.ajax({
+                url  : window.base_url('get/currencies'),
+                type : 'get',
+                cache: true,
+                success : function(response) {
+                    if (response.status) {
+
+                        cont.find('.date-rate').text(response.date);
+                        var tpl = '';
+
+                        $.each(response.data, function(i,e) {
+                            tpl += `<tr>
+                                        <td>${e.name}</td>
+                                        <td>${e.rate}</td>
+                                        <td>${e.toPHP}</td>
+                                    </tr>`;
+                        });
+
+                        cont.find('#currency-data').html(tpl);
+
+                        cont.removeClass('hide');
+                    } else {
+                        cont.hide();
                     }
                 },
                 complete: function() {
@@ -591,7 +632,7 @@ function Mgovph() {
             });
             if (additionalFields != '') {
                 $('#serviceApplicationModal #serviceAdditionalFieldsCont').html('<div class="post-items bg-white padding-10"> \
-                                                                                    <h2 class="text-cyan text-bold offset-bottom-10">Other Fields</h2> \
+                                                                                    <h2 class="text-cyan text-bold offset-bottom-10">Other Information Needed to Complete Your Request</h2> \
                                                                                     <div class="row">'
                                                                                      + additionalFields + 
                                                                                     '</div> \
@@ -616,7 +657,7 @@ function Mgovph() {
                 });
                 if (documentFields != '') {
                     requirementDocFields += '<div class="post-items bg-white padding-10"> \
-                                                <h2 class="text-cyan text-bold offset-bottom-10">'+k.Name +' Required Fields</h2> \
+                                                <h2 class="text-cyan text-bold offset-bottom-10">'+k.Name +' Required Information</h2> \
                                                 <div class="row">'
                                                  + documentFields + 
                                                 '</div> \

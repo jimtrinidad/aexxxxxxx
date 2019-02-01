@@ -10,22 +10,31 @@
 					<!-- Post Items -->
 					<div class="post-items bg-white padding-10 serviceDetails">
 						<div class="row gutter-5">
-					         <div class="col-sm-2 col-xs-6">
-					            <img src="" class="img-responsive DepartmentLogo" style="margin: 10px auto 0;max-height: 100px;">
+					         <div class="col-sm-2 col-xs-3">
+					            <img src="" class="img-responsive DepartmentLogo" style="margin: 10px auto 0;max-height: 70px;max-width: 70px;">
 					         </div>
-					         <div class="visible-xs col-xs-6">
-					            <img src="" class="img-responsive ServiceLogo" style="margin: 0 auto;max-height: 100px;">
-					         </div>
-					         <div class="col-sm-8 col-xs-12">
-					         	<h2><span class="text-bold DeptName">Department name</span></h2>
-					            <h2><span class="text-bold text-green ServiceName">Service name</span></h2>
-					            <span class="ServiceDesc" style="font-family:Trebuchet MS; font-size:12px;">Service description</span>
-					            <h5><span class="text-blue ServiceZone" style="font-family:Trebuchet MS; font-size:10px;">Zone</span></h5>
-					            <div style="margin-top: 5px;" class="transaction-counter">Service Code: <span class="ServiceCode">ServiceCode</span>  Total Services Provided:  <span class="serviceProvided">2,005,009,997</span></div>
-					            <div class="ServiceTags small padding-top-5"></div>
+					         <div class="col-sm-8 col-xs-9">
+					         	<div class="row gutter-0">
+					         		<div class="col-xs-12">
+							         	<h2><span class="text-bold DeptName">Department name</span></h2>
+							            <h2><span class="text-bold text-green ServiceName">Service name</span></h2>
+							            <span class="ServiceDesc" style="font-family:Trebuchet MS; font-size:12px;">Service description</span>
+							            <h5><span class="text-blue ServiceZone" style="font-family:Trebuchet MS; font-size:10px;">Zone</span></h5>
+						            </div>
+						            <div class="col-xs-8 col-sm-12">
+							            <div style="margin-top: 5px;" class="transaction-counter">
+							            	Service Code: <span class="ServiceCode">ServiceCode</span>  <br class="visible-xs">
+							            	Total Services Provided:  <span class="serviceProvided">2,005,009,997</span>
+							            </div>
+							            <div class="ServiceTags small padding-top-5"></div>
+					            	</div>
+					            	<dir class="col-xs-4 visible-xs" style="margin: 0;">
+					            		<img src="" class="img-responsive ServiceLogo" style="float: right;max-height: 50px;">
+					            	</dir>
+					            </div>
 					         </div>
 					         <div class="col-sm-2 hidden-xs">
-					            <img src="" class="img-responsive ServiceLogo" style="float: right;max-height: 100px;">
+					            <img src="" class="img-responsive ServiceLogo" style="float: right;margin-top: 10px;max-height: 70px;max-width: 70px;">
 					         </div>
 					    </div>
 					</div>

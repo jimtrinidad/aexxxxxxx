@@ -61,6 +61,26 @@
     </div>
   </div>
 
+  <div class="col-md-12 top-performance-services offset-top-10" id="currency-cont">
+    <h2 class="org-ranking-title">Philippine Peso Conversion <span class="pull-right text-orange date-rate">02/01/2019</span></h2>
+    <div class="row">
+      <div class="col-xs-12">
+        <table class="table small table-condensed">
+          <thead>
+            <tr>
+              <td width="50%">Currencies</td>
+              <td width="25%">Rate</td>
+              <td>Pesos</td>
+            </tr>
+          </thead>
+          <tbody id="currency-data">
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
   <?php if (current_controller() == 'organization') { ?>
   <div class="col-md-12 offset-top-10">
     <div class="row">
