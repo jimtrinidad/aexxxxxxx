@@ -297,10 +297,12 @@ $config['document_template_keywords'] = array(
 	array(
 		'name'	=> 'Dates',
 		'keys'	=> array(
+			'CURDATE'	=> 'Current date (YYYY-MM-DD)',
 			'CURDAY'	=> 'Current day (DD)',
 			'CURMONTH'	=> 'Current month (January - December)',
 			'CURNMONTH'	=> 'Current month (MM)',
 			'CURYEAR'	=> 'Current year (YYYY)',
+			'DOCXDATE' 	=> 'Doc expiration date (YYYY-MM-DD)',
 			'DOCXDAY' 	=> 'Doc expiration day (DD)',
 			'DOCXMONTH'	=> 'Doc expiration month (MM)',
 			'DOCXYEAR'	=> 'Doc expiration year (YYYY)'
