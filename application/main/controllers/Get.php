@@ -315,7 +315,7 @@ class Get extends CI_Controller
                 $mpdf->SetWatermarkText('DRAFT');
                 $mpdf->showWatermarkText = true;
 
-                $content = str_replace("\xc2\xa0",' ',$doc->DocumentDraft);
+                $content = str_replace("\xc2\xa0",'&nbsp;',$doc->DocumentDraft);
 
                 $mpdf->WriteHTML('<style>@page {margin: 30px;}</style>' . $content);
                 $mpdf->SetHTMLFooter('
