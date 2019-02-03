@@ -393,7 +393,9 @@ class Documents extends CI_Controller
                 $mpdf->Output($filename . '.pdf', 'I');
 
             } else if ($type == 'html') {
-                echo '<html><head><title>' . $filename . '</title></head><body style="min-width:816px;max-width:816px;">'.$content.'</body></html>';
+                // echo '<html><head><title>' . $filename . '</title></head><body style="min-width:816px;max-width:816px;">'.$content.'</body></html>';
+                header("Content-Type: text/html");
+                echo $content;
             }
 
         } else {
