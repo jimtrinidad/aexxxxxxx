@@ -214,6 +214,7 @@ $config['document_template_keywords'] = array(
 			'MABUHAYID'			=> 'Mabuhay ID',
 			'FIRSTNAME' 		=> 'Firstname',
 			'MIDDLENAME'		=> 'Middlename',
+			'MI'				=> 'Middle initial',
 			'LASTNAME'			=> 'Lastname',
 			'EMAIL'				=> 'Email address',
 			'CONTACTNO'			=> 'Contact number',

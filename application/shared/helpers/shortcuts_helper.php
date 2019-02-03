@@ -618,6 +618,7 @@ function generate_document_from_template($documentID, $data)
 			'MABUHAYID'			=> $userData->MabuhayID,
 			'FIRSTNAME' 		=> $userData->FirstName,
 			'MIDDLENAME'		=> $userData->MiddleName,
+			'MI'				=> strtoupper(substr($userData->MiddleName, 0, 1) '.'),
 			'LASTNAME'			=> $userData->LastName,
 			'EMAIL'				=> $userData->EmailAddress,
 			'CONTACTNO'			=> $userData->ContactNumber,
