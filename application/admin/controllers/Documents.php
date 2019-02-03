@@ -380,7 +380,7 @@ class Documents extends CI_Controller
                 $mpdf->SetWatermarkText('TEMPLATE');
                 $mpdf->showWatermarkText = true;
 
-                $content = str_replace("\xc2\xa0",' ',$content);
+                $content = str_replace("\xc2\xa0",'&nbsp;',$content);
 
                 $mpdf->WriteHTML($content);
                 
