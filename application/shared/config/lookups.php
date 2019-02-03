@@ -295,14 +295,15 @@ $config['document_template_keywords'] = array(
 		)
 	),
 	array(
-		'name'	=> 'Other Data',
+		'name'	=> 'Dates',
 		'keys'	=> array(
-			'CURDAY'	=> 'Current day',
-			'CURMONTH'	=> 'Current month',
-			'CURYEAR'	=> 'Current year',
-			'DOCXDAY' 	=> 'Doc expiration day',
-			'DOCXMONTH'	=> 'Doc expiration month',
-			'DOCXYEAR'	=> 'Doc expiration year'
+			'CURDAY'	=> 'Current day (DD)',
+			'CURMONTH'	=> 'Current month (January - December)',
+			'CURNMONTH'	=> 'Current month (MM)',
+			'CURYEAR'	=> 'Current year (YYYY)',
+			'DOCXDAY' 	=> 'Doc expiration day (DD)',
+			'DOCXMONTH'	=> 'Doc expiration month (MM)',
+			'DOCXYEAR'	=> 'Doc expiration year (YYYY)'
 		)
 	),
 );

@@ -643,6 +643,7 @@ function generate_document_from_template($documentID, $data)
 			'LBRGY'				=> $userData->brgyDesc,
 			'CURDAY'			=> date('j'),
 			'CURMONTH'			=> date('F'),
+			'CURNMONTH'			=> date('m'),
 			'CURYEAR'			=> date('Y'),
 			'DOCXDAY'			=> ($expiration ? date('d', strtotime($expiration)) : '00'),
 			'DOCXMONTH'			=> ($expiration ? date('m', strtotime($expiration)) : '00'),
