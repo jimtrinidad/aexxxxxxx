@@ -33,7 +33,7 @@ class Documents extends CI_Controller
         $where = array(
             'deletedAt' => NULL
         );
-        $order = 'DateAdded';
+        $order = 'Name';
 
         $paginatationData = $this->mgovdb->getPaginationData('Doc_Templates', $page_limit, $page_start, $where, $order);
 
