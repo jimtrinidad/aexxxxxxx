@@ -218,6 +218,7 @@ $config['document_template_keywords'] = array(
 			'EMAIL'				=> 'Email address',
 			'CONTACTNO'			=> 'Contact number',
 			'BIRTHDAY'			=> 'Birthday',
+			'AGE'				=> 'Age',
 			'GENDER'			=> 'Gender',
 			'MARITALSTATUS'		=> 'Marital status',
 			'EDUCATION'			=> 'Education',

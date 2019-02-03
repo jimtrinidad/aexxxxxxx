@@ -622,6 +622,7 @@ function generate_document_from_template($documentID, $data)
 			'EMAIL'				=> $userData->EmailAddress,
 			'CONTACTNO'			=> $userData->ContactNumber,
 			'BIRTHDAY'			=> $userData->BirthDate,
+			'AGE'				=> $age = date_diff(date_create($userData->BirthDate), date_create('now'))->y,
 			'GENDER'			=> lookup('gender', $userData->GenderID),
 			'MARITALSTATUS'		=> lookup('marital_status', $userData->MaritalStatusID),
 			'EDUCATION'			=> lookup('education', $userData->EducationalAttainmentID),
@@ -680,9 +681,10 @@ function generate_document_from_template($documentID, $data)
 		// echo '<pre>';
 		// print_r($data);
 		// print_r($document_keywords);
-		// print_r($default_keyword_data);
-		// print_r($default_image_data);
+		// print_data($default_keyword_data);
+		// print_data($default_image_data);
 		// echo '</pre>';
+		// exit;
 
 		// replace keywords
 		foreach ($default_keyword_data as $keyword => $value) {
