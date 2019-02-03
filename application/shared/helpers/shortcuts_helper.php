@@ -639,7 +639,7 @@ function generate_document_from_template($documentID, $data)
 			'SDADDRESS'			=> ($subDeptData ? $subDeptData->Address : 'N/A'),
 			'LREGION'			=> $userData->regDesc,
 			'LPROVINCE'			=> $userData->provDesc,
-			'LMUNICITY'			=> $userData->citymunDesc,
+			'LMUNICITY'			=> ($municityData->type == 1 ? 'Municipality of ' : '') . $userData->citymunDesc,
 			'LBRGY'				=> $userData->brgyDesc,
 			'CURDAY'			=> date('j'),
 			'CURMONTH'			=> date('F'),
