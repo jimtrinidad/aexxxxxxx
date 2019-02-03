@@ -610,6 +610,8 @@ function generate_document_from_template($documentID, $data)
 		$municityData  		= lookup_row('UtilLocCityMun', $userData->MunicipalityCityID, 'citymunCode');
 		$brgyData  			= lookup_row('UtilLocBrgy', $userData->BarangayID, 'brgyCode');
 
+		$expiration 		= compute_expiration_date(lookup_db('Doc_Templates', 'Validity', $documentID));
+
 
 		// map keyword data
 		$default_keyword_data = array(
@@ -641,11 +643,15 @@ function generate_document_from_template($documentID, $data)
 			'LBRGY'				=> $userData->brgyDesc,
 			'CURDAY'			=> date('j'),
 			'CURMONTH'			=> date('F'),
-			'CURYEAR'			=> date('Y')
+			'CURYEAR'			=> date('Y'),
+			'DOCXDAY'			=> ($expiration ? date('d', strtotime($expiration)) : '00'),
+			'DOCXMONTH'			=> ($expiration ? date('m', strtotime($expiration)) : '00'),
+			'DOCXYEAR'			=> ($expiration ? date('Y', strtotime($expiration)) : '0000'),
 		);
 
 		$default_image_data 	= array(
 			'i/profile/dummy'	=> base_url() . 'assets/profile/' . $userData->Photo,
+			'i/profile/qr'		=> base_url() . 'assets/qr/' . get_qr_file($userData->MabuhayID),
 			'i/dept/logo'		=> base_url() . 'assets/logo/' . logo_filename($deparmentData->Logo),
 			'i/subdept/logo'	=> base_url() . 'assets/logo/' . logo_filename(($subDeptData ? $subDeptData->Logo : 'na')),
 			'i/region/logo'		=> base_url() . 'assets/logo/' . logo_filename(($regionData ? $regionData->logo : 'na')),

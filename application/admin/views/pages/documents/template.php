@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-xs-12">
-    <div class="row">
+    <div class="row gutter-5">
 
       <div class="col-md-12 col-lg-5 col-lg-push-7">
         <div class="box box-success">
@@ -45,7 +45,7 @@
       </div>
 
       <div class="col-md-12 col-lg-7 col-lg-pull-5" style="overflow: auto;">
-        <div class="box box-primary" style="min-width: 816px;max-width: 816px;">
+        <div class="box box-primary" style="min-width: 816px;max-width: 816px;margin: 0 auto;">
           <form action="" method="post" id="DocumentTemplateForm" name="DocumentTemplateForm" onsubmit="return confirm('Are you sure you want to save your changes?')">
             <div class="box-header">
               <h3 class="box-title">Editor</h3>
