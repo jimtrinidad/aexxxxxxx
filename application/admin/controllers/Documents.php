@@ -380,6 +380,8 @@ class Documents extends CI_Controller
                 $mpdf->SetWatermarkText('TEMPLATE');
                 $mpdf->showWatermarkText = true;
 
+                $content = str_replace("\xc2\xa0",' ',$content);
+
                 $mpdf->WriteHTML($content);
                 
                 // overwrite html title

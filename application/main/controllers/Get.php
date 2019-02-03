@@ -315,7 +315,9 @@ class Get extends CI_Controller
                 $mpdf->SetWatermarkText('DRAFT');
                 $mpdf->showWatermarkText = true;
 
-                $mpdf->WriteHTML('<style>@page {margin: 30px;}</style>' . $doc->DocumentDraft);
+                $content = str_replace("\xc2\xa0",' ',$doc->DocumentDraft);
+
+                $mpdf->WriteHTML('<style>@page {margin: 30px;}</style>' . $content);
                 $mpdf->SetHTMLFooter('
                         <table width="100%" style="font-size:8px;">
                             <tr>
