@@ -25,7 +25,13 @@ date_default_timezone_set('Asia/Manila');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/Projects/Aexponents/mgovphV2/public/';
+if (SUBDOMAIN == 'localhost') {
+	$config['base_url'] = 'http://localhost/Projects/Aexponents/mgovphV2/public/';
+} else if (SUBDOMAIN !== false) {
+	$config['base_url'] = 'https://'. SUBDOMAIN .'.mgov.cloud/';
+} else {
+	$config['base_url'] = 'https://mgov.cloud/';
+}
 
 /*
 |--------------------------------------------------------------------------

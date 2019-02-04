@@ -37,6 +37,24 @@
  * @filesource
  */
 
+/**
+* GET SUBDOMAIN THAT WILL BE USE ON DEFINING BASE URL
+*/
+$subdomain = false;
+$allowed_subdomains = array(
+	'davaocity',
+	'localhost'
+);
+
+$host_parts = explode('.', strtolower($_SERVER['HTTP_HOST']));
+if (count($host_parts) > 0) {
+	$sub_domain = $host_parts[0];
+	if (in_array($sub_domain, $allowed_subdomains)) {
+		$subdomain = $sub_domain;
+	}
+}
+defined('SUBDOMAIN') OR define('SUBDOMAIN', $subdomain);
+
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
