@@ -9,7 +9,21 @@
                 <div class="row">
                   <div class="col-sm-2"></div>
                   <div class="col-sm-8 text-center center-block float-none">
-                    <a href="#"><img src="<?php echo public_url(); ?>resources/images/mak-logo.png" class="img-responsive" /></a>
+                    <?php
+                    if (SUBDOMAIN == 'davaocity') {
+                      echo '<div class="row gutter-5 padding-bottom-5 login-header registration">
+                          <div class="col-xs-3">
+                            <img src="' . public_url() . 'resources/images/davaocity-logo.png" class="img-responsive" />
+                          </div>
+                          <div class="col-xs-9 text-left login-header-cont">
+                                  <h1>DAVAO CITY</h1>
+                                  <h4>GOVERNMENT INTEGRATED SYSTEM</h4>
+                                </div>
+                        </div>';
+                    } else {
+                        echo '<img src="' . public_url() . 'resources/images/mak-logo.png" class="img-responsive" />';
+                    }
+                    ?>
                   </div>
                 </div>
                 <form id="RegistrationForm" action="<?php echo site_url('account/register') ?>" enctype="multipart/form-data" >

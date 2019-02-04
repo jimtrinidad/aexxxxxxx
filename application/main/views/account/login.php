@@ -7,9 +7,24 @@
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-sm-12 padding-top-10">
-								<p class="text-muted text-center">
-									<img src="<?php echo public_url(); ?>resources/images/mak-logo.png" class="img-responsive" />
-								</p>
+								<?php
+								if (SUBDOMAIN == 'davaocity') {
+									echo '<div class="row gutter-5 padding-bottom-5 login-header">
+											<div class="col-xs-3">
+												<img src="' . public_url() . 'resources/images/davaocity-logo.png" class="img-responsive" />
+											</div>
+											<div class="col-xs-9 text-left login-header-cont">
+								              <h1>DAVAO CITY</h1>
+								              <h4>GOVERNMENT INTEGRATED SYSTEM</h4>
+								            </div>
+										</div>';
+									// echo '<img src="' . public_url() . 'resources/images/davaocity-logo.png" class="img-responsive" />';
+								} else {
+									echo '<p class="text-muted text-center">';
+										echo '<img src="' . public_url() . 'resources/images/mak-logo.png" class="img-responsive" />';
+									echo '<p>';
+								}
+								?>
 								<form id="loginForm" action="<?php echo site_url('account/login') ?>" autocomplete="off" >
 									<div id="error_message_box" class="hide alert alert-danger" role="alert"></div>
 									<div class="form-group">
