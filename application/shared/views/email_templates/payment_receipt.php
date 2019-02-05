@@ -198,17 +198,17 @@
           <table class="table table-condensed rtable">
             <thead>
               <tr>
-                <td width="40%" class="text-center">
+                <td width="45%" class="text-center">
                   <span class="style9 style15">
                     Nature of Collection
                   </span>
                 </td>
-                <td width="20%" class="text-center">
+                <td width="30%" class="text-center">
                   <span class="style9 style15">
                     Fund and Account Code
                   </span>
                 </td>
-                <td colspan="2" class="text-center">
+                <td class="text-center">
                   <span class="style9 style15">
                     Amount
                   </span>
@@ -217,8 +217,7 @@
               <tr>
                 <td></td>
                 <td></td>
-                <td width="22%"><span class="style14">P</span></td>
-                <td></td>
+                <td><span class="style14">P</span></td>
               </tr>
             </thead>
             <tbody>
@@ -230,14 +229,12 @@
                   echo '<tr>';
                   echo '<td>'. $k['name'] .'</td>';
                   echo '<td>'. $k['code'] .'</td>';
-                  echo '<td></td>';
                   echo '<td class="text-right">'. number_format($k['amount']) .'</td>';
                   echo '</tr>';
                 }
                 // row placeholder
                 for (;$i < 7; $i++) {
                   echo '<tr>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td>&nbsp;</td>
@@ -248,8 +245,10 @@
             <tfoot>
               <tr>
                 <td colspan="2"></td>
-                <td><span class="style14">P</span></td>
-                <td><?php echo number_format($total) ?></td>
+                <td class="text-right">
+                  <span class="style14 pull-left">P</span>
+                  <?php echo number_format($total) ?>
+                </td>
               </tr>
             </tfoot>
           </table>
