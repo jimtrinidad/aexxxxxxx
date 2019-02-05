@@ -1,4 +1,9 @@
 <style type="text/css">
+	.noscroll {
+		position: fixed;
+		overflow-y: scroll;
+		width: 100%;
+	}
 	.chatbubble {
 	    position: fixed;
 	    bottom: 0;

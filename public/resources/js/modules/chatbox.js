@@ -55,7 +55,6 @@ function Chatbox() {
             self.isTabActive = false; 
         });
 
-
         $('.chatbubble .unexpanded').click(function(){
             self.openChatWindow();
         });
@@ -72,6 +71,8 @@ function Chatbox() {
             if (self.findRequest) {
                 self.findRequest.abort();
             }
+
+            self.unlockBodyScroll();
         });
 
         // select thread
@@ -115,6 +116,46 @@ function Chatbox() {
             self.sendMessage();
         });
 
+
+
+        // BLOCK BODY SCROLL WHEN FOCUSED ON CHATBOX
+        $chatbubble = $('.chatbubble .expanded');
+        $chatbubble.mouseenter(function(){
+            setTimeout(function(){
+                self.lockBodyScroll();
+            }, 100);
+        }).mouseleave(function(e){
+            $('body').one('mousemove', function(evt){
+                if($(evt.target).prop('class') != 'loadingoverlay') {
+                    setTimeout(function(){
+                        self.unlockBodyScroll();
+                    }, 100);
+                }
+            });
+        });
+
+    }
+
+    this.lockBodyScroll = function()
+    {
+        // console.log('focused');
+        var scrollTop = $('html').scrollTop() ? $('html').scrollTop() : $('body').scrollTop(); // Works for Chrome, Firefox, IE..
+        // console.log(scrollTop);
+        $('html').addClass('noscroll');
+        if (scrollTop != 0) {
+            $('html').css('top',-scrollTop);
+        }
+    }
+
+    this.unlockBodyScroll = function()
+    {
+        // console.log('blured');  
+        var scrollTop = parseInt($('html').css('top'));
+        // console.log('v -' + scrollTop);
+        $('html,body').removeClass('noscroll');
+        if (scrollTop != 0) {
+            $('html,body').scrollTop(-scrollTop);
+        }
     }
 
     /**
@@ -199,6 +240,28 @@ function Chatbox() {
         $(".chatbubble .messages").getNiceScroll(0).resize();
         $(".chatbubble .messages").getNiceScroll(0).doScrollTop(999999, 999);
     };
+
+
+    /**
+    * send message request from outside
+    * called from other pages, not within chatbox
+    */
+    this.openChatbox = function(mabuhayID)
+    {
+        self.abortRequest();
+        self.activeThread = false;
+        this.new_support_thread = false;
+        self.receiverID = false;
+        $('.chatbubble').addClass('opened');
+        $(".chatbubble .list-friends").show();
+        $(".chatbubble .messages").show();
+        $('.chatbubble .recent-threads li').removeClass('active');
+        self.findThreadByID(mabuhayID);
+
+        setTimeout(function(){
+            self.lockBodyScroll();
+        }, 100);
+    }
 
     /**
     * get thread from fetched data
@@ -422,23 +485,6 @@ function Chatbox() {
         self.activeThread = false;
         self.receiverID = false;
         this.new_support_thread = false;
-    }
-
-    /**
-    * send message request from outside
-    * called from other pages, not within chatbox
-    */
-    this.openChatbox = function(mabuhayID)
-    {
-        self.abortRequest();
-        self.activeThread = false;
-        this.new_support_thread = false;
-        self.receiverID = false;
-        $('.chatbubble').addClass('opened');
-        $(".chatbubble .list-friends").show();
-        $(".chatbubble .messages").show();
-        $('.chatbubble .recent-threads li').removeClass('active');
-        self.findThreadByID(mabuhayID);
     }
 
 
