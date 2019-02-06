@@ -133,6 +133,13 @@ function Organization() {
                     serviceTemplate.find('span.ServiceCode').text(v.Code);
                     serviceTemplate.find('span.serviceProvided').text(v.serviceProvided);
 
+                    if (v.Fee) {
+                        serviceTemplate.find('span.ServiceFee .fee-amount').text('P' + v.Fee);
+                        serviceTemplate.find('span.ServiceFee').show();
+                    } else {
+                        serviceTemplate.find('span.ServiceFee').hide();
+                    }
+
                     // if (v.SubDepartment) {
                     //     serviceTemplate.find('span.DeptName').text(v.SubDepartment.Name);
                     //     serviceTemplate.find('img.DepartmentLogo').prop('src', window.public_url('assets/logo/' + v.SubDepartment.Logo));

@@ -65,6 +65,10 @@ class Services extends CI_Controller
                 $serviceData['hasPending'] = 0;
             }
 
+            if ($serviceData['Fee']) {
+                $serviceData['Fee'] = number_format($serviceData['Fee']);
+            }
+
             $serviceData['serviceProvided'] = get_department_service_provided($serviceData['DepartmentID']);
             $serviceData['serviceProvider'] = get_service_providers($serviceData['id']);
 

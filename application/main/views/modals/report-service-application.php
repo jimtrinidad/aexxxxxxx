@@ -19,6 +19,7 @@
 							         	<h2><span class="text-bold DeptName">Department name</span></h2>
 							            <h2><span class="text-bold text-green ServiceName">Service name</span></h2>
 							            <span class="ServiceDesc" style="font-family:Trebuchet MS; font-size:12px;">Service description</span>
+							            <span class="ServiceFee" style="font-family:Trebuchet MS; font-size:12px;"><br>Fee: <span class="fee-amount text-orange"></span><br></span>
 							            <h5><span class="text-blue ServiceZone" style="font-family:Trebuchet MS; font-size:10px;">Zone</span></h5>
 						            </div>
 						            <div class="col-xs-8 col-sm-12">
