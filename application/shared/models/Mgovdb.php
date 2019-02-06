@@ -324,6 +324,7 @@ class Mgovdb extends CI_Model {
 							saf.Status safStatus,
 							saf.DateAdded StartedTime,
 							saf.DateCompleted EndedTime,
+							saf.OfficerID processedBy,
 							ss.Name ServiceName,
 		                    ss.Code ServiceCode,
 							ss.LocationScopeID,

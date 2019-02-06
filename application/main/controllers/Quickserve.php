@@ -175,6 +175,10 @@ class Quickserve extends CI_Controller
                 $item['paymentInfo'] = $payment;
 
             }
+
+            if ($item['processedBy']) {
+                $item['processedBy'] = get_user($item['processedBy'])->MabuhayID;
+            }
         }
 
         // print_data($items, true);
@@ -272,6 +276,7 @@ class Quickserve extends CI_Controller
     * complete application if all functions are processed
     * generate citizen document if requirement function is complete
     *
+    * if function is payment and service fee is set, require payment info
     * if function is payment and payment info has been set, send receipt email
     */
     public function approve()
@@ -282,217 +287,243 @@ class Quickserve extends CI_Controller
 
             if ($safData) {
 
+                $sfData          = $this->mgovdb->getRowObject('Service_Functions', $safData->FunctionID, 'id');
+                $serviceData     = $this->mgovdb->getRowObject('Service_Services', $safData->ServiceID, 'id');
                 $applicationData = $this->mgovdb->getRowObject('Service_Applications', $safData->ApplicationID, 'id');
                 if ($applicationData) {
 
-                    $processOrder = json_decode($applicationData->ProcessOrder, true);
+                    $require_payment = false;
 
-                    $continue_main_application_update = false;
-                    $continue_requirement_update = true;
+                    // if payment function and service fee is set, require payment
+                    if ($sfData && $sfData->FunctionTypeID == 4 && ((int)$serviceData->Fee) > 0) {
 
-                    // print_r($safData);
-                    // print_r($processOrder);
+                        $require_payment = true;
 
-                    $safUpdate = array(
-                        'id'            => $safData->id,
-                        'Status'        => 2,
-                        'Remarks'       => get_post('Remarks'),
-                        'OfficerID'     => current_user(),
-                        'DateCompleted' => date('Y-m-d H:i:s'),
-                        'LastUpdate'    => date('Y-m-d H:i:s')
-                    );
+                        // check if payment info exists on the application, no need to require it
+                        $paymentData = $this->mgovdb->getRowObject('Service_Payments', $applicationData->id, 'ApplicationID');
+                        if ($paymentData) {
+                            $require_payment = false;
+                        }
+                    }
 
-                    $this->db->trans_begin();
+                    if ($require_payment === false) {
 
-                    if ($this->mgovdb->saveData('Service_Application_Functions', $safUpdate)) {
+                        $processOrder = json_decode($applicationData->ProcessOrder, true);
 
-                        // if main, update application process count
-                        // if requirement, update application requirement process count, and application process count
-                        // if requirement process count is completed, save the document (user document)
-                        // if all process is completed, complete the application transaction
+                        $continue_main_application_update = false;
+                        $continue_requirement_update = true;
 
-                        $completedRequirementCount = $applicationData->RequirementProcessedCount;
-                        $applicationUpdate = array(
-                            'id'            => $applicationData->id,
-                            'UpdatedBy'     => current_user(),
-                            'LastUpdate'    => date('Y-m-d H:i:s'),
-                            'Status'        => 1
+                        // print_r($safData);
+                        // print_r($processOrder);
+
+                        $safUpdate = array(
+                            'id'            => $safData->id,
+                            'Status'        => 2,
+                            'Remarks'       => get_post('Remarks'),
+                            'OfficerID'     => current_user(),
+                            'DateCompleted' => date('Y-m-d H:i:s'),
+                            'LastUpdate'    => date('Y-m-d H:i:s')
                         );
 
-                        // if function is for requirement
-                        if ($safData->RequirementID) {
+                        $this->db->trans_begin();
 
-                            // get application requirement
-                            $applicationRequirementData = $this->mgovdb->getRowObjectWhere('Service_Application_Requirements', array(
-                                'ApplicationID' => $safData->ApplicationID,
-                                'RequirementID' => $safData->RequirementID
-                            ));
+                        if ($this->mgovdb->saveData('Service_Application_Functions', $safUpdate)) {
 
-                            if ($applicationRequirementData) {
+                            // if main, update application process count
+                            // if requirement, update application requirement process count, and application process count
+                            // if requirement process count is completed, save the document (user document)
+                            // if all process is completed, complete the application transaction
 
-                                $requirementProcessedFunctionCount = $this->mgovdb->getCount('Service_Application_Functions', array(
-                                                        'ApplicationID' => $safData->ApplicationID,
-                                                        'RequirementID' => $safData->RequirementID,
-                                                        'Status'        => 2
-                                                    ));
+                            $completedRequirementCount = $applicationData->RequirementProcessedCount;
+                            $applicationUpdate = array(
+                                'id'            => $applicationData->id,
+                                'UpdatedBy'     => current_user(),
+                                'LastUpdate'    => date('Y-m-d H:i:s'),
+                                'Status'        => 1
+                            );
 
-                                $applicationRequirementUpdate = array(
-                                    'id'            => $applicationRequirementData->id,
-                                    'UpdatedBy'     => current_user(),
-                                    'LastUpdate'    => date('Y-m-d H:i:s'),
-                                    'FunctionProcessedCount'    => $requirementProcessedFunctionCount,
-                                );
+                            // if function is for requirement
+                            if ($safData->RequirementID) {
 
-                                if ($requirementProcessedFunctionCount == $applicationRequirementData->FunctionCount) {
+                                // get application requirement
+                                $applicationRequirementData = $this->mgovdb->getRowObjectWhere('Service_Application_Requirements', array(
+                                    'ApplicationID' => $safData->ApplicationID,
+                                    'RequirementID' => $safData->RequirementID
+                                ));
 
-                                    // save the actual the citizen document
-                                    // but check if there's no same active document, just update if found
-                                    $currentDocumentData = $this->mgovdb->getRowObjectWhere('UserDocuments', array(
-                                        'AccountID'     => $applicationRequirementData->ApplicantID,
-                                        'DocumentID'    => $applicationRequirementData->DocumentID,
-                                        'Status'        => 1,
-                                        'ExpirationDate > '=> date('Y-m-d')
-                                    ));
+                                if ($applicationRequirementData) {
 
-                                    $citizenDocumentData = array(
-                                        'Code'              => $applicationRequirementData->Code,
-                                        'ApplicationID'     => $applicationRequirementData->ApplicationID,
-                                        'DocumentContent'   => $applicationRequirementData->DocumentDraft,
-                                        'ExpirationDate'    => compute_expiration_date(lookup_db('Doc_Templates', 'Validity', $applicationRequirementData->DocumentID)),
-                                        'Status'            => 1,
-                                        'CreatedBy'         => current_user(),
-                                        'LastUpdate'        => date('Y-m-d H:i:s')
-                                    );
-
-                                    if ($currentDocumentData) {
-                                        $citizenDocumentData['id'] = $currentDocumentData->id;
-                                    } else {
-                                        $citizenDocumentData['AccountID'] = $applicationRequirementData->ApplicantID;
-                                        $citizenDocumentData['DocumentID']= $applicationRequirementData->DocumentID;
-                                        $citizenDocumentData['DateAdded'] = date('Y-m-d H:i:s');
-                                    }
-
-                                    if (!$this->mgovdb->saveData('UserDocuments', $citizenDocumentData)) {
-                                        $continue_requirement_update = false;
-                                        $return_data = array(
-                                            'status'    => false,
-                                            'message'   => 'Creating document record failed.'
-                                        );
-                                        $this->db->trans_rollback();
-                                    }
-
-                                    $applicationRequirementUpdate['Status']         = 2;
-                                    $applicationRequirementUpdate['DateCompleted']  = date('Y-m-d H:i:s');
-                                    $applicationRequirementUpdate['ApproverID']     = current_user();
-
-                                } else {
-                                    $applicationRequirementUpdate['Status'] = 1;
-                                }
-
-                                if ($continue_requirement_update) {
-
-                                    if ($this->mgovdb->saveData('Service_Application_Requirements', $applicationRequirementUpdate)) {
-
-                                        // count completed requirements
-                                        $completedRequirementCount = $this->mgovdb->getCount('Service_Application_Requirements', array(
+                                    $requirementProcessedFunctionCount = $this->mgovdb->getCount('Service_Application_Functions', array(
                                                             'ApplicationID' => $safData->ApplicationID,
-                                                            'Status'        => 2,
+                                                            'RequirementID' => $safData->RequirementID,
+                                                            'Status'        => 2
                                                         ));
 
-                                        $applicationUpdate['RequirementProcessedCount'] = $completedRequirementCount;
+                                    $applicationRequirementUpdate = array(
+                                        'id'            => $applicationRequirementData->id,
+                                        'UpdatedBy'     => current_user(),
+                                        'LastUpdate'    => date('Y-m-d H:i:s'),
+                                        'FunctionProcessedCount'    => $requirementProcessedFunctionCount,
+                                    );
 
-                                        $continue_main_application_update = true;
+                                    if ($requirementProcessedFunctionCount == $applicationRequirementData->FunctionCount) {
+
+                                        // save the actual the citizen document
+                                        // but check if there's no same active document, just update if found
+                                        $currentDocumentData = $this->mgovdb->getRowObjectWhere('UserDocuments', array(
+                                            'AccountID'     => $applicationRequirementData->ApplicantID,
+                                            'DocumentID'    => $applicationRequirementData->DocumentID,
+                                            'Status'        => 1,
+                                            'ExpirationDate > '=> date('Y-m-d')
+                                        ));
+
+                                        $citizenDocumentData = array(
+                                            'Code'              => $applicationRequirementData->Code,
+                                            'ApplicationID'     => $applicationRequirementData->ApplicationID,
+                                            'DocumentContent'   => $applicationRequirementData->DocumentDraft,
+                                            'ExpirationDate'    => compute_expiration_date(lookup_db('Doc_Templates', 'Validity', $applicationRequirementData->DocumentID)),
+                                            'Status'            => 1,
+                                            'CreatedBy'         => current_user(),
+                                            'LastUpdate'        => date('Y-m-d H:i:s')
+                                        );
+
+                                        if ($currentDocumentData) {
+                                            $citizenDocumentData['id'] = $currentDocumentData->id;
+                                        } else {
+                                            $citizenDocumentData['AccountID'] = $applicationRequirementData->ApplicantID;
+                                            $citizenDocumentData['DocumentID']= $applicationRequirementData->DocumentID;
+                                            $citizenDocumentData['DateAdded'] = date('Y-m-d H:i:s');
+                                        }
+
+                                        if (!$this->mgovdb->saveData('UserDocuments', $citizenDocumentData)) {
+                                            $continue_requirement_update = false;
+                                            $return_data = array(
+                                                'status'    => false,
+                                                'message'   => 'Creating document record failed.'
+                                            );
+                                            $this->db->trans_rollback();
+                                        }
+
+                                        $applicationRequirementUpdate['Status']         = 2;
+                                        $applicationRequirementUpdate['DateCompleted']  = date('Y-m-d H:i:s');
+                                        $applicationRequirementUpdate['ApproverID']     = current_user();
 
                                     } else {
-                                        $return_data = array(
-                                            'status'    => false,
-                                            'message'   => 'Updating requirement process failed.'
-                                        );
-                                        $this->db->trans_rollback();
+                                        $applicationRequirementUpdate['Status'] = 1;
                                     }
 
-                                }
+                                    if ($continue_requirement_update) {
 
-                            } else {
-                                $return_data = array(
-                                    'status'    => false,
-                                    'message'   => 'Invalid process requirement data.'
-                                );
-                            }
-                            
-                        } else {
-                            $continue_main_application_update = true;
-                        }
+                                        if ($this->mgovdb->saveData('Service_Application_Requirements', $applicationRequirementUpdate)) {
 
-                        if ($continue_main_application_update) {
+                                            // count completed requirements
+                                            $completedRequirementCount = $this->mgovdb->getCount('Service_Application_Requirements', array(
+                                                                'ApplicationID' => $safData->ApplicationID,
+                                                                'Status'        => 2,
+                                                            ));
 
-                            // get all completed functions
-                            $processedCount = $this->mgovdb->getCount('Service_Application_Functions', array(
-                                                    'ApplicationID' => $safData->ApplicationID,
-                                                    'Status'        => 2
-                                                ));
+                                            $applicationUpdate['RequirementProcessedCount'] = $completedRequirementCount;
 
-                            $applicationUpdate['FunctionProcessedCount'] = $processedCount;
+                                            $continue_main_application_update = true;
 
-                            // check if all functions and requirements are completed
-                            if ($processedCount == $applicationData->FunctionCount && $completedRequirementCount == $applicationData->RequirementCount) {
-
-                                $applicationUpdate['DateCompleted'] = date('Y-m-d H:i:s');
-                                $applicationUpdate['ApproverID']    = current_user();
-                                $applicationUpdate['Status']        = 2;
-
-                                if ($this->mgovdb->saveData('Service_Applications', $applicationUpdate)) {
-                                    $return_data = array(
-                                        'status'    => true,
-                                        'message'   => 'Process has been completed. This is also the last step for application completion.'
-                                    );
-                                    $this->db->trans_commit();
-                                } else {
-                                    $return_data = array(
-                                        'status'    => false,
-                                        'message'   => 'Updating application failed.'
-                                    );
-                                    $this->db->trans_rollback();
-                                }
-
-                            } else {
-                                // if not done, update application and create new entry for the next function to process
-                                if ($this->mgovdb->saveData('Service_Applications', $applicationUpdate)) {
-
-                                    // get the next function process
-                                    $next = false;
-                                    foreach ($processOrder as $k => &$v) {
-                                        if ($safData->FunctionID == $v['id']) {
-                                            if (isset($processOrder[$k+1])) {
-                                                $next = $processOrder[$k+1];
-                                            }
-                                            break;
-                                        }
-                                    }
-
-                                    if ($next) {
-
-                                        $nextApplicationFunctionData = array(
-                                            'ServiceID'     => $safData->ServiceID,
-                                            'ApplicationID' => $safData->ApplicationID,
-                                            'ApplicantID'   => $safData->ApplicantID,
-                                            'FunctionID'    => $next['id'],
-                                            'DateAdded'     => date('Y-m-d H:i:s')
-                                        );
-                                        if ($next['For'] != 'Main') {
-                                            $nextApplicationFunctionData['RequirementID'] = $next['For'];
-                                        }
-
-                                        if ($this->mgovdb->saveData('Service_Application_Functions', $nextApplicationFunctionData)) {
-                                            $return_data = array(
-                                                'status'    => true,
-                                                'message'   => 'Process has been completed.'
-                                            );
-                                            $this->db->trans_commit();
                                         } else {
                                             $return_data = array(
                                                 'status'    => false,
-                                                'message'   => 'Cannot save the next task to process. Try again later.'
+                                                'message'   => 'Updating requirement process failed.'
+                                            );
+                                            $this->db->trans_rollback();
+                                        }
+
+                                    }
+
+                                } else {
+                                    $return_data = array(
+                                        'status'    => false,
+                                        'message'   => 'Invalid process requirement data.'
+                                    );
+                                }
+                                
+                            } else {
+                                $continue_main_application_update = true;
+                            }
+
+                            if ($continue_main_application_update) {
+
+                                // get all completed functions
+                                $processedCount = $this->mgovdb->getCount('Service_Application_Functions', array(
+                                                        'ApplicationID' => $safData->ApplicationID,
+                                                        'Status'        => 2
+                                                    ));
+
+                                $applicationUpdate['FunctionProcessedCount'] = $processedCount;
+
+                                // check if all functions and requirements are completed
+                                if ($processedCount == $applicationData->FunctionCount && $completedRequirementCount == $applicationData->RequirementCount) {
+
+                                    $applicationUpdate['DateCompleted'] = date('Y-m-d H:i:s');
+                                    $applicationUpdate['ApproverID']    = current_user();
+                                    $applicationUpdate['Status']        = 2;
+
+                                    if ($this->mgovdb->saveData('Service_Applications', $applicationUpdate)) {
+                                        $return_data = array(
+                                            'status'    => true,
+                                            'message'   => 'Process has been completed. This is also the last step for application completion.'
+                                        );
+                                        $this->db->trans_commit();
+                                    } else {
+                                        $return_data = array(
+                                            'status'    => false,
+                                            'message'   => 'Updating application failed.'
+                                        );
+                                        $this->db->trans_rollback();
+                                    }
+
+                                } else {
+                                    // if not done, update application and create new entry for the next function to process
+                                    if ($this->mgovdb->saveData('Service_Applications', $applicationUpdate)) {
+
+                                        // get the next function process
+                                        $next = false;
+                                        foreach ($processOrder as $k => &$v) {
+                                            if ($safData->FunctionID == $v['id']) {
+                                                if (isset($processOrder[$k+1])) {
+                                                    $next = $processOrder[$k+1];
+                                                }
+                                                break;
+                                            }
+                                        }
+
+                                        if ($next) {
+
+                                            $nextApplicationFunctionData = array(
+                                                'ServiceID'     => $safData->ServiceID,
+                                                'ApplicationID' => $safData->ApplicationID,
+                                                'ApplicantID'   => $safData->ApplicantID,
+                                                'FunctionID'    => $next['id'],
+                                                'DateAdded'     => date('Y-m-d H:i:s')
+                                            );
+                                            if ($next['For'] != 'Main') {
+                                                $nextApplicationFunctionData['RequirementID'] = $next['For'];
+                                            }
+
+                                            if ($this->mgovdb->saveData('Service_Application_Functions', $nextApplicationFunctionData)) {
+                                                $return_data = array(
+                                                    'status'    => true,
+                                                    'message'   => 'Process has been completed.'
+                                                );
+                                                $this->db->trans_commit();
+                                            } else {
+                                                $return_data = array(
+                                                    'status'    => false,
+                                                    'message'   => 'Cannot save the next task to process. Try again later.'
+                                                );
+                                                $this->db->trans_rollback();
+                                            }
+
+                                        } else {
+                                            $return_data = array(
+                                                'status'    => false,
+                                                'message'   => 'Cannot find next task to process. Try again later.'
                                             );
                                             $this->db->trans_rollback();
                                         }
@@ -500,50 +531,48 @@ class Quickserve extends CI_Controller
                                     } else {
                                         $return_data = array(
                                             'status'    => false,
-                                            'message'   => 'Cannot find next task to process. Try again later.'
+                                            'message'   => 'Updating application failed.'
                                         );
                                         $this->db->trans_rollback();
                                     }
-
-                                } else {
-                                    $return_data = array(
-                                        'status'    => false,
-                                        'message'   => 'Updating application failed.'
-                                    );
-                                    $this->db->trans_rollback();
                                 }
+
                             }
 
+                        } else {
+                            $return_data = array(
+                                'status'    => false,
+                                'message'   => 'Updating process failed.'
+                            );
+                            $this->db->trans_rollback();
+                        }
+
+
+                        // send payment receipt if success trasaction, and
+                        // if has payment details, and
+                        // not a report application
+                        if ($return_data['status'] === true) {
+                            if ($serviceData && !in_array($serviceData->ServiceType, lookup('report_service_type'))) {
+                                $paymentData = $this->mgovdb->getRowObject('Service_Payments', $safData->id, 'ApplicationFunctionID');
+                                if ($paymentData) {
+                                    // send receipt
+                                    $receipt_data = prepare_payment_receipt_data($paymentData);
+                                    $emailData = array(
+                                        'from'      => array('info@mgov.ph', 'MGov Info'),
+                                        'to'        => array($receipt_data['payorData']->EmailAddress),
+                                        'subject'   => 'MGOV - Payment Receipt',
+                                        'message'   => view('email_templates/payment_receipt', $receipt_data, null, true)
+                                    );
+                                    send_email($emailData, true);
+                                }
+                            }
                         }
 
                     } else {
                         $return_data = array(
                             'status'    => false,
-                            'message'   => 'Updating process failed.'
+                            'message'   => 'Please provide payment details before processing.'
                         );
-                        $this->db->trans_rollback();
-                    }
-
-
-                    // send payment receipt if success trasaction, and
-                    // if has payment details, and
-                    // not a report application
-                    if ($return_data['status'] === true) {
-                        $serviceData = $this->mgovdb->getRowObject('Service_Services', $safData->ServiceID, 'id');
-                        if ($serviceData && !in_array($serviceData->ServiceType, lookup('report_service_type'))) {
-                            $paymentData = $this->mgovdb->getRowObject('Service_Payments', $safData->id, 'ApplicationFunctionID');
-                            if ($paymentData) {
-                                // send receipt
-                                $receipt_data = prepare_payment_receipt_data($paymentData);
-                                $emailData = array(
-                                    'from'      => array('info@mgov.ph', 'MGov Info'),
-                                    'to'        => array($receipt_data['payorData']->EmailAddress),
-                                    'subject'   => 'MGOV - Payment Receipt',
-                                    'message'   => view('email_templates/payment_receipt', $receipt_data, null, true)
-                                );
-                                send_email($emailData, true);
-                            }
-                        }
                     }
 
                 } else {

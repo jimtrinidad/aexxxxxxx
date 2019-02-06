@@ -379,12 +379,25 @@ function current_user($view = 'id')
 }
 
 /**
+* get user raw data
+*/
+function get_user($userID)
+{
+	$ci =& get_instance();
+	$user = $ci->mgovdb->getRowObject('UserAccountInformation', $userID, 'id');
+	if ($user) {
+		return $user;
+	}
+
+	return false;
+}
+
+/**
 * get user profile pic
 */
 function get_user_photo($userID)
 {
-	$ci =& get_instance();
-	$user = $ci->mgovdb->getRowObject('UserAccountInformation', $userID, 'id');
+	$user = get_user($userID);
 	return photo_filename(($user ? $user->Photo : ''));
 }
 
