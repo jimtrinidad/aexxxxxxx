@@ -67,9 +67,9 @@
 <!-- Secondary Navigation -->
 <div class="bg-light-gray seconday-nav">
   <ul>
-    <li><a href="<?php echo site_url('account'); ?>">My Account <!-- <i class="fa fa-caret-down" aria-hidden="true"></i> --></a></li>
-    <li><a href="<?php echo site_url('trabaho'); ?>">Profile <!-- <i class="fa fa-caret-down" aria-hidden="true"></i> --></a></li>
-    <li><a href="#">Mobile Wallet <!-- <i class="fa fa-caret-down" aria-hidden="true"></i> --></a></li>
+    <li><a href="<?php echo site_url('account'); ?>">My Account</a></li>
+    <!-- <li><a href="<?php echo site_url('trabaho'); ?>">Profile</a></li> -->
+    <!-- <li><a href="#">Mobile Wallet</a></li> -->
   </ul>
 </div>
 <!-- Secondary Navigation End

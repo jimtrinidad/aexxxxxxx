@@ -42,7 +42,7 @@ class Account extends CI_Controller
 
         // var_dump(get_department_service_provided(17, array(17 => 5)));exit;
         // print_data(get_service_providers(1, array()));
-        print_data(user_account_details(), true); exit;
+        // print_data(user_account_details(), true); exit;
 
         $data['userData']       = user_account_details();
         $data['extraFields']    = json_decode('{"HxODTWeU":"main pet name","ihOfLUPQ":"desc","QqrsxG":"the <b>brgy</b> purpose"}', true);
@@ -321,6 +321,72 @@ class Account extends CI_Controller
                     'message'   => 'Invalid user.'
                 );
             }
+        }
+
+        response_json($return_data);
+    }
+
+    /**
+    * update profile picture
+    */
+    public function changeprofile()
+    {
+
+        $userData = $this->mgovdb->getRowObject('UserAccountInformation', get_post('mid'), 'MabuhayID');
+        if ($userData) {
+
+            $photoFilename  = md5($userData->RegistrationID);
+
+            // validate file upload
+            $this->load->library('upload', array(
+                'upload_path'   => PHOTO_DIRECTORY,
+                'allowed_types' => 'gif|jpg|png',
+                'max_size'      => '2000', // 2mb
+                'max_width'     => '1024',
+                'max_height'    => '768',
+                'overwrite'     => true,
+                'file_name'     => $photoFilename
+            ));
+
+            if (empty($_FILES['avatarFile']['name'])) {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'No image selected.'
+                );
+            } else {
+                if ($this->upload->do_upload('avatarFile') == false) {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Uploading picture failed.',
+                        'fields'    => array('avatarFile' => $this->upload->display_errors('',''))
+                    );
+                } else {
+
+                    $updateData = array(
+                        'id'         => $userData->id,
+                        'Photo'      => $this->upload->data('file_name'),
+                        'LastUpdate' => date('Y-m-d H:i:s')
+                    );
+
+                    if ($this->mgovdb->saveData('UserAccountInformation', $updateData)) {
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Profile picture has been updated successfully'
+                        );
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Saving new picture failed.'
+                        );
+                    }
+
+                }
+            }
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Invalid user.'
+            );
         }
 
         response_json($return_data);

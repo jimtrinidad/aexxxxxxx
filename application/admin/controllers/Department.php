@@ -618,7 +618,8 @@ class Department extends CI_Controller
                                 'DepartmentID'          => $DepartmentID,
                                 'SubDepartmentID'       => $SubDepartmentID, 
                                 'DepartmentLocationID'  => $locID,
-                                'AccountID'             => $accountID
+                                'AccountID'             => $accountID,
+                                'FunctionTypeID'        => $functionTypeID
                             );
             $officer = $this->mgovdb->getRecords('Dept_Officers', $officerWhere, 'id', array(1));
             if (count($officer)) {
@@ -655,7 +656,7 @@ class Department extends CI_Controller
             } else {
                 $return_data = array(
                     'status'    => false,
-                    'message'   => 'Officer already assigned on this deparment.',
+                    'message'   => 'Officer already assigned on this deparment with the same function.',
                 );
             }
 

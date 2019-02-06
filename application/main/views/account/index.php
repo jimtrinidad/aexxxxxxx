@@ -4,7 +4,7 @@
 		<div class="col-xs-3">
 			<!-- Profile Menu-->
 			<div class="profile-img">
-				<img style="width: 100%;max-width: 170px;margin: 0 auto;" src="<?php echo public_url(); ?>assets/profile/<?php echo $accountInfo->Photo ?>" class="img-responsive"/>
+				<img style="width: 100%;max-width: 170px;margin: 0 auto;" src="<?php echo public_url(); ?>assets/profile/<?php echo $accountInfo->Photo ?>" class="img-responsive i-profile"/>
 				<img class="visible-xs" src="<?php echo public_url() . 'assets/qr/' . $accountInfo->QR ?>" style="width: 100%;max-width: 60px;background: white;margin-top: 10px;"/>
 			</div>
 		</div>
@@ -28,7 +28,7 @@
 				<!-- <img src="<?php echo public_url(); ?>resources/images/mak-id-2.png" class="img-responsive" /> -->
 			</div>
 
-			<button class="btn btn-sm bg-green text-white btn-block offset-top-10">UPDATE PROFILE</button>
+			<button class="btn btn-sm bg-green text-white btn-block offset-top-10" onclick="Account.changeProfileOpen()">UPDATE PROFILE</button>
 
 		</div>
 	</div>

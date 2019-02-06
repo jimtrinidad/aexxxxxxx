@@ -746,7 +746,7 @@ function Department() {
             $('#departmentOfficersListModal #result_message').text('').addClass('hidden');
             var template = '';
             $.each(currentOfficers, function(i,e){
-                template += '<tr id="officer_row_'+e.AccountID+'" data-id="'+e.id+'">';
+                template += '<tr id="officer_row_'+e.AccountID+'_'+e.FunctionTypeID+'" data-id="'+e.id+'">';
                 template += '<td><img class="logo-small" src="' + window.public_url() + 'assets/profile/' + (e.Photo != '' ? e.Photo : 'avatar_default.jpg') + '"></td>';
                 template += '<td>' + e.MabuhayID + '</td>';
                 template += '<td>' + e.FirstName + ' ' + e.LastName + '</td>';
@@ -927,8 +927,9 @@ function Department() {
     this.saveDepartmentOfficer = function(form)
     {
         var selectedAccountID = $('#DepartmentOfficerForm #SelectedAccountID').val();
-        if ($('#departmentOfficersListModal #officer_row_' + selectedAccountID).length) {
-            bootbox.alert('Officer is already assigned on this department.');
+        var selectedFunctionID = $('#DepartmentOfficerForm #FunctionTypeID').val();
+        if ($('#departmentOfficersListModal #officer_row_' + selectedAccountID+'_'+selectedFunctionID).length) {
+            bootbox.alert('Officer is already assigned on this department with the same function.');
         } else {
 
             // prenvet multiple calls
@@ -959,8 +960,9 @@ function Department() {
                     if (response.status) {
                         $('#departmentOfficersListModal #result_message').text('').addClass('hidden');
                         $.each(response.data, function(i,e){
+                            var row_id = e.AccountID+'_'+e.FunctionTypeID;
                             var template = '';
-                                template += '<tr id="officer_row_'+e.AccountID+'" data-id="'+e.id+'">';
+                                template += '<tr id="officer_row_'+row_id+'" data-id="'+e.id+'">';
                                 template += '<td><img class="logo-small" src="' + window.public_url() + 'assets/profile/' + (e.Photo != '' ? e.Photo : 'avatar_default.jpg') + '"></td>';
                                 template += '<td>' + e.MabuhayID + '</td>';
                                 template += '<td>' + e.FirstName + ' ' + e.LastName + '</td>';
@@ -979,8 +981,8 @@ function Department() {
                                             </td>';
                                 template += '</tr>';
                             $('#departmentOfficersListModal #tableBody').append(template);
-                            self.setEditableFunction($('#departmentOfficersListModal #officer_row_'+e.AccountID+' .officerFunction'));
-                            self.setEditablePosition($('#departmentOfficersListModal #officer_row_'+e.AccountID+' .officerPosition'));
+                            self.setEditableFunction($('#departmentOfficersListModal #officer_row_'+row_id+' .officerFunction'));
+                            self.setEditablePosition($('#departmentOfficersListModal #officer_row_'+row_id+' .officerPosition'));
                         });
                         self.officerChanged = true;
                         $('#departmentOfficersListModal #tableData').removeClass('hidden');

@@ -99,6 +99,12 @@ label {
   height: 120px;
 }
 
+.bigger.image-upload-container {
+  width: 170px;
+  height: 180px;
+  margin-top: 0;
+}
+
 .smaller.image-upload-container {
   width: 50px;
   height: 50px;
@@ -122,6 +128,12 @@ label {
   width: 120px;
   height: 120px;
   min-height: 120px;
+}
+
+.bigger .image-preview{
+  width: 170px;
+  height: 170px;
+  min-height: 50px;
 }
 
 .smaller .image-preview{

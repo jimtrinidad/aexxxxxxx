@@ -131,6 +131,19 @@
           echo '<td>' . $item['FunctionName'] . '</td>';
           echo '<td class="qs-buttons">';
 
+            // payments
+            if ($item['FunctionTypeID'] == 4) {
+              if ($item['safStatus'] == 0) {
+                if (is_current_url('quickserve', 'index')) {
+                  echo '<a href="javascript:;" onClick="Quickserve.setPayment(this);"><i class="fa fa-credit-card padding-5 bg-yellow text-black" aria-hidden="true"></i></a>';
+                }
+              } else {
+                if ($item['paymentInfo']) {
+                  echo '<a href="javascript:;" onClick="Quickserve.paymentReceipt('.$item['paymentInfo']->id.');"><i class="fa fa-file-text padding-5 bg-yellow text-black" aria-hidden="true"></i></a>';
+                }
+              }
+            }
+
             if (is_current_url('quickserve', 'index')) {
 
               if ($item['safStatus'] == 0) {
@@ -147,18 +160,7 @@
 
             echo '<a href="javascript:;" onClick="Quickserve.viewDetails(this);"><i class="fa fa-search padding-5 bg-cyan text-white" aria-hidden="true"></i></a>';
             echo '<a href="javascript:;" onClick="Quickserve.viewFeedbacks(this);"><i class="fa fa-comments padding-5 bg-blue text-white" aria-hidden="true"></i></a>';
-            // payments
-            if ($item['FunctionTypeID'] == 4) {
-              if ($item['safStatus'] == 0) {
-                if (is_current_url('quickserve', 'index')) {
-                  echo '<a href="javascript:;" onClick="Quickserve.setPayment(this);"><i class="fa fa-credit-card padding-5 bg-yellow text-black" aria-hidden="true"></i></a>';
-                }
-              } else {
-                if ($item['paymentInfo']) {
-                  echo '<a href="javascript:;" onClick="Quickserve.paymentReceipt('.$item['paymentInfo']->id.');"><i class="fa fa-file-text padding-5 bg-yellow text-black" aria-hidden="true"></i></a>';
-                }
-              }
-            }
+
           echo '</td>';
           echo '<td>' . $item['duration'] . '</td>';
           echo '<td>' . $item['reqProgress'] . '</td>';

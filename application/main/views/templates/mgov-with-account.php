@@ -39,8 +39,8 @@
 					</div>
 					<!-- Profile Menu-->
 					<div class="profile-img">
-						<img style="max-width: 234px;margin: 0 auto;" src="<?php echo public_url(); ?>assets/profile/<?php echo $accountInfo->Photo ?>" class="img-responsive"/>
-						<button class="btn btn-sm bg-green text-white btn-block offset-top-10">UPDATE PROFILE</button>
+						<img style="max-width: 234px;max-height: 250px;margin: 0 auto;" src="<?php echo public_url(); ?>assets/profile/<?php echo $accountInfo->Photo ?>" class="img-responsive i-profile"/>
+						<button class="btn btn-sm bg-green text-white btn-block offset-top-10" onclick="Account.changeProfileOpen()">UPDATE PROFILE</button>
 					</div>
 					
 					<!-- Profile Data -->
@@ -89,7 +89,7 @@
 
 	    <?php view('templates/mabuhay_id'); ?>
 	    <?php view('snippets/chat'); ?>
-	    <?php view('modals/changepassword'); ?>
+	    <?php view('modals/account-modals'); ?>
 
 	</body>
 

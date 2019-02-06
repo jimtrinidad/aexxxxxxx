@@ -38,6 +38,11 @@ function Account() {
         $('#ChangePasswordForm').submit(function(e) {
             e.preventDefault();
             self.changePassword(this);
+        });
+
+        $('#ChangeProfileForm').submit(function(e) {
+            e.preventDefault();
+            self.changeProfile(this);
         })
 
     }
@@ -265,6 +270,94 @@ function Account() {
             processData: false
         });
     }
+
+    /**
+    * change profile pic form modal
+    */
+    this.changeProfileOpen = function()
+    {
+        // reset form data
+        $('#ChangeProfileForm').trigger("reset");
+
+        // reset input erros
+        $.each($('#ChangeProfileForm').find('input,select,textarea'), function(i,e){
+            $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger');
+            $(e).popover('destroy');
+        });
+        //clean error box
+        $('#ChangeProfileForm').find('#error_message_box .error_messages').html('');
+        $('#ChangeProfileForm').find('#error_message_box').addClass('hide');
+
+        $('#changeProfileModal .modal-title .header-action').html('Change Profile');
+        $('#changeProfileModal').modal({
+            backdrop : 'static',
+            keyboard : false
+        });
+    }
+
+    this.changeProfile = function(form)
+    {
+        // prenvet multiple calls
+        if ($(form).data('running')) {
+            return false;
+        }
+
+        $(form).data('running', true);
+        $(form).find('input').blur();
+        $(form).LoadingOverlay("show");
+
+        var formData = new FormData(form);
+        
+        // reset input erros
+        $.each($(form).find('input, select, textarea'), function(i,e){
+            $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger');
+            $(e).popover('destroy');
+        });
+        //clean error box
+        $(form).find('#error_message_box .error_messages').html('');
+        $(form).find('#error_message_box').addClass('hide');
+
+        $.ajax({
+            url: $(form).prop('action'),
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                if (response.status) {
+                    bootbox.alert(response.message);
+                    $('#changeProfileModal').modal('hide');
+                    var imgsrc = $('.profile-img').find('img').prop('src') + "?" + Date.now();
+                    // profile
+                    $('.profile-img').find('img.i-profile').prop('src', imgsrc);
+                    // modal image
+                    $('#changeProfileModal').find('.image-preview').prop('src', imgsrc);
+                    // id
+                    $('.profile-photo img.avatar').prop('src', imgsrc);
+                } else {
+                    $(form).find('#error_message_box .error_messages').append('<p><b>' + response.message + '</b></p>');
+
+                    $.each(response.fields, function(i,e){
+                        $(form).find('#'+i).prop('title', e).closest('div').addClass('has-error').find('label').addClass('text-danger');
+                        Utils.popover($('#'+i), {
+                            t: 'hover',
+                            p: 'top',
+                            m: e
+                        });
+                        $(form).find('#error_message_box .error_messages').append('<p>' + e + '</p>');
+                    });
+
+                    $(form).find('#error_message_box').removeClass('hide');
+                }
+            },
+            complete: function() {
+                $(form).LoadingOverlay("hide");
+                $(form).data('running', false);
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    }
+
 }
 
 var Account = new Account();

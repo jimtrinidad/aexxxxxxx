@@ -35,12 +35,50 @@
                 </div>
               </div>
             </div>
-            <input type="hidden" id="mid" name="mid" value="<?php echo $accountInfo->MabuhayID?>">
+            <input type="hidden" name="mid" value="<?php echo $accountInfo->MabuhayID?>">
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
           <button type="submit" class="btn btn-success">Change</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="changeProfileModal" tabindex="-1" role="dialog" aria-labelledby="changeProfileModal">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <form id="ChangeProfileForm" name="ChangeProfileForm" action="<?php echo site_url('account/changeprofile') ?>" enctype="multipart/form-data">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title"><b class="text-bold">Account</b> | Change Profile</h4>
+        </div>
+        <div class="modal-body">
+          <div id="error_message_box" class="hide row">
+            <br>
+            <div class="error_messages no-border-radius alert alert-danger small" role="alert"></div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-xs-12 text-center">
+                <div class="bigger image-upload-container padding-top-10">
+                  <img class="image-preview" src="<?php echo public_url(); ?>assets/profile/<?php echo $accountInfo->Photo?>" alt="...">
+                  <span class="hiddenFileInput hide">
+                    <input type="file" accept="image/*" class="image-upload-input" id="avatarFile" name="avatarFile"/>
+                  </span>
+                </div>
+                <span class="help-block">Click on the photo to choose new one</span>
+              </div>
+            </div>
+            <input type="hidden" name="mid" value="<?php echo $accountInfo->MabuhayID?>">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-success">Update</button>
         </div>
       </form>
     </div>
