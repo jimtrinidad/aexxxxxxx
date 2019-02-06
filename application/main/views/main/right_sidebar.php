@@ -59,6 +59,7 @@
     <div class="row">
       
     </div>
+    <a style="position: absolute;bottom: 2px;right: 5px;text-decoration: none;" class="text-bold org-ranking-view-button" data-view="partial" href="javascript:;" onclick="Mgovph.load_organization_ranking()">Ranked</a>
   </div>
 
   <div class="col-md-12 top-performance-services offset-top-10" id="currency-cont">

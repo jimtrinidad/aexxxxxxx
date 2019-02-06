@@ -132,27 +132,37 @@ function Mgovph() {
         var cont = $('#org-ranking-cont');
         if (cont.length) {
             cont.LoadingOverlay("show");
+            var all = false;
+            var view = cont.find('.org-ranking-view-button').data('view');
+            if (view == 'all') {
+                all = true;
+                cont.find('.org-ranking-view-button').data('view', 'partial');
+                cont.find('.org-ranking-view-button').text('Top 20');
+            } else {
+                cont.find('.org-ranking-view-button').data('view', 'all');
+                cont.find('.org-ranking-view-button').text('View All');
+            }
             $.ajax({
-                url  : window.base_url('get/organization_report_rank'),
+                url  : window.base_url('get/organization_report_rank' + (all ? '?all' : '')),
                 type : 'get',
                 cache: true,
                 success : function(response) {
                     if (response.status) {
                         cont.find('h2').text(response.name + ' Performance');
-                        var tpl = `<div class="col-xs-6">`;
+                        // var tpl = `<div class="col-xs-6">`;
 
-                        tpl += `<ul>`;
+                        // tpl += `<ul>`;
 
-                        $.each(response.data, function(i,e) {
-                            tpl += `<li>${e.FirstName.substr(0, 1)}. ${e.LastName}<span>${e.Applications}</span></li>`;
-                            if (i == 9) {
-                                tpl += `</ul></div><div class="col-xs-6"><ul>`;
-                            }
-                        });
+                        // $.each(response.data, function(i,e) {
+                        //     tpl += `<li>${e.FirstName.substr(0, 1)}. ${e.LastName}<span>${e.Applications}</span></li>`;
+                        //     if (i == 9) {
+                        //         tpl += `</ul></div><div class="col-xs-6"><ul>`;
+                        //     }
+                        // });
 
-                        tpl += `</ul></div>`;
+                        // tpl += `</ul></div>`;
 
-                        cont.find('div.row').html(tpl);
+                        cont.find('div.row').html(self.generate_organization_ranking(response.data));
 
                         cont.removeClass('hide');
                     }
@@ -162,6 +172,29 @@ function Mgovph() {
                 }
             });
         }
+    }
+
+    this.generate_organization_ranking = function(data)
+    {
+
+        mid = Math.ceil(data.length/2),
+        obj = {
+            left: data.slice(0, mid),
+            right: data.slice(mid)
+        };
+
+        var tpl = '';
+        var ctr = 1;
+        $.each(obj, function(j,k){
+            tpl += `<div class="col-xs-6"><ul>`;
+            $.each(k, function(i,e){
+                tpl += `<li><i class="small text-cyan">${ctr})</i> ${e.FirstName.substr(0, 1)}. ${e.LastName}<span>${e.Applications}</span></li>`;
+                ctr++;
+            });
+            tpl += `</ul></div>`;
+        });
+
+        return tpl;
     }
 
     /**

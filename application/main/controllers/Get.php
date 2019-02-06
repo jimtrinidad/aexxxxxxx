@@ -526,6 +526,8 @@ class Get extends CI_Controller
 
         check_authentication();
 
+        $all = get_post('all');
+
         $user = $this->mgovdb->getRowObject('UserAccountInformation', current_user(), 'id');
 
         if ($user->OrganizationID) {
@@ -541,8 +543,11 @@ class Get extends CI_Controller
                     AND ss.InOrganization = 1
                     AND ss.SubDepartmentID = ?
                     GROUP BY ua.id
-                    ORDER BY Applications DESC
-                    LIMIT 20";
+                    ORDER BY Applications DESC";
+
+            if (is_null($all)) {
+                $sql .= " LIMIT 20";
+            }
 
             $results = $this->db->query($sql, array($user->OrganizationID))->result_array();
 
