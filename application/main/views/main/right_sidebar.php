@@ -56,7 +56,7 @@
 
   <div class="col-md-12 top-performance-services offset-top-10 hide" id="org-ranking-cont">
     <h2 class="org-ranking-title">Organization Performance</h2>
-    <div class="row">
+    <div class="row offset-bottom-10">
       
     </div>
     <a style="position: absolute;bottom: 2px;right: 5px;text-decoration: none;" class="text-bold org-ranking-view-button" data-view="partial" href="javascript:;" onclick="Mgovph.load_organization_ranking()">Ranked</a>
