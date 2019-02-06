@@ -233,7 +233,7 @@
                   echo '</tr>';
                 }
                 // row placeholder
-                for (;$i < 7; $i++) {
+                for (;$i < 4; $i++) {
                   echo '<tr>
                         <td></td>
                         <td></td>
