@@ -188,7 +188,7 @@ function Mgovph() {
         $.each(obj, function(j,k){
             tpl += `<div class="col-xs-6"><ul>`;
             $.each(k, function(i,e){
-                tpl += `<li><i class="small text-cyan">${ctr})</i> ${e.FirstName.substr(0, 1)}. ${e.LastName}<span>${e.Applications}</span></li>`;
+                tpl += `<li><i class="small text-cyan">${ctr})</i>&nbsp; ${e.FirstName.substr(0, 1)}. ${e.LastName}<span>${e.Applications}</span></li>`;
                 ctr++;
             });
             tpl += `</ul></div>`;
