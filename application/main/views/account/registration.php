@@ -2,8 +2,8 @@
   <div class="modal-dialog modal-lg animated fadeInUp">
     
     <div class="modal-content" style="background-color:transparent;">
-      <div class="modal-body">
-        <div class="row">
+      <div class="modal-body padding-5">
+        <div class="row gutter-5">
           <div class="col-sm-12">
               <div class="login-container col-md-12 padding-top-10">
                 <div class="row">
@@ -32,9 +32,9 @@
                     <div class="error_messages alert alert-danger" role="alert"></div>
                   </div>
                   <input type="hidden" id="RegistrationID" name="RegistrationID" class="form-control" value="<?php echo $RegistrationID; ?>">
-                  <div class="row padding-top-10">
+                  <div class="row gutter-5 padding-top-10">
 
-                    <div class="col-md-3 col-md-push-9">
+                    <div class="col-md-3 col-md-push-9 col-xs-6 col-xs-push-6">
                       <div class="image-upload-container padding-top-20">
                         <img class="image-preview" src="<?php echo public_url(); ?>assets/profile/avatar_default.jpg" alt="...">
                         <span class="hiddenFileInput hide">
@@ -43,23 +43,25 @@
                       </div>
                     </div>
 
-                    <div class="col-md-9 col-md-pull-3">
-                        <div class="row">
-                          <div class="col-md-4">
+                    <div class="col-md-9 col-md-pull-3 col-xs-6 col-xs-pull-6">
+                        <div class="row gutter-5">
+                          <div class="col-md-4 col-xs-12">
                             <label class="text-white padding-bottom-5">First Name</label>
                             <input type="text" id="FirstName" name="FirstName" class="form-control" placeholder="">
                           </div>
-                          <div class="col-md-4">
+                          <div class="col-md-4 col-xs-12">
                             <label class="text-white padding-bottom-5">Middle Name</label>
                             <input type="text" id="MiddleName" name="MiddleName" class="form-control has-error" placeholder="">
                           </div>
-                          <div class="col-md-4">
+                          <div class="col-md-4 col-xs-12">
                             <label class="text-white padding-bottom-5">Last Name</label>
                             <input type="text" id="LastName" name="LastName" class="form-control" placeholder="">
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col-md-4">
+
+                        <div class="row gutter-5 hidden-xs hidden-sm showonmd">
+
+                          <div class="col-md-4 col-xs-6">
                             <label class="text-white padding-bottom-5">Gender</label>
                             <select id="GenderID" name="GenderID" class="form-control">
                               <option value="">--</option>
@@ -71,18 +73,54 @@
                             </select>
                           </div>
 
-                          <div class="col-md-4">
+                          <div class="col-md-4 col-xs-6">
                             <label class="text-white padding-bottom-5">Birth Date</label>
                             <input type="text" autocomplete="off" id="BirthDate" name="BirthDate" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask>
                           </div>
 
-                          <div class="col-md-4">
+                          <div class="col-md-4 col-xs-6">
                             <label class="text-white padding-bottom-5">Contact Number</label>
                             <input type="text" id="ContactNumber" name="ContactNumber" class="form-control" placeholder="">
                           </div>
+
+                          <div class="col-md-12 col-xs-6">
+                            <label class="text-white padding-bottom-5">Email Address</label>
+                            <input type="text" id="EmailAddress" name="EmailAddress" class="form-control" placeholder="">
+                          </div>
+
                         </div>
-                        <div class="row">
-                          <div class="col-md-12">
+
+                    </div>
+
+                  </div>
+
+                  <div class="row gutter-5 hidden-md hidden-lg showonsm">
+                    <div class="col-md-9 col-xs-12">
+                        <div class="row gutter-5">
+
+                          <div class="col-md-4 col-xs-6">
+                            <label class="text-white padding-bottom-5">Gender</label>
+                            <select id="GenderID" name="GenderID" class="form-control">
+                              <option value="">--</option>
+                              <?php
+                                foreach (lookup('gender') as $k => $v) {
+                                  echo "<option value='{$k}'>{$v}</option>";
+                                }
+                              ?>
+                            </select>
+                          </div>
+
+                          <div class="col-md-4 col-xs-6">
+                            <label class="text-white padding-bottom-5">Birth Date</label>
+                            <input type="text" autocomplete="off" id="BirthDate" name="BirthDate" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask>
+                          </div>
+
+                          <div class="col-md-4 col-xs-6">
+                            <label class="text-white padding-bottom-5">Contact Number</label>
+                            <input type="text" id="ContactNumber" name="ContactNumber" class="form-control" placeholder="">
+                          </div>
+
+                          <div class="col-md-12 col-xs-6">
                             <label class="text-white padding-bottom-5">Email Address</label>
                             <input type="text" id="EmailAddress" name="EmailAddress" class="form-control" placeholder="">
                           </div>
@@ -91,8 +129,8 @@
                     </div>
                   </div>
 
-                  <div class="row">
-                    <div class="col-md-4">
+                  <div class="row gutter-5">
+                    <div class="col-md-4 col-xs-6">
                       <label class="text-white padding-bottom-5">Marital Status</label>
                       <select id="MaritalStatusID" name="MaritalStatusID" class="form-control">
                         <option value="">--</option>
@@ -103,7 +141,7 @@
                         ?>
                       </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-xs-6">
                       <label class="text-white padding-bottom-5">Educational Attainment</label>
                       <select id="EducationalAttainmentID" name="EducationalAttainmentID" class="form-control">
                         <option value="">--</option>
@@ -114,7 +152,7 @@
                         ?>
                       </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-xs-6">
                       <label class="text-white padding-bottom-5">Present Livelihood Status</label>
                       <select id="LivelihoodStatusID" name="LivelihoodStatusID" class="form-control">
                         <option value="">--</option>
@@ -125,9 +163,7 @@
                         ?>
                       </select>
                     </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12 col-xs-6">
                       <label class="text-white padding-bottom-5">City or Municipality</label>
                       <select id="MunicipalityCityID" name="MunicipalityCityID" class="form-control" onChange="Account.loadBarangayOptions(BarangayID, this)">
                         <option value="">--</option>
@@ -138,23 +174,17 @@
                         ?>
                       </select>
                     </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12" id="LoadBarangay">
+                    <div class="col-md-12 col-xs-6" id="LoadBarangay">
                       <label class="text-white padding-bottom-5">Barangay</label>
                       <select id="BarangayID" disabled="disabled" name="BarangayID" class="form-control">
                         <option value="">--</option>
                       </select>
                     </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12 col-xs-6">
                       <label class="text-white padding-bottom-5">Building, Street, etc..</label>
                       <input type="text" id="StreetPhase" name="StreetPhase" class="form-control">
                     </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12 col-xs-12">
                       <label class="text-white padding-bottom-5">Organization</label>
                       <select id="OrganizationID" name="OrganizationID" class="form-control">
                         <option value="">--</option>

@@ -43,8 +43,24 @@ function Account() {
         $('#ChangeProfileForm').submit(function(e) {
             e.preventDefault();
             self.changeProfile(this);
-        })
+        }) 
 
+        self.showhide_registration_elem();
+        $(window).resize(function(){
+            self.showhide_registration_elem();
+        });
+
+    }
+
+    this.showhide_registration_elem = function()
+    {
+        if ($('.showonmd').is(':visible')) {
+            $('.showonmd').find('input,select').prop('disabled', false);
+            $('.showonsm').find('input,select').prop('disabled', true);
+        } else {
+            $('.showonmd').find('input,select').prop('disabled', true);
+            $('.showonsm').find('input,select').prop('disabled', false);
+        }
     }
 
     /**
