@@ -48,6 +48,13 @@ class Quickserve extends CI_Controller
             $params[] = $date . ' 00:00:00';
             $params[] = $date . ' 23:59:59';
         }
+        if (get_post('service')) {
+            $where[] = "(ss.Name LIKE ? OR ss.Description LIKE ? OR ss.Code LIKE ?)";
+            $squery = $this->db->escape_like_str(get_post('service'));
+            $params[] = "%{$squery}%";
+            $params[] = "%{$squery}%";
+            $params[] = "%{$squery}%";
+        }
         if (get_post('searchQuery')) {
             $where[] = "(sa.ExtraFields LIKE ? OR uai.FirstName LIKE ? OR uai.LastName LIKE ?)";
             $squery = $this->db->escape_like_str(get_post('searchQuery'));
@@ -133,6 +140,13 @@ class Quickserve extends CI_Controller
             $date = date('Y-m-d', strtotime(get_post('date')));
             $params[] = $date . ' 00:00:00';
             $params[] = $date . ' 23:59:59';
+        }
+        if (get_post('service')) {
+            $where[] = "(ss.Name LIKE ? OR ss.Description LIKE ? OR ss.Code LIKE ?)";
+            $squery = $this->db->escape_like_str(get_post('service'));
+            $params[] = "%{$squery}%";
+            $params[] = "%{$squery}%";
+            $params[] = "%{$squery}%";
         }
         if (get_post('searchQuery')) {
             $where[] = "(sa.ExtraFields LIKE ? OR uai.FirstName LIKE ? OR uai.LastName LIKE ?)";

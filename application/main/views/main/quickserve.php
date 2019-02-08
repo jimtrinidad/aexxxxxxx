@@ -44,6 +44,10 @@
             <input type="text" name="applicationCode" class="form-control input-sm" value="<?php echo get_post('applicationCode')?>">
           </div>
           <div class="col-md-2">
+            <label class="text-white text-bold padding-bottom-5">Service</label>
+            <input type="text" name="service" class="form-control input-sm" value="<?php echo get_post('service')?>">
+          </div>
+          <div class="col-md-1">
             <label class="text-white text-bold padding-bottom-5">Status</label>
             <select class="form-control input-sm" name="status">
               <option value="" <?php echo get_post('status') == '' ? 'selected="selected"' : ''?>></option>
@@ -56,7 +60,7 @@
             <label class="text-white text-bold padding-bottom-5">Advance Search</label>
             <input type="text" name="searchQuery" class="form-control input-sm" value="<?php echo get_post('searchQuery')?>">
           </div>
-          <div class="col-md-2">
+          <div class="col-md-1">
             <label class="text-white text-bold padding-bottom-5">&nbsp;</label>
             <button class="btn btn-block btn-sm bg-cyan text-white">Search</button>
           </div>
