@@ -85,7 +85,7 @@
 
                           <div class="col-md-12 col-xs-6">
                             <label class="text-white padding-bottom-5">Email Address</label>
-                            <input type="text" id="EmailAddress" name="EmailAddress" class="form-control" placeholder="">
+                            <input type="text" id="EmailAddress" name="EmailAddress" class="form-control EmailAddress" placeholder="">
                           </div>
 
                         </div>
@@ -122,7 +122,7 @@
 
                           <div class="col-md-12 col-xs-6">
                             <label class="text-white padding-bottom-5">Email Address</label>
-                            <input type="text" id="EmailAddress" name="EmailAddress" class="form-control" placeholder="">
+                            <input type="text" id="EmailAddress" name="EmailAddress" class="form-control EmailAddress" placeholder="">
                           </div>
 
                         </div>

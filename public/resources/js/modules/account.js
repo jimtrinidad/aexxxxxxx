@@ -160,8 +160,8 @@ function Account() {
                     // bootbox.alert(response.message);
                     var errors = '';
                     $.each(response.fields, function(i,e){
-                        $('#'+i).prop('title', e).closest('div').addClass('has-error').find('label').removeClass('text-white').addClass('text-danger');
-                        Utils.popover($('#'+i), {
+                        $('#'+i+',.'+i).prop('title', e).closest('div').addClass('has-error').find('label').removeClass('text-white').addClass('text-danger');
+                        Utils.popover($('#'+i+',.'+i), {
                             t: 'hover',
                             p: 'top',
                             m: e
