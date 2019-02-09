@@ -1,0 +1,1 @@
+<?php view('reports/organization/navigation'); ?>
