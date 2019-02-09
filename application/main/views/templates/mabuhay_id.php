@@ -1,11 +1,32 @@
 <div class="id-overlay"></div>
 <div id="mak-id">
 	<div class="left-logo">
-		<img src="<?php echo public_url(); ?>resources/images/mabuhay-logo-id.png" width="200" />
+		<img src="<?php echo public_url(); ?>resources/images/rp.png" width="200" />
+		<span class="txt">
+			<span class="m">MABUHAY</span>
+			<span class="c"><?php echo $accountInfo->PublicOffice ? $accountInfo->PublicOffice->Name : $accountInfo->citymunDesc?></span>
+			<span class="i">INTEGRATED GOVERNMENT SYSTEM IDENTIFICATION CARD</span>
+		</span>
 	</div>
 	<div class="right-logo">
 		<img src="<?php echo public_url() . (file_exists(LOGO_DIRECTORY . $accountInfo->CityData->logo) ? 'assets/logo/' . $accountInfo->CityData->logo : 'resources/images/republic.png') ?>" style="max-width: 70px;" /><br />
-		<p class="text-bold"><?php echo ucwords(strtolower($accountInfo->regDesc)) ?><br /> <?php echo ucwords(strtolower($accountInfo->citymunDesc)) ?></p>
+		<p class="text-bold">
+			<?php
+
+				$wordlist = array('city', 'of', 'municipal', 'municipality');
+				foreach ($wordlist as &$word) {
+				    $word = '/\b' . preg_quote($word, '/') . '\b/i';
+				}
+
+				$string = preg_replace($wordlist, '', $accountInfo->citymunDesc);
+
+				if ($accountInfo->CityData->type == 2) {
+					echo 'City Government of ' . ucwords(strtolower($string));
+				} else {
+					echo 'Municipal Government of ' . ucwords(strtolower($string));
+				}
+			?>
+		</p>
 	</div>
 	
 	<div class="profile-photo">
@@ -28,7 +49,11 @@
 	
 	<div class="qr-code">
 		<!-- <img src="<?php echo public_url(); ?>resources/images/qr-code.png" width="75" /> -->
-		<img src="<?php echo public_url() . 'assets/qr/' . $accountInfo->QR ?>" width="75" />
+		<img src="<?php echo public_url() . 'assets/qr/' . $accountInfo->QR ?>" width="75" class="qr-img" />
+		<img src="<?php echo public_url(); ?>resources/images/rp-flag-small.png" width="30" class="qr-flag" />
 	</div>
 	
 </div>
+<?php 
+// print_data($accountInfo, true);
+?>

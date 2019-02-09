@@ -143,7 +143,7 @@ ul#horizontal, #horizontal ul  {
 .top-gov-services ul li{ font-size: 13px; color: #145598; font-weight: bold; line-height: 18px; }
 
 .top-performance-services{ background: #ffffff; padding: 10px; min-height: 150px;}
-.top-performance-services h2{ text-transform: uppercase; color: #475f68; font-weight: bold; border-bottom: 5px solid #475f68; padding-bottom: 5px; margin-bottom: 10px; font-size: 14px; }
+.top-performance-services h2{ text-transform: uppercase; color: #475f68; font-weight: bold; border-bottom: 5px solid #475f68; padding-bottom: 5px; margin-bottom: 10px; font-size: 13px; }
 .top-performance-services ul li{ font-size: 10px; color: #145598; font-weight: bold; line-height: 18px; clear: both; }
 .top-performance-services ul li span{ float: right; color: #92a0ae; font-weight: normal; }
 .view-all{ text-align: center }
@@ -316,11 +316,43 @@ ul#horizontal, #horizontal ul  {
 #mak-id{background: url('../images/bg-id2.png'); background-size: 480px; background-repeat: no-repeat; width: 480px; height: 300px; position:fixed; z-index: 9999; left: 50%; top: 50%; margin-left: -240px; margin-top: -150px; 
 -webkit-border-radius: 30px 30px 30px 30px; border-radius: 30px 30px 30px 30px; display: none;}
 
-#mak-id .left-logo{ position:absolute; top: 15px; left: 10px;}
-#mak-id .right-logo{ position:absolute; top: 5px; right: 10px; width: 150px; text-align:center; color: #12404a; font-size: 11px;}
+#mak-id .left-logo{ position:absolute; top: 15px; left: 10px;width: 330px;}
+#mak-id .left-logo img {width: 50px;float: left;}
+#mak-id .left-logo .txt {font-weight: bolder;font-size: 30px;font-family: "Arial";text-transform: uppercase;line-height: 22px;vertical-align: top;margin-left: 52px;display: block;}
+#mak-id .left-logo .m {
+	color:#03438b;    
+	text-shadow: 2px 0 #03438b;
+	letter-spacing:5px;
+	display: block;
+}
+#mak-id .left-logo .c {
+	color:#e63b38;    
+	text-shadow: 2px 0 #e63b38;
+	letter-spacing:2px;
+	display: block;
+}
+#mak-id .left-logo .i {
+	font-weight: bold;
+    color: #38341a;
+    text-decoration: none;
+    font-family: "HelveticaNeue-Medium", sans-serif;
+    font-size: 8px;
+    display: block;
+    margin-top: -3px;
+    padding-left: 2px;
+    transform: scale(1, 1.5);
+    -webkit-transform: scale(1, 1.5); /* Safari and Chrome */
+	  -moz-transform: scale(1, 1.5); /* Firefox */
+	  -ms-transform: scale(1, 1.5); /* IE 9+ */
+	  -o-transform: scale(1, 1.5); /* Opera */
+}
+
+#mak-id .right-logo{ position:absolute; top: 5px; right: 10px; width: 130px; text-align:center; color: #12404a; font-size: 11px;}
 #mak-id .profile-photo{  width: 100px; position:absolute; top: 85px; left: 10px;}
 #mak-id .profile-photo img.avatar{border: 4px solid #a39562;}
-#mak-id .qr-code{position:absolute; bottom: 15px; right: 20px;}
+#mak-id .qr-code{position:absolute; bottom: 15px; right: 20px;text-align: right;}
+#mak-id .qr-code .qr-img {display: block;}
+#mak-id .qr-code .qr-flag {margin-top: -8px;margin-bottom: -10px;margin-right: 2px;}
 #mak-id .mak-id-data{position:absolute; bottom: 7px; left: 15px;}
 #mak-id .mak-id-data p{ font-size: 12px; }
 #mak-id .mak-id-data .main-data{ font-size: 18px; font-weight:bold; margin-bottom: 5px; display: inline-block; color: #12404a;}

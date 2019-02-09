@@ -129,7 +129,7 @@
 	  display: inline-flex;
 	  flex-direction: column;
 	  vertical-align: 40px;
-	  width: calc(100% - 65px - 65px);
+	  width: calc(100% - 65px - 70px);
 	}
 	.ui .chat .info .name {
 	  font-weight: 600;
