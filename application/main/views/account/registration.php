@@ -63,7 +63,7 @@
 
                           <div class="col-md-4 col-xs-6">
                             <label class="text-white padding-bottom-5">Gender</label>
-                            <select id="GenderID" name="GenderID" class="form-control">
+                            <select id="GenderID" name="GenderID" class="form-control GenderID">
                               <option value="">--</option>
                               <?php
                                 foreach (lookup('gender') as $k => $v) {
@@ -75,12 +75,12 @@
 
                           <div class="col-md-4 col-xs-6">
                             <label class="text-white padding-bottom-5">Birth Date</label>
-                            <input type="text" autocomplete="off" id="BirthDate" name="BirthDate" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask>
+                            <input type="text" autocomplete="off" id="BirthDate" name="BirthDate" class="form-control BirthDate" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask>
                           </div>
 
                           <div class="col-md-4 col-xs-6">
                             <label class="text-white padding-bottom-5">Contact Number</label>
-                            <input type="text" id="ContactNumber" name="ContactNumber" class="form-control" placeholder="">
+                            <input type="text" id="ContactNumber" name="ContactNumber" class="form-control ContactNumber" placeholder="">
                           </div>
 
                           <div class="col-md-12 col-xs-6">
@@ -94,13 +94,13 @@
 
                   </div>
 
-                  <div class="row gutter-5 hidden-md hidden-lg showonsm">
+                  <div class="row gutter-5 hidden-md hidden-lg">
                     <div class="col-md-9 col-xs-12">
-                        <div class="row gutter-5">
+                        <div class="row gutter-5 showonsm">
 
                           <div class="col-md-4 col-xs-6">
                             <label class="text-white padding-bottom-5">Gender</label>
-                            <select id="GenderID" name="GenderID" class="form-control">
+                            <select id="GenderID" name="GenderID" class="form-control GenderID">
                               <option value="">--</option>
                               <?php
                                 foreach (lookup('gender') as $k => $v) {
@@ -112,12 +112,12 @@
 
                           <div class="col-md-4 col-xs-6">
                             <label class="text-white padding-bottom-5">Birth Date</label>
-                            <input type="text" autocomplete="off" id="BirthDate" name="BirthDate" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask>
+                            <input type="text" autocomplete="off" id="BirthDate" name="BirthDate" class="form-control BirthDate" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask>
                           </div>
 
                           <div class="col-md-4 col-xs-6">
                             <label class="text-white padding-bottom-5">Contact Number</label>
-                            <input type="text" id="ContactNumber" name="ContactNumber" class="form-control" placeholder="">
+                            <input type="text" id="ContactNumber" name="ContactNumber" class="form-control ContactNumber" placeholder="">
                           </div>
 
                           <div class="col-md-12 col-xs-6">

@@ -50,6 +50,20 @@ function Account() {
             self.showhide_registration_elem();
         });
 
+        // bind values on multiple inputs
+        $('.EmailAddress').bind('input', function() { 
+            $('.EmailAddress').val($(this).val());
+        });
+        $('.ContactNumber').bind('input', function() { 
+            $('.ContactNumber').val($(this).val());
+        });
+        $('.BirthDate').bind('input', function() { 
+            $('.BirthDate').val($(this).val());
+        });
+        $('.GenderID').bind('input', function() { 
+            $('.GenderID').val($(this).val());
+        });
+
     }
 
     this.showhide_registration_elem = function()
