@@ -2,7 +2,7 @@
 
 
 <div class="table-report table-responsive bg-white padding-10 offset-top-10">
-	<h2 class="h2 offset-top-5">Monthly violation reports</h2>
+	<h2 class="h2 offset-top-5">Monthly violations report</h2>
 	<table class="table table-condensed table-bordered">
 	    <thead>
 	      <tr class="text-bold">
