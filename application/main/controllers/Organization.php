@@ -118,6 +118,8 @@ class Organization extends CI_Controller
             $month_total[$item['month']] = (isset($month_total[$item['month']]) ? ($month_total[$item['month']] + $item['applicationCount']) : $item['applicationCount']);
         }
 
+        ksort($month_total);
+
         $report_data = array(
             'items'             => $items,
             'per_month_count'   => $per_month_count,
