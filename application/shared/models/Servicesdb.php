@@ -25,7 +25,7 @@ class Servicesdb extends CI_Model {
 		foreach ($data['extraFields'] as $item) {
 			$this->mgovdb->saveData('Service_ExtraFormFields', array(
 				'ServiceID'		=> $service_id,
-				'FieldGroup'	=> $item['Group'],
+				'DefaultValue'	=> $item['DefaultValue'],
 				'FieldType'		=> $item['Type'],
 				'FieldID'		=> $item['ID'],
 				'FieldLabel'	=> $item['Label'],
@@ -128,7 +128,7 @@ class Servicesdb extends CI_Model {
 				if ($existing) {
 					$fieldData = array(
 						'id'			=> $existing->id,
-						'FieldGroup'	=> $item['Group'],
+						'DefaultValue'	=> $item['DefaultValue'],
 						'FieldType'		=> $item['Type'],
 						'FieldLabel'	=> $item['Label'],
 						'Ordering'		=> $item['Ordering']
@@ -136,7 +136,7 @@ class Servicesdb extends CI_Model {
 				} else {
 					$fieldData = array(
 						'ServiceID'		=> $serviceID,
-						'FieldGroup'	=> $item['Group'],
+						'DefaultValue'	=> $item['DefaultValue'],
 						'FieldType'		=> $item['Type'],
 						'FieldID'		=> $item['ID'],
 						'FieldLabel'	=> $item['Label'],

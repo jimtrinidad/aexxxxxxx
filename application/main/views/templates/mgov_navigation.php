@@ -2,7 +2,7 @@
 <?php 
   
   $banners = array();
-  if (current_controller() == 'organization' && $Organization->Setup) {
+  if (current_controller() == 'organization' && isset($Organization) && $Organization->Setup) {
       $banners = json_decode($Organization->Setup->Banners, true);
   }
 

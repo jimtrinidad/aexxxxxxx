@@ -16,7 +16,9 @@ class Statistics extends CI_Controller
     {
         $viewData = array(
             'pageTitle'     => 'Government Performance Report',
-            'accountInfo'   => user_account_details()
+            'accountInfo'   => user_account_details(),
+            'nosidebar'     => true,
+            'shownav'       => true,
         );
 
         view('main/govt_performance_report', $viewData, 'templates/mgov');

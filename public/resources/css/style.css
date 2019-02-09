@@ -1,3 +1,15 @@
+@font-face {
+    font-family: "Arial Black";
+    src: url('../fonts/arial-black/Arial-Black.ttf');
+    src: url('../fonts/arial-black/Arial-Black.eot');
+    src: url('../fonts/arial-black/Arial-Black.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/arial-black/Arial-Black.woff2') format('woff2'),
+        url('../fonts/arial-black/Arial-Black.woff') format('woff'),
+        url('../fonts/arial-black/Arial-Black.svg#Arial-Black') format('svg');
+    font-weight: 900;
+    font-style: normal;
+}
+
 body { font-family: 'Open Sans', sans-serif; margin: 0px; padding: 0px; background: #101928 url('../images/bg-blue-water.png') no-repeat; background-size: cover}
 html, body { height: 100%; margin: 0; font-size: 14px;}
 
@@ -18,7 +30,7 @@ html, body { height: 100%; margin: 0; font-size: 14px;}
 
 
 /* Primary Navigation */
-.primary-nav{ padding: 10px; height: 40px;width: }
+.primary-nav{ padding: 10px; height: 40px;}
 .primary-nav ul li{ display: inline-block; margin-right: 10px; }
 .primary-nav ul li a{ color: #fff; font-size: 12px; font-weight: bold; text-decoration: none;}
 .primary-nav ul li a:hover{ text-decoration: none; color: #fed700; }
@@ -28,7 +40,6 @@ ul#horizontal, #horizontal ul  {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
-	width: 1000px;
 }
 
 #horizontal li {
@@ -108,7 +119,7 @@ ul#horizontal, #horizontal ul  {
 
 
 /* Primary Navigation */
-.seconday-nav{ padding: 10px; height: 40px; overflow: hidden;}
+.seconday-nav{ padding: 10px; overflow: hidden;}
 .seconday-nav ul li{ display: inline-block; margin-right: 10px; }
 .seconday-nav ul li a{ color: #145598; font-size: 12px; font-weight: bold; }
 .seconday-nav ul li a:hover{ text-decoration: none; color: #fed700; }
@@ -318,17 +329,17 @@ ul#horizontal, #horizontal ul  {
 
 #mak-id .left-logo{ position:absolute; top: 15px; left: 10px;width: 330px;}
 #mak-id .left-logo img {width: 50px;float: left;}
-#mak-id .left-logo .txt {font-weight: bolder;font-size: 30px;font-family: "Arial";text-transform: uppercase;line-height: 22px;vertical-align: top;margin-left: 52px;display: block;}
+#mak-id .left-logo .txt {font-weight: bolder;font-size: 30px;font-family: "Arial Black";text-transform: uppercase;line-height: 24px;vertical-align: top;margin-left: 52px;display: block;}
 #mak-id .left-logo .m {
 	color:#03438b;    
-	text-shadow: 2px 0 #03438b;
-	letter-spacing:5px;
+	text-shadow: 1px 0 #03438b;
+	letter-spacing:1px;
 	display: block;
 }
 #mak-id .left-logo .c {
 	color:#e63b38;    
-	text-shadow: 2px 0 #e63b38;
-	letter-spacing:2px;
+	text-shadow: 1px 0 #e63b38;
+	letter-spacing:1px;
 	display: block;
 }
 #mak-id .left-logo .i {

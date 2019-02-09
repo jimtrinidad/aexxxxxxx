@@ -79,4 +79,77 @@ class Organization extends CI_Controller
         response_json($return_data);
     }
 
+    /**
+    * monthly violations report for the whole year
+    */
+    public function monthlyreports()
+    {   
+
+        $this->load->model('statisticsdb');
+
+        $year = get_post('year') ?? date('Y');
+
+        $where = array(
+            'ss.SubDepartmentID = ?',
+            'YEAR(sa.DateApplied) = ?'
+        );
+
+        $params = array(
+            $this->user->OrganizationID,
+            $year
+        );
+
+
+        $records = $this->statisticsdb->organizationMonthlyApplication($where, $params);
+
+        $items = array();
+        $per_month_count = array();
+        $month_total = array();
+        foreach ($records as $item) {
+            if (!array_key_exists($item['id'], $items)) {
+                $items[$item['id']] = array(
+                    'Code'  => $item['Code'],
+                    'Name'  => $item['Name'],
+                    'CommonName'    => $item['MenuName']
+                );
+            }
+
+            $per_month_count[$item['id']][$item['month']] = $item['applicationCount'];
+            $month_total[$item['month']] = (isset($month_total[$item['month']]) ? ($month_total[$item['month']] + $item['applicationCount']) : $item['applicationCount']);
+        }
+
+        $report_data = array(
+            'items'             => $items,
+            'per_month_count'   => $per_month_count,
+            'monthly_total'       => $month_total
+        );
+
+        // print_data($report_data, true);
+
+        $viewData = array(
+            'pageTitle'     => 'Organization - Monthly Reports',
+            'accountInfo'   => user_account_details(),
+            'nosidebar'     => true,
+            'shownav'       => true,
+            'jsModules'     => array(
+            ),
+            'reportData'    => $report_data
+        );
+
+        view('reports/organization/monthly', $viewData, 'templates/mgov');
+    }
+
+    public function yearlyreports()
+    {
+        $viewData = array(
+            'pageTitle'     => 'Organization - Yearly Reports',
+            'accountInfo'   => user_account_details(),
+            'nosidebar'     => true,
+            'shownav'       => true,
+            'jsModules'     => array(
+            ),
+        );
+
+        view('reports/organization/yearly', $viewData, 'templates/mgov');
+    }
 }

@@ -34,6 +34,15 @@
 
 	        	<?php if (isset($nosidebar) && $nosidebar): ?>
 	        		<div class="col-xs-12 padding-bottom-20">
+
+	        			<!-- NAVIGATION -->
+	        			<?php if (isset($shownav) && $shownav) {
+		            		view('templates/mgov_navigation');
+		            	}
+		            	?>
+		            	<!-- END NAVIGATION -->
+
+
 		        		<!-- PAGE VIEW CONTENT -->
 		            	<?php echo $templateContent;?>
 		            	<!-- END PAGE VIEW CONTENT -->

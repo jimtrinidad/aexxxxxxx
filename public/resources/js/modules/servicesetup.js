@@ -291,27 +291,27 @@ function ServiceSetup() {
     this.addFieldRow = function()
     {   
         var form    = $(self.form).find('#addFormFields');
-        var group   = form.find('.fieldGroup').val();
+        var dvalue  = form.find('.fieldValue').val();
         var type    = form.find('.fieldType').val();
         var label   = form.find('.fieldLabel').val();
 
-        if (group != '' && type != '' && label.trim() != '') {
+        if (type != '' && label.trim() != '') {
             var clone  = form.children().clone();
             var itemID = Utils.generateString();
             var count  = $(self.form).find('#createdFields tr').length;
             clone.removeClass('info').addClass('sortable-row');
             clone.prop('id', itemID);
             clone.find('td:first-child').prepend('<i class="drag-handle fa fa-arrows"></i>');
-            clone.find('.fieldGroup').val(group).prop('name', 'Field['+itemID+'][Group]').addClass('fGroup');
             clone.find('.fieldType').val(type).prop('name', 'Field['+itemID+'][Type]').addClass('fType');
             clone.find('.fieldLabel').val(label).prop('name', 'Field['+itemID+'][Label]').addClass('fLabel').closest('td').append('<input type="hidden" class="item-order" name="Field['+itemID+'][Ordering]" value="'+(count + 1)+'">');
+            clone.find('.fieldValue').val(dvalue).prop('name', 'Field['+itemID+'][DefaultValue]').addClass('fValue');
             clone.find('td:last-child').html('<button type="button" class="btn btn-danger btn-sm" onClick="ServiceSetup.removeFieldRow(this)"><i class="fa fa-trash"></i></button>');
             $(self.form).find('#createdFields').append(clone);
 
             // reset
-            form.find('.fieldGroup').val(1);
             form.find('.fieldType').val(1);
             form.find('.fieldLabel').val('');
+            form.find('.fieldValue').val('');
 
             self.setSortable('createdFields');
         }

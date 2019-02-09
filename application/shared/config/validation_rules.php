@@ -87,7 +87,6 @@ $config['service_base_setup'] = array(
 );
 
 $config['service_fields_setup'] = array(
-	array('Group', 'group', 'required'),
 	array('Type', 'type', 'required'),
 	array('Label', 'label', 'trim|required')
 );

@@ -153,23 +153,20 @@
                         <fieldset>
                             <h2>Additional Fields</h2>
                             <p class="desc">Please setup additional fields needed on service application form. <br> Drag item to change order</p>
+                            <span class="help-block small text-orange" style="padding: 0;margin: 0">For Selection type options. Add item on default value and use Pipe `|` to separate each options. eg: Yes|No</span>
                             <div class="fieldset-content">
                                 <table id="serviceExtraFieldsTable" class="table table-responsive">
                                     <thead>
                                         <th style="width: 10px;"></th>
-                                        <th>Field Group</th>
                                         <th>Field Type</th>
                                         <th>Label</th>
+                                        <th>Default Value</th>
                                         <th style="width: 30px;"></th>
                                     </thead>
                                     <tbody id="createdFields">
                                         <?php
                                         if (isset($extraFields) && is_array($extraFields)) {
                                             foreach ($extraFields as $item) {
-                                                $groupOptions = '';
-                                                foreach (lookup('field_class') as $k => $v) {
-                                                    $groupOptions .= "<option ".($k == $item['FieldGroup'] ? 'selected="selected"' : '')." value='{$k}'>{$v}</option>";
-                                                }
                                                 $typeOptions = '';
                                                 foreach (lookup('field_type') as $k => $v) {
                                                     $typeOptions .= "<option ".($k == $item['FieldType'] ? 'selected="selected"' : '')." value='{$k}'>{$v}</option>";
@@ -177,18 +174,17 @@
                                                 echo '<tr class="sortable-row" id="'.$item['FieldID'].'">
                                                         <td><i class="drag-handle fa fa-arrows"></i></td>
                                                         <td>
-                                                            <select class="form-control fieldGroup input-sm fGroup" name="Field['.$item['FieldID'].'][Group]" title="">'
-                                                               . $groupOptions .
-                                                            '</select>
-                                                        </td>
-                                                        <td>
                                                             <select class="form-control fieldType input-sm fType" name="Field['.$item['FieldID'].'][Type]" title="">'
                                                                 . $typeOptions .
                                                             '</select>
                                                         </td>
                                                         <td>
                                                             <input type="text" class="form-control fieldLabel input-sm fLabel" placeholder="Field label" autocomplete="off" name="Field['.$item['FieldID'].'][Label]" title="" value="'.$item['FieldLabel'].'">
-                                                            <input type="hidden" class="item-order" name="Field['.$item['FieldID'].'][Ordering]" value="'.$item['Ordering'].'" title=""></td>
+                                                            <input type="hidden" class="item-order" name="Field['.$item['FieldID'].'][Ordering]" value="'.$item['Ordering'].'" title="">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control fieldValue input-sm fValue" placeholder="Field default value" autocomplete="off" name="Field['.$item['FieldID'].'][DefaultValue]" title="" value="'.$item['DefaultValue'].'">
+                                                        </td>
                                                         <td>
                                                             <button type="button" class="btn btn-danger btn-sm" onclick="ServiceSetup.removeFieldRow(this)"><i class="fa fa-trash"></i></button>
                                                             </td>
@@ -201,15 +197,6 @@
                                         <tr class="info">
                                             <td></td>
                                             <td>
-                                                <select class="form-control fieldGroup input-sm">
-                                                     <?php
-                                                      foreach (lookup('field_class') as $k => $v) {
-                                                        echo "<option value='{$k}'>{$v}</option>";
-                                                      }
-                                                    ?>
-                                                </select>
-                                            </td>
-                                            <td>
                                                 <select class="form-control fieldType input-sm">
                                                      <?php
                                                       foreach (lookup('field_type') as $k => $v) {
@@ -219,7 +206,10 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <input type="text" class="form-control fieldLabel input-sm" placeholder="Field label">
+                                                <input type="text"  maxlength="1000" class="form-control fieldLabel input-sm" placeholder="Field label">
+                                            </td>
+                                            <td>
+                                                <input type="text" maxlength="5000" class="form-control fieldValue input-sm" placeholder="Field default value">
                                             </td>
                                             <td>
                                                 <button type="button" class="btn btn-success btn-sm" onclick="ServiceSetup.addFieldRow()"><i class="fa fa-plus"></i></button>

@@ -164,11 +164,21 @@ function Organization() {
                     $.each(v.ExtraFields, function(i, e) {
                         additionalFields += '<div class="col-xs-6 col-sm-4"><div class="form-group"><label class="control-label">'+e.FieldLabel+'</label>';
                         if (e.FieldType == 1) {
-                            additionalFields += '<input type="text" id="'+e.FieldID+'" name="ExtraField['+e.FieldID+']" class="form-control input-sm" placeholder="'+e.FieldLabel+'">';
+                            additionalFields += '<input type="text" id="'+e.FieldID+'" name="ExtraField['+e.FieldID+']" class="form-control input-sm" placeholder="'+e.FieldLabel+'" value="'+e.DefaultValue+'">';
                         } else if (e.FieldType == 2) {
-                            additionalFields += '<textarea rows="1" class="form-control input-sm" id="'+e.FieldID+'" name="ExtraField['+e.FieldID+']" placeholder="'+e.FieldLabel+'"></textarea>';
+                            additionalFields += '<textarea rows="1" class="form-control input-sm" id="'+e.FieldID+'" name="ExtraField['+e.FieldID+']" placeholder="'+e.FieldLabel+'">'+e.DefaultValue+'</textarea>';
                         } else if (e.FieldType == 3) {
                             additionalFields += '<input type="file" id="'+e.FieldID+'" name="Image['+e.FieldID+']" class="form-control input-sm" placeholder="'+e.FieldLabel+'">';
+                        } else if (e.FieldType == 4) {
+                            var options = '';
+                            if (e.DefaultValue) {
+                                $.each(e.DefaultValue.split('|'), function(i,e){
+                                    options += `<option>${e}</option>`;
+                                });
+                            } else {
+                                options += `<option>--</option>`;
+                            }
+                            additionalFields += `<select class="form-control input-sm" name="ExtraField[${e.FieldID}]">${options}</select>`;
                         }
                         additionalFields += '</div></div>';
                     });

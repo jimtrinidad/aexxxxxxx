@@ -42,7 +42,7 @@
 			Birthday: <strong class="text-bold"><?php echo date('M d, Y', strtotime($accountInfo->BirthDate)) ?></strong>    
 			Gender: <strong class="text-bold"><?php echo lookup('gender', $accountInfo->GenderID) ?></strong>  <br /> 
 			Status: <strong class="text-bold"><?php echo lookup('marital_status', $accountInfo->MaritalStatusID) ?></strong>  
-			Address:  <strong class="text-bold">Brgy <?php echo ucwords(strtolower($accountInfo->brgyDesc)) ?>, <?php echo ucwords(strtolower($accountInfo->citymunDesc)) ?></strong> <br />
+			Address:  <strong class="text-bold"><?php echo ucwords(strtolower($accountInfo->brgyDesc)) ?>, <?php echo ucwords(strtolower($accountInfo->citymunDesc)) ?></strong> <br />
 			Organization: <strong class="text-bold"><?php echo ($accountInfo->OrganizationID ? lookup_db('Dept_ChildDepartment', 'Name', $accountInfo->OrganizationID) : 'n/a') ?></strong>
 		</p>
 	</div>

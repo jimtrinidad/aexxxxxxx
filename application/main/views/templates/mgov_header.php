@@ -54,7 +54,12 @@
                 echo '<a class="text-bold" href="' . site_url('quickserve') .'">QS</a>';
               }
             ?>
-            <a href="<?php echo site_url('statistics/govt_performance') ?>"><i class="fa fa-bar-chart text-blue" aria-hidden="true"></i></a>
+            <?php
+              if (in_array($accountInfo->AccountTypeID, array(2,3,4)) && isset($accountInfo->OrganizationID) && $accountInfo->OrganizationID) {
+                echo '<a class="text-bold" href="' . site_url('organization/monthlyreports') .'"><i class="fa fa-bar-chart text-blue" aria-hidden="true"></i></a>';
+              }
+            ?>
+            <!-- <a href="<?php echo site_url('statistics/govt_performance') ?>"><i class="fa fa-bar-chart text-blue" aria-hidden="true"></i></a> -->
             <!-- <i class="fa fa-wrench text-blue offset-right-5 hide" aria-hidden="true"></i> -->
             <a href="<?php echo site_url('account/logout') ?>"><i class="fa fa-power-off text-blue" aria-hidden="true"></i></a>
           </div>
