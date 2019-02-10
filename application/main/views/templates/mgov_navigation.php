@@ -50,13 +50,10 @@
     <ul id="horizontal">
       <li><a href="<?php echo site_url('dashboard'); ?>"><i class="fa fa-rss bg-orange" aria-hidden="true"></i> Livefeed</a></li>
       <li><a href="<?php echo site_url('services'); ?>"><i class="fa fa-arrow-right bg-yellow" aria-hidden="true"></i> Services</a></li>
-      <?php if (isset($accountInfo->OrganizationID) && $accountInfo->OrganizationID): ?>
-        <li><a href="<?php echo site_url('organization'); ?>"><i class="fa fa-sitemap bg-gray" aria-hidden="true"></i> My Organization</a></li>
-      <?php endif;?>
-      <!-- <li><a href="#"><i class="fa fa-volume-up bg-green" aria-hidden="true"></i> Announcements</a></li> -->
       <li><a href="<?php echo site_url('statistics/govt_performance'); ?>"><i class="fa fa-bar-chart-o bg-green" aria-hidden="true"></i> Government Performance</a></li>
       <li><a href="javascript:;" onclick="Chatbox.openChatWindow('support')"><i class="fa fa-comments-o bg-cyan" aria-hidden="true"></i> Live Support</a></li>
       <!-- <li><a href="<?php echo site_url('trabaho'); ?>"><i class="fa fa-clock-o bg-red" aria-hidden="true"></i> My Trabaho</a></li> -->
+      <!-- <li><a href="#"><i class="fa fa-volume-up bg-green" aria-hidden="true"></i> Announcements</a></li> -->
       <!-- <li><a href="#"><i class="fa fa-flag bg-violet" aria-hidden="true"></i> Events</a></li> -->
       <!-- <li><a href="#"><i class="fa fa-search bg-orange" aria-hidden="true"></i> Community</a></li> -->
       <!-- <li><a href="<?php echo site_url('account'); ?>"><i class="fa fa-user bg-green" aria-hidden="true"></i> My Account</a></li> -->
@@ -67,7 +64,10 @@
 <!-- Secondary Navigation -->
 <div class="bg-light-gray seconday-nav">
   <ul>
-    <li><a href="<?php echo site_url('account'); ?>">My Account</a></li>
+    <li><a href="<?php echo site_url('account'); ?>"><i class="fa fa-user bg-cyan" aria-hidden="true"></i> My Account</a></li>
+    <?php if (isset($accountInfo->OrganizationID) && $accountInfo->OrganizationID): ?>
+      <li><a href="<?php echo site_url('organization'); ?>"><i class="fa fa-sitemap bg-cyan" aria-hidden="true"></i> My Organization</a></li>
+    <?php endif;?>
     <!-- <li><a href="<?php echo site_url('trabaho'); ?>">Profile</a></li> -->
     <!-- <li><a href="#">Mobile Wallet</a></li> -->
   </ul>
