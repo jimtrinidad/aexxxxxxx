@@ -8,16 +8,16 @@ $max = $cur + 5;
 
 
 <div class="bg-white padding-10 offset-top-10">
-	<div class="row gutter-5 offset-top-5">
-		<div class="col-xs-12 col-sm-10">
+	<div class="row gutter-5">
+		<div class="col-xs-12 col-sm-10 offset-top-5">
 			<h2 class="h2 offset-5 offset-top-10">
-				Monthly violations report for <?php echo $sel?>
+				Monthly Violations Report <?php echo $sel?>
 			</h2>
 			<div class="offset-left-10">As of <?php echo date('F d, Y'); ?></div>
 		</div>
-		<div class="col-xs-12 col-sm-2">
-			<label>Year</label>
-			<div class="form-group">
+		<div class="col-xs-12 col-sm-2 offset-top-5">
+			<div class="form-group" style="padding: 0 7px">
+				<label>Year</label>
 				<select class="form-control" onchange="window.location = window.public_url('organization/monthlyreports?year=' + this.value)">
 					<?php
 					while ($min < $max) {
