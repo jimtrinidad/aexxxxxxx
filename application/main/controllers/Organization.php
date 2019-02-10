@@ -100,7 +100,7 @@ class Organization extends CI_Controller
         );
 
 
-        $records = $this->statisticsdb->organizationMonthlyApplication($where, $params);
+        $records = $this->statisticsdb->organizationMonthlyViolationReport($where, $params);
 
         $items = array();
         $per_month_count = array();
@@ -133,8 +133,6 @@ class Organization extends CI_Controller
             'accountInfo'   => user_account_details(),
             'nosidebar'     => true,
             'shownav'       => true,
-            'jsModules'     => array(
-            ),
             'reportData'    => $report_data
         );
 
@@ -143,13 +141,37 @@ class Organization extends CI_Controller
 
     public function yearlyreports()
     {
+
+        $this->load->model('statisticsdb');
+
+        $year = get_post('year') ?? date('Y');
+
+        $where = array(
+            'ss.SubDepartmentID = ?',
+            'YEAR(sa.DateApplied) = ?'
+        );
+
+        $params = array(
+            $this->user->OrganizationID,
+            $year
+        );
+
+
+        $records = $this->statisticsdb->organizationYearlyCategorizeReport($where, $params);
+
+        $categories = array();
+        foreach ($records as $item) {
+            $categories[$item['Category']][] = $item;
+        }
+
+        // print_data($categories, true);
+
         $viewData = array(
             'pageTitle'     => 'Organization - Yearly Reports',
             'accountInfo'   => user_account_details(),
             'nosidebar'     => true,
             'shownav'       => true,
-            'jsModules'     => array(
-            ),
+            'categories'    => $categories
         );
 
         view('reports/organization/yearly', $viewData, 'templates/mgov');

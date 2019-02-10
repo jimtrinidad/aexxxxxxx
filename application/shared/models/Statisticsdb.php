@@ -8,7 +8,10 @@ class Statisticsdb extends CI_Model {
 	}
 
 
-	public function organizationMonthlyApplication ($where, $params)
+	/**
+	* monthly violation reports
+	*/
+	public function organizationMonthlyViolationReport ($where, $params)
 	{
 		$and_where = '';
 		if (count($where)) {
@@ -27,6 +30,35 @@ class Statisticsdb extends CI_Model {
 	                ORDER BY MenuName";
 
 		return $this->db->query($query, $params)->result_array();
+	}
+
+	/**
+	* yearly categorized violation report
+	*/
+	public function organizationYearlyCategorizeReport($where, $params)
+	{
+		$and_where = '';
+		if (count($where)) {
+			$and_where .= ' AND ' . implode(' AND ', $where);
+		}
+		$query = "SELECT so.Category, 
+						MONTH(sa.DateApplied) month, 
+						SUM(sa.Status = 2 || sa.Status = 0 || sa.Status = 3) application, 
+						SUM(sa.Status = 2) as completed, 
+						SUM(sa.Status = 0) as pending, 
+						SUM(sa.Status = 3) as canceled
+					FROM Service_Applications sa
+	                LEFT JOIN Service_Services ss ON sa.ServiceID = ss.id
+	                LEFT JOIN Service_Organization so ON ss.id = so.ServiceID
+	                WHERE ss.deletedAt IS NULL
+	                AND ss.Status = 1
+	                AND ss.ServiceType = 13
+	                AND ss.InOrganization = 1
+	                {$and_where}
+	                GROUP BY so.Category, month
+	                ORDER BY so.Category, month";
+
+	    return $this->db->query($query, $params)->result_array();
 	}
 
 }
