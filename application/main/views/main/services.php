@@ -18,7 +18,7 @@
          <!--input type="text" name="" class="form-control bg-green text-white" value="Department"-->
          <select class="form-control bg-green text-white text-bold" style="text-align-last: center;" id="DepartmentID" name="DepartmentID" onChange="Mgovph.getServices()">
             <!-- input-sm GetAgencyOffice();-->
-            <option value="">--Search By Department--</option>
+            <option value="">Search By Department</option>
             <?php
                foreach(lookup_trending_departments() as $item) {
                 echo '<option value="' . $item['id'] . '">' . $item['Name'] . '</option>';
@@ -29,7 +29,7 @@
       <div class="col-sm-3 padding-top-5 hide">
          <select class="form-control bg-green text-white" id="LocationScopeID" name="LocationScopeID" onchange="Mgovph.getServices()">
             <!-- input-sm-->
-            <option value="">--Search By Location--</option>
+            <option value="">Search By Location</option>
             <?php
               foreach (lookup('location_scope') as $k => $v) {
                 echo "<option value='{$k}'>{$v}</option>";

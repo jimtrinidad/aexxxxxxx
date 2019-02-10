@@ -172,8 +172,8 @@ function Organization() {
                         } else if (e.FieldType == 4) {
                             var options = '';
                             if (e.DefaultValue) {
-                                $.each(e.DefaultValue.split('|'), function(i,e){
-                                    options += `<option>${e}</option>`;
+                                $.each(e.DefaultValue.split('|'), function(k,j){
+                                    options += `<option>${j.trim()}</option>`;
                                 });
                             } else {
                                 options += `<option>--</option>`;
