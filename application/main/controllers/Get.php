@@ -229,6 +229,10 @@ class Get extends CI_Controller
                     }
                 }
 
+                usort($clean_services, function($a, $b) {
+                    return $a['LocationCode'] < $b['LocationCode'];
+                });
+
                 if (count($clean_services)) {
 
                     unset($department['LastUpdate']);
