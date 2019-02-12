@@ -176,4 +176,84 @@ class Organization extends CI_Controller
 
         view('reports/organization/yearly', $viewData, 'templates/mgov');
     }
+
+    public function dailyreport()
+    {
+        $this->load->model('statisticsdb');
+
+        $category   = get_post('category') ?? 6; //default pedestrian
+        if (get_post('date')) {
+            $date = get_post('date');
+        } else {
+            $date = date('Y-m-d') . ' - ' . date('Y-m-d');
+        }
+
+        $daterange = explode(' - ', $date);
+        $datefrom  = $daterange[0];
+        $dateto    = $daterange[1];
+
+        $where = array(
+            'ss.SubDepartmentID = ?',
+            'DATE(sa.DateApplied) >= ? AND DATE(sa.DateApplied) <= ?',
+            'so.Category = ?'
+        );
+
+        $params = array(
+            $this->user->OrganizationID,
+            $datefrom,
+            $dateto,
+            $category
+        );
+
+
+        $records = $this->statisticsdb->organizationDailyApprehension($where, $params);
+
+        $serviceFields = array();
+        $uniquefields  = array();
+
+        foreach ($records as &$record) {
+
+            if (!isset($serviceFields[$record['ServiceID']])) {
+                // get service extra fields label
+                $results = $this->mgovdb->getRecords('Service_ExtraFormFields', array('ServiceID' => $record['ServiceID']));
+                $fields = array();
+                foreach ($results as $r) {
+                    if (in_array($r['FieldType'], array(1,2,4))) {
+                        $fields[$r['FieldID']] = trim($r['FieldLabel']);
+                    }
+                }
+                $serviceFields[$record['ServiceID']] = $fields;
+            }
+
+            $extrafields = json_decode($record['ExtraFields'], true);
+
+            foreach ($extrafields as $key => $val) {
+                if (isset($serviceFields[$record['ServiceID']][$key])) {
+                    $flabel  = $serviceFields[$record['ServiceID']][$key];
+                    $fhash   = md5($flabel);
+                    $record[$fhash] = $val;
+                    if (!isset($uniquefields[$fhash])) {
+                        $uniquefields[$fhash] = $flabel;
+                    }
+                }
+            }
+
+        }
+
+        $viewData = array(
+            'pageTitle'     => 'Organization - Yearly Reports',
+            'accountInfo'   => user_account_details(),
+            'nosidebar'     => true,
+            'shownav'       => true,
+            'records'       => $records,
+            'fields'        => $uniquefields,
+            'category'      => $category,
+            'date'          => $date,
+            'jsModules'         => array(
+                'organization',
+            ),
+        );
+
+        view('reports/organization/daily', $viewData, 'templates/mgov');
+    }
 }

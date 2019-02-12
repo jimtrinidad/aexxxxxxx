@@ -22,10 +22,10 @@ class Statisticsdb extends CI_Model {
 	                LEFT JOIN Service_Services ss ON sa.ServiceID = ss.id
 	                LEFT JOIN Service_Organization so ON ss.id = so.ServiceID
 	                WHERE ss.deletedAt IS NULL
-	                AND ss.Status = 1
-	                AND ss.ServiceType = 13
-	                AND ss.InOrganization = 1
-	                {$and_where}
+		                AND ss.Status = 1
+		                AND ss.ServiceType = 13
+		                AND ss.InOrganization = 1
+		                {$and_where}
 	                GROUP BY ss.id, month
 	                ORDER BY MenuName";
 
@@ -51,12 +51,37 @@ class Statisticsdb extends CI_Model {
 	                LEFT JOIN Service_Services ss ON sa.ServiceID = ss.id
 	                LEFT JOIN Service_Organization so ON ss.id = so.ServiceID
 	                WHERE ss.deletedAt IS NULL
-	                AND ss.Status = 1
-	                AND ss.ServiceType = 13
-	                AND ss.InOrganization = 1
-	                {$and_where}
+		                AND ss.Status = 1
+		                AND ss.ServiceType = 13
+		                AND ss.InOrganization = 1
+		                {$and_where}
 	                GROUP BY so.Category, month
 	                ORDER BY so.Category, month";
+
+	    return $this->db->query($query, $params)->result_array();
+	}
+
+
+	/**
+	* get daily apprehension
+	*/
+	public function organizationDailyApprehension($where, $params)
+	{
+		$and_where = '';
+		if (count($where)) {
+			$and_where .= ' AND ' . implode(' AND ', $where);
+		}
+		$query = "SELECT ss.id AS ServiceID,ss.Code,ss.Name,so.MenuName,so.Category,sa.id AS reportid, sa.ExtraFields,uai.FirstName, uai.LastName, DATE(sa.DateApplied) AS dateapplied
+					FROM Service_Applications sa
+					LEFT JOIN Service_Services ss ON sa.ServiceID = ss.id
+					LEFT JOIN Service_Organization so ON ss.id = so.ServiceID
+					LEFT JOIN UserAccountInformation AS uai ON uai.id = sa.ApplicantID
+					WHERE ss.deletedAt IS NULL
+						AND ss.Status = 1
+						AND ss.ServiceType = 13
+						AND ss.InOrganization = 1
+	                	{$and_where}
+	                ORDER BY reportid";
 
 	    return $this->db->query($query, $params)->result_array();
 	}
