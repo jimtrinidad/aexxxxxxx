@@ -162,7 +162,7 @@ function Organization() {
 
                     var additionalFields = '';
                     $.each(v.ExtraFields, function(i, e) {
-                        additionalFields += '<div class="col-xs-6 col-sm-4"><div class="form-group"><label class="control-label">'+e.FieldLabel+'</label>';
+                        additionalFields += '<div class="col-xs-6 col-sm-4"><div class="form-group" title="'+e.FieldLabel+'"><label class="control-label">'+e.FieldLabel+'</label>';
                         if (e.FieldType == 1) {
                             additionalFields += '<input type="text" id="'+e.FieldID+'" name="ExtraField['+e.FieldID+']" class="form-control input-sm" placeholder="'+e.FieldLabel+'" value="'+e.DefaultValue+'">';
                         } else if (e.FieldType == 2) {
@@ -197,7 +197,7 @@ function Organization() {
                     $.each(v.Requirements, function (j, k) {
                         var documentFields = '';
                         $.each(k.extraFields, function(i, e) {
-                            documentFields += '<div class="col-xs-6 col-sm-4"><div class="form-group"><label class="control-label">'+e.label+'</label>';
+                            documentFields += '<div class="col-xs-6 col-sm-4"><div class="form-group" title="'+e.label+'"><label class="control-label">'+e.label+'</label>';
                             if (e.type == 1) {
                                 documentFields += '<input type="text" id="'+i+'" name="RequirementField['+k.id+']['+i+']" class="form-control input-sm" placeholder="'+e.label+'">';
                             } else if (e.type == 2) {
