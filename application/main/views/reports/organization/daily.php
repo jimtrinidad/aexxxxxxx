@@ -20,7 +20,9 @@ view('reports/organization/navigation');
 							<select class="form-control" name="category">
 								 <?php
 				                foreach (lookup('service_organization_category') as $k => $v) {
-				                    echo "<option ".($k == $category ? 'selected' : '')." value='{$k}'>{$v}</option>";
+				                	if (!in_array($k, array(1,2,3))) {
+					                    echo "<option ".($k == $category ? 'selected' : '')." value='{$k}'>{$v}</option>";
+					                }
 				                }
 				                ?>
 							</select>
