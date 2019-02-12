@@ -62,6 +62,7 @@ view('reports/organization/navigation');
 		        		echo '<th style="max-width: 200px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">' . $l . '</th>';
 		        	}
 		        ?>
+		        <th class="text-center">Status</th>
 		        <th class="text-center">Date</th>
 		        <th class="text-center">Officer</th>
 		      </tr>
@@ -71,15 +72,22 @@ view('reports/organization/navigation');
 		      $i = 1;
 		      foreach ($records as $item) {
 		      	$item_total = 0;
+		      	$status = '';
+		      	switch ($item['Status']) {
+		      		case '2': $status = 'Settled'; break;
+		      		case '0': $status = 'Unsettled'; break;
+		      		case '3': $status = 'Canceled'; break;
+		      	}
 		      	echo '<tr>';
 		      		echo '<td>' . $i . '</td>';
-		      		echo '<td>' . $item['reportid'] . '</td>';
+		      		echo '<td>' . $item['appCode'] . '</td>';
 		      		echo '<td>' . $item['MenuName'] . '</td>';
 
 		      		foreach ($fields as $k => $l) {
 		      			echo '<td>' . ($item[$k] ?? '') . '</td>';
 		      		}
 
+		      		echo '<td class="text-center">' . $status . '</td>';
 		      		echo '<td class="text-center">' . date('m/d/y', strtotime($item['dateapplied'])) . '</td>';
 		      		echo '<td class="text-center">' . substr($item['FirstName'], 0, 1) . '. ' . $item['LastName'] . '</td>';
 

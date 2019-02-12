@@ -71,7 +71,7 @@ class Statisticsdb extends CI_Model {
 		if (count($where)) {
 			$and_where .= ' AND ' . implode(' AND ', $where);
 		}
-		$query = "SELECT ss.id AS ServiceID,ss.Code,ss.Name,so.MenuName,so.Category,sa.id AS reportid, sa.ExtraFields,uai.FirstName, uai.LastName, DATE(sa.DateApplied) AS dateapplied
+		$query = "SELECT ss.id AS ServiceID,ss.Code,ss.Name,so.MenuName,so.Category,sa.id AS reportid, sa.ExtraFields,uai.FirstName, uai.LastName, DATE(sa.DateApplied) AS dateapplied, sa.Status, sa.Code appCode
 					FROM Service_Applications sa
 					LEFT JOIN Service_Services ss ON sa.ServiceID = ss.id
 					LEFT JOIN Service_Organization so ON ss.id = so.ServiceID
@@ -80,6 +80,7 @@ class Statisticsdb extends CI_Model {
 						AND ss.Status = 1
 						AND ss.ServiceType = 13
 						AND ss.InOrganization = 1
+						AND sa.Status IN (0,2,3)
 	                	{$and_where}
 	                ORDER BY reportid";
 
