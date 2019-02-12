@@ -75,7 +75,7 @@ view('reports/organization/navigation');
 		      		echo '<td>' . $item['MenuName'] . '</td>';
 
 		      		foreach ($fields as $k => $l) {
-		      			echo '<td>' . $item[$k] . '</td>';
+		      			echo '<td>' . ($item[$k] ?? '') . '</td>';
 		      		}
 
 		      		echo '<td class="text-center">' . date('m/d/y', strtotime($item['dateapplied'])) . '</td>';
