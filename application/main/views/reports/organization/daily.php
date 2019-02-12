@@ -63,6 +63,7 @@ view('reports/organization/navigation');
 		        	}
 		        ?>
 		        <th class="text-center">Status</th>
+		        <th class="text-center">Amount</th>
 		        <th class="text-center">Date</th>
 		        <th class="text-center">Officer</th>
 		      </tr>
@@ -70,6 +71,7 @@ view('reports/organization/navigation');
 		    <tbody>
 		      <?php
 		      $i = 1;
+		      $total_amount = 0;
 		      foreach ($records as $item) {
 		      	$item_total = 0;
 		      	$status = '';
@@ -78,6 +80,8 @@ view('reports/organization/navigation');
 		      		case '0': $status = 'Unsettled'; break;
 		      		case '3': $status = 'Canceled'; break;
 		      	}
+		      	$amount = total_collections_amount($item['collections']);
+		      	$total_amount += $amount;
 		      	echo '<tr>';
 		      		echo '<td>' . $i . '</td>';
 		      		echo '<td>' . $item['appCode'] . '</td>';
@@ -88,6 +92,7 @@ view('reports/organization/navigation');
 		      		}
 
 		      		echo '<td class="text-center">' . $status . '</td>';
+					echo '<td class="text-center">' . ($amount ? number_format($amount) : '') . '</td>';
 		      		echo '<td class="text-center">' . date('m/d/y', strtotime($item['dateapplied'])) . '</td>';
 		      		echo '<td class="text-center">' . substr($item['FirstName'], 0, 1) . '. ' . $item['LastName'] . '</td>';
 
@@ -96,6 +101,16 @@ view('reports/organization/navigation');
 		      }
 		      ?>
 		 	</tbody>
+		 	<tfoot>
+		 		<tr>
+		 			<td colspan="<?php echo 7 + count($fields); ?>"></td>
+		 		</tr>
+		 		<tr>
+		 			<th colspan="<?php echo 4 + count($fields); ?>"" class="text-bold text-right">Total</th>
+			        <td class="text-center text-bold"><?php echo number_format($total_amount) ?></td>
+			        <th colspan="2"></th>
+		 		</tr>
+		 	</tfoot>
 		</table>
 	</div>
 	<?php } ?>

@@ -870,3 +870,20 @@ function prepare_payment_receipt_data($paymentData)
         'serviceQR'		=> get_qr_file($serviceData->Code, 4)
     );
 }
+
+function total_collections_amount($collections)
+{
+	$total = 0;
+	if (is_string($collections)) {
+		$collections = json_decode($collections, true);
+	}
+	if (is_array($collections)) {
+		foreach ($collections as $col) {
+			if (isset($col['amount'])) {
+				$total += $col['amount'];
+			}
+		}
+
+	}
+	return $total;
+}
