@@ -37,7 +37,7 @@ view('reports/organization/navigation');
 					<div class="col-xs-2 offset-top-5">
 						<div class="form-group">
 							<label>&nbsp;</label>
-							<button type="submit" name="find" class="form-control btn btn-success">Find</button>
+							<button type="submit" class="form-control btn btn-success">Find</button>
 						</div>
 					</div>
 				</div>
