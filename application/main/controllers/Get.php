@@ -230,7 +230,11 @@ class Get extends CI_Controller
                 }
 
                 usort($clean_services, function($a, $b) {
-                    return $a['LocationCode'] < $b['LocationCode'];
+                    if ($a['Name'] == $b['Name']) {
+                        return $a['LocationCode'] > $b['LocationCode'];
+                    } else {
+                        return $a['Name'] > $b['Name'];
+                    }
                 });
 
                 if (count($clean_services)) {
@@ -254,6 +258,10 @@ class Get extends CI_Controller
 
                 }
             }
+
+            usort($services, function($a, $b){
+                return $a['Name'] > $b['Name'];
+            });
 
         }
 
