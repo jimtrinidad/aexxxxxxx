@@ -8,7 +8,7 @@ view('reports/organization/navigation');
 		<div class="row gutter-5">
 			<div class="col-xs-12 col-sm-6 text-center">
 				<h2 class="h2 offset-5 offset-top-10">
-					<?php echo '<div class="h3 offset-5">' . lookup('service_organization_category', $category) . '</div>Daily Apprehension Report<div class="small offset-top-5">' . str_replace(' - ', ' to ', $date) . '</div>'; ?>
+					<?php echo '<div class="h3" style="margin: 0">' . lookup('service_organization_category', $category) . '</div>Daily Apprehension Report<div class="small offset-top-5">' . str_replace(' - ', ' to ', $date) . '</div>'; ?>
 				</h2>
 			</div>
 			<div class="col-xs-12 col-sm-6">
