@@ -402,7 +402,8 @@ class Message extends CI_Controller
                     LEFT OUTER JOIN msg_threads t ON (t.key = ss.Code AND t.type = 1 AND t.client = {$user_id})
                     WHERE ss.deletedAt IS NULL
                     AND Supports NOT LIKE '%\"{$user_id}\"%'
-                    AND ss.Status = 1";
+                    AND ss.Status = 1
+                    ORDER BY ss.Name";
 
         $results = $this->db->query($sql)->result_array();
         if (count($results)) {
