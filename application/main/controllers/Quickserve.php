@@ -796,6 +796,11 @@ class Quickserve extends CI_Controller
                     );
                 } else {
 
+                    $totalAmount = 0;
+                    foreach ($collections as $col) {
+                        $totalAmount += $col['amount'];
+                    }
+
                     $paymentData = array(
                         'ServiceID'         => $safData->ServiceID,
                         'ApplicationID'     => $safData->ApplicationID,
@@ -807,6 +812,7 @@ class Quickserve extends CI_Controller
                         'type'              => get_post('type'),
                         'treasurer'         => get_post('treasurer'),
                         'collections'       => json_encode($collections),
+                        'Total'             => $totalAmount,
                         'OfficerID'         => current_user(),
                         'DateAdded'         => date('Y-m-d H:i:s')
                     );

@@ -256,4 +256,25 @@ class Organization extends CI_Controller
 
         view('reports/organization/daily', $viewData, 'templates/mgov');
     }
+
+    public function collectionreport()
+    {
+        $payments = $this->mgovdb->getRecords('Service_Payments');
+         foreach ($payments as $p) {
+            $col = json_decode($p['collections'], true);
+            $tot = 0;
+            foreach ($col as $c) {
+                $tot += $c['amount'];
+            }
+
+            echo $tot . '<br>';
+            $paymentData = array(
+                        'Total' => $tot,
+                        'id'    => $p['id']
+                    );
+
+            $this->mgovdb->saveData('Service_Payments', $paymentData);
+         }
+        print_data($payments);
+    }
 }
