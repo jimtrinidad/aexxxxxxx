@@ -259,22 +259,118 @@ class Organization extends CI_Controller
 
     public function collectionreport()
     {
-        $payments = $this->mgovdb->getRecords('Service_Payments');
-         foreach ($payments as $p) {
-            $col = json_decode($p['collections'], true);
-            $tot = 0;
-            foreach ($col as $c) {
-                $tot += $c['amount'];
+        $this->load->model('statisticsdb');
+
+        $year = get_post('year') ?? date('Y');
+
+        $where = array(
+            'ss.SubDepartmentID = ?',
+            'YEAR(sa.DateApplied) = ?'
+        );
+
+        $params = array(
+            $this->user->OrganizationID,
+            $year
+        );
+
+
+        $records = $this->statisticsdb->organizationCollectioReport($where, $params);
+
+        $items = array();
+        $per_month_count    = array();
+        $per_month_amount   = array();
+        $month_total        = array();
+        $month_total_amount = array();
+        foreach ($records as $item) {
+            if (!array_key_exists($item['id'], $items)) {
+                $items[$item['id']] = array(
+                    'Code'  => $item['Code'],
+                    'Name'  => $item['Name'],
+                    'CommonName'    => $item['MenuName']
+                );
             }
 
-            echo $tot . '<br>';
-            $paymentData = array(
-                        'Total' => $tot,
-                        'id'    => $p['id']
-                    );
+            $per_month_count[$item['id']][$item['month']] = $item['applicationCount'];
+            $per_month_amount[$item['id']][$item['month']] = $item['Total'];
+            $month_total[$item['month']] = (isset($month_total[$item['month']]) ? ($month_total[$item['month']] + $item['applicationCount']) : $item['applicationCount']);
+            $month_total_amount[$item['month']] = (isset($month_total_amount[$item['month']]) ? ($month_total_amount[$item['month']] + $item['Total']) : $item['Total']);
+        }
 
-            $this->mgovdb->saveData('Service_Payments', $paymentData);
-         }
-        print_data($payments);
+        ksort($month_total);
+
+        $report_data = array(
+            'items'                => $items,
+            'per_month_count'      => $per_month_count,
+            'monthly_total'        => $month_total,
+            'per_month_amount'     => $per_month_amount,
+            'monthly_total_amount' => $month_total_amount
+        );
+
+        // print_data($report_data, true);
+
+        $viewData = array(
+            'pageTitle'     => 'Organization - Collection Reports',
+            'accountInfo'   => user_account_details(),
+            'nosidebar'     => true,
+            'shownav'       => true,
+            'reportData'    => $report_data
+        );
+
+        view('reports/organization/collection', $viewData, 'templates/mgov');
+    }
+
+    public function collectiondetails($year = false, $month = false, $serviceCode = false)
+    {
+
+        if (!$year OR !$month OR !$serviceCode) {
+            show_404();
+        } else {
+
+            $this->load->model('statisticsdb');
+
+            $where = array(
+                'ss.SubDepartmentID = ?',
+                'YEAR(sa.DateApplied) = ?',
+                'MONTH(sa.DateApplied) = ?',
+                'ss.Code = ?'
+            );
+
+            $params = array(
+                $this->user->OrganizationID,
+                $year,
+                $month,
+                $serviceCode
+            );
+
+
+            $serviceData   = $this->mgovdb->getRowObject('Service_Services', $serviceCode, 'Code');
+            $orgData       = $this->mgovdb->getRowObject('Service_Organization', $serviceData->id, 'ServiceID');
+            $extrafields   = $this->mgovdb->getRecords('Service_ExtraFormFields', array('ServiceID' => $serviceData->id));
+            $records       = $this->statisticsdb->organizationCollectioDetails($where, $params);
+            $fields = array();
+            foreach ($extrafields as $r) {
+                if (in_array($r['FieldType'], array(1,2,4))) {
+                    $fields[$r['FieldID']] = trim($r['FieldLabel']);
+                }
+            }
+
+            $viewData = array(
+                'pageTitle'     => 'Organization - Collection Details',
+                'accountInfo'   => user_account_details(),
+                'nosidebar'     => true,
+                'shownav'       => true,
+                'serviceData'   => $serviceData,
+                'orgData'       => $orgData,
+                'fields'        => $fields,
+                'records'       => $records,
+                'jsModules'         => array(
+                    'quickserve',
+                ),
+            );
+
+            // print_data($records);
+
+            view('reports/organization/collectiondetails', $viewData, 'templates/mgov');
+        }
     }
 }

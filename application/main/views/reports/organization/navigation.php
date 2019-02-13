@@ -13,5 +13,6 @@
     <!-- <li><a href="javascript:;">Accident Statistics</a></li> -->
     <li><a href="<?php echo site_url('organization/monthlyreports'); ?>" class="<?php echo current_method() == 'monthlyreports' ? 'active' : '';?>">Violation Report</a></li>
     <li><a href="<?php echo site_url('organization/yearlyreports'); ?>" class="<?php echo current_method() == 'yearlyreports' ? 'active' : '';?>">Yearly Reports</a></li>
+    <li><a href="<?php echo site_url('organization/collectionreport'); ?>" class="<?php echo in_array(current_method(), array('collectionreport', 'collectiondetails')) ? 'active' : '';?>">Collection Report</a></li>
   </ul>
 </div>

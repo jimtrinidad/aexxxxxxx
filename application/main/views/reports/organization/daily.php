@@ -80,7 +80,8 @@ view('reports/organization/navigation');
 		      		case '0': $status = 'Unsettled'; break;
 		      		case '3': $status = 'Canceled'; break;
 		      	}
-		      	$amount = ($item['Status'] == 2 ? total_collections_amount($item['collections']) : 0);
+		      	// $amount = ($item['Status'] == 2 ? total_collections_amount($item['collections']) : 0);
+		      	$amount = ($item['Status'] == 2 ? $item['Total'] : 0);
 		      	$total_amount += $amount;
 		      	echo '<tr>';
 		      		echo '<td>' . $i . '</td>';
