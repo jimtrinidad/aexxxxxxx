@@ -9,7 +9,7 @@ $max = $cur + 5;
 
 <div class="bg-white padding-10 offset-top-10">
 	<div class="row gutter-5">
-		<div class="col-xs-12 col-sm-10 offset-top-5">
+		<div class="col-xs-12 col-sm-10">
 			<h2 class="h2 offset-5 offset-top-10">
 				Collection Report <?php echo $sel?>
 			</h2>

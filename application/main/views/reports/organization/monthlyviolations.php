@@ -9,7 +9,7 @@ $max = $cur + 5;
 
 <div class="bg-white padding-10 offset-top-10">
 	<div class="row gutter-5">
-		<div class="col-xs-12 col-sm-10 offset-top-5">
+		<div class="col-xs-12 col-sm-10">
 			<h2 class="h2 offset-5 offset-top-10">
 				Monthly Violations Report <?php echo $sel?>
 			</h2>
@@ -18,7 +18,7 @@ $max = $cur + 5;
 		<div class="col-xs-12 col-sm-2 offset-top-5">
 			<div class="form-group" style="padding: 0 7px">
 				<label>Year</label>
-				<select class="form-control" onchange="window.location = window.public_url('organization/monthlyreports?year=' + this.value)">
+				<select class="form-control" onchange="window.location = window.public_url('organization/monthlyvreports?year=' + this.value)">
 					<?php
 					while ($min < $max) {
 						echo '<option '.($min == $sel ? 'selected' : '').' >'.$min.'</option>';
@@ -34,7 +34,7 @@ $max = $cur + 5;
 		echo '<h3 class="h3">No record found.</h3>';
 	} else {
 	?>
-	<div class="table-report table-responsive">
+	<div class="table-report table-responsive offset-top-10">
 		<table class="table table-condensed table-bordered">
 		    <thead>
 		      <tr class="text-bold">

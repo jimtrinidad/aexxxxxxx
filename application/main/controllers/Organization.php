@@ -82,7 +82,7 @@ class Organization extends CI_Controller
     /**
     * monthly violations report for the whole year
     */
-    public function monthlyreports()
+    public function monthlyvreports()
     {   
 
         $this->load->model('statisticsdb');
@@ -129,14 +129,85 @@ class Organization extends CI_Controller
         // print_data($report_data, true);
 
         $viewData = array(
-            'pageTitle'     => 'Organization - Monthly Reports',
+            'pageTitle'     => 'Organization - Monthly Violation Report',
             'accountInfo'   => user_account_details(),
             'nosidebar'     => true,
             'shownav'       => true,
             'reportData'    => $report_data
         );
 
-        view('reports/organization/monthly', $viewData, 'templates/mgov');
+        view('reports/organization/monthlyviolations', $viewData, 'templates/mgov');
+    }
+
+    /**
+    * daily violations report
+    * violation count
+    */
+    public function dailyvreports()
+    {   
+
+        $this->load->model('statisticsdb');
+
+        if (get_post('date')) {
+            $date = get_post('date');
+        } else {
+            $date = date('Y-m-d') . ' - ' . date('Y-m-d');
+        }
+
+        $daterange = explode(' - ', $date);
+        $datefrom  = $daterange[0];
+        $dateto    = $daterange[1];
+
+        $where = array(
+            'ss.SubDepartmentID = ?',
+            'DATE(sa.DateApplied) >= ? AND DATE(sa.DateApplied) <= ?',
+        );
+
+        $params = array(
+            $this->user->OrganizationID,
+            $datefrom,
+            $dateto
+        );
+
+
+        $records = $this->statisticsdb->organizationDailyViolationReport($where, $params);
+
+        $items = array();
+        $per_day_count = array();
+        $day_total = array();
+        foreach ($records as $item) {
+            if (!array_key_exists($item['id'], $items)) {
+                $items[$item['id']] = array(
+                    'Code'  => $item['Code'],
+                    'Name'  => $item['Name'],
+                    'CommonName'    => $item['MenuName']
+                );
+            }
+
+            $per_day_count[$item['id']][$item['day']] = $item['applicationCount'];
+            $day_total[$item['day']] = (isset($day_total[$item['day']]) ? ($day_total[$item['day']] + $item['applicationCount']) : $item['applicationCount']);
+        }
+
+        ksort($day_total);
+
+        $report_data = array(
+            'items'             => $items,
+            'per_day_count'     => $per_day_count,
+            'daily_total'       => $day_total
+        );
+
+        // print_data($report_data, true);
+
+        $viewData = array(
+            'pageTitle'     => 'Organization - Daily Violation Report',
+            'accountInfo'   => user_account_details(),
+            'nosidebar'     => true,
+            'shownav'       => true,
+            'date'          => $date,
+            'reportData'    => $report_data
+        );
+
+        view('reports/organization/dailyviolations', $viewData, 'templates/mgov');
     }
 
     public function yearlyreports()
@@ -177,6 +248,10 @@ class Organization extends CI_Controller
         view('reports/organization/yearly', $viewData, 'templates/mgov');
     }
 
+    /**
+    * daily apprehension report
+    * detailed list
+    */
     public function dailyreport()
     {
         $this->load->model('statisticsdb');

@@ -6,7 +6,7 @@ view('reports/organization/navigation');
 <div class="bg-white padding-10 offset-top-10">
 	<form>
 		<div class="row gutter-5">
-			<div class="col-xs-12 col-sm-6 text-center">
+			<div class="col-xs-12 col-sm-6 text-left">
 				<h2 class="h2 offset-5 offset-top-10">
 					<?php echo '<div class="h3" style="margin: 0">' . lookup('service_organization_category', $category) . '</div>Apprehension Report<div class="small offset-top-5">' . str_replace(' - ', ' to ', $date) . '</div>'; ?>
 				</h2>
@@ -47,7 +47,7 @@ view('reports/organization/navigation');
 	<?php
 
 	if (!count($records)) {
-		echo '<h3 class="h3 text-center">No record found.</h3>';
+		echo '<h3 class="h3 text-left">No record found.</h3>';
 	} else {
 	?>
 	<div class="table-report table-responsive offset-top-10">
@@ -129,6 +129,15 @@ view('reports/organization/navigation');
 			autoUpdateInput: true,
 			locale: {
 		      format: 'YYYY-MM-DD'
+		    },
+		    opens: "left",
+		    ranges: {
+		        'Today': [moment(), moment()],
+		        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+		        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+		        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+		        'This Month': [moment().startOf('month'), moment().endOf('month')],
+		        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
 		    }
 		});
 	});

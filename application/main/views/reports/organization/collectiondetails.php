@@ -9,7 +9,7 @@ $max = $cur + 5;
 
 <div class="bg-white padding-10 offset-top-10">
 	<div class="row gutter-5">
-		<div class="col-xs-11 offset-top-5">
+		<div class="col-xs-11">
 			<h2 class="h4 offset-5">
 				<?php echo $serviceData->Name . ' (' . $orgData->MenuName . ')';?>
 				<span class="small" style="display: block;"><?php echo $serviceData->Description; ?></span>

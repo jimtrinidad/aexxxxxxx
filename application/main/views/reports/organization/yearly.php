@@ -9,7 +9,7 @@ $max = $cur + 5;
 
 <div class="bg-white padding-10 offset-top-10">
 	<div class="row gutter-5">
-		<div class="col-xs-12 col-sm-10 offset-top-5">
+		<div class="col-xs-12 col-sm-10">
 			<h2 class="h2 offset-5 offset-top-10">
 				Yearly Report <?php echo $sel?>
 			</h2>
@@ -35,7 +35,7 @@ $max = $cur + 5;
 	} 
 	foreach ($categories as $category => $items) { 
 	?>
-	<div class="table-report table-responsive">
+	<div class="table-report table-responsive offset-top-10">
 		<h3 class="h4 text-center">
 			"<?php echo lookup('service_organization_category', $category) ?>"
 		</h3>
