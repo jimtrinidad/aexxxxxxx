@@ -19,7 +19,7 @@ $view = get_post('v');
 		<div class="col-xs-6 col-sm-2 offset-top-5">
 			<div class="form-group">
 				<label>View</label>
-				<select class="form-control" onchange="window.location = window.public_url('organization/yearlyreports?year=<?php echo get_post('year');?>&v=' + this.value)">
+				<select class="form-control" onchange="window.location = window.public_url('organization/yearlyreports?year=<?php echo $sel;?>&v=' + this.value)">
 					<option value="2" <?php echo ($view == 2 ? 'selected' : '');?>>Collection</option>
 					<option value="1" <?php echo ($view == 1 ? 'selected' : '');?>>Count</option>
 				</select>
