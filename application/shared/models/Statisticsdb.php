@@ -128,10 +128,13 @@ class Statisticsdb extends CI_Model {
 						SUM(sa.Status = 2 || sa.Status = 0 || sa.Status = 3) application, 
 						SUM(sa.Status = 2) as completed, 
 						SUM(sa.Status = 0) as pending, 
-						SUM(sa.Status = 3) as canceled
+						SUM(sa.Status = 3) as canceled,
+						SUM(if(sa.Status = 2, sp.Total, 0)) as completedAmount,
+                        SUM(if(sa.Status = 0, ss.Fee, 0)) as pendingAmount
 					FROM Service_Applications sa
 	                LEFT JOIN Service_Services ss ON sa.ServiceID = ss.id
 	                LEFT JOIN Service_Organization so ON ss.id = so.ServiceID
+	                LEFT JOIN Service_Payments sp ON sa.id = sp.ApplicationID
 	                WHERE ss.deletedAt IS NULL
 		                AND ss.Status = 1
 		                AND ss.ServiceType = 13
