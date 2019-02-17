@@ -4,6 +4,7 @@
 
 define('USER_TABLE_TABLENAME', 'UserAccountInformation u');
 define('USER_TABLE_ID', 'u.id');
+define('USER_TABLE_PHOTO', 'u.Photo');
 define('USER_TABLE_USERNAME', 'CONCAT(u.FirstName, " ", u.LastName) as user_name');
 
 

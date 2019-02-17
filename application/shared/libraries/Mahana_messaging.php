@@ -157,6 +157,8 @@ class Mahana_messaging
                     $threads[$msg['thread_id']]['thread_id'] = $msg['thread_id'];
                     $threads[$msg['thread_id']]['thread_type'] = $msg['type'];
                     $threads[$msg['thread_id']]['key'] = $msg['key'];
+                    $threads[$msg['thread_id']]['client'] = $msg['client'];
+                    $threads[$msg['thread_id']]['subject'] = $msg['subject'];
                     $threads[$msg['thread_id']]['messages']  = array($msg);
                 }
                 else

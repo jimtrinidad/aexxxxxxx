@@ -7,6 +7,7 @@ function Chatbox() {
     this.currentUser;
     this.totalUnread = 0;
     this.totalMsg = 0;
+    this.participantCount = 0;
     this.threads = {};
     this.activeThread;
     this.lastTime = 0;
@@ -15,6 +16,7 @@ function Chatbox() {
     this.findRequest;
     this.threadRequest;
     this.receiverID;
+    this.threadType;
     this.serviceID;
     this.new_support_thread = false;
 
@@ -29,6 +31,7 @@ function Chatbox() {
         self.getThreads();
         self.get_service_supports();
         self.userFinder("#findUser");
+        self.userFinderMulti('#findManyUser');
 
         self.currentUser = $('#chat_current_user').val();
     }
@@ -85,10 +88,13 @@ function Chatbox() {
             self.selectSupport(this);
         });
 
+        $('.chatbubble .top').on('click', 'button.manage_group', function(){
+            self.manageGroup(this);
+        });
+
         // new or find thread
         $('.chatbubble .new-message').click(function(){
             self.clearThread();
-            self.userFinder("#findUser");
         });
 
         // send message via enter
@@ -97,6 +103,32 @@ function Chatbox() {
             self.findThreadByID($("#findUser").val());
             return false;
           }
+        });
+
+        $("#findManyUser").keypress(function(e) {
+          if (e.keyCode === 13) {
+            if ($('.findManyUserGroup').find('.ttmulti-selections li').length > 0) {
+                $('.no-selected-user').hide();
+            }
+          }
+        });
+        $("#startGroupChat").click(function(e) {
+            var selected = [];
+            var selected_el = $('.findManyUserGroup').find('.ttmulti-selections li');
+            if (selected_el.length > 0) {
+                $.each(selected_el, function(i,e) {
+                    selected.push($(e).data('val'));                    
+                });
+                if (selected.length > 1) {
+                    self.findThreadByID(selected, 2);
+                } else {
+                    // only 1, use private message
+                    self.findThreadByID(selected[0]);
+                }
+                $('.no-selected-user').hide();
+            } else {
+                $('.no-selected-user').show();
+            }
         });
 
         // send message via enter
@@ -116,7 +148,32 @@ function Chatbox() {
             self.sendMessage();
         });
 
+        $("#group_name").keypress(function(e) {
+          if (e.keyCode === 13) {
+            self.saveGroupAlias(this);
+            return false;
+          }
+        });
 
+        $('#manageGroupModal #addFoundUserForGroup').click(function(){
+            self.addGroupMember(this);
+        });
+
+        $('#manageGroupModal .leave_group').click(function(){
+            self.leaveGroup(this);
+        });
+
+        $('#manageGroupModal').on('click', '.kick_participant', function(){
+            self.kickParticipant(this);
+        });
+
+    }
+
+    /**
+    * usage of different libraries and plugins
+    */
+    this.set_configs = function()
+    {
 
         // BLOCK BODY SCROLL WHEN FOCUSED ON CHATBOX
         $chatbubble = $('.chatbubble .expanded');
@@ -133,6 +190,21 @@ function Chatbox() {
                 }
             });
         });
+
+        self.setScroll();
+
+        $(window).resize(function(){
+            self.resetScroll();
+        });
+
+        setInterval(function(){
+            if ($('.chatbubble').hasClass('opened') && self.activeThread && self.isTabActive) {
+                var thread_data = self.get_thread_data(self.activeThread);
+                if (thread_data.unread > 0) {
+                    self.setRead(self.activeThread);
+                }
+            }
+        }, 5000);
 
     }
 
@@ -156,29 +228,6 @@ function Chatbox() {
         if (scrollTop != 0) {
             $('html,body').scrollTop(-scrollTop);
         }
-    }
-
-    /**
-    * usage of different libraries and plugins
-    */
-    this.set_configs = function()
-    {
-
-        self.setScroll();
-
-        $(window).resize(function(){
-            self.resetScroll();
-        });
-
-        setInterval(function(){
-            if ($('.chatbubble').hasClass('opened') && self.activeThread && self.isTabActive) {
-                var thread_data = self.get_thread_data(self.activeThread);
-                if (thread_data.unread > 0) {
-                    self.setRead(self.activeThread);
-                }
-            }
-        }, 5000);
-
     }
 
     this.setScroll = function()
@@ -289,11 +338,15 @@ function Chatbox() {
         self.threadRequest = $.ajax({
             url  : window.base_url('message/threads'),
             type : 'post',
-            data : {'unread': self.totalUnread, 'count': self.totalMsg},
+            data : {'unread': self.totalUnread, 'count': self.totalMsg, 'parti_count': self.participantCount},
             success : function(response) {
                 if (response.status) {
+
+                    var old_active_thread = self.get_thread_data(self.activeThread);
+
                     self.totalUnread = response.unread;
                     self.totalMsg = response.count;
+                    self.participantCount = response.parti_count;
                     self.threads = response.data;
                     self.showThreads(response.data);
 
@@ -301,6 +354,12 @@ function Chatbox() {
                         $('span.bubble-unread').text(self.totalUnread).removeClass('hide');
                     } else {
                         $('span.bubble-unread').addClass('hide');
+                    }
+
+                    // on thread refresh, and the active thread is not on the new list if thread, user was kicked!
+                    if (old_active_thread && !self.get_thread_data(self.activeThread)) {
+                        bootbox.alert('You had been kicked out of "<b class="text-bold">' + old_active_thread.name + '</b>" group.');
+                        self.clearThread();
                     }
                 }
             },
@@ -374,6 +433,7 @@ function Chatbox() {
                     vData.thread_id = self.activeThread;
                 } else if (self.receiverID) {
                     vData.receiver = self.receiverID;
+                    vData.thread_type = self.threadType;
                 } else if (self.new_support_thread && self.serviceID) {
                     vData.service_id = self.serviceID;
                 }
@@ -408,7 +468,8 @@ function Chatbox() {
                                     cdate: response.datetime,
                                     sender_id: self.currentUser,
                                     user_name: 'Me',
-                                    body: message
+                                    body: message,
+                                    id: response.data
                                 }
 
                                 self.showMessages([messageData]);
@@ -478,20 +539,24 @@ function Chatbox() {
         $('.chatbubble .write-form').addClass('hide');
         $('.chatbubble .messages').html('').addClass('hide');
         $('.chatbubble .recent-threads li').removeClass('active');
-        $('#findUser').val('');
-        $('.findUserGroup').removeClass('has-error');
-        $('.chatbubble .findUserHelp').text('Press enter to start conversation.');
+        $('#findUser, #findManyUser').val('');
+        $('.findUserGroup, .findManyUserGroup').removeClass('has-error');
+        $('.findUserGroup .findUserHelp').text('Press enter to start conversation.');
+        $('.findManyUserGroup .findUserHelp').text('Press enter to add to group.');
         $('.chatbubble .finder').removeClass('hide');
         self.activeThread = false;
         self.receiverID = false;
         this.new_support_thread = false;
+
+        self.userFinder("#findUser");
+        self.userFinderMulti('#findManyUser');
     }
 
 
     /**
     * find conversation by mabuhay id
     */
-    this.findThreadByID = function(mabuhayID)
+    this.findThreadByID = function(mabuhayID, type = 0)
     {
         if (self.findRequest) {
             self.findRequest.abort();
@@ -502,11 +567,49 @@ function Chatbox() {
         self.findRequest = $.ajax({
                 url  : window.base_url('message/find'),
                 type : 'post',
-                data : {'mabuhay_id' : mabuhayID},
+                data : {
+                    'mabuhay_id' : mabuhayID,
+                    'type'       : type
+                },
                 success: function(response) {
                     if (response.status) {
+
                         if (response.code == 2 && $('#thread_' + response.thread_id).length) {
-                            $('#thread_' + response.thread_id).click();
+                            // if type is group, and same participants exists, ask if want to use it or create a new group
+                            if (type == 2) {
+                                bootbox.confirm({
+                                    message: 'Group with the same participants already exist. Do you want to use it or create a new group.',
+                                    buttons: {
+                                        confirm: {
+                                            label: 'Use existing',
+                                            className: 'btn-danger'
+                                        },
+                                        cancel: {
+                                            label: 'Create a new one',
+                                            className: 'btn-success',
+                                        }
+                                    },
+                                    callback: function (result) {
+                                        if (!result) {
+                                            // set info
+                                            $('.chatbubble .top .avatar img').prop('src', window.public_url('assets/profile/' + response.receiver.photo));
+                                            $('.chatbubble .top .info .name').text(response.receiver.name);
+                                            $('.chatbubble .top .info .count').text('new conversation');
+                                            $('.chatbubble .top content').removeClass('hide');
+                                            $('.chatbubble .write-form').removeClass('hide');
+                                            $('.chatbubble .messages').html('').removeClass('hide');
+
+                                            self.receiverID = response.receiver.id;
+                                            self.threadType = type;
+                                        } else {
+                                            $('#thread_' + response.thread_id).click();
+                                        }
+                                    }
+                                })
+                            } else {
+                                $('#thread_' + response.thread_id).click();
+                            }
+
                         } else {
                             // set info
                             $('.chatbubble .top .avatar img').prop('src', window.public_url('assets/profile/' + response.receiver.photo));
@@ -517,13 +620,14 @@ function Chatbox() {
                             $('.chatbubble .messages').html('').removeClass('hide');
 
                             self.receiverID = response.receiver.id;
+                            self.threadType = type;
                         }
 
                         $('.chatbubble .finder').addClass('hide');
-                        $('.findUserGroup').removeClass('has-error');
+                        $('.' + (type == 2 ? 'findManyUserGroup' : 'findUserGroup')).removeClass('has-error');
                     } else {
-                        $('.chatbubble .findUserHelp').text(response.message);
-                        $('.findUserGroup').addClass('has-error');
+                        $('.' + (type == 2 ? 'findManyUserGroup' : 'findUserGroup')).find('.findUserHelp').text(response.message);
+                        $('.' + (type == 2 ? 'findManyUserGroup' : 'findUserGroup')).addClass('has-error');
                     }
                 },
                 complete: function() {
@@ -584,8 +688,8 @@ function Chatbox() {
             $.each(data.participants, function(i, e) {
                 participants.push(e.user_name);
             });
-            if (data.type == 0) {
-                $('.chatbubble .top .info .name').text(participants.join(', '));
+            if (data.type == 2) {
+                $('.chatbubble .top .info .name').html('<span>' + data.name + `</span> <button class="btn btn-xs btn-primary manage_group" data-thread_id="${data.id}"><i class="fa fa-cog"></i>Manage</button>`);
             } else {
                 $('.chatbubble .top .info .name').text(data.name);
             }
@@ -613,30 +717,31 @@ function Chatbox() {
     {
         $.each(data, function(i, e){
             
-            var ctime = moment(e.cdate).fromNow();
-            if (e.sender_id == self.currentUser) {
-                $(".chatbubble .messages").append(
-                    `<li class="i">
-                        <div class="head">
-                            <span class="time">${ctime}</span>
-                            <span class="name">Me</span>
-                        </div>
-                        <div class="message">${e.body}</div>
-                    </li>`
-                );
-            } else {
-                $(".chatbubble .messages").append(
-                    `<li class="friend">
-                        <div class="head">
-                            <span class="name">${e.user_name}</span>
-                            <span class="time">${ctime}</span>
-                        </div>
-                        <div class="message">${e.body}</div>
-                    </li>`
-                );
+            if (!$(".chatbubble .messages").find('#msg_id_' + e.id).length) {
+                var ctime = moment(e.cdate).fromNow();
+                if (e.sender_id == self.currentUser) {
+                    $(".chatbubble .messages").append(
+                        `<li class="i" id="msg_id_${e.id}">
+                            <div class="head">
+                                <span class="time">${ctime}</span>
+                                <span class="name">Me</span>
+                            </div>
+                            <div class="message">${e.body}</div>
+                        </li>`
+                    );
+                } else {
+                    $(".chatbubble .messages").append(
+                        `<li class="friend" id="msg_id_${e.id}">
+                            <div class="head">
+                                <span class="name">${e.user_name}</span>
+                                <span class="time">${ctime}</span>
+                            </div>
+                            <div class="message">${e.body}</div>
+                        </li>`
+                    );
+                }
+                self.clearResizeScroll();
             }
-
-            self.clearResizeScroll();
         })
     }
 
@@ -682,6 +787,55 @@ function Chatbox() {
         }).bind('typeahead:select', function(ev, item) {
             var id = $(ev.target).prop('id');
         });
+
+    },
+
+    this.userFinderMulti = function(elem)
+    {   
+        
+        $('.no-selected-user').hide();
+        // if already set, clear selected
+        if ($('.findManyUserGroup').find('.ttmulti-selections').length > 0) {
+            $('.findManyUserGroup').find('.ttmulti-selections').html('');
+        } else {
+            $(elem).typeaheadmulti({
+                hint: false,
+                minLength: 5
+            },
+            {
+                templates: {
+                    empty: [
+                        '<div class="padding-left-10 empty-message">',
+                          'No match found.',
+                        '</div>'
+                    ].join('\n'),
+                    suggestion: function (item) {
+                        item.address.pop();
+                        return '<div class="row gutter-0">' +
+                                    '<div class="col-xs-2">' +
+                                        '<span>' +
+                                        '<img style="width:45px;height:45px;margin: 0 auto;" src="' + window.public_url() + "assets/profile/"+item.photo+'">' +
+                                        '</span></div>' +
+                                    '<div class="col-xs-10 small" style="padding-left: 10px;">' +
+                                        '<div>'+ item.mabuhayID +'<small> - '+ item.fullname + '</small></div>' +
+                                        '<div><small>'+ item.aclevel +'</small></div>' +
+                                        '<div><small>'+ item.address.join(', ') +'</small></div>' +
+                                    '</div>' +
+                                '</div>';
+                    }
+                },
+                name: 'user',
+                display: 'mabuhayID',
+                source: function(query, syncResults, asyncResults) {
+                    try {clearTimeout(typeaheadTimeout);} catch (e) {}
+                    typeaheadTimeout = setTimeout(function (){
+                        $.get(window.base_url('message/find_user') + "?q=" + query, function(responseData) {
+                            asyncResults(responseData);
+                        });
+                    }, 500);
+                }
+            });
+        }
     }
 
 
@@ -744,6 +898,163 @@ function Chatbox() {
             self.activeThread  = data.thread_id;
             self.lastTime = 0;
         }
+    }
+
+    this.manageGroup = function(elem)
+    {
+        var $this = $(elem);
+        var data = self.get_thread_data($this.data('thread_id'));
+        // console.log(data);
+
+        $('#findUserForGroup').val('');
+        self.userFinder("#findUserForGroup");
+        $('#manageGroupModal #modal_thread_id').val(data.id);
+        $('#manageGroupModal #group_name').val($('.chatbubble .top .info .name span').text());
+        $('#manageGroupModal .participant-list').html('');
+        $.each(data.participants, function(i,e) {
+            var kicklink = '';
+            if (data.starter == self.currentUser) {
+                kicklink = `<i class="js-remove kick_participant pull-right" data-user="${e.user_id}" style="cursor:pointer">✖</i>`;
+            }
+            var tpl = `<li class="ttmulti-selection list-group-item padding-5">
+                        <img width="30" height="30" style="vertical-align: middle;" src="${window.public_url() + "assets/profile/"+e.Photo}">
+                        <span>${e.user_name}</span>
+                        ${kicklink}
+                    </li>`;
+
+            $('#manageGroupModal .participant-list').append(tpl);
+        });
+        
+        $('#manageGroupModal').modal({
+            backdrop : 'static',
+            keyboard : false
+        });
+    }
+
+    this.saveGroupAlias = function(elem)
+    {
+        var $this = $(elem);
+        var thread_id = $('#manageGroupModal #modal_thread_id').val();
+        var data = self.get_thread_data(thread_id);
+        $('#manageGroupModal .modal-content').LoadingOverlay("show", {zIndex: 9999999});
+        $.ajax({
+            url  : window.base_url('message/savegroupalias'),
+            type : 'post',
+            data: {
+                'thread_id' : thread_id,
+                'alias'     : $this.val()
+            },
+            success : function(response) {
+                if (response.status) {
+                    if ($this.val() == '') {
+                        var name = data.name;
+                    } else {
+                        var name = $this.val();
+                    }
+                    $('.chatbubble .top .info .name span').text(name);
+                    $('#thread_' + thread_id).find('.user').text(name);
+                }
+            },
+            complete: function(r) {
+                $('#manageGroupModal .modal-content').LoadingOverlay("hide");
+            }
+        });
+    }
+
+    this.addGroupMember = function(elem)
+    {
+        var $this = $(elem);
+        var mid   = $('#manageGroupModal #findUserForGroup').val();
+        var thread_id = $('#manageGroupModal #modal_thread_id').val();
+        var data = self.get_thread_data(thread_id);
+        if (mid.trim() != '') {
+            if (!$this.hasClass('clicked')) {
+                $this.addClass('clicked');
+                $('#manageGroupModal .modal-content').LoadingOverlay("show", {zIndex: 9999999});
+                $.ajax({
+                    url  : window.base_url('message/addparticipant'),
+                    type : 'post',
+                    data: {
+                        'thread_id' : thread_id,
+                        'mabuhayID' : mid
+                    },
+                    success : function(response) {
+                        // console.log(response);
+                        if (response.status) {
+                            var e = response.data;
+                            var kicklink = '';
+                            if (data.starter == self.currentUser) {
+                                kicklink = `<i class="js-remove kick_participant pull-right" data-user="${e.user_id}" style="cursor:pointer">✖</i>`;
+                            }
+                            var tpl = `<li class="ttmulti-selection list-group-item padding-5">
+                                        <img width="30" height="30" style="vertical-align: middle;" src="${window.public_url() + "assets/profile/"+e.Photo}">
+                                        <span>${e.user_name}</span>
+                                        ${kicklink}
+                                    </li>`;
+
+                            $('#manageGroupModal .participant-list').append(tpl);
+                            $('#manageGroupModal #findUserForGroup').val('');
+                        } else {
+                            bootbox.alert(response.message);
+                        }
+                    },
+                    complete: function(r) {
+                        $('#manageGroupModal .modal-content').LoadingOverlay("hide");
+                        $this.removeClass('clicked');
+                    }
+                });
+            }
+        }
+    }
+
+    this.leaveGroup = function(elem)
+    {
+        var $this = $(elem);
+        var thread_id = $('#manageGroupModal #modal_thread_id').val();
+        bootbox.confirm('Are you sure you want to leave this group?', function(result){
+            if (result) {
+                $.ajax({
+                    url  : window.base_url('message/leavegroup'),
+                    type : 'post',
+                    data: {
+                        'thread_id' : thread_id
+                    },
+                    success : function(response) {
+                        if (response.status) {
+                            $('#manageGroupModal').modal('hide');
+                            self.totalMsg = 0;
+                            self.getThreads();
+                            self.clearThread();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    this.kickParticipant = function(elem)
+    {
+        var $this = $(elem);
+        var thread_id = $('#manageGroupModal #modal_thread_id').val();
+        bootbox.confirm('Are you sure you want to kick ' + $this.closest('li').find('span').text(), function(result){
+            if (result) {
+                $.ajax({
+                    url  : window.base_url('message/leavegroup'),
+                    type : 'post',
+                    data: {
+                        'thread_id' : thread_id,
+                        'id'        : $this.data('user')
+                    },
+                    success : function(response) {
+                        if (response.status) {
+                            $this.closest('li').remove();
+                            self.totalMsg = 0;
+                            self.getThreads();
+                        }
+                    }
+                });
+            }
+        });
     }
 
 }

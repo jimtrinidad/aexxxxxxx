@@ -45,10 +45,20 @@ class Message extends CI_Controller
 
         if ($message != '') {
             if ($thread_id) {
-                $rsp = $this->mahana_messaging->reply_to_thread($thread_id, $user_id, $message);
-                $type = 1; // reply
+                // if existing participant
+                if (!$this->mahana_model->valid_new_participant($thread_id, $user_id)) {
+                    $rsp = $this->mahana_messaging->reply_to_thread($thread_id, $user_id, $message);
+                    $type = 1; // reply
+                } else {
+                    $rsp['err'] = 1;
+                }
             } else if ($receiver && $receiver != $user_id) {
-                $rsp = $this->mahana_messaging->send_new_message($user_id, $receiver, '', $message);
+                if (get_post('thread_type') == 2) {
+                    // group message
+                    $rsp = $this->mahana_messaging->send_new_message($user_id, $receiver, '', $message, PRIORITY_NORMAL, 2, null, $user_id);
+                } else {
+                    $rsp = $this->mahana_messaging->send_new_message($user_id, $receiver, '', $message);
+                }
                 $type = 2; // new
             } else if ($service_id) {
                 $serviceData = $this->mgovdb->getRowObject('Service_Services', $service_id, 'Code');
@@ -118,19 +128,32 @@ class Message extends CI_Controller
     {
         $user_id    = current_user();
         $mID        = get_post('mabuhay_id');
-        $userData   = $this->mgovdb->getRowObject('UserAccountInformation', $mID, 'MabuhayID');
-        if ($userData) {
-            $match_thread = $this->mahana_model->get_thread_by_participants($user_id, $userData->id);
-            $receiver     = array(
-                                'id'    => $userData->id,
-                                'name'  => $userData->FirstName . ' ' . $userData->LastName,
-                                'photo' => photo_filename($userData->Photo)
-                            );
-            if (count($match_thread)) {
-                $found = false;
-                foreach ($match_thread as $match) {
-                    if ($match['type'] == 0) {
-                        $found = true;
+        $type       = get_post('type');
+
+        if ($type == 2) {
+            if (is_array($mID) && count($mID)) {
+                $users = $this->mgovdb->getRecords('UserAccountInformation', 'MabuhayID IN ("'.implode('","', $mID).'")');
+                $recipient_ids  = array();
+                $receiver       = array();
+                foreach ($users as $user) {
+                    $recipient_ids[] = $user['id'];
+                    if (!isset($receiver['name'])) {
+                        $receiver = array(
+                            'name'  => $user['FirstName'] . ' ' . $user['LastName'],
+                            'photo' => photo_filename($user['Photo'])
+                        );
+                    }
+                }
+                if (count($recipient_ids)) {
+                    $receiver['id'] = $recipient_ids;
+                    if (count($recipient_ids) > 2) {
+                        $receiver['name'] .= ', +' . (count($recipient_ids) - 1) . ' Others';
+                    } else if (count($recipient_ids) == 2){
+                        $receiver['name'] .= ', + 1 Other';
+                    }
+                    $match_thread = $this->mahana_model->get_thread_by_participants($user_id, $recipient_ids, 2);
+                    if (count($match_thread)) {
+                        $match       = $match_thread[0];
                         $thread_id   = $match['thread_id'];
                         $return_data = array(
                             'status'    => true,
@@ -138,10 +161,58 @@ class Message extends CI_Controller
                             'receiver'  => $receiver,
                             'thread_id' => $thread_id
                         );
-                        break;
+                    } else {
+                        $return_data = array(
+                            'status'    => true,
+                            'code'      => 1,
+                            'receiver'     => $receiver
+                        );
                     }
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Recipient data not found.'
+                    );
                 }
-                if ($found == false) {
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Invalid group recipient.'
+                );
+            }
+            // echo $this->db->last_query();
+        } else {
+            $userData   = $this->mgovdb->getRowObject('UserAccountInformation', $mID, 'MabuhayID');
+            if ($userData) {
+                $match_thread = $this->mahana_model->get_thread_by_participants($user_id, $userData->id);
+                $receiver     = array(
+                                    'id'    => $userData->id,
+                                    'name'  => $userData->FirstName . ' ' . $userData->LastName,
+                                    'photo' => photo_filename($userData->Photo)
+                                );
+                if (count($match_thread)) {
+                    $found = false;
+                    foreach ($match_thread as $match) {
+                        if ($match['type'] == 0) {
+                            $found = true;
+                            $thread_id   = $match['thread_id'];
+                            $return_data = array(
+                                'status'    => true,
+                                'code'      => 2,
+                                'receiver'  => $receiver,
+                                'thread_id' => $thread_id
+                            );
+                            break;
+                        }
+                    }
+                    if ($found == false) {
+                        $return_data = array(
+                            'status'    => true,
+                            'code'      => 1,
+                            'receiver'  => $receiver
+                        );
+                    }
+                } else {
                     $return_data = array(
                         'status'    => true,
                         'code'      => 1,
@@ -150,16 +221,10 @@ class Message extends CI_Controller
                 }
             } else {
                 $return_data = array(
-                    'status'    => true,
-                    'code'      => 1,
-                    'receiver'  => $receiver
+                    'status'    => false,
+                    'message'   => 'Cannot find this Mabuhay ID.'
                 );
             }
-        } else {
-            $return_data = array(
-                'status'    => false,
-                'message'   => 'Cannot find this Mabuhay ID.'
-            );
         }
 
         response_json($return_data);
@@ -167,9 +232,10 @@ class Message extends CI_Controller
 
     public function threads()
     {
-        $user_id        = current_user();
-        $last_unread    = get_post('unread');
-        $old_count      = get_post('count');
+        $user_id          = current_user();
+        $last_unread      = get_post('unread');
+        $old_count        = get_post('count');
+        $old_participants = get_post('parti_count');
 
         $start = time();
         $limit = 100;
@@ -183,11 +249,12 @@ class Message extends CI_Controller
 
             while(true) {
 
-                $total_unread   = 0;
-                $message_count  = 0;
+                $total_unread       = 0;
+                $message_count      = 0;
+                $participants_count = 0;
 
                 $threads = array();
-                $rsp = $this->mahana_messaging->get_all_threads_grouped($user_id, false, 'desc');
+                $rsp = $this->mahana_messaging->get_all_threads_grouped($user_id, true, 'desc');
                 foreach ($rsp['retval'] as $item) {
                     $unread         = $this->mahana_model->get_thread_msg_count($user_id, $item['thread_id'], MSG_STATUS_UNREAD);
                     $participants   = $this->mahana_model-> get_participant_list($item['thread_id'], $user_id);
@@ -203,18 +270,29 @@ class Message extends CI_Controller
                             foreach ($participants as $i) {
                                 if (!in_array($i['user_id'], $supports)) {
                                     $name = $i['user_name'] . ' - ' . $name;
-                                    $photo = public_url('assets/profile/') . get_user_photo($i['user_id']);
+                                    $photo = public_url('assets/profile/') . photo_filename($i['Photo']);
                                     break;
                                 }
                             }
                         }
                     } else {
-                        $name   = $participants[0]['user_name'];
-                        $photo  = '';
-                        if (count($participants) > 2) {
-                            $name .= ', +' . (count($participants) - 1) + ' Others';
-                        } else if (count($participants) == 2){
-                            $name .= ', + 1 Other';
+                        $photo  = public_url('assets/profile/') . photo_filename($participants[0]['Photo']);
+                        if ($item['thread_type'] == 2 && $item['subject']) {
+                            $name = $item['subject'];
+                        } else {
+                            $name   = $participants[0]['user_name'];
+                            if (count($participants) > 2) {
+                                $name .= ', +' . (count($participants) - 1) . ' Others';
+                            } else if (count($participants) == 2){
+                                $name .= ', + 1 Other';
+                            }
+                        }
+                    }
+
+                    if (is_array($participants)) {
+                        $participants_count += count($participants);
+                        foreach ($participants as &$p) {
+                            $p['Photo'] = photo_filename($p['Photo']);
                         }
                     }
 
@@ -224,25 +302,21 @@ class Message extends CI_Controller
                         'unread'    => $unread,
                         'type'      => $item['thread_type'],
                         'key'       => $item['key'],
+                        'starter'   => $item['client'],
                         'participants'  => $participants,
+                        'subject'   => $item['subject'],
                         'name'      => $name,
                         'photo'     => $photo,
                     );
                 }
 
-                if ($old_count != $message_count || $last_unread != $total_unread) {
-
-                    foreach ($threads as &$thread) {
-                        if ($thread['type'] == 0) {
-                            $thread['photo'] = public_url('assets/profile/') . get_user_photo($thread['participants'][0]['user_id']);
-                        }
-                    }
-
+                if ($old_count != $message_count || $last_unread != $total_unread || $old_participants != $participants_count) {
                     response_json(array(
-                        'status'    => true,
-                        'unread'    => $total_unread,
-                        'count'     => $message_count,
-                        'data'      => $threads
+                        'status'      => true,
+                        'unread'      => $total_unread,
+                        'count'       => $message_count,
+                        'parti_count' => $participants_count,
+                        'data'        => $threads
                     ));
                     break;
 
@@ -359,10 +433,12 @@ class Message extends CI_Controller
 
     public function find_user()
     {   
+        $user_id = current_user();
         $query = get_post('q');
         $where =  'deletedAt IS NULL' .
                     'AND (CONCAT(FirstName, " ", LastName) LIKE "%' . $query . '%")' .
-                    'AND AccountTypeID IN(1,2,3)';
+                    'AND AccountTypeID IN(1,2,3)
+                    AND id != ' . $user_id;
         $users = $this->mgovdb->getRecords('UserAccountInformation', $where);
         $items = array();
         foreach ($users as $user) {
@@ -425,6 +501,97 @@ class Message extends CI_Controller
             response_json(array(
                 'status'    => false,
                 'data'      => 'No service found.'
+            ));
+        }
+    }
+
+    public function savegroupalias()
+    {
+        $thread_id = get_post('thread_id');
+        $thread = $this->mgovdb->getRowObject('msg_threads', $thread_id, 'id');
+        if ($thread) {
+            $updateData = array(
+                'id'        => $thread->id,
+                'subject'   => get_post('alias')
+            );
+            $this->mgovdb->saveData('msg_threads', $updateData);
+            response_json(array(
+                'status'    => true,
+                'data'      => 'Alias has been saved.'
+            ));
+        } else {
+            response_json(array(
+                'status'    => false,
+                'data'      => 'Thread not found.'
+            ));
+        }
+    }
+
+    public function addparticipant()
+    {
+        $thread_id = get_post('thread_id');
+        $mID       = get_post('mabuhayID');
+        $thread = $this->mgovdb->getRowObject('msg_threads', $thread_id, 'id');
+        if ($thread) {
+            $userData   = $this->mgovdb->getRowObject('UserAccountInformation', $mID, 'MabuhayID');
+            if ($userData) {
+                $ret = $this->mahana_messaging->add_participant($thread_id, $userData->id);
+                if ($ret['err'] == 0) {
+                    $return_data = array(
+                        'status'    => true,
+                        'message'   => 'Participant has been added.',
+                        'data'      => array(
+                            'user_id'   => $userData->id,
+                            'user_name' => $userData->FirstName . ' ' . $userData->LastName,
+                            'Photo'     => photo_filename($userData->Photo),
+                            'latest'    => null
+                        )
+                    );
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => $ret['msg']
+                    );
+                }
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Cannot find this Mabuhay ID.'
+                );
+            }
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Thread not found.'
+            );
+        }
+
+        response_json($return_data);
+    }
+
+    public function leavegroup()
+    {
+        $thread_id = get_post('thread_id');
+        $user_id   = current_user();
+        $thread = $this->mgovdb->getRowObject('msg_threads', $thread_id, 'id');
+        if ($thread) {
+            // only creator can kick
+            if (get_post('id')) {
+                if ($thread->client == $user_id) {
+                    $this->mahana_messaging->remove_participant($thread_id, get_post('id'));
+                }
+            } else {
+                // leave group
+                $this->mahana_messaging->remove_participant($thread_id, $user_id);
+            }
+            response_json(array(
+                'status'    => true,
+                'data'      => 'Participants list has been updated.'
+            ));
+        } else {
+            response_json(array(
+                'status'    => false,
+                'data'      => 'Thread not found.'
             ));
         }
     }

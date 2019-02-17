@@ -14,7 +14,10 @@ class Mahana_model extends CI_Model
      */
     function send_new_message($sender_id, $recipients, $subject, $body, $priority, $type = 0, $key = null, $client = null)
     {
-        $match_thread = $this->get_thread_by_participants($sender_id, $recipients, $type, $key);
+        $match_thread = array();
+        if ($type != 2) {
+            $match_thread = $this->get_thread_by_participants($sender_id, $recipients, $type, $key);
+        }
         if (count($match_thread)) {
             
             $thread_id = $match_thread[0]['thread_id'];
@@ -319,6 +322,9 @@ class Mahana_model extends CI_Model
             $statuses[] = array('message_id' => $message['id'], 'user_id' => $user_id, 'status' => MSG_STATUS_UNREAD);
         }
 
+        // delete remaing status if exists (in case user manage to send message but already kicked)
+        $this->_delete_statuses($thread_id, $user_id);
+
         $this->_insert_statuses($statuses);
 
         $this->db->trans_complete();
@@ -503,6 +509,7 @@ class Mahana_model extends CI_Model
             $sql .= " AND grouped.key = {$key}";
         }
 
+        $sql .= ' ORDER BY thread_id DESC';
 
         $query = $this->db->query($sql, array($count, $imploded, $type));
 
@@ -617,15 +624,18 @@ class Mahana_model extends CI_Model
      */
     private function _get_thread_participants($thread_id, $sender_id = 0)
     {
-        $array['thread_id'] = $thread_id;
+        $array['msg_participants.thread_id'] = $thread_id;
 
         if ($sender_id) // If $sender_id 0, no one to exclude
         {
             $array['msg_participants.user_id != '] = $sender_id;
         }
 
-        $this->db->select('msg_participants.user_id, '.USER_TABLE_USERNAME, FALSE);
+        $this->db->select('msg_participants.user_id, MAX(msg_messages.cdate) latest, '.USER_TABLE_USERNAME.','.USER_TABLE_PHOTO, FALSE);
         $this->db->join(USER_TABLE_TABLENAME, 'msg_participants.user_id = ' . USER_TABLE_ID);
+        $this->db->join('msg_messages', 'msg_messages.thread_id = msg_participants.thread_id AND msg_messages.sender_id = msg_participants.user_id', 'left outer');
+        $this->db->group_by('msg_participants.user_id');
+        $this->db->order_by('latest', 'DESC');
 
         $query = $this->db->get_where('msg_participants', $array);
 
