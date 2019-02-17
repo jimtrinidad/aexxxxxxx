@@ -330,7 +330,7 @@ function Chatbox() {
     /**
     * poll threads
     */
-    this.getThreads = function()
+    this.getThreads = function(callback = false)
     {
         if (self.threadRequest) {
             self.threadRequest.abort();
@@ -368,6 +368,10 @@ function Chatbox() {
                     setTimeout(function(){
                         self.getThreads();
                     }, 1000);
+                }
+
+                if (callback) {
+                    callback();
                 }
             }
         });
@@ -459,7 +463,9 @@ function Chatbox() {
                                 $('.nav-tabs a[href="#recent"]').tab('show');
 
                                 // refresh thread
-                                self.getThreads();
+                                self.getThreads(function(){
+                                    $('#thread_' + response.data).removeClass('active').click();
+                                });
                                 
                             } else {
                                 self.lastTime = response.timestamp;
