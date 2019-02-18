@@ -109,62 +109,63 @@
 
 <div class="modal fade" id="manageGroupModal" tabindex="-1" role="dialog" aria-labelledby="manageGroupModal" style="background: rgba(50,50,50, 0.5);">
 	<div class="modal-dialog">
-			<div class="modal-content" id="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-					<h4 class="modal-title" style="font-size:18px;"><b class="text-bold">Manage Group</b></h4>
-				</div>
-				<div class="modal-body" id="modal-body">
+		<div class="modal-content" id="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+				<h4 class="modal-title" style="font-size:18px;"><b class="text-bold">Manage Group</b></h4>
+			</div>
+			<div class="modal-body" id="modal-body">
 
-					<div class="form-group offset-bottom-5">
-						<label class="text-bold">Group Alias</label>
-						<input class="form-control offset-bottom-5" type="text" id="group_name" name="group_name" placeholder="Group alias" maxlength="100">
-						<span class="help-block small pull-right offset-top-5">Press enter to save.</span>
-						<div class="clearfix"></div>
-					</div>
-
-					<hr class="offset-top-10 offset-bottom-10">
-
-					<div class="row">
-						<div class="col-xs-12">
-							<label class="text-bold offset-top-5 offset-bottom-5">Participants</label>	
-						</div>
-						<!-- <div class="col-xs-4 text-right">
-							<button class="btn btn-xs btn-success"><i class="fa fa-plus"></i>Add</button>
-						</div> -->
-					</div>
-					<div class="row gutter-5">
-						<div class="col-xs-10">
-							<input class="form-control" type="text" id="findUserForGroup" placeholder="Mabuhay ID or Search by Name">
-							<span class="help-block findUserHelp small pull-right">Find user then click the add button.</span>
-						</div>
-						<div class="col-xs-2">
-							<button class="btn btn-sm btn-success" id="addFoundUserForGroup"><i class="fa fa-plus"></i> Add</button>
-						</div>
-					<div class="row">
-						<div class="col-xs-12">
-							<ul class="list-group participant-list">
-								<li class="ttmulti-selection list-group-item padding-5">
-									<img width="30" height="30" style="vertical-align: middle;" src="http://localhost/Projects/Aexponents/mgovphV2/public/assets/profile/avatar_default.jpg">
-									<span>Some Name</span>
-									<i class="js-remove pull-right" style="cursor:pointer">✖</i>
-								</li>
-							</ul>
-						</div>
-					</div>
-
-					<input type="hidden" id="modal_thread_id" name="modal_thread_id" value="">
-
-					<div class="pull-left">
-						<button type="button" class="btn btn-danger btn-xs text-white leave_group">Leave group</button>
-					</div>
-					<div class="pull-right">
-						<button type="button" class="btn bg-cyan btn-xs text-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-					</div>
-
+				<div class="form-group offset-bottom-5">
+					<label class="text-bold">Group Alias</label>
+					<input class="form-control offset-bottom-5" type="text" id="group_name" name="group_name" placeholder="Group alias" maxlength="100">
+					<span class="help-block small pull-right offset-top-5">Press enter to save.</span>
 					<div class="clearfix"></div>
 				</div>
+
+				<hr class="offset-top-10 offset-bottom-10">
+
+				<div class="row">
+					<div class="col-xs-12">
+						<label class="text-bold offset-top-5 offset-bottom-5">Participants</label>	
+					</div>
+					<!-- <div class="col-xs-4 text-right">
+						<button class="btn btn-xs btn-success"><i class="fa fa-plus"></i>Add</button>
+					</div> -->
+				</div>
+				<div class="row gutter-5">
+					<div class="col-xs-10">
+						<input class="form-control" type="text" id="findUserForGroup" placeholder="Mabuhay ID or Search by Name">
+						<span class="help-block findUserHelp small pull-right">Find user then click the add button.</span>
+					</div>
+					<div class="col-xs-2">
+						<button class="btn btn-sm btn-success" id="addFoundUserForGroup"><i class="fa fa-plus"></i> Add</button>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<ul class="list-group participant-list">
+							<li class="ttmulti-selection list-group-item padding-5">
+								<img width="30" height="30" style="vertical-align: middle;" src="http://localhost/Projects/Aexponents/mgovphV2/public/assets/profile/avatar_default.jpg">
+								<span>Some Name</span>
+								<i class="js-remove pull-right" style="cursor:pointer">✖</i>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<input type="hidden" id="modal_thread_id" name="modal_thread_id" value="">
+
+				<div class="pull-left">
+					<button type="button" class="btn btn-danger btn-xs text-white leave_group">Leave group</button>
+				</div>
+				<div class="pull-right">
+					<button type="button" class="btn bg-cyan btn-xs text-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+				</div>
+
+				<div class="clearfix"></div>
 			</div>
+		</div>
 	</div>
 </div>
 
