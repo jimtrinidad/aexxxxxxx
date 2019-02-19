@@ -68,7 +68,7 @@ function Organization() {
 
                     var data = response.data;
                     $.each(data, function(i,e){
-                        var tpl = `<div class="col-xs-12 col-sm-6 offset-top-10">
+                        var tpl = `<div class="categorybox col-xs-12 col-sm-6 offset-top-10">
                                     <div class="bg-white">
                                         <div class="org-category">${e.category}</div>
                                         <div class="row gutter-5">`;
@@ -86,6 +86,11 @@ function Organization() {
                         tpl += '</div></div></div>';
 
                         $('#LoadMainBody').append(tpl);
+                        $('#LoadMainBody').imagesLoaded( function(){
+                            $('#LoadMainBody').isotope({
+                              itemSelector : '.categorybox'
+                            });
+                        });
                     });
 
                 } else {
