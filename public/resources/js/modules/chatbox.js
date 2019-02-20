@@ -453,7 +453,7 @@ function Chatbox() {
         var message = self.textarea.data("emojioneArea").getText().trim();
         if (message) {
 
-            $(".chatbubble .chat").LoadingOverlay("show", {zIndex: 9999999});
+            $(".chatbubble .write-form").LoadingOverlay("show", {zIndex: 9999999});
             if (!$(".chatbubble .write-form").hasClass('sending')) {
                 $(".chatbubble .write-form").addClass('sending');
                 $("#text_message").blur();
@@ -519,7 +519,7 @@ function Chatbox() {
                         }
                     }, complete: function() {
                         $(".chatbubble .write-form").removeClass('sending');
-                        $(".chatbubble .chat").LoadingOverlay("hide");
+                        $(".chatbubble .write-form").LoadingOverlay("hide");
                         $("#text_message").focus();
 
                         $("#text_message").val('');
