@@ -264,6 +264,15 @@
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
 }
+
+.ui .messages li .message.notext {
+  background: unset !important;
+  margin-top: 5px !important;
+}
+.ui .messages li .message.notext:before {
+  border: 0 !important;
+}
+
 .ui .messages li.friend .name {
   margin-left: 20px;
 }
@@ -304,10 +313,16 @@
 .ui .write-form {
   height: 85px;
 }
+
+.ui .write-form .textarea-cont {
+    width: 80%;
+    height: 55px;
+    float: left;
+    margin: 14px 1% 0 4%;
+}
 .ui .write-form textarea {
-  height: 50px;
-  margin: 17px 1% 0 4%;
-  width: 80%;
+  height: 100%;
+  width: 100%;
   outline: none;
   padding: 10px;
   border: none;
@@ -422,7 +437,7 @@
 		display: none;
 	}
 
-	.ui .write-form textarea {
+	.ui .write-form .textarea-cont {
 		width: 73%;
 	}
 
@@ -455,4 +470,24 @@
 	.chatbubble .ui {
 		height: 320px;
 	}
+}
+
+.emojione {
+    font-size: inherit;
+    height: 2ex;
+    width: 2.1ex;
+    min-height: 20px;
+    min-width: 20px;
+    display: inline-block;
+    margin: -.2ex .15em .2ex;
+    line-height: normal;
+    vertical-align: middle;
+    max-width: 100%;
+    top: 0;
+    background-image: none;
+}
+
+.emojionearea .emojionearea-editor {
+  min-height: 4em !important;
+  max-height: 4em !important
 }

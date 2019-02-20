@@ -279,6 +279,9 @@ class Message extends CI_Controller
                         $photo  = public_url('assets/profile/') . photo_filename($participants[0]['Photo']);
                         if ($item['thread_type'] == 2 && $item['subject']) {
                             $name = $item['subject'];
+                            if ($item['logo']) {
+                                $photo = public_url('assets/logo/') . logo_filename($item['logo']);
+                            }
                         } else {
                             $name   = $participants[0]['user_name'];
                             if (count($participants) > 2) {
@@ -465,7 +468,7 @@ class Message extends CI_Controller
     public function services()
     {
         $user_id = current_user();
-        $sql = "SELECT ss.id,ss.Code,ss.Name,Supports,Logo,t.id AS thread_id FROM Service_Services ss
+        $sql = "SELECT ss.id,ss.Code,ss.Name,Supports,ss.Logo,t.id AS thread_id FROM Service_Services ss
                     JOIN UserAccountInformation ua ON (
                         ua.id = {$user_id} AND (
                             (ss.LocationScopeID = 1) OR
@@ -525,6 +528,64 @@ class Message extends CI_Controller
                 'data'      => 'Thread not found.'
             ));
         }
+    }
+
+    public function savegrouplogo()
+    {
+        $thread_id = get_post('thread_id');
+        $thread = $this->mgovdb->getRowObject('msg_threads', $thread_id, 'id');
+        if ($thread) {
+
+            $photoFilename  = md5('thread-' . $thread_id);
+
+            // validate file upload
+            $this->load->library('upload', array(
+                'upload_path'   => LOGO_DIRECTORY,
+                'allowed_types' => 'gif|jpg|png',
+                'max_size'      => '1000', // mb
+                'max_width'     => '1024',
+                'max_height'    => '768',
+                'overwrite'     => true,
+                'file_name'     => $photoFilename
+            ));
+
+            if (empty($_FILES['avatarFile']['name'])) {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'No image selected.'
+                );
+            } else {
+                if ($this->upload->do_upload('avatarFile') == false) {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Uploading picture failed.',
+                        'fields'    => array('avatarFile' => $this->upload->display_errors('',''))
+                    );
+                } else {
+
+                    $updateData = array(
+                        'id'        => $thread->id,
+                        'logo'      => $this->upload->data('file_name')
+                    );
+
+                    $this->mgovdb->saveData('msg_threads', $updateData);
+
+                    $return_data = array(
+                        'status'    => true,
+                        'message'   => 'Group picture has been updated successfully',
+                        'url'       => public_url('assets/logo/') . logo_filename($updateData['logo']) . '?' . time()
+                    );
+
+                }
+            }
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'data'      => 'Thread not found.'
+            );
+        }
+
+        response_json($return_data);
     }
 
     public function addparticipant()

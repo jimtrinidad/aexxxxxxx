@@ -1,4 +1,6 @@
 <link rel="stylesheet" href="<?php echo public_url(); ?>resources/css/chatbox.css?<?php echo time()?>" type="text/css"> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/css/emojione.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.1/emojionearea.css" />
 
 <div class="chatbubble">
     <div class="unexpanded">
@@ -97,8 +99,11 @@
 					</li> -->
 				</ul>
 				<div class="write-form hide">
-					<textarea placeholder="Type your message" name="e" id="text_message"  rows="2"></textarea>
+					<div class="textarea-cont">
+						<textarea placeholder="Type your message" name="e" id="text_message"  rows="2"></textarea>
+					</div>
 					<span class="send"><i class="fa fa-send"></i> Send</span>
+					<div class="clearfix"></div>
 					<span class="help-block textMessageHelp small"></span>
 				</div>
 			</div>
@@ -116,11 +121,26 @@
 			</div>
 			<div class="modal-body" id="modal-body">
 
-				<div class="form-group offset-bottom-5">
-					<label class="text-bold">Group Alias</label>
-					<input class="form-control offset-bottom-5" type="text" id="group_name" name="group_name" placeholder="Group alias" maxlength="100">
-					<span class="help-block small pull-right offset-top-5">Press enter to save.</span>
-					<div class="clearfix"></div>
+				<div class="row gutter-5">
+					<div class="col-xs-9">
+						<div class="form-group offset-bottom-5">
+							<label class="text-bold">Group Alias</label>
+							<input class="form-control offset-bottom-5" type="text" id="group_name" name="group_name" placeholder="Group alias" maxlength="100">
+							<span class="help-block small pull-right offset-top-5 offset-bottom-5">Press enter to save alias.</span>
+						</div>
+					</div>
+					<div class="col-xs-3 text-center" style="margin-top: -15px;">
+						<form id="groupImageForm" name="groupImageForm" action="<?php echo site_url('message/savegrouplogo') ?>" enctype="multipart/form-data">
+							<div class="image-upload-container small padding-top-10">
+				                <img class="image-preview" src="<?php echo public_url(); ?>assets/profile/avatar_default.jpg" alt="...">
+				                <span class="hiddenFileInput hide">
+				                  <input type="file" accept="image/*" class="image-upload-input" id="avatarFile" name="avatarFile"/>
+				                </span>
+				            </div>
+				            <input type="hidden" class="modal_thread_id" name="thread_id" value="">
+							<button type="submit" class="btn btn-primary btn-xs text-white small" style="margin-top: 11px;">Save Image</button>
+						</form>
+					</div>
 				</div>
 
 				<hr class="offset-top-10 offset-bottom-10">
@@ -154,7 +174,7 @@
 					</div>
 				</div>
 
-				<input type="hidden" id="modal_thread_id" name="modal_thread_id" value="">
+				<input type="hidden" id="modal_thread_id" class="modal_thread_id" name="modal_thread_id" value="">
 
 				<div class="pull-left">
 					<button type="button" class="btn btn-danger btn-xs text-white leave_group">Leave group</button>
@@ -171,6 +191,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/nicescroll/3.5.4/jquery.nicescroll.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/lib/js/emojione.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.1/emojionearea.min.js"></script>
 
 <script type="text/javascript" src="<?php echo public_url(); ?>resources/js/typeahead-multiselect.js"></script>
 

@@ -19,6 +19,7 @@ function Chatbox() {
     this.threadType;
     this.serviceID;
     this.new_support_thread = false;
+    this.textarea;
 
     /**
      * Initialize events
@@ -167,6 +168,11 @@ function Chatbox() {
             self.kickParticipant(this);
         });
 
+        $('#manageGroupModal #groupImageForm').submit(function(e) {
+            e.preventDefault();
+            self.saveGroupImage(this);
+        }) 
+
     }
 
     /**
@@ -205,6 +211,27 @@ function Chatbox() {
                 }
             }
         }, 5000);
+
+
+        self.textarea = $('#text_message').emojioneArea({
+            pickerPosition: "top",
+            filtersPosition: "bottom",
+            tones: false,
+            autocomplete: false,
+            hidePickerOnBlur: true,
+            shortnames: true,
+            saveEmojisAs: 'shortname',
+            search: true,
+            searchPosition: "bottom",
+            events: {
+                keydown: function (editor, event) {
+                    if(event.which == 13){
+                        self.sendMessage(); // work
+                        self.textarea.data("emojioneArea").setText(''); // this work
+                    }
+                }
+            }
+        });
 
     }
 
@@ -422,10 +449,11 @@ function Chatbox() {
     */
     this.sendMessage = function()
     {
-        var message = $("#text_message").val();
+        // var message = $("#text_message").val();
+        var message = self.textarea.data("emojioneArea").getText().trim();
         if (message) {
 
-            $(".chatbubble .write-form").LoadingOverlay("show", {zIndex: 9999999});
+            $(".chatbubble .chat").LoadingOverlay("show", {zIndex: 9999999});
             if (!$(".chatbubble .write-form").hasClass('sending')) {
                 $(".chatbubble .write-form").addClass('sending');
                 $("#text_message").blur();
@@ -484,12 +512,6 @@ function Chatbox() {
                             // abort previous message request, request new with latest timestamp
                             self.getMessages();
 
-                            // self.getMessages(1, function() {
-                            //     $(".chatbubble .write-form").removeClass('sending');
-                            //     $(".chatbubble .write-form").LoadingOverlay("hide");
-                            //     $("#text_message").focus();
-                            // });
-
                             $(".chatbubble .write-form .textMessageHelp").text('');
 
                         } else {
@@ -497,14 +519,16 @@ function Chatbox() {
                         }
                     }, complete: function() {
                         $(".chatbubble .write-form").removeClass('sending');
-                        $(".chatbubble .write-form").LoadingOverlay("hide");
+                        $(".chatbubble .chat").LoadingOverlay("hide");
                         $("#text_message").focus();
+
+                        $("#text_message").val('');
+                        self.textarea.data("emojioneArea").setText('')
+                        self.textarea.data("emojioneArea").hidePicker();
                     }
                 });
             }
         }
-
-        $("#text_message").val('');
     }
 
     /**
@@ -550,6 +574,10 @@ function Chatbox() {
         $('.findUserGroup .findUserHelp').text('Press enter to start conversation.');
         $('.findManyUserGroup .findUserHelp').text('Press enter to add to group.');
         $('.chatbubble .finder').removeClass('hide');
+
+        $("#text_message").val('');
+        self.textarea.data("emojioneArea").setText('');
+
         self.activeThread = false;
         self.receiverID = false;
         this.new_support_thread = false;
@@ -707,6 +735,9 @@ function Chatbox() {
             $(".chatbubble .finder").addClass('hide');
             $(".chatbubble .messages").html('').removeClass('hide').LoadingOverlay("show", {zIndex: 9999999});
 
+            $("#text_message").val('');
+            self.textarea.data("emojioneArea").setText('');
+
             self.receiverID = false;
             this.new_support_thread = false;
             self.activeThread  = data.id;
@@ -721,10 +752,13 @@ function Chatbox() {
     */
     this.showMessages = function(data)
     {
+
         $.each(data, function(i, e){
             
             if (!$(".chatbubble .messages").find('#msg_id_' + e.id).length) {
-                var ctime = moment(e.cdate).fromNow();
+                var ctime   = moment(e.cdate).fromNow();
+                var body    = emojione.shortnameToImage(e.body);
+                var notext  = ($('<span>' + body + '<span>').text().trim() == '' ? 'notext' : '');
                 if (e.sender_id == self.currentUser) {
                     $(".chatbubble .messages").append(
                         `<li class="i" id="msg_id_${e.id}">
@@ -732,7 +766,7 @@ function Chatbox() {
                                 <span class="time">${ctime}</span>
                                 <span class="name">Me</span>
                             </div>
-                            <div class="message">${e.body}</div>
+                            <div class="message ${notext}">${body}</div>
                         </li>`
                     );
                 } else {
@@ -742,7 +776,7 @@ function Chatbox() {
                                 <span class="name">${e.user_name}</span>
                                 <span class="time">${ctime}</span>
                             </div>
-                            <div class="message">${e.body}</div>
+                            <div class="message ${notext}">${body}</div>
                         </li>`
                     );
                 }
@@ -914,7 +948,8 @@ function Chatbox() {
 
         $('#findUserForGroup').val('');
         self.userFinder("#findUserForGroup");
-        $('#manageGroupModal #modal_thread_id').val(data.id);
+        $('#manageGroupModal .modal_thread_id').val(data.id);
+        $('#manageGroupModal .image-preview').prop('src', $('.chatbubble .top .avatar img').prop('src'));
         $('#manageGroupModal #group_name').val($('.chatbubble .top .info .name span').text());
         $('#manageGroupModal .participant-list').html('');
         $.each(data.participants, function(i,e) {
@@ -964,6 +999,66 @@ function Chatbox() {
             complete: function(r) {
                 $('#manageGroupModal .modal-content').LoadingOverlay("hide");
             }
+        });
+    }
+
+    this.saveGroupImage = function(form)
+    {
+        // prenvet multiple calls
+        if ($(form).data('running')) {
+            return false;
+        }
+
+        $(form).data('running', true);
+        $(form).find('input').blur();
+        $(form).LoadingOverlay("show");
+
+        var formData = new FormData(form);
+        var thread_id = $('#manageGroupModal #modal_thread_id').val();
+        
+        // reset input erros
+        $.each($(form).find('input, select, textarea'), function(i,e){
+            $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger');
+            $(e).popover('destroy');
+        });
+        //clean error box
+        $(form).find('#error_message_box .error_messages').html('');
+        $(form).find('#error_message_box').addClass('hide');
+
+        $.ajax({
+            url: $(form).prop('action'),
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                if (response.status) {
+                    bootbox.alert(response.message);
+                    var imgsrc = response.url;
+                    $('.profile-img').find('img.i-profile').prop('src', imgsrc);
+                    $('.chatbubble .top .avatar img').prop('src', imgsrc);
+                    $('#thread_' + thread_id).find('img').prop('src', imgsrc);
+                } else {
+                    $(form).find('#error_message_box .error_messages').append('<p><b>' + response.message + '</b></p>');
+
+                    $.each(response.fields, function(i,e){
+                        $(form).find('#'+i).prop('title', e).closest('div').addClass('has-error').find('label').addClass('text-danger');
+                        Utils.popover($('#'+i), {
+                            t: 'hover',
+                            p: 'top',
+                            m: e
+                        });
+                        $(form).find('#error_message_box .error_messages').append('<p>' + e + '</p>');
+                    });
+
+                    $(form).find('#error_message_box').removeClass('hide');
+                }
+            },
+            complete: function() {
+                $(form).LoadingOverlay("hide");
+                $(form).data('running', false);
+            },
+            cache: false,
+            contentType: false,
+            processData: false
         });
     }
 

@@ -191,7 +191,7 @@ class Mahana_model extends CI_Model
      */
     function get_full_thread($thread_id, $user_id, $full_thread = FALSE, $order_by = 'asc')
     {
-        $sql = 'SELECT m.*, s.status, t.subject, t.type, t.key, t.client, '.USER_TABLE_USERNAME .
+        $sql = 'SELECT m.*, s.status, t.subject, t.type, t.key, t.client, t.logo, '.USER_TABLE_USERNAME .
         ' FROM ' . $this->db->dbprefix . 'msg_participants p ' .
         ' JOIN ' . $this->db->dbprefix . 'msg_threads t ON (t.id = p.thread_id) ' .
         ' JOIN ' . $this->db->dbprefix . 'msg_messages m ON (m.thread_id = t.id) ' .
@@ -224,7 +224,7 @@ class Mahana_model extends CI_Model
      */
     function get_all_threads($user_id, $full_thread = FALSE, $order_by = 'asc')
     {
-        $sql = 'SELECT m.*, s.status, t.subject, t.type, t.key, t.client, '.USER_TABLE_USERNAME .
+        $sql = 'SELECT m.*, s.status, t.subject, t.type, t.key, t.client, t.logo, '.USER_TABLE_USERNAME .
         ' FROM ' . $this->db->dbprefix . 'msg_participants p ' .
         ' JOIN ' . $this->db->dbprefix . 'msg_threads t ON (t.id = p.thread_id) ' .
         ' JOIN ' . $this->db->dbprefix . 'msg_messages m ON (m.thread_id = t.id) ' .
@@ -255,7 +255,7 @@ class Mahana_model extends CI_Model
      */
     function get_thread_messages($user_id, $thread_id, $from_time = false, $status = false, $order_by = 'asc')
     {
-        $sql = 'SELECT m.*, s.status, t.subject, t.type, t.key, t.client, '.USER_TABLE_USERNAME .
+        $sql = 'SELECT m.*, s.status, t.subject, t.type, t.key, t.client, t.logo, '.USER_TABLE_USERNAME .
         ' FROM ' . $this->db->dbprefix . 'msg_participants p ' .
         ' JOIN ' . $this->db->dbprefix . 'msg_threads t ON (t.id = p.thread_id) ' .
         ' JOIN ' . $this->db->dbprefix . 'msg_messages m ON (m.thread_id = t.id) ' .
