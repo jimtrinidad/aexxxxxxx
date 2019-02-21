@@ -182,7 +182,12 @@ $config['service_organization_category'] = array(
 	3 => 'Emergency Assistance',
 	4 => 'Driving Violation',
 	5 => 'Establishment Traffic Violation',
-	6 => 'Pedestrian Traffic Violation'
+	6 => 'Pedestrian Traffic Violation',
+	7 => 'Expenditure',
+	8 => 'Income',
+	9 => 'Other Services',
+	10 => 'Special Budget',
+	11 => 'Special Services'
 );
 
 
