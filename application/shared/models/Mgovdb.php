@@ -453,7 +453,7 @@ class Mgovdb extends CI_Model {
                 AND ss.SubDepartmentID = ?
                 {$keywordFilter}
                 GROUP BY ss.id
-                ORDER BY Applications DESC";
+                ORDER BY Applications DESC, so.MenuName";
 
         return $this->db->query($sql, $queryParams)->result_array();
 	}

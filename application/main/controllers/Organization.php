@@ -6,6 +6,7 @@ class Organization extends CI_Controller
 
     private $user;
     private $categories = array();
+    private $orgCode;
     public function __construct()
     {
         parent::__construct();
@@ -20,8 +21,10 @@ class Organization extends CI_Controller
 
         if (in_array($user->OrganizationID, lookup('cttmo_organizations'))) {
             $this->categories = lookup('service_cttmo_category');
+            $this->orgCode = 'cttmo';
         } else if (in_array($user->OrganizationID, lookup('coa_organizations'))) {
             $this->categories = lookup('service_coa_category');
+            $this->orgCode = 'coa';
         }
 
         $this->user = $user;
