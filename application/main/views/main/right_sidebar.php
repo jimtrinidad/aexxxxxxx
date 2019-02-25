@@ -15,7 +15,7 @@
   <div class="col-md-12 offset-top-10 bg-white" >
     <div class="row gutter-5">
       <div class="col-xs-12 text-blue" style="text-transform: uppercase;font-weight: bold;padding: 4px;">
-        WELCOME REMARKS FROM <?php echo $firstOfficer['Position'] . ' ' . $firstOfficer['Firstname'] . ' ' . $firstOfficer['Lastname'] ?>
+        <small class="small">WELCOME REMARKS FROM</small><br><?php echo $firstOfficer['Position'] . ' ' . $firstOfficer['Firstname'] . ' ' . $firstOfficer['Lastname'] ?>
       </div>
       <hr style="border: 1px solid gray;opacity: 0.3;margin: 5px 0;">
       <div class="col-xs-12 side-message">
@@ -95,8 +95,8 @@
                <?php if ($accountInfo->CityData->logo && file_exists(LOGO_DIRECTORY . $accountInfo->CityData->logo)) {?>
                 <img src="<?php echo public_url() . 'assets/logo/' . $accountInfo->CityData->logo; ?>" class="organization-partner-logo" />
                <?php }?>
-               <img src="<?php echo public_url() . 'resources/images/dotr-logo.png' ?>" class="organization-partner-logo" />
-               <img src="<?php echo public_url() . 'resources/images/LTO.png' ?>" class="organization-partner-logo" />
+            <!--    <img src="<?php echo public_url() . 'resources/images/dotr-logo.png' ?>" class="organization-partner-logo" />
+               <img src="<?php echo public_url() . 'resources/images/LTO.png' ?>" class="organization-partner-logo" /> -->
 
                <?php
                 if ($Organization->Setup) {

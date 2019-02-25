@@ -1,5 +1,5 @@
 <?php 
-view('reports/organization/navigation');
+view('reports/cttmo/navigation');
 $cur = date('Y');
 $sel = get_post('year') ?? $cur;
 $min = $cur - 5;
@@ -11,14 +11,14 @@ $max = $cur + 5;
 	<div class="row gutter-5">
 		<div class="col-xs-12 col-sm-10">
 			<h2 class="h2 offset-5 offset-top-10">
-				Collection Report <?php echo $sel?>
+				Monthly Violations Report <?php echo $sel?>
 			</h2>
 			<div class="offset-left-10">As of <?php echo date('F d, Y'); ?></div>
 		</div>
 		<div class="col-xs-12 col-sm-2 offset-top-5">
 			<div class="form-group" style="padding: 0 7px">
 				<label>Year</label>
-				<select class="form-control" onchange="window.location = window.public_url('organization/collectionreport?year=' + this.value)">
+				<select class="form-control" onchange="window.location = window.public_url('cttmo/monthlyvreports?year=' + this.value)">
 					<?php
 					while ($min < $max) {
 						echo '<option '.($min == $sel ? 'selected' : '').' >'.$min.'</option>';
@@ -41,7 +41,7 @@ $max = $cur + 5;
 		        <th width="30">No</th>
 		        <th>Violation</th>
 		        <?php
-		        	foreach ($reportData['monthly_total_amount'] as $k => $t) {
+		        	foreach ($reportData['monthly_total'] as $k => $t) {
 		        		echo '<th class="text-center" style="min-width: 50px;">' . substr(lookup('months', $k), 0, 3) . '</th>';
 		        	}
 		        ?>
@@ -57,16 +57,16 @@ $max = $cur + 5;
 		      		echo '<td>' . $i . '</td>';
 		      		echo '<td>' . $item['CommonName'] . '</td>';
 
-		      		foreach ($reportData['monthly_total_amount'] as $m => $t) {
+		      		foreach ($reportData['monthly_total'] as $m => $t) {
 		      			$tt = 0;
-		      			if (isset($reportData['per_month_amount'][$k][$m])) {
-		      				$tt = $reportData['per_month_amount'][$k][$m];
+		      			if (isset($reportData['per_month_count'][$k][$m])) {
+		      				$tt = $reportData['per_month_count'][$k][$m];
 		      			}
-		      			echo '<td class="text-center">' . ($tt ? '<a href="'.site_url("organization/collectiondetails/$sel/$m/{$item['Code']}").'">₱' . number_format($tt) . '</a>' : '') . '</td>';
+		      			echo '<td class="text-center">' . ($tt ? number_format($tt) : '') . '</td>';
 		      			$item_total += $tt;
 		      		}
 
-		      		echo '<td class="text-center">₱' . number_format($item_total) . '</td>';
+		      		echo '<td class="text-center">' . number_format($item_total) . '</td>';
 
 		      	echo '</tr>';
 		      	$i++;
@@ -75,19 +75,19 @@ $max = $cur + 5;
 		 	</tbody>
 		 	<tfoot>
 		 		<tr>
-		 			<td colspan="<?php echo 3 + count($reportData['monthly_total_amount']); ?>"></td>
+		 			<td colspan="<?php echo 3 + count($reportData['monthly_total']); ?>"></td>
 		 		</tr>
 		 		<tr>
 		 			<th></th>
 		 			<th><b class="text-bold">Totals</b></th>
 		 			<?php
 		 				$total = 0;
-			        	foreach ($reportData['monthly_total_amount'] as $k => $t) {
+			        	foreach ($reportData['monthly_total'] as $k => $t) {
 			        		$total += $t;
-			        		echo '<th class="text-center">₱' . number_format($t) . '</th>';
+			        		echo '<th class="text-center">' . number_format($t) . '</th>';
 			        	}
 			        ?>
-			        <td class="text-center text-bold">₱<?php echo number_format($total) ?></td>
+			        <td class="text-center text-bold"><?php echo number_format($total) ?></td>
 		 		</tr>
 		 	</tfoot>
 		</table>

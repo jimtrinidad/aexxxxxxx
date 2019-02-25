@@ -1,5 +1,5 @@
 <?php 
-view('reports/organization/navigation');
+view('reports/cttmo/navigation');
 ?>
 
 
@@ -108,7 +108,7 @@ view('reports/organization/navigation');
 		        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
 		    }
 		}).on('apply.daterangepicker', function(ev, picker) {
-			window.location = window.public_url('organization/dailyvreports?date=' + $(this).val());
+			window.location = window.public_url('cttmo/dailyvreports?date=' + $(this).val());
 		});
 	});
 </script>

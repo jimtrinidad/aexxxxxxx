@@ -631,7 +631,7 @@ function Mgovph() {
             serviceTemplate.find('span.ServiceCode').text(v.Code);
             serviceTemplate.find('span.serviceProvided').text(v.serviceProvided);
 
-            if (v.Fee) {
+            if (v.Fee && v.Fee > 0) {
                 serviceTemplate.find('span.ServiceFee .fee-amount').text('P' + v.Fee);
                 serviceTemplate.find('span.ServiceFee').show();
             } else {

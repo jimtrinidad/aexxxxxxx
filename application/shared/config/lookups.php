@@ -145,6 +145,7 @@ $config['service_type'] = array(
 	15 => 'Service Implementation',
 	16 => 'Endorsement Financial Assistant',
 	17 => 'Security Support',
+	18 => 'Accounting Expenses'
 );
 
 //array of service type id
@@ -175,21 +176,6 @@ $config['service_application_status'] = array(
 	3 => 'Denied',
 	4 => 'Canceled',
 );
-
-$config['service_organization_category'] = array(
-	1 => 'Traffic Violation',
-	2 => 'Licensing Services',
-	3 => 'Emergency Assistance',
-	4 => 'Driving Violation',
-	5 => 'Establishment Traffic Violation',
-	6 => 'Pedestrian Traffic Violation',
-	7 => 'Expenditure',
-	8 => 'Income',
-	9 => 'Other Services',
-	10 => 'Special Budget',
-	11 => 'Special Services'
-);
-
 
 $config['account_status'] = array(
 	// 0 => 'Pending', //hidden option, default upon registration (waiting for approval status)
@@ -587,3 +573,37 @@ $config['months'] = array(
 	10 => 'October', 
 	11 => 'November', 
 	12 => 'December');
+
+
+
+/**
+* organization id the will use the ctto report
+*/
+$config['cttmo_organizations'] = array(
+	246
+);
+
+/**
+* organization id the will use coa format
+*/
+$config['coa_organizations'] = array(
+	297
+);
+
+
+$config['service_cttmo_category'] = array(
+	1 => 'Traffic Violation',
+	2 => 'Licensing Services',
+	3 => 'Emergency Assistance',
+	4 => 'Driving Violation',
+	5 => 'Establishment Traffic Violation',
+	6 => 'Pedestrian Traffic Violation',
+);
+
+$config['service_coa_category'] = array(
+	7 => 'Expenditure',
+	8 => 'Income',
+	9 => 'Other Services',
+	10 => 'Special Budget',
+	11 => 'Special Services'
+);

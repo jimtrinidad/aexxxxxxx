@@ -1,5 +1,5 @@
 <?php 
-view('reports/organization/navigation');
+view('reports/cttmo/navigation');
 $cur = date('Y');
 $sel = get_post('year') ?? $cur;
 $min = $cur - 5;
@@ -17,7 +17,7 @@ $max = $cur + 5;
 			<div class="offset-left-5 text-bold"><?php echo lookup('months', $this->uri->segment(4)) . ' ' . $this->uri->segment(3); ?></div>
 		</div>
 		<div class="col-xs-1 text-right offset-top-10">
-			<a class="btn btn-danger btn-xs" onclick="if(window.history.length > 2) {window.history.back();return false;}" href="<?php echo site_url('organization/collectionreport/?year=' . $this->uri->segment(3)) ?>">Back</a>
+			<a class="btn btn-danger btn-xs" onclick="if(window.history.length > 2) {window.history.back();return false;}" href="<?php echo site_url('cttmo/collectionreport/?year=' . $this->uri->segment(3)) ?>">Back</a>
 		</div>
 	</div>
 

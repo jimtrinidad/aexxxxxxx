@@ -54,7 +54,7 @@
       <li><a href="javascript:;" onclick="Chatbox.openChatWindow('support')"><i class="fa fa-comments-o bg-cyan" aria-hidden="true"></i> Live Support</a></li>
       <!-- <li><a href="<?php echo site_url('trabaho'); ?>"><i class="fa fa-clock-o bg-red" aria-hidden="true"></i> My Trabaho</a></li> -->
       <!-- <li><a href="#"><i class="fa fa-volume-up bg-green" aria-hidden="true"></i> Announcements</a></li> -->
-      <li><a href="#"><i class="fa fa-flag bg-violet" aria-hidden="true"></i> Events</a></li>
+      <!-- <li><a href="#"><i class="fa fa-flag bg-violet" aria-hidden="true"></i> Events</a></li> -->
       <!-- <li><a href="#"><i class="fa fa-search bg-orange" aria-hidden="true"></i> Community</a></li> -->
       <!-- <li><a href="<?php echo site_url('account'); ?>"><i class="fa fa-user bg-green" aria-hidden="true"></i> My Account</a></li> -->
       <!-- <li><a href="<?php echo site_url('account/mywallet'); ?>"><i class="fa fa-google-wallet bg-cyan" aria-hidden="true"></i> My GovWallet</a></li> -->
@@ -67,8 +67,11 @@
     <li><a href="<?php echo site_url('account'); ?>"><i class="fa fa-user bg-cyan" aria-hidden="true"></i> My Account</a></li>
     <?php if (isset($accountInfo->OrganizationID) && $accountInfo->OrganizationID): ?>
       <li><a href="<?php echo site_url('organization'); ?>"><i class="fa fa-sitemap bg-cyan" aria-hidden="true"></i> My Organization</a></li>
+      <?php if (in_array($accountInfo->OrganizationID, lookup('coa_organizations')) && in_array($accountInfo->AccountTypeID, array(2,3,4))):?>
+      <li><a href="<?php echo site_url('coa/projects'); ?>"><i class="fa fa-cubes bg-cyan" aria-hidden="true"></i> Projects</a></li>
+      <?php endif; ?>
     <?php endif;?>
-    <li><a href="<?php echo site_url('trabaho'); ?>"><i class="fa fa-graduation-cap bg-cyan" aria-hidden="true"></i> Profile</a></li>
+    <!-- <li><a href="<?php echo site_url('trabaho'); ?>"><i class="fa fa-graduation-cap bg-cyan" aria-hidden="true"></i> Profile</a></li> -->
     <!-- <li><a href="#">Mobile Wallet</a></li> -->
   </ul>
 </div>

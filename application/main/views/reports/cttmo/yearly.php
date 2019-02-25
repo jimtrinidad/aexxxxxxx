@@ -1,5 +1,5 @@
 <?php 
-view('reports/organization/navigation');
+view('reports/cttmo/navigation');
 $cur = date('Y');
 $sel = get_post('year') ?? $cur;
 $min = $cur - 5;
@@ -19,7 +19,7 @@ $view = get_post('v');
 		<div class="col-xs-6 col-sm-2 offset-top-5">
 			<div class="form-group">
 				<label>View</label>
-				<select class="form-control" onchange="window.location = window.public_url('organization/yearlyreports?year=<?php echo $sel;?>&v=' + this.value)">
+				<select class="form-control" onchange="window.location = window.public_url('cttmo/yearlyreports?year=<?php echo $sel;?>&v=' + this.value)">
 					<option value="2" <?php echo ($view == 2 ? 'selected' : '');?>>Collection</option>
 					<option value="1" <?php echo ($view == 1 ? 'selected' : '');?>>Count</option>
 				</select>
@@ -28,7 +28,7 @@ $view = get_post('v');
 		<div class="col-xs-6 col-sm-2 offset-top-5">
 			<div class="form-group">
 				<label>Year</label>
-				<select class="form-control" onchange="window.location = window.public_url('organization/yearlyreports?year=' + this.value + '&v=<?php echo $view;?>')">
+				<select class="form-control" onchange="window.location = window.public_url('cttmo/yearlyreports?year=' + this.value + '&v=<?php echo $view;?>')">
 					<?php
 					while ($min < $max) {
 						echo '<option '.($min == $sel ? 'selected' : '').' >'.$min.'</option>';
@@ -47,7 +47,7 @@ $view = get_post('v');
 	?>
 	<div class="table-report table-responsive offset-top-10">
 		<h3 class="h4 text-center">
-			"<?php echo lookup('service_organization_category', $category) ?>"
+			"<?php echo lookup('service_cttmo_category', $category) ?>"
 		</h3>
 		<table class="table table-condensed table-bordered rtable">
 		    <thead>

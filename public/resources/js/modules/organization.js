@@ -25,6 +25,11 @@ function Organization() {
             e.preventDefault();
             self.submitServiceApplication(this);
         });
+
+        $('#projectForm').submit(function(e){
+            e.preventDefault();
+            self.saveProject(this);
+        });
     }
 
     /**
@@ -71,11 +76,11 @@ function Organization() {
                         var tpl = `<div class="categorybox col-xs-12 col-sm-6 offset-top-10">
                                     <div class="bg-white">
                                         <div class="org-category">${e.category}</div>
-                                        <div class="row gutter-5">`;
+                                        <div class="categoryitemcont row gutter-5">`;
 
                         $.each(e.items, function(j,k) {
                             var logo = window.public_url('assets/logo/' + k.Logo)
-                            tpl += `<div class="col-xs-3">
+                            tpl += `<div class="col-xs-3 categoryitem">
                                         <div class="org-item" onclick="Organization.openServiceApplication('${k.Code}')">
                                             <div class="image" style="background-image: url(${logo});"></div>
                                             <div class='name'>${k.MenuName}</div>
@@ -89,6 +94,10 @@ function Organization() {
                         $('#LoadMainBody').imagesLoaded( function(){
                             $('#LoadMainBody').isotope({
                               itemSelector : '.categorybox'
+                            });
+
+                            $('.categoryitemcont').isotope({
+                                itemSelector : '.categoryitem'
                             });
                         });
                     });
@@ -138,7 +147,7 @@ function Organization() {
                     serviceTemplate.find('span.ServiceCode').text(v.Code);
                     serviceTemplate.find('span.serviceProvided').text(v.serviceProvided);
 
-                    if (v.Fee) {
+                    if (v.Fee && v.Fee > 0) {
                         serviceTemplate.find('span.ServiceFee .fee-amount').text('P' + v.Fee);
                         serviceTemplate.find('span.ServiceFee').show();
                     } else {
@@ -326,6 +335,33 @@ function Organization() {
             cache: false,
             contentType: false,
             processData: false
+        });
+    }
+
+
+    /**
+    * add project
+    */
+    this.addProject = function()
+    {   
+        // reset form data
+        $('#projectForm').trigger("reset");
+
+        // reset input erros
+        $.each($('#projectForm').find('input'), function(i,e){
+            $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger');
+            $(e).popover('destroy');
+        });
+        //clean error box
+        $('#projectForm').find('#error_message_box .error_messages').html('');
+        $('#projectForm').find('#error_message_box').addClass('hide');
+
+        $('#projectForm #id').val('');
+
+        $('#projectModal .modal-title').html('<b>Project</b> | Add');
+        $('#projectModal').modal({
+            backdrop : 'static',
+            keyboard : false
         });
     }
 

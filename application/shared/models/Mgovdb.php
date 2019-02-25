@@ -458,5 +458,38 @@ class Mgovdb extends CI_Model {
         return $this->db->query($sql, $queryParams)->result_array();
 	}
 
+	/**
+	* get ogranization services limited by category
+	*/
+	public function getProjectServices($params)
+	{
+		$queryParams = array(
+			$params['userID'],
+			$params['organization'],
+			$params['category']
+		);
+
+		$sql = "SELECT ss.id,ss.Code,ss.Name,ss.Logo,so.MenuName,so.Category,so.Keyword FROM Service_Services ss
+                JOIN UserAccountInformation ua ON (
+                ua.id = ? AND (
+                    (ss.LocationScopeID = 1) OR
+                    (ss.RegionalID = ua.RegionalID AND ss.LocationScopeID = 2) OR 
+                    (ss.ProvincialID = ua.ProvincialID AND ss.LocationScopeID = 3) OR
+                    (ss.MunicipalityCityID = ua.MunicipalityCityID AND (ss.LocationScopeID = 4 OR ss.LocationScopeID = 5)) OR
+                    (ss.BarangayID = ua.BarangayID AND ss.LocationScopeID = 6)
+                    )
+                )
+                LEFT JOIN Service_Organization so ON ss.id = so.ServiceID
+                WHERE ss.deletedAt IS NULL
+                AND ss.Status = 1
+                AND ss.InOrganization = 1
+                AND ss.SubDepartmentID = ?
+                AND so.Category = ?
+                GROUP BY ss.id
+                ORDER BY ss.Name";
+
+        return $this->db->query($sql, $queryParams)->result_array();
+	}
+
 
 }

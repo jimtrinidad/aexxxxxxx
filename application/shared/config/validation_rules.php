@@ -126,3 +126,16 @@ $config['save_office_setup'] = array(
 	array('Domain', 'Domain name', 'trim|alpha_numeric'),
 	array('Email', 'Email', 'trim|valid_email')
 );
+
+$config['save_project'] = array(
+	array('LocationScopeID', 'Location Scope', 'trim|required'),
+	array('Name', 'Project name', 'trim|required'),
+	array('Description', 'Project description', 'trim')
+);
+
+$config['save_project_category_item'] = array(
+	array('Name', 'Project name', 'trim|required'),
+	array('Description', 'Project description', 'trim'),
+	array('Quantity', 'Quantity', 'trim|required|numeric'),
+	array('Allocation', 'Allocation', 'trim|required|numeric'),
+);
