@@ -82,9 +82,10 @@
                               $item['Status'] == 0
                               ? '
                                 <button type="button" class="btn btn-xs btn-success" title="Approve service" onClick="Services.approveService('.$item['id'].')"><i class="fa fa-check"></i><span class="visible-lg-inline"> Approve</span></button>'
-                              : '
-                                <button class="btn btn-xs btn-'.($item['InOrganization'] ? 'primary' : 'default').'" title="Organization" onClick="Services.showOrganization('.$item['id'].')"><i class="fa fa-sitemap"></i><span class="visible-lg-inline"> Organization</span></button>
-                                <button class="btn btn-xs btn-info" title="Supports" onClick="Services.showSupports('.$item['id'].')">( '.count($item['Supports']).' ) <i class="fa fa-users"></i></button>
+                              : 
+
+                              ($item['isOrganization'] ? '<button class="btn btn-xs btn-'.($item['InOrganization'] ? 'primary' : 'default').'" title="Organization" onClick="Services.showOrganization('.$item['id'].')"><i class="fa fa-sitemap"></i><span class="visible-lg-inline"> Organization</span></button>' : '') . 
+                              '<button class="btn btn-xs btn-info" title="Supports" onClick="Services.showSupports('.$item['id'].')">( '.count($item['Supports']).' ) <i class="fa fa-users"></i></button>
                               ' 
                             )
                               . '<a href="'.base_url('services/setup/' . $item['Code']).'" class="btn btn-xs btn-default" title="View details"><i class="fa fa-pencil"></i></a>
@@ -116,5 +117,6 @@
 <script type="text/javascript">
   $(document).ready(function(){
   	Services.servicesData = <?php echo json_encode($services, JSON_HEX_TAG);?>;
+    Services.organizationCategoriesData = <?php echo json_encode($organizationCategories, JSON_HEX_TAG);?>;
   });
 </script>

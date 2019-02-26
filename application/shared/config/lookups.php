@@ -587,6 +587,7 @@ $config['cttmo_organizations'] = array(
 * organization id the will use coa format
 */
 $config['coa_organizations'] = array(
+	234,
 	297
 );
 

@@ -84,7 +84,6 @@ function lookup_db($tableName, $fieldName, $id = null, $formatted = true, $optio
     return $items;
 }
 
-
 function lookup_muni_city($id = null, $formatted = true, $options = false)
 {
     if ($options == false) {
@@ -337,4 +336,34 @@ function lookup_trending_departments()
             ORDER BY ApplicationCount DESC, d.Name";
 
     return $ci->db->query($sql)->result_array();
+}
+
+
+/**
+* organization category
+*/
+function lookup_organization_category($orgID, $catID = null)
+{
+    $ci = &get_instance();
+    $raw = $ci->mgovdb->getRecords('OrganizationCategories', array('OrganizationID' => $orgID));
+
+    $categories = array();
+    foreach ($raw as $item) {
+
+        if ($catID) {
+            if ($item['id'] == $catID) {
+                return $item['Name'];
+            }
+        }
+
+        if ($item['Status'] == 1) {
+            $categories[$item['id']] = $item['Name'];
+        }
+    }
+
+    if ($catID) {
+        return false; // no match on initial loop
+    }
+    
+    return $categories;
 }

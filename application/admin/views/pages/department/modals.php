@@ -350,6 +350,7 @@
             <ul class="nav nav-tabs" role="tablist">
               <li role="presentation" class="active"><a href="#banners" aria-controls="banners" role="tab" data-toggle="tab">Banners</a></li>
               <li role="presentation"><a href="#partners" aria-controls="partners" role="tab" data-toggle="tab">Partners</a></li>
+              <li role="presentation"><a href="#categories" aria-controls="categories" role="tab" data-toggle="tab">Menu Categories</a></li>
             </ul>
 
             <!-- Tab panes -->
@@ -384,6 +385,11 @@
                 </table>
               </div>
 
+              <div role="tabpanel" class="tab-pane" id="categories">
+                <button type="button" class="btn btn-sm btn-success offset-top-10" onclick="Department.addOrgCategory()"><i class="fa fa-plus"></i> Add Category</button>
+                <ul class="list-group category-list offset-top-5"></ul>
+              </div>
+
             </div>
           </div>
 
@@ -393,7 +399,41 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="submitb btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="organizationCategoryModal" tabindex="-1" role="dialog" aria-labelledby="organizationCategoryModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form id="organizationCategoryForm" name="organizationCategoryForm" action="<?php echo site_url('department/saveorgcategory') ?>">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+          <div id="error_message_box" class="hide row">
+            <br>
+            <div class="error_messages no-border-radius alert alert-danger small" role="alert"></div>
+          </div>
+          <div class="row gutter-5">
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label class="control-label" for="Name">Name</label>
+                <input type="text" name="Name" id="Name" class="form-control">
+                <span class="help-block hidden"></span>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" name="id" id="id" value="">
+          <input type="hidden" name="orgcode" id="orgcode" value="">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-success">Save</button>
         </div>
       </form>
     </div>

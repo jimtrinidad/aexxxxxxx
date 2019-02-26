@@ -47,7 +47,7 @@ $view = get_post('v');
 	?>
 	<div class="table-report table-responsive offset-top-10">
 		<h3 class="h4 text-center">
-			"<?php echo lookup('service_cttmo_category', $category) ?>"
+			"<?php echo lookup_organization_category($accountInfo->OrganizationID, $category) ?>"
 		</h3>
 		<table class="table table-condensed table-bordered rtable">
 		    <thead>

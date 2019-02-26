@@ -19,11 +19,10 @@ class Organization extends CI_Controller
             redirect();
         }
 
+        $this->categories = lookup_organization_category($user->OrganizationID);
         if (in_array($user->OrganizationID, lookup('cttmo_organizations'))) {
-            $this->categories = lookup('service_cttmo_category');
             $this->orgCode = 'cttmo';
         } else if (in_array($user->OrganizationID, lookup('coa_organizations'))) {
-            $this->categories = lookup('service_coa_category');
             $this->orgCode = 'coa';
         }
 

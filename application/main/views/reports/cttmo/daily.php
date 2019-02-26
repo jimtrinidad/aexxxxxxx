@@ -8,7 +8,7 @@ view('reports/cttmo/navigation');
 		<div class="row gutter-5">
 			<div class="col-xs-12 col-sm-6 text-left">
 				<h2 class="h2 offset-5 offset-top-10">
-					<?php echo '<div class="h3" style="margin: 0">' . lookup('service_cttmo_category', $category) . '</div>Apprehension Report<div class="small offset-top-5">' . str_replace(' - ', ' to ', $date) . '</div>'; ?>
+					<?php echo '<div class="h3" style="margin: 0">' . lookup_organization_category($accountInfo->OrganizationID, $category) . '</div>Apprehension Report<div class="small offset-top-5">' . str_replace(' - ', ' to ', $date) . '</div>'; ?>
 				</h2>
 			</div>
 			<div class="col-xs-12 col-sm-6">
@@ -19,7 +19,7 @@ view('reports/cttmo/navigation');
 							<label>Category</label>
 							<select class="form-control" name="category">
 								 <?php
-				                foreach (lookup('service_cttmo_category') as $k => $v) {
+				                foreach (lookup_organization_category($accountInfo->OrganizationID) as $k => $v) {
 				                	if (!in_array($k, array(1,2,3))) {
 					                    echo "<option ".($k == $category ? 'selected' : '')." value='{$k}'>{$v}</option>";
 					                }

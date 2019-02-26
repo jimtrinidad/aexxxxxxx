@@ -4,6 +4,7 @@ function Services() {
     var self = this;
 
     this.servicesData = {};
+    this.organizationCategoriesData = {};
     this.supportChanged = false;
     this.officerFinderSelected;
 
@@ -323,7 +324,7 @@ function Services() {
     {
         var serviceData = self.getService(id);
         if (serviceData) {
-            console.log(serviceData);
+            // console.log(serviceData);
             // reset form data
             $('#organizationForm').trigger("reset");
 
@@ -345,6 +346,13 @@ function Services() {
                 '<h5><b>Organization: </b> ' + org + '</h5>' +
                 '<h5><b>Address: </b> ' + Object.values(serviceData.Location).slice(-2) + '</h5>'
             );
+
+            var orgCategories = self.organizationCategoriesData[serviceData.SubDepartmentID];
+            var orgCatOpts = '';
+            $.each(orgCategories, function(i,e) {
+                orgCatOpts += `<option value='${i}'>${e}</option>`;
+            });
+            $('#organizationForm #Category').html(orgCatOpts);
 
             if (serviceData.Organization) {
                 var org = serviceData.Organization;

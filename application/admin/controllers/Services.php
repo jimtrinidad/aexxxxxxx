@@ -72,10 +72,17 @@ class Services extends CI_Controller
         $paginatationData = $this->mgovdb->getPaginationData('Service_Services', $page_limit, $page_start, $where, $order);
 
         // prepare data
-        $services = array();
+        $services       = array();
+        $orgcategories  = array();
         foreach ($paginatationData['data'] as $item) {
-            $services[] = prepare_service_data($item);
-            // $services[] = $item;
+            $service = prepare_service_data($item);
+            $services[] = $service;
+
+            if ($service['isOrganization'] && !isset($orgcategories[$service['SubDepartmentID']])) {
+                $orgcategories[$service['SubDepartmentID']] = lookup_organization_category($service['SubDepartmentID']);
+            }
+
+
         }
 
         $paginationConfig = array(
@@ -90,6 +97,7 @@ class Services extends CI_Controller
         $viewData['services']   = $services;
         $viewData['pagination'] = paginate($paginationConfig);
 
+        $viewData['organizationCategories'] = $orgcategories;
         // echo '<pre>';print_r($viewData);exit;
 
         view('pages/services/index', $viewData, 'templates/mgovadmin');

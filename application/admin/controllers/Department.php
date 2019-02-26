@@ -868,12 +868,11 @@ class Department extends CI_Controller
 
             if ($includeOrgSetup) {
                 $orgSetup = $this->mgovdb->getRowObject('Dept_OrganizationSetup', $mainDepartment['UniqueCode'], 'UniqueCode');
-                if ($orgSetup) {
-                    $mainDepartment['OrganizationSetup'] = array(
-                        'Banners'   => (array) json_decode($orgSetup->Banners, true),
-                        'Partners'  => (array) json_decode($orgSetup->Partners, true),
-                    );
-                }
+                $mainDepartment['OrganizationSetup'] = array(
+                    'Banners'   => ($orgSetup ? (array) json_decode($orgSetup->Banners, true) : array()),
+                    'Partners'  => ($orgSetup ? (array) json_decode($orgSetup->Partners, true) : array()),
+                    'Categories'=> $this->mgovdb->getRecords('OrganizationCategories', array('OrganizationCode' => $mainDepartment['UniqueCode']))
+                );
             }
             
             $mainDepartment['subDepartment'] = array();
@@ -883,12 +882,11 @@ class Department extends CI_Controller
 
                 if ($includeOrgSetup) {
                     $orgSetup = $this->mgovdb->getRowObject('Dept_OrganizationSetup', $subDepartment['UniqueCode'], 'UniqueCode');
-                    if ($orgSetup) {
-                        $subDepartment['OrganizationSetup'] = array(
-                            'Banners'   => (array) json_decode($orgSetup->Banners, true),
-                            'Partners'  => (array) json_decode($orgSetup->Partners, true),
-                        );
-                    }
+                    $subDepartment['OrganizationSetup'] = array(
+                        'Banners'   => ($orgSetup ? (array) json_decode($orgSetup->Banners, true) : array()),
+                        'Partners'  => ($orgSetup ? (array) json_decode($orgSetup->Partners, true) : array()),
+                        'Categories'=> $this->mgovdb->getRecords('OrganizationCategories', array('OrganizationCode' => $subDepartment['UniqueCode']))
+                    );
                 }
 
                 $mainDepartment['subDepartment'][$subDepartment['id']] = $subDepartment;
@@ -980,6 +978,126 @@ class Department extends CI_Controller
                 }
             }
 
+        }
+
+        response_json($return_data);
+    }
+
+    /**
+    * save organization category
+    */ 
+    public function saveorgcategory()
+    {
+        $code = get_post('orgcode');
+        $orgData = $this->mgovdb->getRowObject('Dept_ChildDepartment', $code, 'UniqueCode');
+        if ($orgData) {
+
+            $name = get_post('Name');
+            if (trim($name) != '') {
+
+                $id     = get_post('id');
+                $record = $this->mgovdb->getRowObjectWhere('OrganizationCategories', array('id' => $id, 'OrganizationCode' => $code));
+
+                if ($record) {
+                    $type = 'old';
+                    $saveData = array(
+                        'id'    => $id,
+                        'Name'  => $name,
+                        'LastUpdate'    => date('Y-m-d H:i:s')
+                    );
+                } else {
+                    $type = 'new';
+                    $saveData = array(
+                        'Name'             => $name,
+                        'OrganizationID'   => $orgData->id,
+                        'OrganizationCode' => $code,
+                        'LastUpdate'       => date('Y-m-d H:i:s')
+                    );
+                }
+
+                if (($ID = $this->mgovdb->saveData('OrganizationCategories', $saveData))) {
+
+                    if ($type == 'new') {
+                        $saveData['id'] = $ID;
+                    }
+
+                    $return_data = array(
+                        'status'    => true,
+                        'message'   => 'Organization category has been saved successfully.',
+                        'type'      => $type,
+                        'data'      => $saveData
+                    );
+
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Saving category. Please try again.'
+                    );
+                }
+
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Name is required'
+                );
+            }
+
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Invalid organization'
+            );
+        }
+
+        response_json($return_data);
+    }
+
+    /*
+    * set organization category status
+    */
+    public function orgcategorystatus()
+    {
+        $id   = get_post('id');
+        $code = get_post('code');
+
+        if ($id && $code) {
+            $record = $this->mgovdb->getRowObjectWhere('OrganizationCategories', array('id' => $id, 'OrganizationCode' => $code));
+            if ($record) {
+                $status = get_post('status');
+                if ($status == 'true' || $status == 'false') {
+                    $updateData = array(
+                        'id'          => $record->id,
+                        'Status'      => ($status == 'true' ? 1 : 0),
+                        'LastUpdate'  => date('Y-m-d H:i:s')
+                    );
+                    if ($this->mgovdb->saveData('OrganizationCategories', $updateData)) {
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Category status has been updated.'
+                        );
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Updating category status failed.'
+                        );
+                    }
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Invalid category status.'
+                    );
+                }
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Invalid request.'
+                );
+            }
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Invalid request.'
+            );
         }
 
         response_json($return_data);

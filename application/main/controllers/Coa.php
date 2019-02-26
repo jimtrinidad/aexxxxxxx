@@ -52,7 +52,7 @@ class Coa extends CI_Controller
                                                     ->from('OrganizationProjectServiceItems psi')
                                                     ->join('OrganizationProjectServices ps', 'ps.id = psi.ProjectServiceID')
                                                     ->where('psi.ProjectID', $item['id'])
-                                                    ->where('ps.Status', 1      )
+                                                    ->where('ps.Status', 1)
                                                     ->get()
                                                     ->row_array()
             ); 

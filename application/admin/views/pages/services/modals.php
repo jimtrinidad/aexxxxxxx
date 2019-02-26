@@ -88,11 +88,6 @@
               <div class="form-group">
                 <label class="control-label" for="Category">Category</label>
                 <select id="Category" name="Category" class="form-control">
-                  <?php
-                  foreach (lookup('service_organization_category') as $k => $v) {
-                    echo "<option value='{$k}'>{$v}</option>";
-                  }
-                  ?>
                 </select>
               </div>
             </div>

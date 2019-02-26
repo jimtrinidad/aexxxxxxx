@@ -8,6 +8,7 @@ function Department() {
     this.officersData = {}
     this.officerChanged;
     this.sortable = {};
+    this.categorychanged;
 
     /**
      * Initialize events
@@ -61,6 +62,11 @@ function Department() {
         $('#organizationSetupForm').submit(function(e) {
             e.preventDefault();
             self.saveOrganizationSetup(this);
+        });
+
+        $('#organizationCategoryForm').submit(function(e){
+            e.preventDefault();
+            self.saveOrganizationCategory(this);
         });
 
     }
@@ -1057,6 +1063,8 @@ function Department() {
 
         if (data != false) {
 
+            self.categorychanged = false;
+
             // reset form data
             $('#organizationSetupForm').trigger("reset");
 
@@ -1071,6 +1079,9 @@ function Department() {
 
             $('#organizationSetupForm').find('#addedBanners').html('');
             $('#organizationSetupForm').find('#addedPartners').html('');
+            $('#organizationSetupForm').find('ul.category-list').html('');
+
+            $('a[href="#banners"]').tab('show');
 
             if (data.OrganizationSetup) {
                 var v = data.OrganizationSetup;
@@ -1130,6 +1141,28 @@ function Department() {
                                 </tr>'`;
 
                     $('#organizationSetupForm').find('#addedPartners').append(tpl);
+                });
+
+                $.each(v.Categories, function(i, e){
+                    var checked = (e.Status == 1 ? 'checked' : '');
+                    var tpl = `<li id="category-item-${e.id}" class="list-group-item">
+                                <div class="row gutter-0">
+                                  <div class="col-xs-8 catname">${e.Name}</div>
+                                  <div class="col-xs-4 text-right">
+                                    <input class="categoryStatusToggle" type="checkbox" ${checked}
+                                      data-code="${e.id}"
+                                      data-toggle="toggle" 
+                                      data-on="Active" 
+                                      data-off="Disabled" 
+                                      data-size="mini" 
+                                      data-width="60">
+                                      
+                                    <a href="javascript:;" class="btn btn-xs btn-warning pull-right offset-left-5" onClick="Department.editCategory(${e.id}, this)"><i class="fa fa-pencil"></i></a>
+                                  </div>
+                                </div>
+                              </li>`;
+
+                    $('#organizationSetupForm').find('ul.category-list').append(tpl);
                 });
 
 
@@ -1198,6 +1231,31 @@ function Department() {
             $('#organizationSetupModal').modal({
                 backdrop : 'static',
                 keyboard : false
+            });
+
+
+            // on modal events
+
+            $('#organizationSetupModal').on('hide.bs.modal', function (e) {
+                // refresh list
+                if (self.categorychanged) {
+                    location.reload();
+                }
+            });
+
+            $('a[data-toggle="tab"]').off('shown.bs.tab').on('shown.bs.tab', function (e) {
+              var target = $(e.target).attr("href") // activated tab
+              if (target == '#categories') {
+                $('#organizationSetupModal .modal-footer .submitb').hide();
+              } else {
+                $('#organizationSetupModal .modal-footer .submitb').show();
+              }
+            });
+
+            $('.categoryStatusToggle').bootstrapToggle();
+
+            $('.categoryStatusToggle').off('change').on('change', function(e) {
+                self.updateOrganizationCategoryStatus(this);
             });
 
         }
@@ -1372,6 +1430,168 @@ function Department() {
             }
         });
 
+    }
+
+    /**
+    * ORGANIZATION CATEGORY
+    */
+    this.addOrgCategory = function()
+    {
+        // reset form data
+        $('#organizationCategoryForm').trigger("reset");
+
+        // reset input erros
+        $.each($('#organizationCategoryForm').find('input'), function(i,e){
+            $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger').addClass('text-white');
+            $(e).popover('destroy');
+        });
+        //clean error box
+        $('#organizationCategoryForm').find('#error_message_box .error_messages').html('');
+        $('#organizationCategoryForm').find('#error_message_box').addClass('hide');
+
+        $('#organizationCategoryForm #id').val('');
+        $('#organizationCategoryForm #orgcode').val($('#organizationSetupForm #UniqueCode').val());
+
+        $('#organizationCategoryModal .modal-title').html('<b>Category</b> | Add');
+        $('#organizationCategoryModal').modal({
+            backdrop : 'static',
+            keyboard : false
+        });
+    }
+
+    this.editCategory = function(id, elem)
+    {
+        // reset form data
+        $('#organizationCategoryForm').trigger("reset");
+
+        // reset input erros
+        $.each($('#organizationCategoryForm').find('input'), function(i,e){
+            $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger').addClass('text-white');
+            $(e).popover('destroy');
+        });
+        //clean error box
+        $('#organizationCategoryForm').find('#error_message_box .error_messages').html('');
+        $('#organizationCategoryForm').find('#error_message_box').addClass('hide');
+
+        $('#organizationCategoryForm #id').val(id);
+        $('#organizationCategoryForm #Name').val($(elem).closest('li').find('.catname').text());
+        $('#organizationCategoryForm #orgcode').val($('#organizationSetupForm #UniqueCode').val());
+
+        $('#organizationCategoryModal .modal-title').html('<b>Category</b> | Edit');
+        $('#organizationCategoryModal').modal({
+            backdrop : 'static',
+            keyboard : false
+        });
+    }
+
+    this.saveOrganizationCategory = function(form) 
+    {
+        // prenvet multiple calls
+        if ($(form).data('running')) {
+            return false;
+        }
+
+        $(form).data('running', true);
+        $(form).find('input').blur();
+        $(form).LoadingOverlay("show");
+
+        var formData = new FormData(form);
+        
+        // reset input erros
+        $.each($(form).find('input, select'), function(i,e){
+            $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger').addClass('text-white');
+            $(e).popover('destroy');
+        });
+        //clean error box
+        $(form).find('#error_message_box .error_messages').html('');
+        $(form).find('#error_message_box').addClass('hide');
+
+        $.ajax({
+            url: $(form).prop('action'),
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                if (response.status) {
+                    self.categorychanged = true;
+                    if (response.type == 'new') {
+                        var e = response.data;
+                        var tpl = `<li id="category-item-${e.id}" class="list-group-item">
+                                <div class="row gutter-0">
+                                  <div class="col-xs-8 catname">${e.Name}</div>
+                                  <div class="col-xs-4 text-right">
+                                    <input class="categoryStatusToggle" type="checkbox" checked
+                                      data-code="${e.id}"
+                                      data-toggle="toggle" 
+                                      data-on="Active" 
+                                      data-off="Disabled" 
+                                      data-size="mini" 
+                                      data-width="60">
+                                      
+                                    <a href="javascript:;" class="btn btn-xs btn-warning pull-right offset-left-5" onClick="Department.editCategory(${e.id}, this)"><i class="fa fa-pencil"></i></a>
+                                  </div>
+                                </div>
+                              </li>`;
+
+                        $('#organizationSetupForm').find('ul.category-list').append(tpl);
+                        $("#category-item-" + e.id + ' .categoryStatusToggle').bootstrapToggle();
+                        $("#category-item-" + e.id + ' .categoryStatusToggle').off('change').on('change', function(e) {
+                            self.updateOrganizationCategoryStatus(this);
+                        });
+
+                    } else {
+                        $('#category-item-' + response.data.id).find('.catname').text(response.data.Name);
+                    }
+                    $('#organizationCategoryModal').modal('hide');
+                } else {
+                    // bootbox.alert(response.message);
+                    $(form).find('#error_message_box .error_messages').append('<p><b>' + response.message + '</b></p>');
+
+                    $.each(response.fields, function(i,e){
+                        $(form).find('#'+i).prop('title', e).closest('div').addClass('has-error').find('label').removeClass('text-white').addClass('text-danger');
+                        Utils.popover($('#'+i), {
+                            t: 'hover',
+                            p: 'top',
+                            m: e
+                        });
+                        $(form).find('#error_message_box .error_messages').append('<p>' + e + '</p>');
+                    });
+
+                    $(form).find('#error_message_box').removeClass('hide');
+                }
+            },
+            complete: function() {
+                $(form).LoadingOverlay("hide");
+                $(form).data('running', false);
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    }
+
+    this.updateOrganizationCategoryStatus = function(elem)
+    {
+        var checkbox    = $(elem);
+        var data        = checkbox.data();
+        var status      = checkbox.is(":checked");
+        $.ajax({
+            url: window.base_url('department/orgcategorystatus'),
+            type: 'post',
+            data: {
+                'status' : status, 
+                'id' : data.code,
+                'code' : $('#organizationSetupForm #UniqueCode').val()
+            },
+            success: function (response) {
+                self.categorychanged = true;
+                if (!response.status) {
+                    // failed
+                    bootbox.alert(response.message, function(){
+                        location.reload();
+                    })
+                }
+            }
+        });
     }
 
 }

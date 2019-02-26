@@ -317,6 +317,12 @@ function prepare_service_data($raw, $getcomponents = false)
 
 	$data['Supports'] = $supports;
 
+	if ($subDept && $subDept->Type == 3) {
+		$data['isOrganization'] = 1;
+	} else {
+		$data['isOrganization'] = 0;
+	}
+
 	$data['Organization'] = $ci->mgovdb->getRowObject('Service_Organization', $raw->id, 'ServiceID');
 
 	if ($getcomponents) {
