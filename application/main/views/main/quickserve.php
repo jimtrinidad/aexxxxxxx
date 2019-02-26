@@ -37,7 +37,7 @@
           </div>
           <div class="col-md-2">
             <label class="text-white text-bold padding-bottom-5">Date Applied</label>
-            <input type="text" name="date" class="form-control input-sm" value="<?php echo get_post('date')?>">
+            <input type="text" name="date" class="datepicker form-control input-sm" value="<?php echo get_post('date')?>">
           </div>
           <div class="col-md-2">
             <label class="text-white text-bold padding-bottom-5">Transaction #</label>
@@ -118,7 +118,7 @@
         <td>Service Duration</td>
         <td>Req. Docs</td>
         <td>Progress</td>
-        <td>Last Update</td>
+        <td>Date</td>
         <?php if (is_current_url('quickserve', 'observe')) { echo '<td>ProcessedBy</td>';} ?>
       </tr>
     </thead>
@@ -170,7 +170,7 @@
           echo '<td>' . $item['duration'] . '</td>';
           echo '<td>' . $item['reqProgress'] . '</td>';
           echo '<td>' . $item['progress'] . '%</td>';
-          echo '<td>' . date('Y/m/d', strtotime($item['LastUpdate'])) . '</td>';
+          echo '<td>' . date('Y/m/d', strtotime($item['StartedTime'])) . '</td>';
           if (is_current_url('quickserve', 'observe')) {
             echo '<td>' . $item['processedBy'] . '</td>';
           }
@@ -194,6 +194,7 @@
 <script type="text/javascript">
   $(document).ready(function(){
     Quickserve.items = <?php echo json_encode($items, JSON_HEX_TAG);?>;
+    $('.datepicker').datepicker();
   });
 </script>
 <style type="text/css">
