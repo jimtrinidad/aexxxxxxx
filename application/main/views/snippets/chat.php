@@ -45,7 +45,7 @@
 							<div class="count">already 1 902 messages</div>
 						</div>
 					</content>
-					<div class="close-chat"><i class="fa fa-close"></i> Close</div>
+					<div class="close-chat"><i class="fa fa-close"></i></div>
 				</div>
 				<div class="finder">
 					<div class="row">

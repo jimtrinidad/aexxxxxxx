@@ -390,6 +390,27 @@ function Accounts() {
         $(elem).closest('form').find('#AccountLevelID').html(options);
     }
 
+    this.resetPassword = function(id)
+    {
+        var data = self.getAccount(id);
+        if (data) {
+            bootbox.confirm('Are you sure you want to <label class="label label-warning">generate new password</label> for <b>' + data.fullname + '</b>?', function(r){
+                if (r) {
+                    $.LoadingOverlay("show", {zIndex: 999});
+                    $.ajax({
+                        url: window.base_url('accounts/rpassword/' + data.reg_id),
+                        type: 'GET',
+                        success: function (response) {
+                            bootbox.alert(response.message);
+                            $.LoadingOverlay("hide");
+                        }
+                    });
+
+                }
+            });
+        }
+    }
+
 }
 
 

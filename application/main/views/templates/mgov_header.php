@@ -42,10 +42,13 @@
         <h1>Enjoy Mobile Government One Touch Processing</h1>
       </div>
       <div class="col-md-5 col-sm-6">
-        <div class="row gutter-5">
+        <div class="row gutter-0">
           <div class="mak-id col-sm-9 col-xs-8">
-            <div class="col-md-5 hidden-xs hidden-sm text-right"><span>Mabuhay ID</span></div>
-            <div class="col-md-7 col-xs-12 text-left open-mak-id" style="cursor: pointer;"><span class="visible-xs-inline visible-sm-inline" style="padding-right: 30px;">Mabuhay ID</span><?php echo $accountInfo->MabuhayID; ?> <!--16-000-000-106--> </div>
+            <div class="col-md-4 hidden-xs hidden-sm text-right" style="padding: 0;"><span>Mabuhay ID</span></div>
+            <div class="col-md-8 col-xs-12 text-left open-mak-id" style="cursor: pointer;padding: 0 0 0 10px;">
+              <span class="visible-xs-inline visible-sm-inline" style="padding-right: 20px;">ID</span>
+              <?php echo $accountInfo->MabuhayID; ?> <!--16-000-000-106--> 
+            </div>
           </div>
           <div class="col-sm-3 col-xs-4 mak-settings">
             <a href="<?php echo site_url() ?>"><i class="fa fa-university text-blue" aria-hidden="true"></i></a>

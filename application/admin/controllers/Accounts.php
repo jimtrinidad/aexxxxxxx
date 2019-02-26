@@ -321,4 +321,62 @@ class Accounts extends CI_Controller
         response_json($return_data);
     }
 
+    /**
+    * reset password
+    */
+    public function rpassword($id)
+    {
+        if ($id) {
+            $record = $this->mgovdb->getRowObject('UserAccountInformation', $id, 'RegistrationID');
+            if ($record) {
+
+                $random_password = random_password();
+
+                $updateData = array(
+                    'id'         => $record->id,
+                    'Password'   => $this->authentication->hash_password($random_password),
+                    'LastUpdate' => date('Y-m-d H:i:s')
+                );
+
+                if ($this->mgovdb->saveData('UserAccountInformation', $updateData)) {
+
+                    // send approval email
+                    $emailTemplateData = array(
+                        'account'   => $record,
+                        'password'  => $random_password
+                    );
+                    $emailData = array(
+                        'from'      => array('info@mgov.ph', 'MGov Info'),
+                        'to'        => array($record->EmailAddress),
+                        'subject'   => 'MgovPh Password Reset',
+                        'message'   => view('email_templates/password_reset', $emailTemplateData, null, true)
+                    );
+                    send_email($emailData, true);
+
+                    $return_data = array(
+                        'status'    => true,
+                        'message'   => 'New password has been set and email has been sent.'
+                    );
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Generating new account password failed.'
+                    );
+                }
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Invalid account.'
+                );
+            }
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Invalid account.'
+            );
+        }
+
+        response_json($return_data);
+    }
+
 }

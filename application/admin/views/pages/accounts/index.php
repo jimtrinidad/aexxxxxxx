@@ -87,8 +87,10 @@
                                 <button type="button" class="btn btn-xs btn-success" title="Approve account" onClick="Accounts.prepareAccountApproval('.$account['id'].')"><i class="fa fa-check"></i><span class="visible-lg-inline"> Approve</span></button>'
                               : '' 
                             )
-                              . '<button type="button" class="btn btn-xs btn-default" title="View details" onClick="Accounts.editAccount('.$account['id'].')"><i class="fa fa-pencil"></i><span class="visible-lg-inline"> Details</span></button>
-                                <button type="button" class="btn btn-xs btn-danger" title="Delete" onClick="Accounts.deleteAccount('.$account['id'].')"><i class="fa fa-trash"></i></button>
+                              . '
+                              <button type="button" class="btn btn-xs btn-default" title="View details" onClick="Accounts.editAccount('.$account['id'].')"><i class="fa fa-pencil"></i><span class="visible-lg-inline"> Details</span></button>
+                              <button type="button" class="btn btn-xs btn-warning" title="Generate new password." onClick="Accounts.resetPassword('.$account['id'].')"><i class="fa fa-key"></i></button>
+                              <button type="button" class="btn btn-xs btn-danger" title="Delete" onClick="Accounts.deleteAccount('.$account['id'].')"><i class="fa fa-trash"></i></button>
                             </div>
                           </div>
                         </div> 
