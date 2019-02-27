@@ -64,11 +64,11 @@
 <!-- Secondary Navigation -->
 <div class="bg-light-gray seconday-nav">
   <ul>
-    <li><a href="<?php echo site_url('account'); ?>"><i class="fa fa-user bg-cyan" aria-hidden="true"></i> My Account</a></li>
+    <li><a href="<?php echo site_url('account'); ?>"><img src="<?php echo public_url(); ?>resources/images/accountico.png" class="nav-icon"> My Account</a></li>
     <?php if (isset($accountInfo->OrganizationID) && $accountInfo->OrganizationID): ?>
-      <li><a href="<?php echo site_url('organization'); ?>"><i class="fa fa-sitemap bg-cyan" aria-hidden="true"></i> My Organization</a></li>
+      <li><a href="<?php echo site_url('organization'); ?>"><img src="<?php echo public_url(); ?>resources/images/orgico.png" class="nav-icon"> My Organization</a></li>
       <?php if (in_array($accountInfo->OrganizationID, lookup('coa_organizations')) && in_array($accountInfo->AccountTypeID, array(2,3,4))):?>
-      <li><a href="<?php echo site_url('coa/projects'); ?>"><i class="fa fa-cubes bg-cyan" aria-hidden="true"></i> Projects</a></li>
+      <li><a href="<?php echo site_url('coa/projects'); ?>"><img src="<?php echo public_url(); ?>resources/images/packico.png" class="nav-icon"> Projects</a></li>
       <?php endif; ?>
     <?php endif;?>
     <!-- <li><a href="<?php echo site_url('trabaho'); ?>"><i class="fa fa-graduation-cap bg-cyan" aria-hidden="true"></i> Profile</a></li> -->

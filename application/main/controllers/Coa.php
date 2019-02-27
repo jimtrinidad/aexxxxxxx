@@ -191,6 +191,13 @@ class Coa extends CI_Controller
                     'Name'  => $record->Name,
                     'Description'   => $record->Description,
                     'Categories'    => $projectservices,
+                    'Allocations'   => $this->db->select_sum('Allocation')->select_sum('Quantity')->select_sum('1', 'Count')
+                                                    ->from('OrganizationProjectServiceItems psi')
+                                                    ->join('OrganizationProjectServices ps', 'ps.id = psi.ProjectServiceID')
+                                                    ->where('psi.ProjectID', $record->id)
+                                                    ->where('ps.Status', 1)
+                                                    ->get()
+                                                    ->row_array()
                 );
 
                 $viewData['availableServices'] = $this->mgovdb->getProjectServices(array(

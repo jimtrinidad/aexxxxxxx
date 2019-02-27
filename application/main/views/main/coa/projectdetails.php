@@ -18,8 +18,9 @@
     <a class="btn btn-danger btn-xs pull-right" style="margin-top: -18px;" href="<?php echo site_url('coa/projects') ?>" onclick="if(window.history.length > 1) {window.history.back();return false;}" >Back</a>
   </div>
   <div class="panel-body">
-    <?php if ($projectData['Description']) {echo $projectData['Description'] . '<hr>' ;} ?>
-    
+    <span><?php if ($projectData['Description']) {echo $projectData['Description'];} ?></span>
+    <div class="padding-top-5 text-cyan small">Total Project Allocation: <b class="text-bold">P<?php echo number_format($projectData['Allocations']['Allocation']) ?></b></div>
+    <hr>
     <div class="row gutter-5">
     	<div class="col-xs-9">
     		<b class="text-bold">Categories</b>

@@ -36,6 +36,8 @@ html, body { height: 100%; margin: 0; font-size: 14px;}
 .primary-nav ul li a:hover{ text-decoration: none; color: #fed700; }
 .primary-nav ul li a i{ padding: 3px 5px; }
 
+.nav-icon {width: 16px;height: 16px;vertical-align: middle;margin-top: -4px;}
+
 ul#horizontal, #horizontal ul  {
 	list-style-type: none;
 	margin: 0;
