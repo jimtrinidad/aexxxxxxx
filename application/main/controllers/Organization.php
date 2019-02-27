@@ -60,7 +60,7 @@ class Organization extends CI_Controller
 
         $grouped = array();
         foreach ($records as $record) {
-            $record['Logo'] = logo_filename($record['Logo']);
+            $record['Logo'] = logo_filename($record['Logo']) . '?' . strtotime($record['LastUpdate']);
             $grouped[$record['Category']][] = $record;
         }
         ksort($grouped);
