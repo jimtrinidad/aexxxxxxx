@@ -1033,7 +1033,6 @@ function Chatbox() {
                 if (response.status) {
                     bootbox.alert(response.message);
                     var imgsrc = response.url;
-                    $('.profile-img').find('img.i-profile').prop('src', imgsrc);
                     $('.chatbubble .top .avatar img').prop('src', imgsrc);
                     $('#thread_' + thread_id).find('img').prop('src', imgsrc);
                 } else {

@@ -434,13 +434,16 @@ function user_account_details($id = false, $field = 'id', $publicData = true)
 function photo_filename($filename)
 {
 	// replace by default avatar if not exists
-	return (!empty($filename) && file_exists(PUBLIC_DIRECTORY . 'assets/profile/' . $filename) ? $filename : 'avatar_default.jpg');
+	$filepath = PUBLIC_DIRECTORY . 'assets/profile/' . $filename;
+	return (!empty($filename) && file_exists($filepath) ? $filename . '?' . filemtime($filepath) : 'avatar_default.jpg');
 }
 
 function logo_filename($filename)
 {
 	// replace by default logo if not exists
-	return (!empty($filename) && file_exists(PUBLIC_DIRECTORY . 'assets/logo/' . $filename) ? $filename : 'default_logo.png');
+	// recache using last file change
+	$filepath = PUBLIC_DIRECTORY . 'assets/logo/' . $filename;
+	return (!empty($filename) && file_exists($filepath) ? $filename . '?' . filemtime($filepath)  : 'default_logo.png');
 }
 
 function uploads_filename($filename)

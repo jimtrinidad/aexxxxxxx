@@ -277,8 +277,10 @@ class Message extends CI_Controller
                         }
                     } else {
                         $photo  = public_url('assets/profile/') . photo_filename($participants[0]['Photo']);
-                        if ($item['thread_type'] == 2 && $item['subject']) {
-                            $name = $item['subject'];
+                        if ($item['thread_type'] == 2) {
+                            if ($item['subject']) {
+                                $name = $item['subject'];
+                            }
                             if ($item['logo']) {
                                 $photo = public_url('assets/logo/') . logo_filename($item['logo']);
                             }

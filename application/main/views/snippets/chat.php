@@ -134,7 +134,7 @@
 							<div class="image-upload-container small padding-top-10">
 				                <img class="image-preview" src="<?php echo public_url(); ?>assets/profile/avatar_default.jpg" alt="...">
 				                <span class="hiddenFileInput hide">
-				                  <input type="file" accept="image/*" class="image-upload-input" id="avatarFile" name="avatarFile"/>
+				                  <input type="file" accept="image/*" class="image-upload-input" id="groupAvatar" name="avatarFile"/>
 				                </span>
 				            </div>
 				            <input type="hidden" class="modal_thread_id" name="thread_id" value="">
