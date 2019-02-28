@@ -4,7 +4,11 @@
 		<img src="<?php echo public_url(); ?>resources/images/rp.png" width="200" />
 		<span class="txt">
 			<span class="m">MABUHAY</span>
-			<span class="c"><?php echo $accountInfo->PublicOffice ? $accountInfo->PublicOffice->Name : $accountInfo->citymunDesc?></span>
+			<span class="c">
+			<?php 
+				echo $accountInfo->PublicOffice ? $accountInfo->PublicOffice->Name : $accountInfo->citymunDesc
+			?>
+			</span>
 			<span class="i">INTEGRATED GOVERNMENT SYSTEM IDENTIFICATION CARD</span>
 		</span>
 	</div>

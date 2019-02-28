@@ -145,7 +145,8 @@ $config['service_type'] = array(
 	15 => 'Service Implementation',
 	16 => 'Endorsement Financial Assistant',
 	17 => 'Security Support',
-	18 => 'Accounting Expenses'
+	18 => 'Accounting Expenses',
+	19 => 'Licensing'
 );
 
 //array of service type id
@@ -589,22 +590,4 @@ $config['cttmo_organizations'] = array(
 $config['coa_organizations'] = array(
 	// 234, // bantay korapsyon
 	297 //coa
-);
-
-
-$config['service_cttmo_category'] = array(
-	1 => 'Traffic Violation',
-	2 => 'Licensing Services',
-	3 => 'Emergency Assistance',
-	4 => 'Driving Violation',
-	5 => 'Establishment Traffic Violation',
-	6 => 'Pedestrian Traffic Violation',
-);
-
-$config['service_coa_category'] = array(
-	7 => 'Expenditure',
-	8 => 'Income',
-	9 => 'Other Services',
-	10 => 'Special Budget',
-	11 => 'Special Services'
 );
