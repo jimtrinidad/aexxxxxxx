@@ -43,6 +43,7 @@
 $subdomain = false;
 $allowed_subdomains = array(
 	'davaocity',
+	'bk',
 	'localhost'
 );
 
