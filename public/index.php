@@ -44,6 +44,10 @@ $subdomain = false;
 $allowed_subdomains = array(
 	'davaocity',
 	'bk',
+	'dbp',
+	'caap',
+	'coa',
+	'cttmo',
 	'localhost'
 );
 

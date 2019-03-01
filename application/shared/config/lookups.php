@@ -146,7 +146,9 @@ $config['service_type'] = array(
 	16 => 'Endorsement Financial Assistant',
 	17 => 'Security Support',
 	18 => 'Accounting Expenses',
-	19 => 'Licensing'
+	19 => 'License',
+	20 => 'Permit',
+	21 => 'Validation'
 );
 
 //array of service type id
