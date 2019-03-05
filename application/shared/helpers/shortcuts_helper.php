@@ -345,6 +345,18 @@ function prepare_service_data($raw, $getcomponents = false)
 
 		$data['ExtraFields']  = lookup_all('Service_ExtraFormFields', array('ServiceID' => $raw->id), 'Ordering', false);
 		$data['Requirements'] = $requirements;
+
+		// assigned on organization projects
+        $projects = $ci->db->select('p.id AS pID, ps.id AS psID, p.Name, p.Code')
+                                    ->from('OrganizationProjectServices ps')
+                                    ->join('OrganizationProjects p', 'p.id = ps.ProjectID')
+                                    ->where('ps.ServiceID', $raw->id)
+                                    ->where('ps.Status', 1)
+                                    ->where('p.deletedAt IS NULL', null, false)
+                                    ->order_by('Name')
+                                    ->get()->result_array();
+
+        $data['Projects']    = ($projects ? $projects : false);
 	}
 
 	return $data;

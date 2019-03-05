@@ -683,7 +683,7 @@ function Mgovph() {
             if (additionalFields != '') {
                 $('#serviceApplicationModal #serviceAdditionalFieldsCont').html('<div class="post-items bg-white padding-10"> \
                                                                                     <h2 class="text-cyan text-bold offset-bottom-10">Other Information Needed to Complete Your Request</h2> \
-                                                                                    <div class="row">'
+                                                                                    <div class="row gutter-5">'
                                                                                      + additionalFields + 
                                                                                     '</div> \
                                                                                 </div>');
@@ -708,7 +708,7 @@ function Mgovph() {
                 if (documentFields != '') {
                     requirementDocFields += '<div class="post-items bg-white padding-10"> \
                                                 <h2 class="text-cyan text-bold offset-bottom-10">'+k.Name +' Required Information</h2> \
-                                                <div class="row">'
+                                                <div class="row gutter-5">'
                                                  + documentFields + 
                                                 '</div> \
                                             </div>';
