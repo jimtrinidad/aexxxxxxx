@@ -170,7 +170,7 @@ function Organization() {
 
                     // reset input erros
                     $.each($('#ServiceReportForm').find('input'), function(i,e){
-                        $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger').addClass('text-white');
+                        $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger');
                         $(e).popover('destroy');
                     });
 
@@ -199,7 +199,7 @@ function Organization() {
                     if (additionalFields != '') {
                         $('#serviceApplicationModal #serviceAdditionalFieldsCont').html('<div class="post-items bg-white padding-10"> \
                                                                                             <h2 class="text-cyan text-bold offset-bottom-10">Report Data</h2> \
-                                                                                            <div class="row">'
+                                                                                            <div class="row gutter-5">'
                                                                                              + additionalFields + 
                                                                                             '</div> \
                                                                                         </div>');
@@ -222,9 +222,9 @@ function Organization() {
                             documentFields += '</div></div>';
                         });
                         if (documentFields != '') {
-                            requirementDocFields += '<div class="post-items bg-white padding-10"> \
+                            requirementDocFields += '<div class="post-items bg-white padding-10 offset-top-10"> \
                                                         <h2 class="text-cyan text-bold offset-bottom-10">'+k.Name +' Required Fields</h2> \
-                                                        <div class="row">'
+                                                        <div class="row gutter-5">'
                                                          + documentFields + 
                                                         '</div> \
                                                     </div>';
@@ -235,6 +235,19 @@ function Organization() {
                         $('#serviceApplicationModal #documentAdditionalFieldsCont').html(requirementDocFields);
                     } else {
                         $('#serviceApplicationModal #documentAdditionalFieldsCont').html('');
+                    }
+
+
+                    // IF ASSIGNED ON PROJECTS
+                    if (v.Projects){
+                        // $('#serviceApplicationModal #projectFieldsCont').html('<div class="post-items bg-white padding-10 offset-top-10"> \
+                        //                                                                     <h2 class="text-cyan text-bold offset-bottom-10">Project Data</h2> \
+                        //                                                                     <div class="row">'
+                        //                                                                      + additionalFields + 
+                        //                                                                     '</div> \
+                        //                                                                 </div>');
+                    } else {
+                        // $('#serviceApplicationModal #projectFieldsCont').html('');
                     }
 
                     //clean error box
