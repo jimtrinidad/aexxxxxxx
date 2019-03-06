@@ -13,7 +13,7 @@ class Businesses extends CI_Controller
 
         $business = $this->mgovdb->getRowObject('Businesses', current_user(), 'OwnerID');
         if (!$business) {
-            redirect();
+            redirect(site_url('services/?v=1551833890076'));
         }
 
     }

@@ -65,9 +65,9 @@
 <div class="bg-light-gray seconday-nav">
   <ul>
     <li><a href="<?php echo site_url('account'); ?>"><img src="<?php echo public_url(); ?>resources/images/accountico.png" class="nav-icon"> My Account</a></li>
-    <?php if (isset($accountInfo->Businesses) && $accountInfo->Businesses): ?>
+    <?php //if (isset($accountInfo->Businesses) && $accountInfo->Businesses): ?>
       <li><a href="<?php echo site_url('businesses'); ?>"><i class="fa fa-building"></i>My Negosyo</a></li>
-    <?php endif;?>
+    <?php //endif;?>
     <?php if (isset($accountInfo->OrganizationID) && $accountInfo->OrganizationID): ?>
       <li><a href="<?php echo site_url('organization'); ?>"><img src="<?php echo public_url(); ?>resources/images/orgico.png" class="nav-icon"> My Organization</a></li>
       <?php if (in_array($accountInfo->OrganizationID, lookup('coa_organizations')) && in_array($accountInfo->AccountTypeID, array(2,3,4))):?>
