@@ -43,7 +43,7 @@ class Services extends CI_Controller
                                             ->where('ApplicantID', current_user())
                                             ->where_in('Status', array(0,1))
                                             ->get('Service_Applications')
-                                            ->result_array()
+                                            ->result_array();
 
             if (count($pending_application)) {
                 $serviceData['hasPending'] = 1;
