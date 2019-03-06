@@ -34,11 +34,16 @@ class Services extends CI_Controller
 
             // check if there's an existing application
             // check if no active application
-            $pending_application = lookup_all('Service_Applications', array(
-                'ServiceID'     => $service->id,
-                'ApplicantID'   => current_user(),
-                'Status'        => 0
-            ));
+            // $pending_application = lookup_all('Service_Applications', array(
+            //     'ServiceID'     => $service->id,
+            //     'ApplicantID'   => current_user(),
+            //     'Status'        => 0
+            // ));
+            $pending_application = $this->db->where('ServiceID', $service->id)
+                                            ->where('ApplicantID', current_user())
+                                            ->where_in('Status', array(0,1))
+                                            ->get('Service_Applications')
+                                            ->result_array()
 
             if (count($pending_application)) {
                 $serviceData['hasPending'] = 1;
