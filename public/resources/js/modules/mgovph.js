@@ -5,6 +5,7 @@ function Mgovph() {
 
     this.feedTimeout;
     this.selectedService;
+    this.preSelectedService; // via url params 'v'
 
     /**
      * Initialize events
@@ -419,6 +420,17 @@ function Mgovph() {
             zIndex: 9999
         });
 
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var v = url.searchParams.get("v");
+        
+        if (v) {
+            params.code = v;
+            self.preSelectedService = v;
+        } else {
+            self.preSelectedService = null;
+        }
+
         $.ajax({
             url  : window.base_url('get/services'),
             type : 'post',
@@ -603,12 +615,16 @@ function Mgovph() {
     */
     this.closeServiceDetails = function()
     {
+        if (self.preSelectedService) {
+            // back from preselected service, get all services again
+            window.location.href = public_url('services');
+            return false;
+        }
         $('#LoadMainBody').show();
         $('#searchForm').show();
         $('#ServiceDetailsBody').html('');
         $(window).scrollTop(sessionStorage.serviceScroll);
         self.selectedService = false;
-
         self.moveSidebar();
     }
 

@@ -192,6 +192,10 @@ class Get extends CI_Controller
                 $where[] = $location_search;
             }
 
+            if (get_post('code')) {
+                $where[] = 'Service_Services.Code = "' . get_post('code') . '"';
+            }
+
             $where = implode(' AND ', $where);
             $department_services = $this->mgovdb->getRecords('Service_Services', $where, 'DateAdded DESC');
 
