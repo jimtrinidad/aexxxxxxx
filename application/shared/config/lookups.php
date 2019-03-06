@@ -148,7 +148,8 @@ $config['service_type'] = array(
 	18 => 'Accounting Expenses',
 	19 => 'License',
 	20 => 'Permit',
-	21 => 'Validation'
+	21 => 'Validation',
+	22 => 'Business Accreditation'
 );
 
 //array of service type id
@@ -579,6 +580,8 @@ $config['months'] = array(
 
 
 
+/* DEFAULTS */
+
 /**
 * organization id the will use the ctto report
 */
@@ -593,3 +596,7 @@ $config['coa_organizations'] = array(
 	// 234, // bantay korapsyon
 	297 //coa
 );
+
+
+// BUSINESS APPLICATION REQUEST SERVICE TYPE
+define('BUSINESS_REQUEST_TYPE', 22);

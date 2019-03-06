@@ -434,6 +434,12 @@ function user_account_details($id = false, $field = 'id', $publicData = true)
 	$accountData->Photo = photo_filename($accountData->Photo);
 	$accountData->QR = get_qr_file($accountData->MabuhayID);
 
+	$accountData->Businesses = false;
+	$business = $ci->db->select('id, Code')->from('Businesses')->where('OwnerID', $id)->get()->row_array();
+	if ($business && count($business)) {
+		$accountData->Businesses = $business;
+	}
+
 	if ($publicData) {
 		// get public office data base on user city
 		$accountData->CityData = lookup_row('UtilLocCityMun', $accountData->MunicipalityCityID, 'citymunCode');

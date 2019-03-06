@@ -503,3 +503,36 @@ ul#horizontal, #horizontal ul  {
 .full-button:hover a {
 	color: blue;
 }
+
+
+
+/*  BUSINESS */
+
+.busi-box {
+	background: white;
+	position: relative;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 4px 8px rgba(64, 64, 64, .1);
+    box-shadow: 0 4px 8px rgba(64, 64, 64, .1);
+}
+
+.product-box {
+	background: white;
+	position: relative;
+    padding: 5px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 4px 8px rgba(64, 64, 64, .1);
+    box-shadow: 0 4px 8px rgba(64, 64, 64, .1);
+}
+
+.product-image {
+	max-height: 55px;
+	max-width: 55px;
+}
+
+.product-info {
+	padding: 5px 0 0 5px;
+}

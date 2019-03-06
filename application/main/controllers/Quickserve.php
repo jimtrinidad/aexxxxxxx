@@ -479,6 +479,19 @@ class Quickserve extends CI_Controller
                                     $applicationUpdate['Status']        = 2;
 
                                     if ($this->mgovdb->saveData('Service_Applications', $applicationUpdate)) {
+
+                                        // on completion hooks
+                                        if ($serviceData->ServiceType == BUSINESS_REQUEST_TYPE) {
+                                            // add business record
+                                            $businessData = array(
+                                                'OwnerID'   => $applicationData->ApplicantID,
+                                                'Code'      => $applicationData->Code,
+                                                'LastUpdate'=> date('Y-m-d H:i:s')
+                                            );
+
+                                            $this->mgovdb->saveData('Businesses', $businessData);
+                                        }
+
                                         $return_data = array(
                                             'status'    => true,
                                             'message'   => 'Process has been completed. This is also the last step for application completion.'

@@ -139,3 +139,10 @@ $config['save_project_category_item'] = array(
 	array('Quantity', 'Quantity', 'trim|required|numeric'),
 	array('Allocation', 'Allocation', 'trim|required|numeric'),
 );
+
+
+$config['save_business_item'] = array(
+	array('Name', 'Product name', 'trim|required'),
+	array('Description', 'Product description', 'trim'),
+	array('Price', 'Price', 'trim|required|numeric'),
+);
