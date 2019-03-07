@@ -66,7 +66,7 @@
   <ul>
     <li><a href="<?php echo site_url('account'); ?>"><img src="<?php echo public_url(); ?>resources/images/accountico.png" class="nav-icon"> My Account</a></li>
     <?php //if (isset($accountInfo->Businesses) && $accountInfo->Businesses): ?>
-      <li><a href="<?php echo site_url('businesses'); ?>"><i class="fa fa-building"></i>My Negosyo</a></li>
+      <li><a href="<?php echo site_url('businesses'); ?>"><img src="<?php echo public_url(); ?>resources/images/negico.png" class="nav-icon"> My Negosyo</a></li>
     <?php //endif;?>
     <?php if (isset($accountInfo->OrganizationID) && $accountInfo->OrganizationID): ?>
       <li><a href="<?php echo site_url('organization'); ?>"><img src="<?php echo public_url(); ?>resources/images/orgico.png" class="nav-icon"> My Organization</a></li>
