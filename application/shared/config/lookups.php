@@ -594,7 +594,8 @@ $config['cttmo_organizations'] = array(
 */
 $config['coa_organizations'] = array(
 	// 234, // bantay korapsyon
-	297 //coa
+	297, // Barangay League of Accountants
+	300 // Barangay Procurement League
 );
 
 
