@@ -441,7 +441,7 @@ function Coa() {
 
     this.setSupplier = function(item, rank, selectedid, supplier) {
         console.log(item, rank, selectedid, supplier);
-        $('#supplierItemFinderModal').find('.matchedItems').LoadingOverlay('show');
+        $.LoadingOverlay('show');
         $.ajax({
             url: window.base_url('coa/setitemsupplier/'),
             type: 'POST',
@@ -460,7 +460,7 @@ function Coa() {
                 }
             },
             complete: function(r) {
-                $('#supplierItemFinderModal').find('.matchedItems').LoadingOverlay("hide");
+                $.LoadingOverlay("hide");
             }
         });
     }
