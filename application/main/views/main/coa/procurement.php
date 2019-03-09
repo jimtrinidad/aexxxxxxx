@@ -13,6 +13,7 @@
 </div>
 <?php if (!$projectSelected) { ?>
 <div class="padding-20" style="background: #e7edf0;padding-bottom: 10px;">
+	<?php if (count($projects)) { ?>
 	<div class="row">
 		<div class="col-xs-12">
 			<h3 class="h3 offset-5 text-bold text-orange text-center">Choose a project</h3>
@@ -35,6 +36,13 @@
 			</div>
 		</div>
 	</div>
+	<?php } else {
+		echo '<div class="row">
+				<div class="col-xs-12">
+					<h3 class="h4 offset-5 text-bold text-cyan text-center">No available project at the moment</h3>
+				</div>
+			</div>';
+	} ?>
 </div>
 <?php } else {?>
 <div class="padding-20" style="background: #e7edf0;padding-bottom: 10px;">
