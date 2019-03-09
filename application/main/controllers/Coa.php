@@ -214,10 +214,13 @@ class Coa extends CI_Controller
                                                     ->row_array()
                 );
 
+                $expensesCategory = $this->db->where('Name', 'Expenditure')
+                                                ->where('OrganizationID',$this->user->OrganizationID)
+                                                ->get('OrganizationCategories')->row();
                 $viewData['availableServices'] = $this->mgovdb->getProjectServices(array(
                     'userID'        => current_user(),
                     'organization'  => $this->user->OrganizationID,
-                    'category'      => 7, // category id of expenses
+                    'category'      => ($expensesCategory ? $expensesCategory->id : 0)
                 ));
 
                 // print_data($viewData);
