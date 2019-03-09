@@ -39,7 +39,8 @@ class Businesses extends CI_Controller
 
         if ($business) {
 
-            $businessName = ($business->Name ? $business->Name : $business->Code);
+            $businessData = lookup_business_data($business->id);
+            $businessName = (isset($businessData['Company Name']) ? $businessData['Company Name'] : $business->Code);
 
             $viewData = array(
                 'pageTitle'     => 'Businesses - ' . $businessName,
