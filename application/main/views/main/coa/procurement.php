@@ -19,9 +19,9 @@
 			<h3 class="h3 offset-5 text-bold text-orange text-center">Choose a project</h3>
 		</div>
 		<div class="col-xs-12">
-			<div class="row gutter-5">
+			<div class="row gutter-5 projectcont">
 				<?php foreach ($projects as $item) { ?>
-					<div class="col-xs-6 col-sm-4">
+					<div class="col-xs-6 col-sm-4 projectitem">
 						<a href="<?php echo site_url('coa/procurement/' . $item['Code']); ?>" style="text-decoration: none;color: black">
 							<div class="busi-box">
 									<div class="product-info">
@@ -159,8 +159,17 @@
 
 <?php  view('main/coa/modals'); ?>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.2.0/imagesloaded.pkgd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.2.2/isotope.pkgd.min.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function(){
-	  $('[data-toggle="popover"]').popover(); 
+	  	$('[data-toggle="popover"]').popover(); 
+
+	  	$('#LoadMainBody').imagesLoaded( function(){
+	        $('.projectcont').isotope({
+	          itemSelector : '.projectitem'
+	        });
+	    });
 	});
 </script>
