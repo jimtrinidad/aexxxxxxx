@@ -245,3 +245,28 @@ function price_savings($budget, $actual)
     }
     return '';
 }
+
+
+function containsWord($str, $word)
+{
+    return !!preg_match('#\\b' . preg_quote($word, '#') . '\\b#i', $str);
+}
+
+function wordMatch($str1, $str2)
+{
+    $words = preg_split('/[,;\s]+/', $str1, -1, PREG_SPLIT_NO_EMPTY);
+
+    $words = array_diff($words, array('are','to','and','is','or','in')); // exclude from search
+
+    if(empty($words)){
+        return false;
+    }
+
+    foreach ($words as $word) {
+        if (containsWord($str2, $word)) {
+            return true;
+        }
+    }
+
+    return false;
+}

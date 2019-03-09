@@ -517,16 +517,32 @@ class Coa extends CI_Controller
     {
         $match = lookup_match_suppliers(get_post('matcher'), true);
         if (count($match)) {
+
             $match   = array_slice($match, 0, 100);
+
             $forItem = $this->mgovdb->getRowObject('OrganizationProjectServiceItems', get_post('item'));
+            $hits    = array();
+            $nonhits = array();
+            
             foreach ($match as &$m) {
                 $m['savings']      = price_savings($forItem->Allocation, ($forItem->Quantity * $m['Price']));
                 $m['supplierInfo'] = lookup_business_data($m['BusinessID']);
                 $m['imageurl']     = public_url('assets/logo/') . logo_filename($m['Image']);
+
+                // group by hit and not hit (base on item name)
+                if (wordMatch(get_post('matcher'), $m['Name'])) {
+                    $hits[] = $m;
+                } else {
+                    $nonhits[] = $m;
+                }
             }
+
             response_json(array(
                 'status'    => true,
-                'data'      => $match
+                'data'      => array(
+                    'hits'      => $hits,
+                    'others'    => $nonhits
+                )
             ));
         } else {
             response_json(array(
@@ -631,6 +647,13 @@ class Coa extends CI_Controller
         }
 
         response_json($return_data);
+    }
+
+    public function test()
+    {
+        $r = wordMatch(get_post('i'), get_post('a'));
+        // print_data($r);
+        var_dump($r);
     }
 
 }

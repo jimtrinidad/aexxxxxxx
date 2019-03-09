@@ -369,30 +369,25 @@ function Coa() {
     this.findSuppliers = function(elem) {
 
         var data = $(elem).data();
-        console.log(data);
 
         self.supplierChanged = false;
 
         $('#supplierItemFinderModal').find('.matchRows').html('');
+        $('#supplierItemFinderModal').find('.nonMatchRows').html('');
         $('#supplierItemFinderModal').find('.matchedItems').css({height: '150px'});
         $('#supplierItemFinderModal').find('.matchedItems').LoadingOverlay('show');
 
-        $('#supplierItemFinderModal').modal({
-            backdrop : 'static',
-            keyboard : false
-        });
-
-        $('#supplierItemFinderModal').on('shown.bs.modal', function (e) {
-
-            $.ajax({
-                url: window.base_url('coa/findsupplieritems/'),
-                type: 'POST',
-                data,
-                success: function (response) {
-                    $('#supplierItemFinderModal').find('.matchedItems').css({height: 'auto'});
-                    var tpl = '';
-                    if (response.status) {
-                        $.each(response.data, function(i,e){
+        $.ajax({
+            url: window.base_url('coa/findsupplieritems/'),
+            type: 'POST',
+            data,
+            success: function (response) {
+                $('#supplierItemFinderModal').find('.matchedItems').css({height: 'auto'});
+                var tpl = '';
+                var nonmatchtpl = '';
+                if (response.status) {
+                    if (response.data.hits.length) {
+                        $.each(response.data.hits, function(i,e){
                             tpl += `<tr>
                                         <td><img src="${e.imageurl}" style="max-width: 40px;max-height: 40px;"></td>
                                         <td class="text-green">${e.Name}</td>
@@ -402,15 +397,37 @@ function Coa() {
                                         <td class="text-right"><a href="javascript:;" class="btn btn-xs btn-info" onClick="Coa.setSupplier(${data.item},${data.rank},${e.id},${e.BusinessID})">Select</a></td>
                                     </tr>`;
                         });
-
+                    } else {
+                        tpl += `<tr><td class="text-center text-bold padding-10 text-cyan" colspan="6">No item found.</td></tr>`;
                     }
-                    $('#supplierItemFinderModal').find('.matchRows').html(tpl);
-                },
-                complete: function(r) {
-                    $('#supplierItemFinderModal').find('.matchedItems').LoadingOverlay("hide");
-                }
-            });
 
+                    if (response.data.others.length) {
+                        $.each(response.data.others, function(i,e){
+                            nonmatchtpl += `<tr>
+                                        <td><img src="${e.imageurl}" style="max-width: 40px;max-height: 40px;"></td>
+                                        <td class="text-green">${e.Name}</td>
+                                        <td>${e.Measurement}</td>
+                                        <td class="text-red">P${e.Price}</td>
+                                        <td>${e.supplierInfo['Company Name']}</td>
+                                        <td class="text-right"><a href="javascript:;" class="btn btn-xs btn-info" onClick="Coa.setSupplier(${data.item},${data.rank},${e.id},${e.BusinessID})">Select</a></td>
+                                    </tr>`;
+                        });
+                    } else {
+                        nonmatchtpl += `<tr><td class="text-center text-bold padding-10 text-cyan" colspan="6">No item found.</td></tr>`;
+                    }
+
+                }
+                $('#supplierItemFinderModal').find('.matchRows').html(tpl);
+                $('#supplierItemFinderModal').find('.nonMatchRows').html(nonmatchtpl);
+            },
+            complete: function(r) {
+                $('#supplierItemFinderModal').find('.matchedItems').LoadingOverlay("hide");
+            }
+        });
+
+        $('#supplierItemFinderModal').modal({
+            backdrop : 'static',
+            keyboard : false
         });
 
         $('#supplierItemFinderModal').on('hide.bs.modal', function (e) {
@@ -436,10 +453,10 @@ function Coa() {
                 project: $('#selectedProject').val()
             },
             success: function (response) {
-                console.log(response);
-                bootbox.alert(response.message);
                 if (response.status) {
-                    self.supplierChanged = true;
+                    location.reload();
+                } else {
+                    bootbox.alert(response.message);
                 }
             },
             complete: function(r) {

@@ -76,10 +76,10 @@
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>
-							<th style="width: 30%">Item</th>
-							<th style="width: 23.3%;text-align: center;">Supplier 1</th>
-							<th style="width: 23.3%;text-align: center;">Supplier 2</th>
-							<th style="width: 23.3%;text-align: center;">Supplier 3</th>
+							<th style="width: 18.1%">Item</th>
+							<th style="width: 27.3%;text-align: center;">Supplier 1</th>
+							<th style="width: 27.3%;text-align: center;">Supplier 2</th>
+							<th style="width: 27.3%;text-align: center;">Supplier 3</th>
 						</tr>
 					</thead>
 					<tbody>

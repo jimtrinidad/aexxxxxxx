@@ -165,21 +165,43 @@
 
           <div class="row gutter-5">
             <div class="col-xs-12 matchedItems">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th width="50">Image</th>
-                    <th>Item name</th>
-                    <th>UoM</th>
-                    <th>Price</th>
-                    <th>Supplier</th>
-                    <th width="20"></th>
-                  </tr>
-                </thead>
-                <tbody class="matchRows">
-                  
-                </tbody>
-              </table>
+              <div class="panel panel-info">
+                <div class="panel-heading">Posible matched items</div>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th width="50">Image</th>
+                      <th>Item name</th>
+                      <th>UoM</th>
+                      <th>Price</th>
+                      <th>Supplier</th>
+                      <th width="20"></th>
+                    </tr>
+                  </thead>
+                  <tbody class="matchRows">
+                    
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="panel panel-default">
+                <div class="panel-heading">Other results</div>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th width="50">Image</th>
+                      <th>Item name</th>
+                      <th>UoM</th>
+                      <th>Price</th>
+                      <th>Supplier</th>
+                      <th width="20"></th>
+                    </tr>
+                  </thead>
+                  <tbody class="nonMatchRows">
+                    
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
 
