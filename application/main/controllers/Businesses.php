@@ -105,6 +105,8 @@ class Businesses extends CI_Controller
                         'Description'       => get_post('Description'),
                         'Measurement'       => get_post('Measurement'),
                         'Price'             => get_post('Price'),
+                        'PaymentTerm'       => get_post('PaymentTerm'),
+                        'LeadTime'          => get_post('LeadTime'),
                         'LastUpdate'        => date('Y-m-d H:i:s')
                     );
 

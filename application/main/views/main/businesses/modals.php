@@ -59,6 +59,20 @@
                 <span class="help-block hidden"></span>
               </div>
             </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label" for="PaymentTerm">Terms of Payment</label>
+                <input type="text" class="form-control" id="PaymentTerm" name="PaymentTerm" placeholder="Terms of Payment">
+                <span class="help-block hidden"></span>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label" for="LeadTime">Delivery Lead Time</label>
+                <input type="text" class="form-control" id="LeadTime" name="LeadTime" placeholder="Delivery Lead Time">
+                <span class="help-block hidden"></span>
+              </div>
+            </div>
           </div>
           <input type="hidden" name="BusinessCode" value="<?php echo (isset($businessData->Code) ? $businessData->Code : '') ?>">
           <input type="hidden" name="Code" id="Code" value="">
