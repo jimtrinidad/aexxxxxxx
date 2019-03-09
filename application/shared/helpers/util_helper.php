@@ -234,3 +234,14 @@ function number_to_words($number)
     $f->setTextAttribute(NumberFormatter::DEFAULT_RULESET, "%spellout-numbering-verbose");
     return $f->format($number);
 }
+
+
+function price_savings($budget, $actual)
+{
+    if ($actual < $budget) {
+        return 'P' . number_format(($budget - $actual)) . ' savings';
+    } else if ($actual > $budget) {
+        return 'P' . number_format(($actual - $budget)) . ' over';
+    }
+    return '';
+}

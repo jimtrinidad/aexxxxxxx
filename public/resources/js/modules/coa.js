@@ -4,6 +4,7 @@ function Coa() {
     var self = this;
 
     this.projectData = {};
+    this.supplierChanged;
 
     /**
      * Initialize events
@@ -34,6 +35,12 @@ function Coa() {
         $('#categoryItemForm').submit(function(e){
             e.preventDefault();
             self.saveForm(this);
+        });
+
+
+        $('a.findSupplier').click(function(e){
+            e.preventDefault();
+            self.findSuppliers(this);
         });
     }
 
@@ -346,6 +353,113 @@ function Coa() {
                             bootbox.alert(response.message);
                             $.LoadingOverlay("hide");
                         }
+                    }
+                });
+            }
+        });
+    }
+
+
+
+
+
+    /**
+    * Procurement
+    */
+    this.findSuppliers = function(elem) {
+
+        var data = $(elem).data();
+        console.log(data);
+
+        self.supplierChanged = false;
+
+        $('#supplierItemFinderModal').find('.matchRows').html('');
+        $('#supplierItemFinderModal').find('.matchedItems').css({height: '150px'});
+        $('#supplierItemFinderModal').find('.matchedItems').LoadingOverlay('show');
+
+        $('#supplierItemFinderModal').modal({
+            backdrop : 'static',
+            keyboard : false
+        });
+
+        $('#supplierItemFinderModal').on('shown.bs.modal', function (e) {
+
+            $.ajax({
+                url: window.base_url('coa/findsupplieritems/'),
+                type: 'POST',
+                data,
+                success: function (response) {
+                    $('#supplierItemFinderModal').find('.matchedItems').css({height: 'auto'});
+                    var tpl = '';
+                    if (response.status) {
+                        $.each(response.data, function(i,e){
+                            tpl += `<tr>
+                                        <td><img src="${e.imageurl}" style="max-width: 40px;max-height: 40px;"></td>
+                                        <td class="text-green">${e.Name}</td>
+                                        <td>${e.Measurement}</td>
+                                        <td class="text-red">P${e.Price}</td>
+                                        <td>${e.supplierInfo['Company Name']}</td>
+                                        <td class="text-right"><a href="javascript:;" class="btn btn-xs btn-info" onClick="Coa.setSupplier(${data.item},${data.rank},${e.id},${e.BusinessID})">Select</a></td>
+                                    </tr>`;
+                        });
+
+                    }
+                    $('#supplierItemFinderModal').find('.matchRows').html(tpl);
+                },
+                complete: function(r) {
+                    $('#supplierItemFinderModal').find('.matchedItems').LoadingOverlay("hide");
+                }
+            });
+
+        });
+
+        $('#supplierItemFinderModal').on('hide.bs.modal', function (e) {
+            // refresh list
+            if (self.supplierChanged) {
+                location.reload();
+            }
+        });
+
+    }
+
+    this.setSupplier = function(item, rank, selectedid, supplier) {
+        console.log(item, rank, selectedid, supplier);
+        $('#supplierItemFinderModal').find('.matchedItems').LoadingOverlay('show');
+        $.ajax({
+            url: window.base_url('coa/setitemsupplier/'),
+            type: 'POST',
+            data: {
+                item: item,
+                rank: rank,
+                selecteditem: selectedid,
+                supplierid: supplier,
+                project: $('#selectedProject').val()
+            },
+            success: function (response) {
+                console.log(response);
+                bootbox.alert(response.message);
+                if (response.status) {
+                    self.supplierChanged = true;
+                }
+            },
+            complete: function(r) {
+                $('#supplierItemFinderModal').find('.matchedItems').LoadingOverlay("hide");
+            }
+        });
+    }
+
+    this.removeAssignedSupplier = function(id)
+    {
+        bootbox.confirm('Are you sure you want to remove this supplier?', function(r) {
+            if (r) {
+                $.ajax({
+                    url: window.base_url('coa/removeitemsupplier/'),
+                    type: 'POST',
+                    data: {
+                        id: id,
+                    },
+                    success: function (response) {
+                        location.reload();
                     }
                 });
             }

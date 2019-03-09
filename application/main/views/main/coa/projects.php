@@ -52,7 +52,7 @@
   </div>
 </div>
 
-<?php view('modals/coa'); ?>
+<?php view('main/coa/modals'); ?>
 
 <script type="text/javascript">
   $(document).ready(function(){

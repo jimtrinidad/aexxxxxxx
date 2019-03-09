@@ -367,3 +367,69 @@ function lookup_organization_category($orgID, $catID = null)
     
     return $categories;
 }
+
+
+/**
+* find supplier/seller best match and lowest price
+*/
+function lookup_match_suppliers($item = '', $all = false)
+{
+    $ci =& get_instance();
+
+    $sql = "SELECT * 
+            FROM BusinessItems";
+
+    $params = array();
+
+    if ($all == false) {
+
+        $sql .= ' WHERE Name LIKE ? 
+                  OR Description LIKE ?';
+
+        $key = $ci->db->escape_like_str($item);
+        $params = array(
+            "%{$key}%",
+            "%{$key}%"
+        );
+
+    }
+
+    $results = $ci->db->query($sql, $params)->result_array();
+    foreach ($results as &$result) {
+        $result['lev'] = levenshtein($item, $result['Name']);
+    }
+    usort($results, function($a, $b){
+        if ($a['lev'] == $b['lev']) {
+            return $a['Price'] > $b['Price'];
+        } else {
+            return $a['lev'] > $b['lev'];
+        }
+    });
+    
+    return $results;
+}
+
+function lookup_business_data($businessID)
+{
+    $ci =& get_instance();
+    $business = $ci->mgovdb->getRowObject('Businesses', $businessID);
+    if ($business) {
+        $applicationData = $ci->mgovdb->getRowObject('Service_Applications', $business->Code, 'Code');
+        if ($applicationData) {
+            $exfields = json_decode($applicationData->ExtraFields, true);
+            $data     = array(
+                'AccredicationNo' => $business->Code
+            );
+            foreach ($exfields as $key => $xf) {
+                $fdetail = $ci->mgovdb->getRowObject('Service_ExtraFormFields', $key, 'FieldID');
+                if ($fdetail) {
+                    $data[$fdetail->FieldLabel] = $xf;
+                }
+            }
+
+            return $data;
+        }
+    }
+
+    return false;
+}

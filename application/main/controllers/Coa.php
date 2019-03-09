@@ -21,27 +21,20 @@ class Coa extends CI_Controller
 
     }
 
-    public function projects()
+    private function getProjects($projectCode = null)
     {
-        $viewData = array(
-            'pageTitle'     => 'Organization - Projects',
-            'accountInfo'   => user_account_details(),
-            'jsModules'         => array(
-                'coa',
-            ),
+        $projectFilter = array(
+            'OrganizationID'    => $this->user->OrganizationID
         );
 
-        $organizationData        = $this->mgovdb->getRowObject('Dept_ChildDepartment', $this->user->OrganizationID);
-        $organizationData->Setup = $this->mgovdb->getRowObject('Dept_OrganizationSetup', $organizationData->UniqueCode, 'UniqueCode');
-
-        $viewData['Organization']   = $organizationData;
+        if ($projectCode) {
+            $projectFilter['Code'] = $projectCode;
+        }
 
         $projects = array();
-        $items = lookup_all('OrganizationProjects', array(
-                    'OrganizationID'    => $this->user->OrganizationID
-                ), 'Name');
+        $items    = lookup_all('OrganizationProjects', $projectFilter, 'Name');
         foreach ($items as $item) {
-            $projects[] = array(
+            $projects[$item['Code']] = array(
                     'id'    => $item['id'],
                     'Code'  => $item['Code'],
                     'Name'  => $item['Name'],
@@ -58,6 +51,27 @@ class Coa extends CI_Controller
             ); 
         }
 
+        return $projects;
+
+    }
+
+    public function projects()
+    {
+        $viewData = array(
+            'pageTitle'     => 'Organization - Projects',
+            'accountInfo'   => user_account_details(),
+            'jsModules'         => array(
+                'coa',
+            ),
+        );
+
+        $organizationData        = $this->mgovdb->getRowObject('Dept_ChildDepartment', $this->user->OrganizationID);
+        $organizationData->Setup = $this->mgovdb->getRowObject('Dept_OrganizationSetup', $organizationData->UniqueCode, 'UniqueCode');
+
+        $viewData['Organization']   = $organizationData;
+
+        $projects = $this->getProjects();
+        
         // print_data($projects, true);
 
         $viewData['projects'] = $projects;
@@ -381,6 +395,239 @@ class Coa extends CI_Controller
             'status'    => true,
             'message'   => 'Item has been deleted.'
         ));
+    }
+
+
+
+
+    /**
+    * PROCUREMENT
+    */
+
+    public function procurement($projectCode = false)
+    {
+        $viewData = array(
+                    'pageTitle'     => 'Procurement',
+                    'accountInfo'   => user_account_details(),
+                    'jsModules'         => array(
+                        'coa',
+                    ),
+                );
+
+        $viewData['projectSelected'] = false;
+
+        if ($projectCode) {
+            $project = $this->mgovdb->getRowObjectWhere('OrganizationProjects', array('OrganizationID'    => $this->user->OrganizationID, 'Code' => $projectCode));
+            if ($project) {
+
+                $viewData['projectSelected'] = true;
+                $viewData['projectData']    = array(
+                    'id'    => $project->id,
+                    'Code'  => $project->Code,
+                    'Name'  => $project->Name,
+                    'Description'   => $project->Description,
+                    'Allocations'   => $this->db->select_sum('Allocation')->select_sum('Quantity')->select_sum('1', 'Count')
+                                                    ->from('OrganizationProjectServiceItems psi')
+                                                    ->join('OrganizationProjectServices ps', 'ps.id = psi.ProjectServiceID')
+                                                    ->where('psi.ProjectID', $project->id)
+                                                    ->where('ps.Status', 1)
+                                                    ->get()
+                                                    ->row_array()
+                );
+
+                $items = $this->db->select('i.id,i.Name,i.Description,i.Quantity,i.Allocation,i.ServiceID')
+                                    ->from('OrganizationProjectServiceItems i')
+                                    ->join('OrganizationProjectServices ps', 'ps.id = i.ProjectServiceID')
+                                    ->where('ps.Status', 1)
+                                    ->where('i.ProjectID', $project->id)
+                                    ->get()
+                                    ->result_array();
+
+                foreach ($items as &$item) {
+                    // get selected supplier
+                    // if not selected, find from posible item match. rank by name match and lower price
+                    $item['suppliers'] = array();
+                    $match_suppliers   = lookup_match_suppliers($item['Name']);
+                    $suppliers = array();
+                    // suppliers
+                    for ($i = 1; $i <= 3; $i++) {
+                        $item['suppliers'][$i] = false;
+                        $supplier = $this->mgovdb->getRowObjectWhere('OrganizationPSI_Suppliers', array(
+                                        'ProjectID' => $project->id,
+                                        'Rank'      => $i,
+                                        'ItemID'    => $item['id']
+                                    ));
+
+                        if ($supplier) {
+                            if ($supplier->SupplierID) {
+                                $suppliers[] = $supplier->SupplierID;
+                                $item['suppliers'][$i] = (array) $supplier;
+                            }
+                        } else {
+                            // get supplier from posible match
+                            foreach($match_suppliers as $k => $match) {
+                                if (!in_array($match['BusinessID'], $suppliers)) {
+                                    // auto add
+                                    $saveData = array(
+                                        'ProjectID'     => $project->id,
+                                        'ItemID'        => $item['id'],
+                                        'SupplierID'    => $match['BusinessID'],
+                                        'SupplierItemID'=> $match['id'],
+                                        'Rank'          => $i,
+                                        'Remarks'       => 'Automatically assigned',
+                                        'LastUpdate'    => date('Y-m-d H:i:s')
+                                    );
+                                    $saveData['id'] = $this->mgovdb->saveData('OrganizationPSI_Suppliers', $saveData);
+                                    $item['suppliers'][$i]   = $saveData;
+                                    unset($match_suppliers[$k]);
+                                    break;
+                                } else {
+                                    unset($match_suppliers[$k]);
+                                }
+                            }
+                        }
+
+                        if ($item['suppliers'][$i]) {
+                            $item['suppliers'][$i]['SupplierInfo'] = lookup_business_data($item['suppliers'][$i]['SupplierID']);
+                            $item['suppliers'][$i]['SupplierItemInfo'] = (array) $this->mgovdb->getRowObject('BusinessItems', $item['suppliers'][$i]['SupplierItemID']);
+                        }
+                    }
+
+                }
+
+                $viewData['projectItems'] = $items;
+
+                // print_data($viewData);
+
+            } else {
+                redirect(site_url('coa/procurement'));
+            }
+        } else {
+            $projects = $this->getProjects();
+            $viewData['projects'] = $projects;
+        }
+
+        view('main/coa/procurement', $viewData, 'templates/mgov');
+    }
+
+    public function findsupplieritems()
+    {
+        $match = lookup_match_suppliers(get_post('matcher'), true);
+        if (count($match)) {
+            $match   = array_slice($match, 0, 100);
+            $forItem = $this->mgovdb->getRowObject('OrganizationProjectServiceItems', get_post('item'));
+            foreach ($match as &$m) {
+                $m['savings']      = price_savings($forItem->Allocation, ($forItem->Quantity * $m['Price']));
+                $m['supplierInfo'] = lookup_business_data($m['BusinessID']);
+                $m['imageurl']     = public_url('assets/logo/') . logo_filename($m['Image']);
+            }
+            response_json(array(
+                'status'    => true,
+                'data'      => $match
+            ));
+        } else {
+            response_json(array(
+                'status'    => false,
+                'data'      => 'No item found'
+            ));
+        }
+    }
+
+    public function setitemsupplier()
+    {
+        // check if already assign on other supplier option
+        $sql = "SELECT * FROM OrganizationPSI_Suppliers
+                WHERE ProjectID = ?
+                AND Rank != ?
+                AND ItemID = ?
+                AND SupplierID = ?";
+        $results = $this->db->query($sql, array(
+                        get_post('project'),
+                        get_post('rank'),
+                        get_post('item'),
+                        get_post('supplierid')
+                    ))->result_array();
+        if (count($results)) {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Selected supplier is already assigned as other option.'
+            );
+        } else {
+
+            // get existing supplier assigned if set
+            $assigned = $this->mgovdb->getRowObjectWhere('OrganizationPSI_Suppliers', array(
+                            'ProjectID' => get_post('project'),
+                            'ItemID'    => get_post('item'),
+                            'Rank'      => get_post('rank')
+                        ));
+
+            if ($assigned) {
+                $saveData = array(
+                    'id'            => $assigned->id,
+                    'SupplierID'    => get_post('supplierid'),
+                    'SupplierItemID'=> get_post('selecteditem'),
+                    'Remarks'       => 'Manually assigned',
+                    'LastUpdate'    => date('Y-m-d H:i:s')
+                );
+            } else {
+                $saveData = array(
+                    'ProjectID'     => get_post('project'),
+                    'ItemID'        => get_post('item'),
+                    'Rank'          => get_post('rank'),
+                    'Remarks'       => 'Manually assigned',
+                    'SupplierID'    => get_post('supplierid'),
+                    'SupplierItemID'=> get_post('selecteditem'),
+                    'LastUpdate'    => date('Y-m-d H:i:s')
+                );
+            }
+
+            if ($this->mgovdb->saveData('OrganizationPSI_Suppliers', $saveData)) {
+                $return_data = array(
+                    'status'    => true,
+                    'message'   => 'Supplier has been selected.'
+                );
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Saving selected supplier failed.'
+                );
+            }
+        }
+
+        response_json($return_data);
+    }
+
+    public function removeitemsupplier()
+    {
+        $assigned = $this->mgovdb->getRowObject('OrganizationPSI_Suppliers', get_post('id'));
+        if ($assigned) {
+            $saveData = array(
+                'id'    => $assigned->id,
+                'SupplierID'        => null,
+                'SupplierItemID'    => null,
+                'Remarks'           => 'Removed',
+                'LastUpdate'        => date('Y-m-d H:i:s')
+            );
+
+            if ($this->mgovdb->saveData('OrganizationPSI_Suppliers', $saveData)) {
+                $return_data = array(
+                    'status'    => true,
+                    'message'   => 'Supplier has been removed.'
+                );
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Removing selected supplier failed.'
+                );
+            }
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Invalid supplier.'
+            );
+        }
+
+        response_json($return_data);
     }
 
 }

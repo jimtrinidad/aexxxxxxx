@@ -72,6 +72,7 @@
       <li><a href="<?php echo site_url('organization'); ?>"><img src="<?php echo public_url(); ?>resources/images/orgico.png" class="nav-icon"> My Organization</a></li>
       <?php if (in_array($accountInfo->OrganizationID, lookup('coa_organizations')) && in_array($accountInfo->AccountTypeID, array(2,3,4))):?>
       <li><a href="<?php echo site_url('coa/projects'); ?>"><img src="<?php echo public_url(); ?>resources/images/packico.png" class="nav-icon"> Projects</a></li>
+      <li><a href="<?php echo site_url('coa/procurement'); ?>"><img src="<?php echo public_url(); ?>resources/images/marketico.png" class="nav-icon"> Procurements</a></li>
       <?php endif; ?>
     <?php endif;?>
     <!-- <li><a href="<?php echo site_url('trabaho'); ?>"><i class="fa fa-graduation-cap bg-cyan" aria-hidden="true"></i> Profile</a></li> -->
