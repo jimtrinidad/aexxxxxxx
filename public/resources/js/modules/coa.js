@@ -113,6 +113,7 @@ function Coa() {
 
             $('#projectForm #Code').val(data.Code);
             $('#projectForm #Name').val(data.Name);
+            $('#projectForm #TargetDate').val(data.TargetDate);
             $('#projectForm #Description').val(data.Description);
             $('#projectForm #LocationScopeID').val(data.Scope);
 

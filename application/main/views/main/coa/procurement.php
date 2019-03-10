@@ -12,7 +12,7 @@
    </div>
 </div>
 <?php if (!$projectSelected) { ?>
-<div class="padding-20" style="background: #e7edf0;padding-bottom: 10px;">
+<div class="padding-20 padding-top-10" style="background: #e7edf0;padding-bottom: 10px;">
 	<?php if (count($projects)) { ?>
 	<div class="row">
 		<div class="col-xs-12">
@@ -66,7 +66,7 @@
 			</div>
 			<div class="row gutter-0">
 				<div class="col-xs-6">Target Date: </div>
-				<div class="col-xs-6"><b class="text-bold"><?php echo date('F d, Y', strtotime('+1 month'))?></b></div>
+				<div class="col-xs-6"><b class="text-bold"><?php echo ($projectData['TargetDate'] ? date('F d, Y', strtotime($projectData['TargetDate'])) : '')?></b></div>
 			</div>
 		</div>
 	</div>
@@ -165,11 +165,8 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 	  	$('[data-toggle="popover"]').popover(); 
-
-	  	$('#LoadMainBody').imagesLoaded( function(){
-	        $('.projectcont').isotope({
-	          itemSelector : '.projectitem'
-	        });
-	    });
+        $('.projectcont').isotope({
+          itemSelector : '.projectitem'
+        });
 	});
 </script>

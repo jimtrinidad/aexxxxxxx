@@ -40,6 +40,7 @@ class Coa extends CI_Controller
                     'Name'  => $item['Name'],
                     'Description'   => $item['Description'],
                     'Scope'         => $item['LocationScopeID'],
+                    'TargetDate'    => $item['TargetDate'],
                     'Categories'    => count($this->mgovdb->getRecords('OrganizationProjectServices', array('ProjectID' => $item['id'], 'Status' => 1))),
                     'Allocations'   => $this->db->select_sum('Allocation')->select_sum('Quantity')->select_sum('1', 'Count')
                                                     ->from('OrganizationProjectServiceItems psi')
@@ -96,6 +97,7 @@ class Coa extends CI_Controller
                     'Name'              => get_post('Name'),
                     'Description'       => get_post('Description'),
                     'LocationScopeID'   => get_post('LocationScopeID'),
+                    'TargetDate'        => get_post('TargetDate'),
                     'LastUpdate'        => date('Y-m-d H:i:s')
                 );
 
@@ -428,6 +430,7 @@ class Coa extends CI_Controller
                     'id'    => $project->id,
                     'Code'  => $project->Code,
                     'Name'  => $project->Name,
+                    'TargetDate'    => $project->TargetDate,
                     'Description'   => $project->Description,
                     'Allocations'   => $this->db->select_sum('Allocation')->select_sum('Quantity')->select_sum('1', 'Count')
                                                     ->from('OrganizationProjectServiceItems psi')
@@ -654,6 +657,102 @@ class Coa extends CI_Controller
         $r = wordMatch(get_post('i'), get_post('a'));
         // print_data($r);
         var_dump($r);
+    }
+
+
+    public function procurementreport($projectCode = null)
+    {
+        $viewData = array(
+                    'pageTitle'     => 'Procurement',
+                    'accountInfo'   => user_account_details(),
+                    'nosidebar'     => true,
+                    'shownav'       => true,
+                    'jsModules'         => array(
+                        'coa',
+                    ),
+                );
+
+        if ($projectCode) {
+            $project = $this->mgovdb->getRowObjectWhere('OrganizationProjects', array('OrganizationID'    => $this->user->OrganizationID, 'Code' => $projectCode));
+            if ($project) {
+
+                $userData = $this->mgovdb->getRowObject('UserAccountInformation', $project->CreatorID);
+                $address  = lookup_address((array) $userData);
+
+                $items = $this->db->select('i.id,i.Name,i.Description,i.Quantity,i.Allocation,i.ServiceID')
+                                    ->from('OrganizationProjectServiceItems i')
+                                    ->join('OrganizationProjectServices ps', 'ps.id = i.ProjectServiceID')
+                                    ->where('ps.Status', 1)
+                                    ->where('i.ProjectID', $project->id)
+                                    ->get()
+                                    ->result_array();
+                $totalSavings = 0;
+                $totalAmount  = 0;
+                foreach ($items as &$item) {
+
+                    $chosensupplier = false;
+                    for ($i = 1; $i <= 3; $i++) {
+                        $item['suppliers'][$i] = false;
+                        $supplier = $this->mgovdb->getRowObjectWhere('OrganizationPSI_Suppliers', array(
+                                        'ProjectID' => $project->id,
+                                        'Rank'      => $i,
+                                        'ItemID'    => $item['id']
+                                    ));
+
+                        if ($supplier && $supplier->SupplierID) {
+                            $suppliers[] = $supplier->SupplierID;
+                            $item['suppliers'][$i] = (array) $supplier;
+                        }
+
+                        if ($item['suppliers'][$i]) {
+                            $item['suppliers'][$i]['SupplierInfo'] = lookup_business_data($item['suppliers'][$i]['SupplierID']);
+                            $item['suppliers'][$i]['SupplierItemInfo'] = (array) $this->mgovdb->getRowObject('BusinessItems', $item['suppliers'][$i]['SupplierItemID']);
+
+                            if ($chosensupplier == false) {
+                                $chosensupplier = $item['suppliers'][$i];
+                            }
+                        }
+                    }
+
+                    if ($chosensupplier) {
+                        $item['savings'] = ($item['Allocation'] - ($chosensupplier['SupplierItemInfo']['Price'] * $item['Quantity']));
+                        $item['uprice']  = $chosensupplier['SupplierItemInfo']['Price'] * $item['Quantity'];
+                        $totalSavings += $item['savings'];
+                        $totalAmount += $item['uprice']; 
+                    } else {
+                        $item['savings'] = 0;
+                        $item['uprice']  = 0;
+                    }
+
+                }
+
+                $viewData['projectData']  = $project;
+                $viewData['address']      = $address;
+                $viewData['items']        = $items;
+                $viewData['totalAmount']  = $totalAmount;
+                $viewData['totalSavings'] = $totalSavings;
+                $viewData['owner']        = array(
+                    'FirstName' => $userData->FirstName,
+                    'LastName'  => $userData->LastName
+                );
+
+                $viewData['pAllocation'] = $this->db->select_sum('Allocation')->select_sum('Quantity')->select_sum('1', 'Count')
+                                                    ->from('OrganizationProjectServiceItems psi')
+                                                    ->join('OrganizationProjectServices ps', 'ps.id = psi.ProjectServiceID')
+                                                    ->where('psi.ProjectID', $project->id)
+                                                    ->where('ps.Status', 1)
+                                                    ->get()
+                                                    ->row_array();
+
+                view('main/coa/procurementreport', $viewData, 'templates/mgov');
+
+            } else {
+                redirect(site_url('coa/projects'));
+            }
+        } else {
+            redirect(site_url('coa/projects'));
+        }
+
     }
 
 }

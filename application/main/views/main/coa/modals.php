@@ -12,7 +12,7 @@
             <div class="error_messages no-border-radius alert alert-danger small" role="alert"></div>
           </div>
           <div class="row gutter-5">
-            <div class="col-xs-12">
+            <div class="col-xs-6">
               <div class="form-group">
                 <label class="control-label" for="LocationScopeID">Scope</label>
                 <select class="form-control" id="LocationScopeID" name="LocationScopeID">
@@ -23,6 +23,13 @@
                       }
                     ?>
                  </select>
+                <span class="help-block hidden"></span>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label" for="TargetDate">Target Date</label>
+                <input type="text" class="form-control datepicker" id="TargetDate" name="TargetDate" placehoder="Target date">
                 <span class="help-block hidden"></span>
               </div>
             </div>
@@ -159,7 +166,7 @@
     <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title"><b class="text-bold">Find Supplier Item</h4>
+          <h4 class="modal-title"><b class="text-bold">Find Supplier Item</b></h4>
         </div>
         <div class="modal-body" style="max-height: 800px;overflow: auto;">
 
