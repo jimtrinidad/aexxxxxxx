@@ -112,7 +112,7 @@
       			<span class="seller text-cyan">
       				<?php echo $item['seller']['Company Name']; ?>
       			</span>
-      			<p class="desc small" title="<?php echo $item['Description'] ?>"><?php echo substr($item['Description'], 0, 90) ?></p>
+      			<p class="desc small" title="<?php echo $item['Description'] ?>"><?php echo $item['Description']; ?></p>
       			<hr class="line">
       			<div class="row">
       				<div class="col-sm-12">
