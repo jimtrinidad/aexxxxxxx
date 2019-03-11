@@ -38,7 +38,7 @@
 	}
 
 	.itemcont .thumbnail{
-		opacity:0.85;
+		opacity:0.80;
 		-webkit-transition: all 0.5s; 
 		transition: all 0.5s;
 	}
@@ -108,13 +108,13 @@
 					</div>
                 </div>
             </div> -->
-            <span class="thumbnail">
+            <span class="thumbnail" title="<?php echo $item['Description'] ?>">
       			<img src="<?php echo public_url('assets/logo/') . logo_filename($item['Image']) ?>">
       			<h4><?php echo $item['Name'] ?></h4>
       			<span class="seller text-cyan">
       				<?php echo $item['seller']['Company Name']; ?>
       			</span>
-      			<p class="desc small" title="<?php echo $item['Description'] ?>"><?php echo $item['Description']; ?></p>
+      			<p class="desc small"><?php echo $item['Description']; ?></p>
       			<hr class="line">
       			<div class="row">
       				<div class="col-sm-12">
