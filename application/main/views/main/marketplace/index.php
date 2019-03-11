@@ -27,7 +27,7 @@
 	}
 
 	.itemcont .uom{
-		font-size: 12px;
+		font-size: 10px;
 	}
 
 	.itemcont .seller{ font-size: 10px;display: block;margin-top: -1px;  }
