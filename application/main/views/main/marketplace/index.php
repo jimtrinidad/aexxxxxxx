@@ -28,6 +28,8 @@
 		min-height: 55px;
 		max-height: 55px;
 		font-size: 11px;
+		line-height: 12px;
+		overflow: hidden;
 	}
 
 	.thumbnail a>img, .thumbnail>img {
