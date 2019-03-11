@@ -17,7 +17,12 @@
 
 	<div class="row">
 		<div class="col-xs-12 text-center text-cyan text-bold h4">
-			<div><?php echo $address['MuniCity'];?></div>
+			<div>
+			<?php 
+				$p = explode('~', $address['MuniCity']);
+				echo trim($p[0]);
+			?>
+			</div>
 			<div><?php echo $address['Barangay'];?></div>
 		</div>
 	</div>
