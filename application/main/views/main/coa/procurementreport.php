@@ -44,7 +44,7 @@
 					<th width="20"></th>
 					<th>Item</th>
 					<th>Quantity/Price</th>
-					<th class="text-center">Allocated Savings</th>
+					<th class="text-center">Allocation & Savings</th>
 					<th class="text-center text-bold text-cyan">1st Choice</th>
 					<th class="text-center text-bold text-cyan">2nd Choice</th>
 					<th class="text-center text-bold text-cyan">3rd Choice</th>
@@ -61,13 +61,16 @@
 		   							Qty: <span class="text-info">' . $item['Quantity'] . '</span><br>
 		   							<span class="text-bold text-orange">₱' . number_format($item['uprice']) . '</span>
 		   					  </td>';
+		   				echo '<td class="text-center">';
+		   					echo '<span class="text-bold">₱' . number_format(abs($item['Allocation'])) . '</span><br>';
 		   				if ($item['savings'] > 0) {
-		   					echo '<td class="text-center"><span class="text-green">₱' . number_format(abs($item['savings'])) . '</td>';
+		   					echo '<span class="text-green">₱' . number_format(abs($item['savings'])) . '</span>';
 		   				} else if ($item['savings'] < 0) {
-		   					echo '<td class="text-center"><span class="text-red">- ₱' . number_format(abs($item['savings'])) . '</td>';
+		   					echo '<span class="text-red">- ₱' . number_format(abs($item['savings'])) . '</span>';
 		   				} else {
-		   					echo '<td class="text-center">N/A</td>';
+		   					echo 'N/A';
 		   				}
+		   				echo '</td>';
 
 		   				foreach ($item['suppliers'] as $sup) {
 		   					if ($sup) {
