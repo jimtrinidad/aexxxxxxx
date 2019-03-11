@@ -3,7 +3,13 @@
 	 	margin-bottom: 10px;
 	 	min-height: 250px;
 	}
-   .itemcont h4{
+
+	.itemcont .info{
+		min-height: 80px;
+		max-height: 80px;
+		overflow: hidden;
+	}
+    .itemcont h4{
     	font-weight: 600;
     	line-height: 14px;
     	padding-top: 3px;
@@ -12,6 +18,7 @@
 		font-size: 12px;
 		margin-top: 5px;
 	}
+
 	.itemcont .price{
 		font-size: 20px;
     	margin: 0 auto;
@@ -25,11 +32,8 @@
 
 	.itemcont .seller{ font-size: 10px;display: block;margin-top: -1px;  }
 	.itemcont .desc{
-		min-height: 55px;
-		max-height: 55px;
 		font-size: 11px;
 		line-height: 12px;
-		overflow: hidden;
 	}
 
 	.thumbnail a>img, .thumbnail>img {
@@ -127,11 +131,13 @@
             </div> -->
             <span class="thumbnail" title="<?php echo $item['Description'] ?>">
       			<img src="<?php echo public_url('assets/logo/') . logo_filename($item['Image']) ?>">
-      			<h4><?php echo $item['Name'] ?></h4>
-      			<span class="seller text-cyan">
-      				<?php echo $item['seller']['Company Name']; ?>
-      			</span>
-      			<p class="desc small"><?php echo $item['Description']; ?></p>
+      			<div class="info">
+	      			<h4><?php echo $item['Name'] ?></h4>
+	      			<span class="seller text-cyan">
+	      				<?php echo $item['seller']['Company Name']; ?>
+	      			</span>
+	      			<p class="desc small"><?php echo $item['Description']; ?></p>
+      			</div>
       			<hr class="line">
       			<div class="row">
       				<div class="col-sm-12">
