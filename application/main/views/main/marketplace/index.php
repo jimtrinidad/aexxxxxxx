@@ -5,6 +5,8 @@
 	}
    .itemcont h4{
     	font-weight: 600;
+    	line-height: 14px;
+    	padding-top: 3px;
 	}
 	.itemcont p{
 		font-size: 12px;
@@ -21,9 +23,10 @@
 		font-size: 12px;
 	}
 
-	.itemcont .seller{ font-size: 10px;display: block;margin-top: -3px;  }
+	.itemcont .seller{ font-size: 10px;display: block;margin-top: -1px;  }
 	.itemcont .desc{
 		min-height: 55px;
+		max-height: 55px;
 		font-size: 11px;
 	}
 
