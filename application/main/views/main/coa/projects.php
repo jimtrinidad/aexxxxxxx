@@ -23,9 +23,9 @@
                       <div class="product-price text-bold small offset-top-5">
                         <small class="small">
                           Target Date: <span class="text-green"><?php echo $item['TargetDate'] ?></span><br>
-                          Categories: <span class="text-orange"><?php echo $item['Categories'] ?></span><br>
-                          Items: <span class="text-orange"><?php echo $item['Allocations']['Count'] ?></span><br>
-                          Allocation: <span class="text-orange">P <?php echo number_format($item['Allocations']['Allocation']) ?></span>
+                          Categories: <span class="text-green"><?php echo $item['Categories'] ?></span><br>
+                          Items: <span class="text-green"><?php echo $item['Allocations']['Count'] ?></span><br>
+                          Allocation: <span class="text-green">P <?php echo number_format($item['Allocations']['Allocation']) ?></span>
                         </small>
                       </div>
                       <div class="offset-top-10">

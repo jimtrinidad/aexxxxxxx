@@ -2,6 +2,7 @@
 	.itemcont .thumbnail{
 	 	margin-bottom: 10px;
 	 	min-height: 250px;
+	 	cursor: pointer;
 	}
 
 	.itemcont .info{
@@ -132,7 +133,7 @@
             <span class="thumbnail" title="<?php echo $item['Description'] ?>">
       			<img src="<?php echo public_url('assets/logo/') . logo_filename($item['Image']) ?>">
       			<div class="info">
-	      			<h4><?php echo $item['Name'] ?></h4>
+	      			<h4 class="text-blue"><?php echo $item['Name'] ?></h4>
 	      			<span class="seller text-cyan">
 	      				<?php echo $item['seller']['Company Name']; ?>
 	      			</span>
@@ -141,7 +142,7 @@
       			<hr class="line">
       			<div class="row">
       				<div class="col-sm-12">
-      					<p class="price">₱<?php echo number_format($item['Price']) ?> <span class="uom"><?php echo ($item['Measurement'] ? ' / ' . $item['Measurement'] : '') ?></span></p>
+      					<p class="price"><span class="text-orange">₱<?php echo number_format($item['Price']) ?></span> <span class="uom"><?php echo ($item['Measurement'] ? ' / ' . $item['Measurement'] : '') ?></span></p>
       				</div>
       			</div>
     		</span>
