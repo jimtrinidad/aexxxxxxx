@@ -130,6 +130,11 @@ function paginate($config)
 
 	$config = array_merge($default, $config);
 
+	if (count($_GET) > 0) {
+		$config['suffix'] 	 = '?' . http_build_query($_GET, '', "&");
+		$config['first_url'] = $config['base_url'] . '?' . http_build_query($_GET);
+	}
+
 	$ci->pagination->initialize($config);
 
 	return $ci->pagination->create_links();

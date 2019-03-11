@@ -77,7 +77,7 @@
 		   						echo '<td class="text-center">
 		   								<div class="small">
 											<div class="text-cyan">' . $sup['SupplierInfo']['Company Name'] . '</div>
-											<span class="text-orange">' . $sup['SupplierInfo']['AccredicationNo'] . '</span>
+											<span class="text-orange">' . $sup['SupplierInfo']['Accredication No.'] . '</span>
 										</div>
 										<div class="product-price">
 											<span class="text-bold text-orange small">₱'. number_format($sup['SupplierItemInfo']['Price']) . '</span> / 

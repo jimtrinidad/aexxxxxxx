@@ -418,7 +418,7 @@ function lookup_business_data($businessID)
         if ($applicationData) {
             $exfields = json_decode($applicationData->ExtraFields, true);
             $data     = array(
-                'AccredicationNo' => $business->Code
+                'Accredication No.' => $business->Code
             );
             foreach ($exfields as $key => $xf) {
                 $fdetail = $ci->mgovdb->getRowObject('Service_ExtraFormFields', $key, 'FieldID');

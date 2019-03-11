@@ -79,6 +79,23 @@
 		font-weight:600;
 	}
 </style>
+<form id="searchProducts" action="<?php echo site_url('marketplace') ?>" method="get">
+   <div class="row">
+      <div class="col-md-12">
+         <div class="bg-white padding-bottom-5 padding-left-5 padding-right-5">
+            <div class="row gutter-5">
+              <div class="col-sm-10 padding-top-5">
+                <input type="text" name="search" autocomplete="off" class="form-control" placeholder="Looking for.." value="<?php echo get_post('search') ?>">
+              </div>
+              <div class="col-sm-2 padding-top-5">
+                <button type="submit" class="btn bg-cyan text-white btn-block text-bold">Search</button>
+              </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</form>
+
 <div class="bg-grey padding-10">
    <div class="row gutter-5">
       <div class="col-xs-12 col-sm-8 text-bold text-white padding-top-10 padding-bottom-5">Marketplace</div>

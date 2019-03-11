@@ -1,6 +1,12 @@
 <style type="text/css">
 	.busi-box a, .busi-box a:hover {text-decoration: none;}
 	.padding-2 {padding: 2px;}
+	@media (min-width: 768px) {
+		.dl-horizontal dt {width: 200px;}
+		.dl-horizontal dd {
+		    margin-left: 220px;
+		}
+	}
 </style>
 <div class="bg-grey padding-10">
    <div class="row gutter-5">
@@ -11,17 +17,11 @@
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="row gutter-5">
-				<!-- <div class="col-xs-6 col-sm-4">
-					<div class="busi-box">
-						business 1
-					</div>
-				</div> -->
 				<?php 
 				foreach ($businesses as $busi) { 
 					$bData = lookup_business_data($busi['id']);
-					// print_data($bData);
 				?>
-					<div class="col-xs-6 col-sm-6">
+					<div class="col-xs-12">
 						<div class="busi-box">
 							<a href="<?php echo site_url('businesses/view/' . $busi['Code']); ?>">
 								<?php //echo ($busi['Name'] ? $busi['Name'] : 'Business') . ' - ' . $busi['Code']; ?>

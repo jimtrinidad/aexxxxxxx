@@ -121,8 +121,8 @@ ul#horizontal, #horizontal ul  {
 
 
 /* Primary Navigation */
-.seconday-nav{ padding: 10px; overflow: hidden;}
-.seconday-nav ul li{ display: inline-block; margin-right: 10px; }
+.seconday-nav{ padding: 5px 10px; overflow: hidden;}
+.seconday-nav ul li{ display: inline-block; margin-right: 10px; padding-top: 5px; padding-bottom: 5px;}
 .seconday-nav ul li a{ color: #145598; font-size: 12px; font-weight: bold; }
 .seconday-nav ul li a:hover{ text-decoration: none; color: #fed700; }
 .seconday-nav ul li a i{ padding: 3px 5px; }

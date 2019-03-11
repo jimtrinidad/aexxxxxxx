@@ -25,19 +25,10 @@ class Marketplace extends CI_Controller
         $order = 'LastUpdate Desc';
         $where = array();
 
-        $params     = array();
-        $sellers    = array();
-        $sql = "SELECT * FROM BusinessItems
-                WHERE id IS NOT NULL";
-
-        $products = $this->db->query($sql, $params)->result_array();
-        foreach ($products as &$product) {
-            if (!isset($sellers[$product['BusinessID']])) {
-                $sellers[$product['BusinessID']] = lookup_business_data($product['BusinessID']);
-            }
-            $product['seller'] = $sellers[$product['BusinessID']];
+        // SET SEARCH FILTER
+        if (get_post('search')) {
+            $where['CONCAT(Name, " ", Description) LIKE ']  = '%' . get_post('search') . '%';
         }
-
 
         $paginatationData = $this->mgovdb->getPaginationData('BusinessItems', $page_limit, $page_start, $where, $order);
 

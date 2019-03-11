@@ -75,7 +75,7 @@
       <li><a href="<?php echo site_url('coa/procurement'); ?>"><img src="<?php echo public_url(); ?>resources/images/proc.png" class="nav-icon"><!-- <i class="fa fa-shopping-basket bg-cyan" aria-hidden="true"></i> --> Procurements</a></li>
       <?php endif; ?>
     <?php endif;?>
-    <!-- <li><a href="<?php echo site_url('marketplace'); ?>"><img src="<?php echo public_url(); ?>resources/images/marketico.png" class="nav-icon"> Marketplace</a></li> -->
+    <li><a href="<?php echo site_url('marketplace'); ?>"><img src="<?php echo public_url(); ?>resources/images/marketico.png" class="nav-icon"> Marketplace</a></li>
     <!-- <li><a href="<?php echo site_url('trabaho'); ?>"><i class="fa fa-graduation-cap bg-cyan" aria-hidden="true"></i> Profile</a></li> -->
     <!-- <li><a href="#">Mobile Wallet</a></li> -->
   </ul>

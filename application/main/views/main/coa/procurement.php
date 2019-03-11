@@ -96,9 +96,9 @@
 									if ($sup) {
 
 										?>
-										<div class="small" id="accno-<?php echo $sup['SupplierInfo']['AccredicationNo'] ?>">
+										<div class="small" id="accno-<?php echo $sup['SupplierInfo']['Accredication No.'] ?>">
 											<div class="text-cyan"><?php echo $sup['SupplierInfo']['Company Name'] ?></div>
-											<span class="text-orange"><?php echo $sup['SupplierInfo']['AccredicationNo'] ?></span>
+											<span class="text-orange"><?php echo $sup['SupplierInfo']['Accredication No.'] ?></span>
 										</div>
 										<img class="img-thumbnail" style="max-width:40px;max-height: 40px;" src="<?php echo public_url('assets/logo/') . logo_filename($sup['SupplierItemInfo']['Image']); ?>">
 										<div class="product-info">
