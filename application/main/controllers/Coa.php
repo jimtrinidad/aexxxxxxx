@@ -466,8 +466,11 @@ class Coa extends CI_Controller
 
                         if ($supplier) {
                             if ($supplier->SupplierID) {
-                                $suppliers[] = $supplier->SupplierID;
-                                $item['suppliers'][$i] = (array) $supplier;
+                                // check if item still exists
+                                if ($this->mgovdb->getRowObject('BusinessItems', $supplier->SupplierItemID)) {
+                                    $suppliers[] = $supplier->SupplierID;
+                                    $item['suppliers'][$i] = (array) $supplier;
+                                }
                             }
                         } else {
                             // get supplier from posible match
@@ -700,14 +703,16 @@ class Coa extends CI_Controller
                                     ));
 
                         if ($supplier && $supplier->SupplierID) {
-                            $suppliers[] = $supplier->SupplierID;
-                            $item['suppliers'][$i] = (array) $supplier;
+                            $supplierItem = $this->mgovdb->getRowObject('BusinessItems', $supplier->SupplierItemID);
+                            if ($supplierItem) {
+                                $suppliers[] = $supplier->SupplierID;
+                                $item['suppliers'][$i] = (array) $supplier;
+                                $item['suppliers'][$i]['SupplierInfo'] = lookup_business_data($item['suppliers'][$i]['SupplierID']);
+                                $item['suppliers'][$i]['SupplierItemInfo'] = (array) $supplierItem;
+                            }
                         }
 
                         if ($item['suppliers'][$i]) {
-                            $item['suppliers'][$i]['SupplierInfo'] = lookup_business_data($item['suppliers'][$i]['SupplierID']);
-                            $item['suppliers'][$i]['SupplierItemInfo'] = (array) $this->mgovdb->getRowObject('BusinessItems', $item['suppliers'][$i]['SupplierItemID']);
-
                             if ($chosensupplier == false) {
                                 $chosensupplier = $item['suppliers'][$i];
                             }

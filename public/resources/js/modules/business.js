@@ -81,7 +81,7 @@ function Business() {
 
     this.editItem = function(id)
     {
-        var data  = self.getProject(id);
+        var data  = self.getData(id);
 
         if (data) {
             // reset form data
@@ -106,7 +106,8 @@ function Business() {
 
     this.deleteItem = function(id)
     {
-        var data = self.getProject(id);
+        var data = self.getData(id);
+        console.log(id, data);
         if (data) {
             bootbox.confirm('Are you sure you want to <label class="label label-danger">delete</label> ' + data.Name, function(r){
                 if (r) {

@@ -154,4 +154,33 @@ class Businesses extends CI_Controller
         response_json($return_data);
     }
 
+    public function deleteitem($id = null)
+    {
+        $itemData = $this->mgovdb->getRowObject('BusinessItems', $id, 'Code');
+        if ($itemData) {
+
+            if ($this->mgovdb->deleteData('BusinessItems', $itemData->id)) {
+
+                // also delete this item from assigned project supplier
+
+                response_json(array(
+                    'status'    => true,
+                    'message'   => 'Item has been deleted.'
+                ));
+
+            } else {
+                response_json(array(
+                    'status'    => false,
+                    'message'   => 'Deleting item failed.'
+                ));
+            }
+        } else {
+            response_json(array(
+                'status'    => false,
+                'message'   => 'Invalid item.'
+            ));
+        }
+
+    }
+
 }
