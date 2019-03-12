@@ -403,6 +403,20 @@ class Coa extends CI_Controller
     }
 
 
+    /**
+    * REPORT
+    */
+    public function report()
+    {
+        $viewData = array(
+            'pageTitle'     => 'Barangay Financial Report',
+            'accountInfo'   => user_account_details(),
+            'nosidebar'     => true,
+            'shownav'       => true,
+        );
+
+        view('main/coa/reports', $viewData, 'templates/mgov');
+    }
 
 
     /**

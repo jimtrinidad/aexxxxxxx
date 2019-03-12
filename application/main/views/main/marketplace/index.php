@@ -158,7 +158,7 @@
         </div>
         <div class="modal-body">
           <div class="row">
-          	<div class="col-xs-12 col-sm-4">
+          	<div class="col-xs-12 col-sm-4 offset-bottom-5">
           		<img class="img-responsive item-image" src="">
           	</div>
           	<div class="col-xs-12 col-sm-8">
