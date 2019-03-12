@@ -23,6 +23,7 @@
 									<div class="product-desc small"><?php echo $item['Description'] ?></div>
 									<div class="product-price text-bold text-orange small">P <?php echo number_format($item['Price']) ?></div>
 									<div class="offset-top-5">
+										<a href="javascript:;" onclick="Business.editItem(<?php echo $item['id'] ?>)" class="text-blue"><i class="fa fa-pencil"></i></a>
 										<a href="javascript:;" onclick="Business.deleteItem(<?php echo $item['id'] ?>)" class="text-red"><i class="fa fa-trash"></i></a>
 									</div>
 								</div>

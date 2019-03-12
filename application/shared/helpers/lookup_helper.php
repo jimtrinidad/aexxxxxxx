@@ -409,7 +409,7 @@ function lookup_match_suppliers($item = '', $all = false)
     return $results;
 }
 
-function lookup_business_data($businessID)
+function lookup_business_data($businessID, $include_seller_info = false)
 {
     $ci =& get_instance();
     $business = $ci->mgovdb->getRowObject('Businesses', $businessID);
@@ -425,6 +425,16 @@ function lookup_business_data($businessID)
                 if ($fdetail) {
                     $data[$fdetail->FieldLabel] = $xf;
                 }
+            }
+
+            if ($include_seller_info) {
+                $userData = $ci->mgovdb->getRowObject('UserAccountInformation', $business->OwnerID);
+                $data['sellerData'] = array(
+                    'firstname'     => $userData->FirstName,
+                    'lastname'      => $userData->LastName,
+                    'mabuhayID'     => $userData->MabuhayID,
+                    'contact'       => $userData->ContactNumber
+                );
             }
 
             return $data;

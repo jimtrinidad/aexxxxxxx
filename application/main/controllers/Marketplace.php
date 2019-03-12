@@ -16,7 +16,10 @@ class Marketplace extends CI_Controller
     {
         $viewData = array(
             'pageTitle'     => 'Marketplace',
-            'accountInfo'   => user_account_details()
+            'accountInfo'   => user_account_details(),
+            'jsModules'         => array(
+                'marketplace',
+            ),
         );
 
         $page_limit = 20;
@@ -36,7 +39,7 @@ class Marketplace extends CI_Controller
         foreach ($paginatationData['data'] as $product) {
             $product = (array) $product;
             if (!isset($sellers[$product['BusinessID']])) {
-                $sellers[$product['BusinessID']] = lookup_business_data($product['BusinessID']);
+                $sellers[$product['BusinessID']] = lookup_business_data($product['BusinessID'], true);
             }
             $product['seller'] = $sellers[$product['BusinessID']];
 

@@ -92,6 +92,19 @@ function Business() {
                 $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger');
                 $(e).popover('destroy');
             });
+
+            $('#itemForm').find('#Code').val(data.Code);
+            $('#itemForm').find('#Name').val(data.Name);
+            $('#itemForm').find('#Description').val(data.Description);
+            $('#itemForm').find('#LeadTime').val(data.LeadTime);
+            $('#itemForm').find('#Measurement').val(data.Measurement);
+            $('#itemForm').find('#PaymentTerm').val(data.PaymentTerm);
+            $('#itemForm').find('#Price').val(data.Price);
+            $('#itemForm').find('#Warranty').val(data.Warranty);
+
+            $('#itemForm .image-preview').prop('src', window.public_url() + 'assets/logo/' + data.Image);
+
+
             //clean error box
             $('#itemForm').find('#error_message_box .error_messages').html('');
             $('#itemForm').find('#error_message_box').addClass('hide');
@@ -107,7 +120,6 @@ function Business() {
     this.deleteItem = function(id)
     {
         var data = self.getData(id);
-        console.log(id, data);
         if (data) {
             bootbox.confirm('Are you sure you want to <label class="label label-danger">delete</label> ' + data.Name, function(r){
                 if (r) {
