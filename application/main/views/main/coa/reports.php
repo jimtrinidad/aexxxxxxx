@@ -1,4 +1,4 @@
-<div class="table-reponsive bg-white padding-10">
+<div class="table-report table-responsive bg-white padding-10">
 	<h3 class="h3">Barangay Financial Report</h3>
 	<h4 class="h4">Statement of Receipts And Expenditures</h4>
 	<table class="table table-bordered table-condensed">
