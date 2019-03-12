@@ -112,7 +112,7 @@
       <?php foreach ($products as $item) { ?>
         <div class="col-xs-6 col-sm-3 item">
             <span class="thumbnail" data-id="<?php echo $item['id'] ?>" onclick="Marketplace.viewItem(this, event)">
-      			<img title="<?php echo $item['Description'] ?>" src="<?php echo public_url('assets/logo/') . logo_filename($item['Image']) ?>">
+      			<img title="<?php echo $item['Description'] ?>" src="<?php echo public_url('assets/logo/') . $item['Image'] ?>">
       			<div title="<?php echo $item['Description'] ?>" class="info">
 	      			<h4 class="text-blue"><?php echo $item['Name'] ?></h4>
 	      			<span class="seller text-cyan">
@@ -159,7 +159,7 @@
         <div class="modal-body">
           <div class="row">
           	<div class="col-xs-12 col-sm-4">
-          		<img class="img-responsive" src="https://mgov.cloud/assets/logo/9a1c38ff84eaf53379d35ac3532ef864.jpg?1552392108">
+          		<img class="img-responsive item-image" src="">
           	</div>
           	<div class="col-xs-12 col-sm-8">
           		<div class="row">

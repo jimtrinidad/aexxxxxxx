@@ -41,6 +41,7 @@ class Marketplace extends CI_Controller
             if (!isset($sellers[$product['BusinessID']])) {
                 $sellers[$product['BusinessID']] = lookup_business_data($product['BusinessID'], true);
             }
+            $product['Image']  = logo_filename($product['Image']);
             $product['seller'] = $sellers[$product['BusinessID']];
 
             $products[] = $product;

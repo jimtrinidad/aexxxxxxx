@@ -57,6 +57,8 @@ function Marketplace() {
             $('#viewItemModal').find('span.price').text('₱' + data.Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
             $('#viewItemModal').find('span.uom').text('/ ' + data.Measurement);
 
+            $('#viewItemModal').find('.item-image').prop('src', window.public_url() + 'assets/logo/' + data.Image);
+
             $('#viewItemModal').find('span.sellerName').text(data.seller['Company Name']);
             $('#viewItemModal').find('span.accreditation').text(data.seller['Accredication No.']);
             if (data.seller.sellerData.contact) {
