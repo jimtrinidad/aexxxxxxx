@@ -10,7 +10,7 @@
     font-style: normal;
 }
 
-body { font-family: 'Open Sans', sans-serif; margin: 0px; padding: 0px; background: #101928 url('../images/bg-blue-water.png') no-repeat; background-size: cover}
+body { font-family: 'Open Sans', sans-serif; margin: 0px; padding: 0px; background: #101928 url('../images/bg.png') no-repeat; background-size: cover}
 html, body { height: 100%; margin: 0; font-size: 14px;}
 
 /* Wrapper */
