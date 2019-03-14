@@ -1,11 +1,11 @@
 $(document).ready(function(){
 	
- 	alignMenu();
+ 	// alignMenu();
 
     $(window).resize(function() {
         $("#horizontal").append($("#horizontal li.hideshow ul").html());
         $("#horizontal li.hideshow").remove();
-        alignMenu();
+        // alignMenu();
     });
 
     function alignMenu() {
