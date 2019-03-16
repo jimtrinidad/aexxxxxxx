@@ -576,4 +576,8 @@ span.twitter-typeahead {
 .dropdown:hover .dropdown-content {display: block;}
 
 .dropdown:hover .dropbtn {}
+
+.dropdown-menu .active label {
+  color: #fff !important;
+}
 /*END*/

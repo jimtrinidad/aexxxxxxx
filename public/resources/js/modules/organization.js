@@ -154,13 +154,13 @@ function Organization() {
                         serviceTemplate.find('span.ServiceFee').hide();
                     }
 
-                    // if (v.SubDepartment) {
-                    //     serviceTemplate.find('span.DeptName').text(v.SubDepartment.Name);
-                    //     serviceTemplate.find('img.DepartmentLogo').prop('src', window.public_url('assets/logo/' + v.SubDepartment.Logo));
-                    // } else {
+                    if (v.SubDepartment) {
+                        serviceTemplate.find('span.DeptName').text(v.SubDepartment.Name);
+                        serviceTemplate.find('img.DepartmentLogo').prop('src', window.public_url('assets/logo/' + v.SubDepartment.Logo));
+                    } else {
                         serviceTemplate.find('span.DeptName').text(v.Department.Name);
                         serviceTemplate.find('img.DepartmentLogo').prop('src', window.public_url('assets/logo/' + v.Department.Logo));
-                    // }
+                    }
                     serviceTemplate.find('img.ServiceLogo').prop('src', window.public_url('assets/logo/' + v.Logo));
 
                     serviceTemplate.find('.ServiceTags').html('');
@@ -183,26 +183,46 @@ function Organization() {
                             additionalFields += '<textarea rows="1" class="form-control input-sm" id="'+e.FieldID+'" name="ExtraField['+e.FieldID+']" placeholder="'+e.FieldLabel+'">'+e.DefaultValue+'</textarea>';
                         } else if (e.FieldType == 3) {
                             additionalFields += '<input type="file" id="'+e.FieldID+'" name="Image['+e.FieldID+']" class="form-control input-sm" placeholder="'+e.FieldLabel+'">';
-                        } else if (e.FieldType == 4) {
+                        } else if (e.FieldType == 4 || e.FieldType == 5) {
                             var options = '';
+
                             if (e.DefaultValue) {
+                                if (e.FieldType == 4) {
+                                    options += `<option value=''>-- Please select --</option>`;
+                                }
                                 $.each(e.DefaultValue.split('|'), function(k,j){
                                     options += `<option>${j.trim()}</option>`;
                                 });
                             } else {
                                 options += `<option>--</option>`;
                             }
-                            additionalFields += `<select class="form-control input-sm" name="ExtraField[${e.FieldID}]">${options}</select>`;
+
+                            if (e.FieldType == 5) {
+                                multiple = 'multiple="multiple"';
+                                additionalFields += `<select class="form-control input-sm" multiple="multiple" id="${e.FieldID}" name="ExtraField[${e.FieldID}][]">${options}</select>`;
+                            } else if (e.FieldType == 4) {
+                                additionalFields += `<select class="form-control input-sm" id="${e.FieldID}" name="ExtraField[${e.FieldID}]">${options}</select>`;
+                            }
                         }
                         additionalFields += '</div></div>';
                     });
                     if (additionalFields != '') {
                         $('#serviceApplicationModal #serviceAdditionalFieldsCont').html('<div class="post-items bg-white padding-10"> \
-                                                                                            <h2 class="text-cyan text-bold offset-bottom-10">Report Data</h2> \
+                                                                                            <h2 class="text-cyan text-bold offset-bottom-10">Required Data</h2> \
                                                                                             <div class="row gutter-5">'
                                                                                              + additionalFields + 
                                                                                             '</div> \
                                                                                         </div>');
+                        $('#serviceApplicationModal #serviceAdditionalFieldsCont select[multiple="multiple"]').multiselect({
+                            enableFiltering: true,
+                            enableCaseInsensitiveFiltering: true,
+                            filterBehavior: 'text',
+                            nonSelectedText: '-- Please select --',
+                            maxHeight: 300,
+                            buttonWidth: '100%',
+                            buttonClass: 'btn btn-default btn-sm text-left',
+                            numberDisplayed: 1
+                        });
                     } else {
                         $('#serviceApplicationModal #serviceAdditionalFieldsCont').html('');
                     }
@@ -235,19 +255,6 @@ function Organization() {
                         $('#serviceApplicationModal #documentAdditionalFieldsCont').html(requirementDocFields);
                     } else {
                         $('#serviceApplicationModal #documentAdditionalFieldsCont').html('');
-                    }
-
-
-                    // IF ASSIGNED ON PROJECTS
-                    if (v.Projects){
-                        // $('#serviceApplicationModal #projectFieldsCont').html('<div class="post-items bg-white padding-10 offset-top-10"> \
-                        //                                                                     <h2 class="text-cyan text-bold offset-bottom-10">Project Data</h2> \
-                        //                                                                     <div class="row">'
-                        //                                                                      + additionalFields + 
-                        //                                                                     '</div> \
-                        //                                                                 </div>');
-                    } else {
-                        // $('#serviceApplicationModal #projectFieldsCont').html('');
                     }
 
                     //clean error box

@@ -70,7 +70,8 @@ $config['field_type'] = array(
 	1 => 'Textbox',
 	2 => 'Textarea',
 	3 => 'Image file',
-	4 => 'Selection'
+	4 => 'Selection',
+	5 => 'Checkbox'
 );
 
 $config['document_type'] = array(
@@ -165,6 +166,19 @@ $config['service_tags'] = array(
 	7 => 'province',
 	8 => 'region',
 	9 => 'national'
+);
+
+$config['service_categories'] = array(
+	1 => 'Peace & Order',
+	2 => 'Environment',
+	3 => 'Health',
+	4 => 'Education',
+	5 => 'Social Services',
+	6 => 'Shelter',
+	7 => 'Livelihood & Employment',
+	8 => 'Infrastructure & Utilities',
+	8 => 'Agriculture & Fishery',
+	10 => 'Investment & Tourism'
 );
 
 $config['service_status'] = array(

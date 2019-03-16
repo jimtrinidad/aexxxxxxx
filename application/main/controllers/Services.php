@@ -251,10 +251,22 @@ class Services extends CI_Controller
                     $errors[$item['FieldID']] = $imageUpload['error'];
                 }
             } else {
-                if (!isset($extraFields[$item['FieldID']]) || trim($extraFields[$item['FieldID']]) == '') {
+                if (!isset($extraFields[$item['FieldID']])) {
                     $errors[$item['FieldID']] = ucfirst(strtolower($item['FieldLabel'])) . ' field is required.';
                 } else {
-                    $validFields[$item['FieldID']] = trim($extraFields[$item['FieldID']]);
+                    if (is_string($extraFields[$item['FieldID']])) {
+                        if (trim($extraFields[$item['FieldID']]) == '') {
+                            $errors[$item['FieldID']] = ucfirst(strtolower($item['FieldLabel'])) . ' field is required.';
+                        } else {
+                            $validFields[$item['FieldID']] = trim($extraFields[$item['FieldID']]);
+                        }
+                    } else {
+                        if (count($extraFields[$item['FieldID']]) == 0) {
+                            $errors[$item['FieldID']] = ucfirst(strtolower($item['FieldLabel'])) . ' field is required.';
+                        } else {
+                            $validFields[$item['FieldID']] = implode(' | ', $extraFields[$item['FieldID']]);
+                        }
+                    }
                 }
             }
         }

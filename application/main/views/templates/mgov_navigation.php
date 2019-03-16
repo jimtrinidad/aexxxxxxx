@@ -48,7 +48,8 @@
 <!-- Primary Navigation -->
 <div class="bg-blue primary-nav">
     <ul id="horizontal">
-      <li><a href="<?php echo site_url('dashboard'); ?>"><i class="fa fa-rss bg-orange" aria-hidden="true"></i> Livefeed</a></li>
+      <li><a href="<?php echo site_url(); ?>"><i class="fa fa-home bg-light-green" aria-hidden="true"></i> Home</a></li>
+      <li><a href="<?php echo site_url('livefeed'); ?>"><i class="fa fa-rss bg-orange" aria-hidden="true"></i> Livefeed</a></li>
       <li><a href="<?php echo site_url('services'); ?>"><i class="fa fa-arrow-right bg-yellow" aria-hidden="true"></i> Services</a></li>
       <li><a href="<?php echo site_url('statistics/govt_performance'); ?>"><i class="fa fa-bar-chart-o bg-green" aria-hidden="true"></i> Gov't Performance</a></li>
       <li class="hidden-xs"><a href="javascript:;" onclick="Chatbox.openChatWindow('support')"><i class="fa fa-comments-o bg-cyan" aria-hidden="true"></i> Live Support</a></li>

@@ -43,35 +43,159 @@
    </div>
 </form>
 <!-- Form Search End-->
-<!-- Filter Services-->
-<div class="bg-grey padding-10 offset-bottom-10">
-   <div class="row">
-      <div class="col-sm-12 text-bold text-white padding-top-10 padding-bottom-5">Government and Citizens Livefeed</div>
-      
-   </div>
-</div>
 
 <div id="LoadMainBody">
   
 </div>
 <div id="ServiceDetailsBody"></div>
 
+<div class="row" id="dashboard-menu">
+  <div class="col-xs-12 text-center">
+
+    <?php
+      $menu_items = array(
+        array(
+          'icon'  => 'peace-order.png',
+          'bg'    => '#fd423e',
+          'label' => 'Peace & Order',
+        ),
+        array(
+          'icon'  => 'environment.png',
+          'bg'    => '#ffffff',
+          'label' => 'Environment',
+        ),
+        array(
+          'icon'  => 'health.png',
+          'bg'    => '#ca3435',
+          'label' => 'Health',
+        ),
+        array(
+          'icon'  => 'education.png',
+          'bg'    => '#03585e',
+          'label' => 'Education',
+        ),
+        array(
+          'icon'  => 'social services.png',
+          'bg'    => '#00508d',
+          'label' => 'Social Services',
+        ),
+        array(
+          'icon'  => 'shelter.png',
+          'bg'    => '#003554',
+          'label' => 'Shelter',
+        ),
+        array(
+          'icon'  => 'livelihood.png',
+          'bg'    => '#9bb31c',
+          'label' => 'Livelihood & Employment',
+        ),
+        array(
+          'icon'  => 'infra.png',
+          'bg'    => '#005688',
+          'label' => 'Infrastructure & Utilities',
+        ),
+        array(
+          'icon'  => 'agriculture.png',
+          'bg'    => '#308c32',
+          'label' => 'Agriculture & Fishery',
+        ),
+        array(
+          'icon'  => 'investment-tourism.png',
+          'bg'    => '#ddd9d9',
+          'label' => 'Investment & Tourism',
+        ),
+        array(
+          'icon'  => 'eloading.png',
+          'bg'    => '#fab33b',
+          'label' => 'eLoading',
+        ),
+        array(
+          'icon'  => 'remittance.png',
+          'bg'    => '#005f96',
+          'label' => 'Remittance',
+        ),
+        array(
+          'icon'  => 'mywallet-rewards.png',
+          'bg'    => '#fe6b3e',
+          'label' => 'MyWallet & Rewards',
+        ),
+        array(
+          'icon'  => 'bills-payment.png',
+          'bg'    => '#b43343',
+          'label' => 'Bills Payment',
+        ),
+        array(
+          'icon'  => 'ticketing.png',
+          'bg'    => '#8c9ca1',
+          'label' => 'Ticketing',
+        ),
+        array(
+          'icon'  => 'market.png',
+          'bg'    => '#fd423e',
+          'label' => 'Marketplace',
+        ),
+        array(
+          'icon'  => 'payment-services.png',
+          'bg'    => '#004b68',
+          'label' => 'Payment Services',
+        ),
+      );
+
+      foreach ($menu_items as $i) {
+        echo '<div class="menu-box">
+              <div class="menu-img-box" style="background: '. $i['bg'] .'">
+                <span class="helper"></span>
+                <img src="' . public_url() . 'resources/images/dashboard/' . $i['icon'] . '">
+              </div>
+              <div class="menu-box-label">
+                '. $i['label'] .'
+              </div>
+            </div>';
+      }
+    ?>
+
+  </div>
+</div>
 
 <div class="hide templates-container">
-  <?php view('snippets/livefeed-item'); ?>
   <?php view('snippets/service-item'); ?>
 </div>
+
 <?php view('modals/service-application'); ?>
 
-<script type="text/javascript">
-  $(document).ready(function(){
-    // initial load on feeds upload refresh with 10 seconds refresh interval
-    var params = {
-        'latest'     : 0,
-        'keyword'    : '',
-        'department' : '',
-        'locScope'   : ''
-    };
-    Mgovph.getFeeds(params, true, $global.livefeed_interval);
-  });
-</script>
+<style type="text/css">
+  .menu-box {
+    width: 80px;
+    height: 110px;
+    display:inline-block; 
+    margin: 20px 5px;
+    cursor: pointer;
+  }
+  .menu-box .menu-img-box {
+    width: 75px;
+    height: 90px;
+    white-space: nowrap;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    text-align: center; 
+  }
+  .menu-box .helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+  }
+
+  .menu-box img {
+    vertical-align: middle;
+    max-height: 55px;
+    max-width: 60px;
+  }
+
+  .menu-box .menu-box-label {
+    color: #fafafa;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 12px;
+    display: inline-flex;
+  }
+</style>

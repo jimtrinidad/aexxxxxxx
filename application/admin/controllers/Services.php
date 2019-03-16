@@ -360,6 +360,8 @@ class Services extends CI_Controller
                                     'Limit'             => get_post('Limit'),
                                     'CycleInterval'     => get_post('CycleInterval'),
                                     'Fee'               => get_post('Fee'),
+                                    'DocumentID'        => get_post('DocumentID'),
+                                    'CategoryID'        => get_post('CategoryID'),
                                     'LastUpdate'        => date('Y-m-d H:i:s'),
                                 );
 

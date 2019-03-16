@@ -114,25 +114,48 @@
                                     <div class="col-sm-12 col-md-6 col-lg-6">
                                         <div class="row">
                                             <div class="col-md-6 visible-md padding-bottom-30 padding-top-30">
-                                                <div class="padding-bottom-30 padding-top-30"></div>
-                                                <div class="padding-bottom-30 padding-top-10"></div>
+                                                <div class="padding-bottom-20 padding-top-30"></div>
+                                                <div class="padding-bottom-20 padding-top-10"></div>
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <label for="CategoryID">Service Category</label>
+                                            <select class="form-control" name="CategoryID" id="CategoryID">
+                                                <option value="">--</option>
+                                                 <?php
+                                                  foreach (lookup('service_categories') as $k => $v) {
+                                                    echo "<option ".(isset($serviceData) && $serviceData->CategoryID == $k ? 'selected="selected"' : '')." value='{$k}'>{$v}</option>";
+                                                  }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="DocumentID">Document</label>
+                                            <select class="form-control" name="DocumentID" id="DocumentID">
+                                                <option value="">--</option>
+                                                 <?php
+                                                  foreach(lookup_all('Doc_Templates', false, 'Name') as $item) {
+                                                    echo '<option '.(isset($serviceData) && $serviceData->DocumentID == $item['id'] ? 'selected="selected"' : '').' value="' . $item['id'] . '">' . $item['Name'] . '</option>';
+                                                 }
+                                                ?>
+                                            </select>
+                                            <span class="help-block">Citizen will get this document upon application approval.</span>
+                                        </div>
+                                        <div class="form-group">
                                             <label for="Description">Description</label>
-                                            <textarea rows="4" class="form-control" name="Description" id="Description"><?php echo (isset($serviceData) ? $serviceData->Description : '')?></textarea>
+                                            <textarea rows="3" class="form-control" name="Description" id="Description"><?php echo (isset($serviceData) ? $serviceData->Description : '')?></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="TermsCondition">Terms and Condition</label>
-                                            <textarea rows="4" class="form-control" name="TermsCondition" id="TermsCondition"><?php echo (isset($serviceData) ? $serviceData->TermsCondition : '')?></textarea>
+                                            <textarea rows="3" class="form-control" name="TermsCondition" id="TermsCondition"><?php echo (isset($serviceData) ? $serviceData->TermsCondition : '')?></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="Objectives">Objectives</label>
-                                            <textarea rows="4" class="form-control" name="Objectives" id="Objectives"><?php echo (isset($serviceData) ? $serviceData->Objectives : '')?></textarea>
+                                            <textarea rows="3" class="form-control" name="Objectives" id="Objectives"><?php echo (isset($serviceData) ? $serviceData->Objectives : '')?></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="Qualifications">Qualifications</label>
-                                            <textarea rows="4" class="form-control" name="Qualifications" id="Qualifications"><?php echo (isset($serviceData) ? $serviceData->Qualifications : '')?></textarea>
+                                            <textarea rows="3" class="form-control" name="Qualifications" id="Qualifications"><?php echo (isset($serviceData) ? $serviceData->Qualifications : '')?></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="Tags">Tags</label>
@@ -153,7 +176,7 @@
                         <fieldset>
                             <h2>Additional Fields</h2>
                             <p class="desc">Please setup additional fields needed on service application form. <br> Drag item to change order</p>
-                            <span class="help-block small text-orange" style="padding: 0;margin: 0">For Selection type options. Add item on default value and use Pipe `|` to separate each options. eg: Yes|No</span>
+                            <span class="help-block small text-orange" style="padding: 0;margin: 0">For Selection/Checkbox type options. Add item on default value and use Pipe `|` to separate each options. eg: Yes|No</span>
                             <div class="fieldset-content">
                                 <table id="serviceExtraFieldsTable" class="table table-responsive">
                                     <thead>
