@@ -156,7 +156,7 @@
         echo '<div class="menu-box">';
 
         if (isset($i['href']) && $i['href']) {
-          echo '<a href="' . $i['href'] . '">';
+          echo '<a href="' . $i['href'] . '" style="text-decoration: none;">';
         }
 
           echo '<div class="menu-img-box" style="background: '. $i['bg'] .'">
