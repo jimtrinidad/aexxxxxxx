@@ -58,51 +58,61 @@
           'icon'  => 'peace-order.png',
           'bg'    => '#fd423e',
           'label' => 'Peace & Order',
+          'href'  => site_url('services/?c=1')
         ),
         array(
           'icon'  => 'environment.png',
           'bg'    => '#ffffff',
           'label' => 'Environment',
+          'href'  => site_url('services/?c=2')
         ),
         array(
           'icon'  => 'health.png',
           'bg'    => '#ca3435',
           'label' => 'Health',
+          'href'  => site_url('services/?c=3')
         ),
         array(
           'icon'  => 'education.png',
           'bg'    => '#03585e',
           'label' => 'Education',
+          'href'  => site_url('services/?c=4')
         ),
         array(
           'icon'  => 'social services.png',
           'bg'    => '#00508d',
           'label' => 'Social Services',
+          'href'  => site_url('services/?c=5')
         ),
         array(
           'icon'  => 'shelter.png',
           'bg'    => '#003554',
           'label' => 'Shelter',
+          'href'  => site_url('services/?c=6')
         ),
         array(
           'icon'  => 'livelihood.png',
           'bg'    => '#9bb31c',
           'label' => 'Livelihood & Employment',
+          'href'  => site_url('services/?c=7')
         ),
         array(
           'icon'  => 'infra.png',
           'bg'    => '#005688',
           'label' => 'Infrastructure & Utilities',
+          'href'  => site_url('services/?c=8')
         ),
         array(
           'icon'  => 'agriculture.png',
           'bg'    => '#308c32',
           'label' => 'Agriculture & Fishery',
+          'href'  => site_url('services/?c=9')
         ),
         array(
           'icon'  => 'investment-tourism.png',
           'bg'    => '#ddd9d9',
           'label' => 'Investment & Tourism',
+          'href'  => site_url('services/?c=10')
         ),
         array(
           'icon'  => 'eloading.png',
@@ -133,6 +143,7 @@
           'icon'  => 'market.png',
           'bg'    => '#fd423e',
           'label' => 'Marketplace',
+          'href'  => site_url('marketplace')
         ),
         array(
           'icon'  => 'payment-services.png',
@@ -142,15 +153,25 @@
       );
 
       foreach ($menu_items as $i) {
-        echo '<div class="menu-box">
-              <div class="menu-img-box" style="background: '. $i['bg'] .'">
-                <span class="helper"></span>
-                <img src="' . public_url() . 'resources/images/dashboard/' . $i['icon'] . '">
-              </div>
-              <div class="menu-box-label">
-                '. $i['label'] .'
-              </div>
-            </div>';
+        echo '<div class="menu-box">';
+
+        if (isset($i['href']) && $i['href']) {
+          echo '<a href="' . $i['href'] . '">';
+        }
+
+          echo '<div class="menu-img-box" style="background: '. $i['bg'] .'">
+                  <span class="helper"></span>
+                  <img src="' . public_url() . 'resources/images/dashboard/' . $i['icon'] . '">
+                </div>
+                <div class="menu-box-label">
+                  '. $i['label'] .'
+                </div>';
+
+        if (isset($i['href']) && $i['href']) {
+          echo '</a>';
+        }
+
+        echo  '</div>';
       }
     ?>
 

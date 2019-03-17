@@ -422,13 +422,18 @@ function Mgovph() {
 
         var url_string = window.location.href;
         var url = new URL(url_string);
-        var v = url.searchParams.get("v");
+        var v        = url.searchParams.get("v");
+        var category = url.searchParams.get("c");
         
         if (v) {
             params.code = v;
             self.preSelectedService = v;
         } else {
             self.preSelectedService = null;
+        }
+
+        if (category) {
+            params.category = category;
         }
 
         $.ajax({

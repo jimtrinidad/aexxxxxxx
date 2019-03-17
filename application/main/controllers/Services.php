@@ -21,6 +21,10 @@ class Services extends CI_Controller
             'accountInfo'   => user_account_details($this->session->userdata('identifier'))
         );        
 
+        if (get_post('c') && lookup('service_categories', get_post('c'))) {
+            $viewData['pageTitle'] .= ' - ' . lookup('service_categories', get_post('c'));
+        }
+
         // echo '<pre>';print_r($viewData);echo '</pre>';
         view('main/services', $viewData, 'templates/mgov');
         // view('main/blank', $viewData, 'templates/mgov');
