@@ -115,6 +115,12 @@
           'href'  => site_url('services/?c=10')
         ),
         array(
+          'icon'  => 'business.png',
+          'bg'    => '#2b3d7f',
+          'label' => 'Ease of Doing Business',
+          'href'  => site_url('services/?c=11')
+        ),
+        array(
           'icon'  => 'eloading.png',
           'bg'    => '#fab33b',
           'label' => 'eLoading',

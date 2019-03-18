@@ -482,9 +482,21 @@ ul#horizontal, #horizontal ul  {
 	text-decoration: none;
 }
 
-
+.service-cat-label {text-align: right;padding-top: 3px}
+.service-cat-back {vertical-align: initial;}
 @media (max-width: 766px) {
 
+	.service-cat-label {
+		text-align: left;
+		margin-left: 43px;
+		margin-top: -12px;
+		padding-top: 0;
+	}
+
+	.service-cat-back {
+		margin-top: 3px;
+		vertical-align: top;
+	}
 
 }
 

@@ -178,7 +178,8 @@ $config['service_categories'] = array(
 	7 => 'Livelihood & Employment',
 	8 => 'Infrastructure & Utilities',
 	9 => 'Agriculture & Fishery',
-	10 => 'Investment & Tourism'
+	10 => 'Investment & Tourism',
+	11 => 'Ease of Doing Business'
 );
 
 $config['service_status'] = array(

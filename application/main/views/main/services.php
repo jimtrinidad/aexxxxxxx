@@ -46,14 +46,14 @@
 <div class="bg-grey padding-10 offset-bottom-10 padding-top-15 padding-bottom-15">
    <div class="row">
       <div class="col-sm-8 col-xs-12 text-bold text-white">
+        <?php if (get_post('c') && lookup('service_categories', get_post('c'))) { ?>
+        <a class="service-cat-back btn btn-xs btn-danger" href="<?php echo site_url(); ?>" onclick="if(window.history.length > 1) {window.history.back();return false;}">Back</a>
+        <?php } ?>
         Government and Citizens Services
       </div>
       <?php
          if (get_post('c') && lookup('service_categories', get_post('c'))) {
-          echo '<div class="col-sm-4 col-xs-12 hidden-xs text-bold text-white text-right">';
-            echo '<span class="text-orange" style="text-align: right;">' . lookup('service_categories', get_post('c')) . '</span>';
-          echo '</div>';
-          echo '<div class="col-sm-4 visible-xs col-xs-12 text-bold text-white padding-top-5">';
+          echo '<div class="service-cat-label col-sm-4 col-xs-12 text-bold text-white">';
             echo '<span class="text-orange" style="text-align: right;">' . lookup('service_categories', get_post('c')) . '</span>';
           echo '</div>';
          }
