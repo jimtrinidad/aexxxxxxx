@@ -134,7 +134,7 @@
           'icon'  => 'mywallet-rewards.png',
           'bg'    => '#fe6b3e',
           'label' => 'MyWallet & Rewards',
-          'href'  => site_url('wallet');
+          'href'  => site_url('wallet')
         ),
         array(
           'icon'  => 'bills-payment.png',
