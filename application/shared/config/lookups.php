@@ -177,7 +177,7 @@ $config['service_categories'] = array(
 	6 => 'Shelter',
 	7 => 'Livelihood & Employment',
 	8 => 'Infrastructure & Utilities',
-	8 => 'Agriculture & Fishery',
+	9 => 'Agriculture & Fishery',
 	10 => 'Investment & Tourism'
 );
 
