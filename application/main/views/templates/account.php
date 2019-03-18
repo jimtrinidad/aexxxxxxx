@@ -17,7 +17,7 @@
 
 		<style type="text/css">
 			html {
-				background: #101928 url('<?php echo public_url(); ?>resources/images/bg-blue-water.png') no-repeat; background-size: cover;
+				background: #101928 url('<?php echo public_url(); ?>resources/images/bg.png') no-repeat; background-size: cover;
 			}
 		</style>
 
