@@ -51,7 +51,7 @@ function Organization() {
         };
 
         $('#LoadMainBody').html(''); //reset content
-        $('#LoadMainBodyCont').css('min-height', '70px').LoadingOverlay("show", {
+        $('#LoadMainBodyCont').css('height', '70px').LoadingOverlay("show", {
             text: 'Loading services...', 
             textClass: 'text-gray',
             textResizeFactor: 1,
@@ -91,16 +91,23 @@ function Organization() {
                         tpl += '</div></div></div>';
 
                         $('#LoadMainBody').append(tpl);
-                        $('#LoadMainBody').imagesLoaded( function(){
-                            $('#LoadMainBody').isotope({
-                              itemSelector : '.categorybox'
-                            });
+                    });
 
-                            $('.categoryitemcont').isotope({
-                                itemSelector : '.categoryitem'
-                            });
+                    $('#LoadMainBody').imagesLoaded( function(){
+                        var $grid = $('#LoadMainBody').isotope({
+                          itemSelector : '.categorybox'
+                        });
+
+                        $('.categoryitemcont').isotope({
+                            itemSelector : '.categoryitem'
                         });
                     });
+
+                    // fix when reloading via ajax, to refresh the grid
+                    var iso = $('#LoadMainBody').data('isotope');
+                    if (typeof(iso) != 'undefined') {
+                        $('#LoadMainBody').isotope('reloadItems');
+                    }
 
                 } else {
                     // clear content, add empty message
@@ -148,7 +155,7 @@ function Organization() {
                     serviceTemplate.find('span.serviceProvided').text(v.serviceProvided);
 
                     if (v.Fee && v.Fee > 0) {
-                        serviceTemplate.find('span.ServiceFee .fee-amount').text('P' + v.Fee);
+                        serviceTemplate.find('span.ServiceFee .fee-amount').text('P' + Utils.numberWithCommas(v.Fee));
                         serviceTemplate.find('span.ServiceFee').show();
                     } else {
                         serviceTemplate.find('span.ServiceFee').hide();

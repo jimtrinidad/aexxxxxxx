@@ -224,6 +224,10 @@ function Utils() {
             $obj.highlight( term );
         }
     }
+
+    this.numberWithCommas = function (x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 }
 
 var Utils = new Utils();
