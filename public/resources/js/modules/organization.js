@@ -51,7 +51,7 @@ function Organization() {
         };
 
         $('#LoadMainBody').html(''); //reset content
-        $('#LoadMainBodyCont').css('height', '70px').LoadingOverlay("show", {
+        $('#LoadMainBodyCont').css('min-height', '70px').LoadingOverlay("show", {
             text: 'Loading services...', 
             textClass: 'text-gray',
             textResizeFactor: 1,
@@ -66,8 +66,6 @@ function Organization() {
             type : 'post',
             data : params,
             success : function(response) {
-
-                $('#LoadMainBody').LoadingOverlay("hide");
 
                 if (response.status) {
 
