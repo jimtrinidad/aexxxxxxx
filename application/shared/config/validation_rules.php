@@ -146,3 +146,18 @@ $config['save_business_item'] = array(
 	array('Description', 'Product description', 'trim'),
 	array('Price', 'Price', 'trim|required|numeric'),
 );
+
+
+$config['add_deposit'] = array(
+	array('Bank', 'Bank', 'trim|required'),
+	array('Branch', 'Branch', 'trim|required'),
+	array('ReferenceNo', 'Reference Number', 'trim|required'),
+	array('Date', 'Deposit Date', 'trim|required'),
+	array('Amount', 'Deposit Amount', 'trim|required|numeric'),
+);
+
+$config['add_payment'] = array(
+	array('Description', 'Description', 'trim|required'),
+	array('ReferenceNo', 'Reference Number', 'trim|required'),
+	array('Amount', 'Deposit Amount', 'trim|required|numeric'),
+);
