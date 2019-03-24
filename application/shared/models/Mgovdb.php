@@ -413,6 +413,43 @@ class Mgovdb extends CI_Model {
 	}
 
 
+	public function getServicesForUser($params)
+	{
+
+		$queryParams = array(
+			$params['userID'],
+		);
+
+		$keywordFilter = '';
+		if (trim($params['keyword']) != '') {
+			$keyword = trim($params['keyword']);
+			$keyword = $this->db->escape_like_str(trim($params['keyword']));
+			$keywordFilter = 'AND (ss.Name LIKE ? OR ss.Description LIKE ?)';
+			$queryParams[] = "%$keyword%";
+			$queryParams[] = "%$keyword%";
+		}
+
+		$sql = "SELECT ss.id,ss.Code,ss.Name,ss.Logo,ss.CategoryID,ss.LastUpdate FROM Service_Services ss
+                JOIN UserAccountInformation ua ON (
+                ua.id = ? AND (
+                    (ss.LocationScopeID = 1) OR
+                    (ss.RegionalID = ua.RegionalID AND ss.LocationScopeID = 2) OR 
+                    (ss.ProvincialID = ua.ProvincialID AND ss.LocationScopeID = 3) OR
+                    (ss.MunicipalityCityID = ua.MunicipalityCityID AND (ss.LocationScopeID = 4 OR ss.LocationScopeID = 5)) OR
+                    (ss.BarangayID = ua.BarangayID AND ss.LocationScopeID = 6)
+                    )
+                )
+                WHERE ss.deletedAt IS NULL
+                AND ss.Status = 1
+                AND ss.InOrganization = 0
+                {$keywordFilter}
+                GROUP BY ss.id
+                ORDER BY ss.Name";
+
+        return $this->db->query($sql, $queryParams)->result_array();
+	}
+
+
 	/**
 	* get user organization services
 	*/

@@ -30,6 +30,11 @@ function Wallet() {
             e.preventDefault();
             self.saveForm(this);
         });
+
+        $('#eLoadForm').submit(function(e){
+            e.preventDefault();
+            self.saveForm(this);
+        });
     }
 
     /**
@@ -153,6 +158,27 @@ function Wallet() {
 
         $('#paymentModal .modal-title').html('<b>Payment</b>');
         $('#paymentModal').modal({
+            backdrop : 'static',
+            keyboard : false
+        });
+    }
+
+    this.sendELoad = function()
+    {
+        // reset form data
+        $('#eLoadForm').trigger("reset");
+
+        // reset input erros
+        $.each($('#eLoadForm').find('input, textarea, select'), function(i,e){
+            $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger');
+            $(e).popover('destroy');
+        });
+        //clean error box
+        $('#eLoadForm').find('#error_message_box .error_messages').html('');
+        $('#eLoadForm').find('#error_message_box').addClass('hide');
+
+        $('#eLoadModal .modal-title').html('<b>Send eLoad</b>');
+        $('#eLoadModal').modal({
             backdrop : 'static',
             keyboard : false
         });

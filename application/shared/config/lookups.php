@@ -179,7 +179,8 @@ $config['service_categories'] = array(
 	8 => 'Infrastructure & Utilities',
 	9 => 'Agriculture & Fishery',
 	10 => 'Investment & Tourism',
-	11 => 'Ease of Doing Business'
+	11 => 'Ease of Doing Business',
+	12 => 'Emergency Response'
 );
 
 $config['service_status'] = array(
@@ -592,6 +593,16 @@ $config['months'] = array(
 	10 => 'October', 
 	11 => 'November', 
 	12 => 'December');
+
+
+
+$config['mobile_service_provider'] = array(
+	1 => 'Globe',
+	2 => 'Smart',
+	3 => 'Touch Mobile',
+	4 => 'Sun Cellular',
+	5 => 'ABS-CBN Mobile'
+);
 
 
 

@@ -45,26 +45,31 @@
 <!-- Form Search End-->
 
 <div id="LoadMainBody">
-  
+
 </div>
 <div id="ServiceDetailsBody"></div>
 
 <div class="row" id="dashboard-menu">
   <div class="col-xs-12 text-center">
 
+    <div class="menu-box">
+      <a href="<?php echo site_url('dashboard/services') ?>" style="text-decoration: none;">
+      <div class="menu-img-box" style="background: #efeeee">
+        <span class="helper"></span>
+        <img src="<?php echo public_url() . (file_exists(LOGO_DIRECTORY . $accountInfo->CityData->logo) ? 'assets/logo/' . $accountInfo->CityData->logo : 'resources/images/rp.png') ?>"/>
+      </div>
+      <div class="menu-box-label">
+        All Gov't Services
+      </div>
+      </a>
+    </div>
     <?php
       $menu_items = array(
         array(
-          'icon'  => 'peace-order.png',
-          'bg'    => '#fd423e',
-          'label' => 'Peace & Order',
-          'href'  => site_url('services/?c=1')
-        ),
-        array(
-          'icon'  => 'environment.png',
-          'bg'    => '#ffffff',
-          'label' => 'Environment',
-          'href'  => site_url('services/?c=2')
+          'icon'  => 'business.png',
+          'bg'    => '#2b3d7f',
+          'label' => 'Ease of Doing Business',
+          'href'  => site_url('services/?c=11')
         ),
         array(
           'icon'  => 'health.png',
@@ -97,6 +102,12 @@
           'href'  => site_url('services/?c=7')
         ),
         array(
+          'icon'  => 'emergency.png',
+          'bg'    => '#e20f0a',
+          'label' => 'Emergency Response',
+          'href'  => site_url('services/?c=12')
+        ),
+        array(
           'icon'  => 'infra.png',
           'bg'    => '#005688',
           'label' => 'Infrastructure & Utilities',
@@ -109,26 +120,43 @@
           'href'  => site_url('services/?c=9')
         ),
         array(
+          'icon'  => 'environment.png',
+          'bg'    => '#ffffff',
+          'label' => 'Environment',
+          'href'  => site_url('services/?c=2')
+        ),
+        array(
           'icon'  => 'investment-tourism.png',
           'bg'    => '#ddd9d9',
           'label' => 'Investment & Tourism',
           'href'  => site_url('services/?c=10')
         ),
         array(
-          'icon'  => 'business.png',
-          'bg'    => '#2b3d7f',
-          'label' => 'Ease of Doing Business',
-          'href'  => site_url('services/?c=11')
+          'icon'  => 'peace-order.png',
+          'bg'    => '#fd423e',
+          'label' => 'Peace & Order',
+          'href'  => site_url('services/?c=1')
         ),
         array(
           'icon'  => 'eloading.png',
           'bg'    => '#fab33b',
-          'label' => 'eLoading',
+          'label' => 'eLoad',
+          'attr'  => array(
+            'onclick' => 'Wallet.sendELoad()'
+          )
         ),
         array(
           'icon'  => 'remittance.png',
           'bg'    => '#005f96',
-          'label' => 'Remittance',
+          'label' => 'Fund MyWallet',
+          'attr'  => array(
+            'onclick' => 'Wallet.addDeposit()'
+          )
+        ),
+        array(
+          'icon'  => 'payment-services.png',
+          'bg'    => '#004b68',
+          'label' => 'Encash from MyWallet',
         ),
         array(
           'icon'  => 'mywallet-rewards.png',
@@ -140,6 +168,9 @@
           'icon'  => 'bills-payment.png',
           'bg'    => '#b43343',
           'label' => 'Bills Payment',
+          'attr'  => array(
+            'onclick' => 'Wallet.addPayment()'
+          )
         ),
         array(
           'icon'  => 'ticketing.png',
@@ -152,15 +183,18 @@
           'label' => 'Marketplace',
           'href'  => site_url('marketplace')
         ),
-        array(
-          'icon'  => 'payment-services.png',
-          'bg'    => '#004b68',
-          'label' => 'Payment Services',
-        ),
       );
 
       foreach ($menu_items as $i) {
-        echo '<div class="menu-box">';
+        echo '<div class="menu-box" ';
+
+        if (isset($i['attr'])) {
+          foreach ($i['attr'] as $k => $v) {
+            echo $k . '="' . $v . '" ';
+          }
+        }
+
+        echo '>';
 
         if (isset($i['href']) && $i['href']) {
           echo '<a href="' . $i['href'] . '" style="text-decoration: none;">';
@@ -191,12 +225,14 @@
 
 <?php view('modals/service-application'); ?>
 
+<?php view('main/wallet/modal'); ?>
+
 <style type="text/css">
   .menu-box {
     width: 80px;
     height: 110px;
     display:inline-block; 
-    margin: 20px 5px;
+    margin: 15px 5px;
     cursor: pointer;
   }
   .menu-box .menu-img-box {

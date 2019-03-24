@@ -224,4 +224,59 @@ class Wallet extends CI_Controller
         response_json($return_data);
     }
 
+    public function eload()
+    {
+        if (validate('send_eload') == FALSE) {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Some fields have errors.',
+                'fields'    => validation_error_array()
+            );
+        } else {
+
+            $latest_balance = get_latest_wallet_balance();
+
+            $amount = get_post('Amount');
+            if ($amount > 0) {
+                if ($latest_balance >= $amount) {
+                    $saveData = array(
+                        'Code'          => microsecID(),
+                        'AccountID'     => current_user(),
+                        'ReferenceNo'   => get_post('Number'),
+                        'Description'   => 'eLoad (' . get_post('Number') . ')',
+                        'Date'          => date('Y-m-d H:i:s'),
+                        'Amount'        => $amount,
+                        'Type'          => 'Debit',
+                        'EndingBalance' => ($latest_balance - $amount)
+                    );
+
+                    if ($this->mgovdb->saveData('WalletTransactions', $saveData)) {
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Mobile loading transaction has been successful.'
+                        );
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Saving transaction failed.'
+                        );
+                    }
+
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Insufficient balance.'
+                    );
+                }
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Invalid amount.'
+                );
+            }
+
+        }
+
+        response_json($return_data);
+    }
 }

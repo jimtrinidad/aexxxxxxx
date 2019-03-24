@@ -3,7 +3,7 @@
                     <div class="row">
                         <div class="col-xs-8 text-bold text-white padding-top-5 padding-bottom-5">MyWallet Mobile Processing and Verification</div>
                         <div class="col-xs-4 text-right">
-                          <button class="btn btn-sm btn-info bg-cyan" onclick="Wallet.addDeposit()"><i class="fa fa-plus"></i> Deposit</button>
+                          <button class="btn btn-sm btn-info bg-cyan" onclick="Wallet.addDeposit()"><i class="fa fa-plus"></i> Fund</button>
                         </div>
                     </div>
                 </div>   
@@ -24,10 +24,10 @@
                   </div> 
                 </div>
 
-                <div class="clearfix padding-top-10 padding-bottom-10">
+                <!-- <div class="clearfix padding-top-10 padding-bottom-10">
                   <h2 class="text-yellow pull-left text-bold">Transactions</h2>
                   <button class="btn btn-sm btn-danger pull-right" onclick="Wallet.addPayment()">Add Test Payment</button>
-                </div>
+                </div> -->
                 <?php if (count($transactions)) { ?>
                 <div class="bg-white table-responsive">
                   <table class="table table-striped">
