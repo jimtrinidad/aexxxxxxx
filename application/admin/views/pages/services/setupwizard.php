@@ -88,6 +88,11 @@
                                             <input type="text" class="form-control" name="Name" id="Name" placeholder="Service name" value="<?php echo (isset($serviceData) ? $serviceData->Name : '')?>">
                                         </div>
                                         <div class="form-group">
+                                            <label for="ShortName">Short Name</label>
+                                            <input type="text" class="form-control" name="ShortName" id="ShortName" placeholder="Short service name" value="<?php echo (isset($serviceData) ? $serviceData->ShortName : '')?>">
+                                            <span class="help-block">Will be use as display name on categories service view.</span>
+                                        </div>
+                                        <div class="form-group">
                                             <label for="Limit">Service Limit</label>
                                             <input type="text" class="form-control" name="Limit" id="Limit" placeholder="Leave blank if not applicable" value="<?php echo (isset($serviceData) && $serviceData->Limit ? $serviceData->Limit : '')?>">
                                             <span class="help-block">Max number of services that can be provided.</span>

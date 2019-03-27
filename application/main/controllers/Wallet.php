@@ -22,7 +22,7 @@ class Wallet extends CI_Controller
             )
         );
 
-        $transactions = $this->mgovdb->getRecords('WalletTransactions', array('AccountID' => current_user()));
+        $transactions = $this->mgovdb->getRecords('WalletTransactions', array('AccountID' => current_user()), 'Date DESC');
         $summary      = array(
             'balance'   => 0,
             'debit'     => 0,
@@ -79,7 +79,7 @@ class Wallet extends CI_Controller
 
                 $return_data = array(
                     'status'    => true,
-                    'message'   => 'Deposit has been requested. Will be credited to your wallet upon verification.',
+                    'message'   => ucfirst(number_to_words(get_post('Amount'))) . ' pesos deposit has been requested. It will be credited to your wallet upon verification.',
                     'id'        => $ID
                 );
 
@@ -181,42 +181,53 @@ class Wallet extends CI_Controller
             $latest_balance = get_latest_wallet_balance();
 
             $amount = get_post('Amount');
-            if ($amount > 0) {
-                if ($latest_balance >= $amount) {
-                    $saveData = array(
-                        'Code'          => microsecID(),
-                        'AccountID'     => current_user(),
-                        'ReferenceNo'   => get_post('ReferenceNo'),
-                        'Description'   => get_post('Description'),
-                        'Date'          => date('Y-m-d H:i:s'),
-                        'Amount'        => $amount,
-                        'Type'          => 'Debit',
-                        'EndingBalance' => ($latest_balance - $amount)
-                    );
+            $biller = $this->mgovdb->getRowObjectWhere('Service_Services', array('Code' => get_post('Biller'), 'SubDepartmentID' => DBP_ORG_ID));
+            if ($biller) {
+                if ($amount > 0) {
+                    if ($latest_balance >= $amount) {
 
-                    if ($this->mgovdb->saveData('WalletTransactions', $saveData)) {
-                        $return_data = array(
-                            'status'    => true,
-                            'message'   => 'Payment transaction has been added.'
+                        $desc = 'Bills Payment - ' . $biller->Name . ' (' . $biller->Code . ')';
+
+                        $saveData = array(
+                            'Code'          => microsecID(),
+                            'AccountID'     => current_user(),
+                            'ReferenceNo'   => get_post('ReferenceNo'),
+                            'Description'   => $desc,
+                            'Date'          => date('Y-m-d H:i:s'),
+                            'Amount'        => $amount,
+                            'Type'          => 'Debit',
+                            'EndingBalance' => ($latest_balance - $amount)
                         );
+
+                        if ($this->mgovdb->saveData('WalletTransactions', $saveData)) {
+                            $return_data = array(
+                                'status'    => true,
+                                'message'   => 'Payment transaction has been added.'
+                            );
+                        } else {
+                            $return_data = array(
+                                'status'    => false,
+                                'message'   => 'Saving transaction failed.'
+                            );
+                        }
+
                     } else {
                         $return_data = array(
                             'status'    => false,
-                            'message'   => 'Saving transaction failed.'
+                            'message'   => 'Insufficient balance.'
                         );
                     }
-
                 } else {
                     $return_data = array(
                         'status'    => false,
-                        'message'   => 'Insufficient balance.'
+                        'message'   => 'Invalid amount.'
                     );
                 }
             } else {
                 $return_data = array(
-                    'status'    => false,
-                    'message'   => 'Invalid amount.'
-                );
+                        'status'    => false,
+                        'message'   => 'Invalid biller/merchant.'
+                    );
             }
 
         }

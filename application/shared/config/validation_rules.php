@@ -157,7 +157,7 @@ $config['add_deposit'] = array(
 );
 
 $config['add_payment'] = array(
-	array('Description', 'Description', 'trim|required'),
+	array('Biller', 'Biller', 'trim|required'),
 	array('ReferenceNo', 'Reference Number', 'trim|required'),
 	array('Amount', 'Deposit Amount', 'trim|required|numeric'),
 );

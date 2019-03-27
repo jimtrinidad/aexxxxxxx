@@ -443,3 +443,42 @@ function lookup_business_data($businessID, $include_seller_info = false)
 
     return false;
 }
+
+
+
+/**
+* DBP billers
+*/
+function lookup_dbp_billers()
+{
+    $ci =& get_instance();
+    $records = $ci->mgovdb->getOrganizationServices(array(
+        'userID'        => current_user(),
+        'organization'  => DBP_ORG_ID,
+        'keyword'       => get_post('keyword')
+    ));
+
+    $grouped = array();
+    foreach ($records as $record) {
+        $record['Logo'] = logo_filename($record['Logo']);
+        $grouped[$record['Category']][] = $record;
+    }
+    ksort($grouped);
+
+    $results = array();
+    $categories = lookup_organization_category(DBP_ORG_ID);
+    foreach ($grouped as $cat => $items) {
+        if (isset($categories[$cat])) {
+            $results[] = array(
+                'category'  => $categories[$cat],
+                'items'     => $items
+            );
+        }
+    }
+
+    if (count($results)) {
+        return $results;
+    } 
+
+    return false;
+}

@@ -1,3 +1,40 @@
+<style type="text/css">
+  .menu-box {
+    width: 80px;
+    height: 110px;
+    display:inline-block; 
+    margin: 15px 5px;
+    cursor: pointer;
+  }
+  .menu-box .menu-img-box {
+    width: 75px;
+    height: 90px;
+    white-space: nowrap;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    text-align: center; 
+  }
+  .menu-box .helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+  }
+
+  .menu-box img {
+    vertical-align: middle;
+    max-height: 55px;
+    max-width: 60px;
+  }
+
+  .menu-box .menu-box-label {
+    color: #fafafa;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 12px;
+    display: inline-flex;
+  }
+</style>
+
 <!-- Form Search -->
 <form id="searchForm" onSubmit="return false;">
   <input type="hidden" id="lastFeed">
@@ -226,40 +263,3 @@
 <?php view('modals/service-application'); ?>
 
 <?php view('main/wallet/modal'); ?>
-
-<style type="text/css">
-  .menu-box {
-    width: 80px;
-    height: 110px;
-    display:inline-block; 
-    margin: 15px 5px;
-    cursor: pointer;
-  }
-  .menu-box .menu-img-box {
-    width: 75px;
-    height: 90px;
-    white-space: nowrap;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    text-align: center; 
-  }
-  .menu-box .helper {
-    display: inline-block;
-    height: 100%;
-    vertical-align: middle;
-  }
-
-  .menu-box img {
-    vertical-align: middle;
-    max-height: 55px;
-    max-width: 60px;
-  }
-
-  .menu-box .menu-box-label {
-    color: #fafafa;
-    margin-top: 10px;
-    text-align: center;
-    font-size: 12px;
-    display: inline-flex;
-  }
-</style>

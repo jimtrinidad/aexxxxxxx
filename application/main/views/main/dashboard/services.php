@@ -55,7 +55,7 @@
             <div class="col-xs-3 categoryitem">
                 <div class="org-item" onclick="Mgovph.openServiceDetails(this)" data-code="<?php echo $item['Code'] ?>">
                     <div class="image" style="background-image: url('<?php echo base_url('assets/logo/') . $item['Logo'] ?>');"></div>
-                    <div class="name"><?php echo $item['Name'] ?></div>
+                    <div class="name"><?php echo ($item['ShortName'] ? $item['ShortName'] : $item['Name']) ?></div>
                 </div>
             </div>
             <?php } ?>

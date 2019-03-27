@@ -11,7 +11,7 @@
                 <!-- Account Details -->
                 <div class="text-white row padding-bottom-10">
                   <div class="col-md-3">
-                    <span class="text-yellow">BALANCE:</span>  <?php echo number_format($summary['balance']) ?>     
+                    <span class="text-yellow">Balance:</span>  <?php echo number_format($summary['balance']) ?>     
                   </div>
                   <div class="col-md-3">
                     <span class="text-yellow">Total Transactions:</span>  <?php echo number_format($summary['transactions']) ?>     
@@ -24,17 +24,17 @@
                   </div> 
                 </div>
 
-                <!-- <div class="clearfix padding-top-10 padding-bottom-10">
+                <div class="clearfix padding-top-10 padding-bottom-10">
                   <h2 class="text-yellow pull-left text-bold">Transactions</h2>
-                  <button class="btn btn-sm btn-danger pull-right" onclick="Wallet.addPayment()">Add Test Payment</button>
-                </div> -->
+                  <button class="btn btn-xs btn-warning pull-right" onclick="Wallet.addPayment()">Pay Bills</button>
+                </div>
                 <?php if (count($transactions)) { ?>
                 <div class="bg-white table-responsive">
                   <table class="table table-striped">
                         <thead class="bg-green text-white text-upper text-bold">
                           <tr>
                             <th>Date</th>
-                            <th>Transaction #</th>
+                            <th>Transaction#</th>
                             <th>Description</th>
                             <th class="text-center">Debit</th>
                             <th class="text-center">Credit</th>
@@ -45,7 +45,7 @@
                           <?php
                           foreach ($transactions as $i) {
                             echo '<tr>';
-                              echo '<td>' . date('d F, Y', strtotime($i['Date'])) . '</td>';
+                              echo '<td>' . date('m/d/y', strtotime($i['Date'])) . '</td>';
                               echo '<td>' . $i['Code'] . '</td>';
                               echo '<td>' . $i['Description'] . '</td>';
                               echo '<td class="text-center">' . ($i['debit'] ? number_format($i['debit']) : '') . '</td>';

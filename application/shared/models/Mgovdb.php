@@ -429,7 +429,7 @@ class Mgovdb extends CI_Model {
 			$queryParams[] = "%$keyword%";
 		}
 
-		$sql = "SELECT ss.id,ss.Code,ss.Name,ss.Logo,ss.CategoryID,ss.LastUpdate FROM Service_Services ss
+		$sql = "SELECT ss.id,ss.Code,ss.Name,ss.ShortName,ss.Logo,ss.CategoryID,ss.LastUpdate FROM Service_Services ss
                 JOIN UserAccountInformation ua ON (
                 ua.id = ? AND (
                     (ss.LocationScopeID = 1) OR

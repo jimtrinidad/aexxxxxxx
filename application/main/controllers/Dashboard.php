@@ -22,7 +22,7 @@ class Dashboard extends CI_Controller
             ),
         );        
 
-        // echo '<pre>';print_r($viewData);echo '</pre>';
+        // print_data(lookup_dbp_billers());
         view('main/dashboard/index', $viewData, 'templates/mgov');
         // view('main/blank', $viewData, 'templates/mgov');
     }

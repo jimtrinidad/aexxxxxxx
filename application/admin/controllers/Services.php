@@ -346,6 +346,7 @@ class Services extends CI_Controller
                                 $infoData = array(
                                     'Code'              => get_post('Code'),
                                     'Name'              => get_post('Name'),
+                                    'ShortName'         => get_post('ShortName'),
                                     'ServiceType'       => get_post('ServiceType'),
                                     'LocationScopeID'   => get_post('LocationScope'),
                                     'LocationCode'      => get_post('LocationCode'),

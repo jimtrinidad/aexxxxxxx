@@ -58,7 +58,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModal">
+<div class="modal fade" id="paymentModal" role="dialog" aria-labelledby="paymentModal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <form id="paymentForm" name="paymentForm" action="<?php echo site_url('wallet/add_payment') ?>">
@@ -74,18 +74,39 @@
           <div class="row gutter-5">
             <div class="col-xs-12">
               <div class="form-group">
-                <label class="control-label" for="ReferenceNo">Reference No/Account No</label>
-                <input class="form-control" type="text" name="ReferenceNo" id="ReferenceNo" placeholder="Reference No/Account No">
+                <label class="control-label" for="Biller">Biller/Merchant</label>
+                <select class="form-control" id="Biller" name="Biller">
+                  <option value="">--Biller/Merchant--</option>
+                  <?php
+                  $billers = lookup_dbp_billers();
+                  if ($billers) {
+                    foreach ($billers as $v) {
+                      echo '<optgroup label="'.$v['category'].'">';
+                      foreach ($v['items'] as $biller) {
+                        echo '<option value="' . $biller['Code'] . '" data-logo="'. $biller['Logo'] .'">' . $biller['Name'] . '</option>';
+                      }
+                      echo '</optgroup>';
+                    }
+                  }
+                  ?>
+                </select>
                 <span class="help-block hidden"></span>
               </div>
             </div>
             <div class="col-xs-12">
               <div class="form-group">
+                <label class="control-label" for="ReferenceNo">Reference No/Account No</label>
+                <input class="form-control" type="text" name="ReferenceNo" id="ReferenceNo" placeholder="Reference No/Account No">
+                <span class="help-block hidden"></span>
+              </div>
+            </div>
+<!--             <div class="col-xs-12">
+              <div class="form-group">
                 <label class="control-label" for="Description">Description</label>
                 <input class="form-control"  type="text" name="Description" id="Description" placeholder="Description">
                 <span class="help-block hidden"></span>
               </div>
-            </div>
+            </div> -->
             <div class="col-xs-12">
               <div class="form-group">
                 <label class="control-label" for="Amount">Amount</label>
@@ -122,7 +143,7 @@
               <div class="form-group">
                 <label class="control-label" for="ServiceProvider">Service Provider</label>
                 <select class="form-control" id="ServiceProvider" name="ServiceProvider">
-                  <option value=""></option>
+                  <option value="">--Service Provider--</option>
                   <?php
                     foreach (lookup('mobile_service_provider') as $k => $v) {
                       echo "<option value='{$k}'>{$v}</option>";
@@ -156,3 +177,36 @@
     </div>
   </div>
 </div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.8/css/alt/AdminLTE-select2.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
+
+<style type="text/css">
+  .select2-container--default .select2-selection--single, .select2-selection .select2-selection--single {
+    border-radius: 4px !important;
+    border-color: #ccc !important;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  }
+
+  .select2-container--default .select2-results>.select2-results__options{
+    max-height: 300px;
+  }
+</style>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#Biller').select2({
+        width: '100%',
+        templateResult: function (selection) {
+            if (!selection.id) { return selection.text; }
+            var logo = $(selection.element).data('logo');
+            if(!logo){
+                return selection.text;
+            } else {
+                return $('<img style="width: 30px;height: 30px;vertical-align: middle;" src="' + window.public_url() + 'assets/logo/' + logo + '" alt=""> \
+                                        <span class="img-changer-text"> ' + $(selection.element).text() + '</span>');
+            }
+        }
+    });
+  });
+</script>

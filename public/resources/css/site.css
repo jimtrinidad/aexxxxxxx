@@ -54,6 +54,10 @@ textarea {
   color: #7b7777;
 }
 
+.table>thead.text-white>tr>th {
+  color: #fff;
+}
+
 label {
   margin-bottom: 2px;
   margin-left: 1px;

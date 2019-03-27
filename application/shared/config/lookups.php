@@ -625,5 +625,8 @@ $config['coa_organizations'] = array(
 );
 
 
+// DBP Organization - use for billers
+define('DBP_ORG_ID', 299);
+
 // BUSINESS APPLICATION REQUEST SERVICE TYPE
 define('BUSINESS_REQUEST_TYPE', 22);
