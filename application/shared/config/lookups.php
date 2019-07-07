@@ -612,7 +612,8 @@ $config['mobile_service_provider'] = array(
 * organization id the will use the ctto report
 */
 $config['cttmo_organizations'] = array(
-	246
+	246,
+	329
 );
 
 /**
