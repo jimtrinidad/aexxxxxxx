@@ -49,6 +49,16 @@ $config['account_approval'] = array(
 	array('AccountLevelID', 'Account level', 'trim|required|integer'),
 );
 
+$config['forgot_password'] = array(
+	array('account_email', 'Email address', 'trim|required|valid_email|min_length[5]')
+);
+
+$config['reset_password'] = array(
+	array('reset_code', 'Reset code', 'trim|required'),
+	array('Password', 'Password', 'required|min_length[6]|max_length[16]'),
+	array('ConfirmPassword', 'Password confirmation', 'required|matches[Password]')
+);
+
 
 
 

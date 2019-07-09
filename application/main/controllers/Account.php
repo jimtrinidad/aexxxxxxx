@@ -401,4 +401,199 @@ class Account extends CI_Controller
         redirect();
     }
 
+
+    // FORGOT PASSWORD
+
+    public function forgot()
+    {
+
+        // if already logged in, redirect to home page
+        if (!isGuest()) {
+            redirect();
+        }
+
+        $viewData = array(
+            'pageTitle' => 'Forgot Password',
+        );
+
+        view('account/forgot', $viewData, 'templates/account');
+    }
+
+    public function forgot_password()
+    {
+
+        // if already logged in, redirect to home page
+        if (!isGuest()) {
+            redirect();
+        }
+
+        if (validate('forgot_password') == FALSE) {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Some fields have errors.',
+                'fields'    => validation_error_array()
+            );
+        } else {
+
+            $users = lookup_all('UserAccountInformation', array('EmailAddress' => get_post('account_email')), 'EmailAddress');
+
+            $continue = true;
+            if (count($users) == 0) {
+                $user = false;
+            } else if (count($users) == 1) {
+                $user = (object) $users[0];
+            } else {
+                $continue = false;
+                if (get_post('account_id') && strlen(trim(get_post('account_id'))) > 0) {
+                    $continue = true;
+                    $user = $this->mgovdb->getRowObjectWhere('UserAccountInformation', array('EmailAddress' => get_post('account_email'), 'MabuhayID' => get_post('account_id')));
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        // 'message'   => 'Multiple user found with this email. Mabuhay ID is required to continue',
+                        'fields'    => array(
+                            'account_id'    => 'Multiple user found with this email.<br>Mabuhay ID is required to continue account verification.'
+                        )
+                    );
+                }
+            }
+
+            if ($continue) {
+                if ($user) {
+
+                    $saveData = array(
+                        'AccountID'     => $user->id,
+                        'Code'          => sha1(microsecID(true)),
+                        'Expiration'    => strtotime('+12 hours')
+                    );
+
+                    if ($this->mgovdb->saveData('ResetPassword', $saveData)) {
+
+                        $emailData = array(
+                            'from'      => array('info@mgov.ph', 'Mgov.ph'),
+                            'to'        => array($user->EmailAddress),
+                            'subject'   => 'Reset Password',
+                            'message'   => view('email_templates/forgot_password', array(
+                                'name'      => $user->FirstName . ' ' . $user->LastName,
+                                'code'      => $saveData['Code']
+                            ), null, true)
+                        );
+                        send_email($emailData, true);
+
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Instruction will be send to your email addres on how to reset your password.'
+                        );
+
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Request failed. Please try again later.'
+                        );
+                    }
+
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Account email address does not exists.'
+                    );
+                }
+            }
+
+        }
+
+        response_json($return_data);
+    }
+
+    public function reset($code = '')
+    {
+
+        // if already logged in, redirect to home page
+        if (!isGuest()) {
+            redirect();
+        }
+
+        $resetCode = $this->mgovdb->getRowObject('ResetPassword', $code, 'Code');
+        if ($code && $resetCode && time() <= $resetCode->Expiration) {
+
+            $user = $this->mgovdb->getRowObject('UserAccountInformation', $resetCode->AccountID);
+
+            $viewData = array(
+                'pageTitle' => 'Change Password',
+                'jsModules' => array(
+                    'account'
+                )
+            );
+
+            $viewData['reset_code'] = $resetCode->Code;
+
+            view('account/reset', $viewData, 'templates/account');
+        } else {
+            show_404();
+        }
+    }
+
+    public function reset_password()
+    {
+
+        // if already logged in, redirect to home page
+        if (!isGuest()) {
+            redirect();
+        }
+        
+        if (validate('reset_password') == FALSE) {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Some fields have errors.',
+                'fields'    => validation_error_array()
+            );
+        } else {
+
+            $resetCode = $this->mgovdb->getRowObject('ResetPassword', get_post('reset_code'), 'Code');
+            if ($resetCode) {
+
+                $user = $this->mgovdb->getRowObject('UserAccountInformation', $resetCode->AccountID);
+
+                if ($user) {
+
+                    $saveData = array(
+                        'id'            => $user->id,
+                        'Password'      => $this->authentication->hash_password(get_post('Password')),
+                        'LastUpdate'    => date('Y-m-d H:i:s')
+                    );
+
+                    if ($this->mgovdb->saveData('UserAccountInformation', $saveData)) {
+
+                        $this->mgovdb->deleteData('ResetPassword', $resetCode->id);
+
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Password has been changed successfully.'
+                        );
+
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Changing password failed. Please try again later.'
+                        );
+                    }
+
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Invalid account password reset.'
+                    );
+                }
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Invalid password reset request.s'
+                );
+            }
+            
+        }
+
+        response_json($return_data);
+    }
+
 }

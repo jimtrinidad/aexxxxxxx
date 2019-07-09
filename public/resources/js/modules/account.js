@@ -30,7 +30,7 @@ function Account() {
         /**
         * registration submit
         */
-        $('#RegistrationForm').submit(function(e) {
+        $('#RegistrationForm, #forgotPasswordForm').submit(function(e) {
             e.preventDefault();
             self.register(this);
         });
