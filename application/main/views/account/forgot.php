@@ -25,7 +25,7 @@
 									echo '<p>';
 								}
 								?>
-								<h4 class="text-white">Forgot Password</h4>
+								<h4 class="text-white margin-bottom-15">Forgot Password</h4>
 								<form id="forgotPasswordForm" action="<?php echo site_url('account/forgot_password') ?>" autocomplete="off" >
 									<div id="error_message_box" class="hide row margin-top-20">
 					                    <div class="error_messages alert alert-danger" role="alert"></div>

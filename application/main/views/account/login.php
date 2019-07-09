@@ -48,7 +48,7 @@
 									
 								</form>
 								<div class="text-center padding-top-5 text-yellow">
-									<a href="#<?php //echo site_url('account/forgot')?>"><b>Forgot Password</b></a> | <a href="<?php echo site_url('account/signup')?>"><b>Create New Account</b></a>
+									<a href="<?php echo site_url('account/forgot')?>"><b>Forgot Password</b></a> | <a href="<?php echo site_url('account/signup')?>"><b>Create New Account</b></a>
 								</div>
 								<div class="visible-sm visible-xs padding-top-15">
 									<img src="<?php echo public_url(); ?>resources/images/login-min.png" class="img-responsive" />

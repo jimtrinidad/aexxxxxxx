@@ -183,6 +183,10 @@ function Account() {
                         errors += '<p>' + e + '</p>';
                     });
 
+                    if (errors == '') {
+                       errors += '<p>' + response.message + '</p>'; 
+                    }
+
                     $('#error_message_box .error_messages').html(errors);
                     $('#error_message_box').removeClass('hide');
                 }
