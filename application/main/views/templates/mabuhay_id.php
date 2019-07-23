@@ -34,15 +34,15 @@
 	</div>
 	
 	<div class="profile-photo">
-		<img class="avatar" src="<?php echo public_url(); ?>assets/profile/<?php echo $accountInfo->Photo ?>" width="100" height="100" />
-		<div><img src="<?php echo public_url(); ?>resources/images/id-label.png" width="100" /></div>
+		<img class="avatar" src="<?php echo public_url(); ?>assets/profile/<?php echo $accountInfo->Photo ?>" width="80" height="80" />
 	</div>
 	
 	<div class="mak-id-data">
 		<strong class="main-data">
-			<?php echo strtoupper($accountInfo->LastName . ' ' . $accountInfo->FirstName . ' ' . $accountInfo->MiddleName) ?> <br />
-			<?php echo $accountInfo->MabuhayID ?></strong>
-		<p>
+			<?php echo $accountInfo->MabuhayID ?><br />
+			<?php echo strtoupper($accountInfo->LastName . ' ' . $accountInfo->FirstName . ' ' . $accountInfo->MiddleName) ?> 
+		</strong>
+		<p class="sub-data">
 			Birthday: <strong class="text-bold"><?php echo date('M d, Y', strtotime($accountInfo->BirthDate)) ?></strong>    
 			Gender: <strong class="text-bold"><?php echo lookup('gender', $accountInfo->GenderID) ?></strong>  <br /> 
 			Status: <strong class="text-bold"><?php echo lookup('marital_status', $accountInfo->MaritalStatusID) ?></strong>  
@@ -54,7 +54,6 @@
 	<div class="qr-code">
 		<!-- <img src="<?php echo public_url(); ?>resources/images/qr-code.png" width="75" /> -->
 		<img src="<?php echo public_url() . 'assets/qr/' . $accountInfo->QR ?>" width="75" class="qr-img" />
-		<img src="<?php echo public_url(); ?>resources/images/rp-flag-small.png" width="30" class="qr-flag" />
 	</div>
 	
 </div>

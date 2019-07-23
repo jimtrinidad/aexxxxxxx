@@ -331,10 +331,10 @@ ul#horizontal, #horizontal ul  {
 }
 
 
+/*
 .id-overlay{background-color: rgba(0, 0, 0, 0.8); position:fixed; top: 0; width: 100%; height: 100%; z-index: 999; display: none;}
 #mak-id{background: url('../images/bg-id2.png'); background-size: 480px; background-repeat: no-repeat; width: 480px; height: 300px; position:fixed; z-index: 9999; left: 50%; top: 50%; margin-left: -240px; margin-top: -150px; 
 -webkit-border-radius: 30px 30px 30px 30px; border-radius: 30px 30px 30px 30px; display: none;}
-
 #mak-id .left-logo{ position:absolute; top: 15px; left: 10px;width: 330px;}
 #mak-id .left-logo img {width: 50px;float: left;}
 #mak-id .left-logo .txt {font-weight: bolder;font-size: 30px;font-family: "Arial Black";text-transform: uppercase;line-height: 24px;vertical-align: top;margin-left: 52px;display: block;}
@@ -360,10 +360,10 @@ ul#horizontal, #horizontal ul  {
     margin-top: -3px;
     padding-left: 2px;
     transform: scale(1, 1.5);
-    -webkit-transform: scale(1, 1.5); /* Safari and Chrome */
-	  -moz-transform: scale(1, 1.5); /* Firefox */
-	  -ms-transform: scale(1, 1.5); /* IE 9+ */
-	  -o-transform: scale(1, 1.5); /* Opera */
+    -webkit-transform: scale(1, 1.5); 
+	  -moz-transform: scale(1, 1.5); 
+	  -ms-transform: scale(1, 1.5); 
+	  -o-transform: scale(1, 1.5); 
 }
 
 #mak-id .right-logo{ position:absolute; top: 5px; right: 10px; width: 130px; text-align:center; color: #12404a; font-size: 11px;}
@@ -376,6 +376,53 @@ ul#horizontal, #horizontal ul  {
 #mak-id .mak-id-data p{ font-size: 12px; }
 #mak-id .mak-id-data .main-data{ font-size: 18px; font-weight:bold; margin-bottom: 5px; display: inline-block; color: #12404a;}
 #mak-id .mak-id-data p strong{ color: #12404a; }
+*/
+
+.id-overlay{background-color: rgba(0, 0, 0, 0.8); position:fixed; top: 0; width: 100%; height: 100%; z-index: 999; display: none;}
+#mak-id{background: url('../images/bg-id3.png'); background-size: 480px; background-repeat: no-repeat; width: 480px; height: 300px; position:fixed; z-index: 9999; left: 50%; top: 50%; margin-left: -240px; margin-top: -150px; 
+-webkit-border-radius: 30px 30px 30px 30px; border-radius: 30px 30px 30px 30px; display: none;}
+#mak-id .left-logo{ position:absolute; top: 15px; left: 10px;width: 330px;}
+#mak-id .left-logo img {width: 50px;float: left;}
+#mak-id .left-logo .txt {font-weight: bolder;font-size: 30px;font-family: "Arial Black";text-transform: uppercase;line-height: 24px;vertical-align: top;margin-left: 52px;display: block;}
+#mak-id .left-logo .m {
+	color:#e1dbe0;    
+	text-shadow: 1px 0 #e1dbe0;
+	letter-spacing:1px;
+	display: block;
+}
+#mak-id .left-logo .c {
+	color:#e63b38;    
+	text-shadow: 1px 0 #e63b38;
+	letter-spacing:1px;
+	display: block;
+}
+#mak-id .left-logo .i {
+	font-weight: bold;
+    color: #e1dbe0;
+    text-decoration: none;
+    font-family: "HelveticaNeue-Medium", sans-serif;
+    font-size: 8px;
+    display: block;
+    margin-top: -3px;
+    padding-left: 2px;
+    transform: scale(1, 1.5);
+    -webkit-transform: scale(1, 1.5); 
+	  -moz-transform: scale(1, 1.5); 
+	  -ms-transform: scale(1, 1.5); 
+	  -o-transform: scale(1, 1.5); 
+}
+
+#mak-id .right-logo{ position:absolute; top: 5px; right: 10px; width: 130px; text-align:center; color: #e1dbe0; font-size: 11px;}
+#mak-id .profile-photo{  width: 80px; position:absolute; top: 107px; left: 10px;}
+#mak-id .profile-photo img.avatar{border: 4px solid #a39562;}
+#mak-id .qr-code{position:absolute; bottom: 70px; right: 20px;text-align: right;}
+#mak-id .qr-code .qr-img {display: block; background: #fff}
+#mak-id .qr-code .qr-flag {margin-top: -8px;margin-bottom: -10px;margin-right: 2px;display: none}
+#mak-id .mak-id-data {color: #fff;}
+#mak-id .mak-id-data p{ font-size: 12px; }
+#mak-id .mak-id-data .main-data{position:absolute; bottom: 107px; left: 96px; font-size: 18px; font-weight:bold; margin-bottom: 5px; display: inline-block; color: #fff;}
+#mak-id .mak-id-data .sub-data{position:absolute; bottom: 68px; left: 15px; }
+#mak-id .mak-id-data p strong{ color: #fff; }
 
 /* line height */
 .lh-20{ line-height: 20px;}
