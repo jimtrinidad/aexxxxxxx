@@ -13,7 +13,7 @@
 		</span>
 	</div>
 	<div class="right-logo">
-		<img src="<?php echo public_url() . (file_exists(LOGO_DIRECTORY . $accountInfo->CityData->logo) ? 'assets/logo/' . $accountInfo->CityData->logo : 'resources/images/republic.png') ?>" style="max-width: 70px;" /><br />
+		<img src="<?php echo public_url() . (file_exists(LOGO_DIRECTORY . $accountInfo->CityData->logo) ? 'assets/logo/' . $accountInfo->CityData->logo : 'resources/images/republic.png') ?>" style="max-width: 45px;" /><br />
 		<p class="text-bold">
 			<?php
 
