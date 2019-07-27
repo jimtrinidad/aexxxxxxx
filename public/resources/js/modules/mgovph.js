@@ -566,11 +566,11 @@ function Mgovph() {
                     var reqTpl = '';
                     $.each(v.Requirements, function(i, e) {
                         reqTpl += '<li class="media"> \
-                                     <div class="media-left media-middle"> \
+                                     <div class="media-left media-middle media-image-cont"> \
                                      ' + (typeof(e.status) !== 'undefined' ?
                                             '<a href="'+window.public_url('get/application_doc/' + e.app_req)+'" target="_blank">' :
                                             '<a href="#">' )
-                                        + '<img style="max-height:40px;" class="media-object" src="' + window.public_url('assets/logo/' + e.Logo) + '"> \
+                                        + '<img class="media-object media-image-img" src="' + window.public_url('assets/logo/' + e.Logo) + '"> \
                                        </a> \
                                      </div> \
                                      <div class="media-body media-middle"> \
