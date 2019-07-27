@@ -148,6 +148,9 @@ ul#horizontal, #horizontal ul  {
 .list-requirements .req-status{ font-style: italic; font-size: 12px; color: #c3c9cb; }
 .list-requirements .req-date{  font-size: 12px; color: #c3c9cb; }
 
+.list-requirements .media-image-cont {min-width: 145px;max-width: 145px;}
+.list-requirements .media-image-img {max-height: 40px;max-width: 130px;margin: 0 auto;}
+
 .table thead tr th{ font-size: 12px; }
 .table tbody tr td{ font-size: 12px; }
 
