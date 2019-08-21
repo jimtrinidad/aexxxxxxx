@@ -449,6 +449,20 @@ class Mgovdb extends CI_Model {
         return $this->db->query($sql, $queryParams)->result_array();
 	}
 
+	// get user active document
+	public function getUserActiveDocuments($userID)
+	{
+		$query = "SELECT ud.Code,Name,ApplicationID,DocumentID,DocumentContent,ExpirationDate,ud.LastUpdate 
+				FROM mgovph.UserDocuments ud
+				JOIN Doc_Templates dt ON ud.DocumentID = dt.id
+				WHERE AccountID = ?
+					AND ud.Status = 1
+					AND ExpirationDate > ?
+				ORDER BY Name";
+
+		return $this->db->query($query, array($userID, date('Y-m-d')))->result_array();
+	}
+
 
 	/**
 	* get user organization services
