@@ -365,6 +365,69 @@ class Get extends CI_Controller
     }
 
 
+    /**
+    * open user doc
+    */
+    public function document($code, $userid = null)
+    {
+        check_authentication();
+
+        $doc = $this->mgovdb->getRowObject('UserDocuments', $code, 'Code');
+        if ($doc) {
+
+            if (!$userid) {
+                $userid = current_user();
+            }
+
+            if ($doc->AccountID == $userid) {
+
+                $userData = user_account_details($userid, 'id', false);
+
+                $this->load->library('qr/ciqrcode', array(
+                    'cachedir'  => APPPATH . 'cache/',
+                    'errorlog'  => APPPATH . 'logs/'
+                ));
+
+                $qrparams['data']   = $code;
+                $qrparams['level']  = 'H';
+                $qrparams['size']   = 2;
+                $qrparams['savename'] = tempnam(sys_get_temp_dir(), 'qr');
+                $this->ciqrcode->generate($qrparams);
+
+                $filename = strtoupper(user_full_name($userData, 0) . ' - ' . lookup_db('Doc_Templates', 'Name', $doc->DocumentID));
+
+                $mpdf = new \Mpdf\Mpdf(array('format' => 'Letter', 'mode' => 'utf-8', 'margin_footer' => 2));
+
+                $content = str_replace("\xc2\xa0",'&nbsp;',$doc->DocumentContent);
+
+                $mpdf->WriteHTML('<style>@page {margin: 30px;}</style>' . $content);
+                $mpdf->SetHTMLFooter('
+                        <table width="100%" style="font-size:8px;">
+                            <tr>
+                                <td width="70%" align="left" valign="bottom">This is a system generated document. If you have any question, ask the nearest officer in your area.</td>
+                                <td width="30%" align="right"><img style="width:60px;height:60px;" src="'.$qrparams['savename'].'"></td>
+                            </tr>
+                        </table>');
+
+                
+                // overwrite html title
+                $mpdf->SetTitle($filename);
+                $mpdf->SetSubject($filename);
+                $mpdf->SetAuthor('MGOVPH');
+                $mpdf->SetCreator('MGOVPH');
+
+                $mpdf->Output($filename . '.pdf', 'I');
+
+            } else {
+                show_404();
+            }
+
+        } else {
+            show_404();
+        }
+    }
+
+
 
     /**
     * get govt transactions performanace ranking

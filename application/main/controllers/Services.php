@@ -144,6 +144,14 @@ class Services extends CI_Controller
                         'DateApplied'       => date('Y-m-d H:i:s')
                     );
 
+                    if ($serviceData['DocumentID']) {
+                        $serviceApplicationData['Draft'] = generate_document_from_template($serviceData['DocumentID'], array(
+                                                    'userData'      => $userData,
+                                                    'extraFields'   => $validation['fields'],
+                                                    'uploadedFiles' => $validation['uploads']
+                                                ));
+                    }
+
                     $applicationRequirements = array();
                     foreach ($serviceData['Requirements'] as $requirement) {
                         $applicationRequirements[] = array(

@@ -82,12 +82,60 @@
 		</div>
 	</div>
 </div>
+
 <!-- My Documents -->
 <div class="row offset-top-10 offset-bottom-10">
 	<div class="col-sm-12">
 		<div class="bg-light-gray">
+			<div class="bg-violet text-white text-bold padding-10">
+				My Documents
+			</div>
+			<div class="bg-white padding-10">
+				
+				<div class="row gutter-5">
+
+					<?php
+						if (count($documents)) {
+							foreach ($documents as $item) {
+
+								$as = '<a href="'. site_url('get/document/' . $item['Code']) .'" target="_blank">';
+								$ae = '</a>';
+
+								echo '<div class="col-sm-6">
+										<div class="row offset-bottom-5 gutter-5">
+											<div class="col-xs-6 text-bold text-blue">
+												'. $as . $item['Name'] . $ae .'
+											</div>
+											<div class="col-xs-6 text-italic small-text">
+												'.date('M d, Y', strtotime($item['LastUpdate'])).'
+												- '.date('M d, Y', strtotime($item['ExpirationDate'])).'
+											</div>
+										</div>
+									</div>';
+							}
+						} else {
+							echo '<div class="row offset-bottom-5">
+									<div class="col-sm-12 text-orange text-bold">
+										You currently dont have any availablee documents.
+									</div>
+								</div>';
+						}
+					?>
+					
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- My Complited Applications -->
+<div class="row offset-top-10 offset-bottom-10">
+	<div class="col-sm-12">
+		<div class="bg-light-gray">
 			<div class="bg-yellow text-white text-bold padding-10">
-				My Completed Documents, Credentials and Applications
+				My Completed Credentials and Applications
 			</div>
 			<div class="bg-white padding-10">
 				
@@ -96,10 +144,11 @@
 					<?php
 						if (count($completed_applications)) {
 							foreach ($completed_applications as $item) {
+
 								echo '<div class="col-sm-6">
 										<div class="row offset-bottom-5 gutter-5">
 											<div class="col-xs-6 text-bold text-blue">
-												'. $item['ServiceName'] .'
+												'. $item['ServiceName'] . '
 											</div>
 											<div class="col-xs-3 text-italic small-text">
 												Completed
@@ -132,6 +181,7 @@
 								$logo  	 	= $item['dcLogo'];
 								$deptName 	= $item['dcName'];
 							}
+
 							echo '<div class="col-sm-3 col-xs-6 text-center offset-top-10" style="min-height: 110px;">
 									<img src="' . public_url() . 'assets/logo/' . logo_filename($logo) . '" class="center-block" width="60"/>
 									<p class="text-bold text-blue small offset-top-5">'.$deptName.' - ' . $item['ServiceName'] . '</p>

@@ -90,8 +90,11 @@ class Account extends CI_Controller
             'sa.Status'     => 2
         ), 'sa.DateCompleted DESC');
 
+        $documents = $this->mgovdb->getUserActiveDocuments(current_user());
+
         $viewData['pending_applications']   = $pending_applications;
         $viewData['completed_applications'] = $completed_applications;
+        $viewData['documents']              = $documents;
         // print_data($viewData, true);
 
         view('account/index', $viewData, 'templates/mgov-with-account');

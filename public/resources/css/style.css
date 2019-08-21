@@ -495,7 +495,8 @@ ul#horizontal, #horizontal ul  {
 	height: 50px;
 	border-radius: 50%;
 	margin: 0 auto;
-	background: #dcdfe1;
+	/*background: #dcdfe1;*/
+	background: #ffffff;
 	background-position: center center;
     background-repeat: no-repeat;
     background-size: contain;

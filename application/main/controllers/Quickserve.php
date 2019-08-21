@@ -480,6 +480,8 @@ class Quickserve extends CI_Controller
 
                                     if ($this->mgovdb->saveData('Service_Applications', $applicationUpdate)) {
 
+                                        $success = true;
+
                                         // on completion hooks
                                         if ($serviceData->ServiceType == BUSINESS_REQUEST_TYPE) {
                                             // add business record
@@ -489,14 +491,62 @@ class Quickserve extends CI_Controller
                                                 'LastUpdate'=> date('Y-m-d H:i:s')
                                             );
 
-                                            $this->mgovdb->saveData('Businesses', $businessData);
+                                            if (!$this->mgovdb->saveData('Businesses', $businessData)) {
+                                                $success = false;
+                                                $return_data = array(
+                                                    'status'    => false,
+                                                    'message'   => 'Saving business record failed.'
+                                                );
+                                                $this->db->trans_rollback();
+                                            }
                                         }
 
-                                        $return_data = array(
-                                            'status'    => true,
-                                            'message'   => 'Process has been completed. This is also the last step for application completion.'
-                                        );
-                                        $this->db->trans_commit();
+
+                                        // if service is a document type. save the document record
+                                        if ($serviceData->DocumentID && !empty($applicationData->Draft)) {
+                                            // just update if found
+                                            $currentDocumentData = $this->mgovdb->getRowObjectWhere('UserDocuments', array(
+                                                'AccountID'     => $applicationData->ApplicantID,
+                                                'DocumentID'    => $serviceData->DocumentID,
+                                                'Status'        => 1,
+                                                'ExpirationDate > '=> date('Y-m-d')
+                                            ));
+
+                                            $citizenDocumentData = array(
+                                                'Code'              => md5($serviceData->id . current_user() . $applicationData->id . microsecID()),
+                                                'ApplicationID'     => $applicationData->id,
+                                                'DocumentContent'   => $applicationData->Draft,
+                                                'ExpirationDate'    => compute_expiration_date(lookup_db('Doc_Templates', 'Validity', $serviceData->DocumentID)),
+                                                'Status'            => 1,
+                                                'CreatedBy'         => current_user(),
+                                                'LastUpdate'        => date('Y-m-d H:i:s')
+                                            );
+
+                                            if ($currentDocumentData) {
+                                                $citizenDocumentData['id'] = $currentDocumentData->id;
+                                            } else {
+                                                $citizenDocumentData['AccountID'] = $applicationData->ApplicantID;
+                                                $citizenDocumentData['DocumentID']= $serviceData->DocumentID;
+                                                $citizenDocumentData['DateAdded'] = date('Y-m-d H:i:s');
+                                            }
+
+                                            if (!$this->mgovdb->saveData('UserDocuments', $citizenDocumentData)) {
+                                                $success = false;
+                                                $return_data = array(
+                                                    'status'    => false,
+                                                    'message'   => 'Creating document record failed.'
+                                                );
+                                                $this->db->trans_rollback();
+                                            }
+                                        }
+
+                                        if ($success) {
+                                            $return_data = array(
+                                                'status'    => true,
+                                                'message'   => 'Process has been completed. This is also the last step for application completion.'
+                                            );
+                                            $this->db->trans_commit();
+                                        }
                                     } else {
                                         $return_data = array(
                                             'status'    => false,
