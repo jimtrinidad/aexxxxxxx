@@ -351,6 +351,22 @@ function prepare_service_data($raw, $getcomponents = false)
 		$data['ExtraFields']  = lookup_all('Service_ExtraFormFields', array('ServiceID' => $raw->id), 'Ordering', false);
 		$data['Requirements'] = $requirements;
 
+		if ($data['DocumentID']) {
+            // if service is a document type and has binded a document, add on list of requirements to add on application form
+            $docData = $ci->mgovdb->getRowObject('Doc_Templates', $data['DocumentID']);
+            if ($docData) {
+            	$docFields = json_decode($docData->ExtraFields, true);
+            	foreach ($docFields as $k => $i) {
+            		$data['ExtraFields'][] = array(
+            			'FieldType'	=> $i['type'],
+            			'FieldID'	=> $k,
+            			'FieldLabel'=> $i['label'],
+            			'DefaultValue' => ''
+            		);
+            	}
+            }
+        }
+
 		// assigned on organization projects
         $projects = $ci->db->select('p.id AS pID, ps.id AS psID, p.Name, p.Code')
                                     ->from('OrganizationProjectServices ps')
