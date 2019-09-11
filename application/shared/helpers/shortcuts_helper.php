@@ -356,14 +356,16 @@ function prepare_service_data($raw, $getcomponents = false)
             $docData = $ci->mgovdb->getRowObject('Doc_Templates', $data['DocumentID']);
             if ($docData) {
             	$docFields = json_decode($docData->ExtraFields, true);
-            	foreach ($docFields as $k => $i) {
-            		$data['ExtraFields'][] = array(
-            			'FieldType'	=> $i['type'],
-            			'FieldID'	=> $k,
-            			'FieldLabel'=> $i['label'],
-            			'DefaultValue' => ''
-            		);
-            	}
+            	if ($docFields && is_array($docFields)) {
+	            	foreach ($docFields as $k => $i) {
+	            		$data['ExtraFields'][] = array(
+	            			'FieldType'	=> $i['type'],
+	            			'FieldID'	=> $k,
+	            			'FieldLabel'=> $i['label'],
+	            			'DefaultValue' => ''
+	            		);
+	            	}
+	            }
             }
         }
 
