@@ -613,7 +613,13 @@ $config['mobile_service_provider'] = array(
 */
 $config['cttmo_organizations'] = array(
 	246,
-	329
+	329,
+	336,
+	329,
+	333,
+	335,
+	363,
+	360
 );
 
 /**
