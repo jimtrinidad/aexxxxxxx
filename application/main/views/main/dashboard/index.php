@@ -178,41 +178,47 @@
           'icon'  => 'eloading.png',
           'bg'    => '#fab33b',
           'label' => 'eLoad',
-          'attr'  => array(
-            'onclick' => 'Wallet.sendELoad()'
-          )
+          // 'attr'  => array(
+          //   'onclick' => 'Wallet.sendELoad()'
+          // )
+          'href'  => 'https://ambilis.com/'
         ),
         array(
           'icon'  => 'remittance.png',
           'bg'    => '#005f96',
           'label' => 'Fund MyWallet',
-          'attr'  => array(
-            'onclick' => 'Wallet.addDeposit()'
-          )
+          // 'attr'  => array(
+          //   'onclick' => 'Wallet.addDeposit()'
+          // )
+          'href'  => 'https://ambilis.com/'
         ),
         array(
           'icon'  => 'payment-services.png',
           'bg'    => '#004b68',
           'label' => 'Encash from MyWallet',
+          'href'  => 'https://ambilis.com/'
         ),
         array(
           'icon'  => 'mywallet-rewards.png',
           'bg'    => '#fe6b3e',
           'label' => 'MyWallet & Rewards',
-          'href'  => site_url('wallet')
+          // 'href'  => site_url('wallet')
+          'href'  => 'https://ambilis.com/'
         ),
         array(
           'icon'  => 'bills-payment.png',
           'bg'    => '#b43343',
           'label' => 'Bills Payment',
-          'attr'  => array(
-            'onclick' => 'Wallet.addPayment()'
-          )
+          // 'attr'  => array(
+          //   'onclick' => 'Wallet.addPayment()'
+          // )
+          'href'  => 'https://ambilis.com/'
         ),
         array(
           'icon'  => 'ticketing.png',
           'bg'    => '#8c9ca1',
           'label' => 'Ticketing',
+          'href'  => 'https://ambilis.com/'
         ),
         array(
           'icon'  => 'market.png',
