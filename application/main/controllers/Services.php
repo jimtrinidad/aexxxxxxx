@@ -144,6 +144,10 @@ class Services extends CI_Controller
                         'DateApplied'       => date('Y-m-d H:i:s')
                     );
 
+                    if (isset($_POST['addon-violation']) && $_POST['addon-violation'] != '') {
+                        $serviceApplicationData['AddedViolations'] = get_post('addon-violation');
+                    }
+
                     if ($serviceData['DocumentID']) {
                         $serviceApplicationData['Draft'] = generate_document_from_template($serviceData['DocumentID'], array(
                                                     'userData'      => $userData,

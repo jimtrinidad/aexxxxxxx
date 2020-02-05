@@ -118,7 +118,9 @@
                   <select id="FieldType" name="FieldType" class="form-control">
                     <?php
                     foreach (lookup('field_type') as $k => $v) {
-                    echo "<option value='{$k}'>{$v}</option>";
+                      if ($k <= 3) { 
+                        echo "<option value='{$k}'>{$v}</option>";
+                      }
                     }
                     ?>
                   </select>

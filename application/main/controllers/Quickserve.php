@@ -84,8 +84,34 @@ class Quickserve extends CI_Controller
             $item['progress']           = round(($item['FunctionProcessedCount'] / $item['FunctionCount']) * 100);
             $item['documentName']       = ($item['documentName'] ? $item['documentName'] : 'Main Service');
 
+            if ($item['RequirementID']) {
+                $applicationRequirementData = $this->mgovdb->getRowObjectWhere('Service_Application_Requirements', array(
+                                    'ApplicationID' => $item['ApplicationID'],
+                                    'RequirementID' => $item['RequirementID']
+                                ));
+                if ($applicationRequirementData) {
+                    $item['applicationRequirementID'] = $applicationRequirementData->id;
+                    $item['Draft'] = $applicationRequirementData->DocumentDraft;
+                }
+            }
+
             $item['Scope']              = lookup('location_scope', $item['LocationScopeID']);
             $item['ExtraFields']        = array_values((array) @json_decode($item['ExtraFields'], true));
+
+            if (isset($item['AddedViolations']) && $item['AddedViolations']) {
+                $added_ids = explode(',', $item['AddedViolations']);
+                foreach ($added_ids as $a_id) {
+                    $serviceData = $this->mgovdb->getRowObject('Service_Services', $a_id, 'Code');
+                    if ($serviceData) {
+                        $item['added_violations'][] = array(
+                            'code'  => $serviceData->Code,
+                            'name'  => $serviceData->Name,
+                            'desc'  => trim($serviceData->Description),
+                            'fee'   => $serviceData->Fee
+                        );
+                    }
+                }
+            }
 
             if ($item['FunctionTypeID'] == 4) {
                 $payment = $this->mgovdb->getRowObject('Service_Payments', $item['safID'], 'ApplicationFunctionID');
@@ -179,6 +205,21 @@ class Quickserve extends CI_Controller
 
             $item['Scope']              = lookup('location_scope', $item['LocationScopeID']);
             $item['ExtraFields']        = array_values((array) @json_decode($item['ExtraFields'], true));
+
+            if (isset($item['AddedViolations']) && $item['AddedViolations']) {
+                $added_ids = explode(',', $item['AddedViolations']);
+                foreach ($added_ids as $a_id) {
+                    $serviceData = $this->mgovdb->getRowObject('Service_Services', $a_id, 'Code');
+                    if ($serviceData) {
+                        $item['added_violations'][] = array(
+                            'code'  => $serviceData->Code,
+                            'name'  => $serviceData->Name,
+                            'desc'  => trim($serviceData->Description),
+                            'fee'   => $serviceData->Fee
+                        );
+                    }
+                }
+            }
 
             if ($item['FunctionTypeID'] == 4) {
                 $payment = $this->mgovdb->getRowObject('Service_Payments', $item['safID'], 'ApplicationFunctionID');

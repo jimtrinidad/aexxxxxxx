@@ -106,6 +106,12 @@ function Quickserve() {
                     detailsCont.find('img.DepartmentLogo').prop('src', window.public_url('assets/logo/' + service.Department.Logo));
                     detailsCont.find('img.ServiceLogo').prop('src', window.public_url('assets/logo/' + service.Logo));
 
+                    if (service.ServiceType == 13) {
+                        detailsCont.find('span.ServiceFee').removeClass('hide').find('.fee-amount').text('P' + Utils.numberWithCommas(service.Fee));
+                    } else {
+                        detailsCont.find('span.ServiceFee').addClass('hide');
+                    }
+
                     detailsCont.find('.ServiceTags').html('');
                     $.each(service.Tags, function(i, e) {
                         detailsCont.find('.ServiceTags').append(' <label class="label label-'+Utils.getRandomItem(['info','success','danger','warning','primary'])+'">' + e + '</label> ');
@@ -137,6 +143,24 @@ function Quickserve() {
                         detailsCont.find('#otherDataCont').show();
                     } else {
                         detailsCont.find('#otherDataCont').hide();
+                    }
+
+                    if ('added_violations' in data) {
+                        var tpl = '';
+                        $('#added-violation-list').html(tpl);
+                        $('#detailsModal').find('div.additional-violation-box').removeClass('hide');
+                        $.each(data.added_violations, function(i,v) {
+                            tpl += `<div class="padding-5">
+                                        <h2><span class="text-bold text-green">${v.name}</span></h2>
+                                        <span style="font-family:Trebuchet MS; font-size:12px;">${v.desc}</span>
+                                        <span style="font-family:Trebuchet MS; font-size:12px;">
+                                            <br>Fee: <span class="fee-amount text-orange">P${v.fee}</span>
+                                        </span>
+                                    </div>`;
+                        });
+                        $('#added-violation-list').html(tpl);
+                    } else {
+                        $('#detailsModal').find('div.additional-violation-box').addClass('hide');
                     }
 
                     // requirements
@@ -281,6 +305,8 @@ function Quickserve() {
         var safID = $(elem).closest('tr').data('safid');
         var data = self.getItem(safID);
 
+        console.log(data);
+
         // reset form data
         $('#paymentForm').trigger("reset");
 
@@ -350,6 +376,18 @@ function Quickserve() {
                             <td><input type="number" step=".01" autocomplete="off" name="collectionAmount[]" class="form-control input-sm" value="${amount}"></td>
                             <td style="vertical-align:middle;"></td>
                         </tr>`;
+
+            if ('added_violations' in data) {
+                $.each(data.added_violations, function(i, e) {
+                    console.log(e);
+                    row += `<tr>
+                            <td><input type="text" autocomplete="off" name="collectionName[]" class="form-control input-sm" value="${e.name}"></td>
+                            <td><input type="text" autocomplete="off" name="collectionCode[]" class="form-control input-sm"  value=""></td>
+                            <td><input type="number" step=".01" autocomplete="off" name="collectionAmount[]" class="form-control input-sm" value="${e.fee}"></td>
+                            <td style="vertical-align:middle;"></td>
+                        </tr>`;
+                });
+            }
 
             $('#paymentForm #collectionBody').html(row);
 

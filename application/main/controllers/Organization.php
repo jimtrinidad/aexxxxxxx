@@ -45,6 +45,37 @@ class Organization extends CI_Controller
 
         $viewData['Organization']   = $organizationData;
         // print_data($organizationData);
+
+        if ($this->orgCode == 'cttmo') {
+
+            $violations = $this->mgovdb->getOrganizationServices(array(
+                'userID'        => current_user(),
+                'organization'  => $this->user->OrganizationID,
+                'serviceType'   => 13
+            ));
+
+            $grouped = array();
+            foreach ($violations as $record) {
+                $record['Logo'] = logo_filename($record['Logo']);
+                $grouped[$record['Category']][] = $record;
+            }
+
+            ksort($grouped);
+
+            $results = array();
+            foreach ($grouped as $cat => $items) {
+                if (isset($this->categories[$cat])) {
+                    $results[] = array(
+                        'category'  => $this->categories[$cat],
+                        'items'     => $items
+                    );
+                }
+            }
+
+            $viewData['violations'] = $results;
+            
+        }
+
         view('main/organization', $viewData, 'templates/mgov');
 
     }

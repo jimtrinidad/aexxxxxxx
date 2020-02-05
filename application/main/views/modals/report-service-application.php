@@ -1,4 +1,4 @@
-<div class="modal fade" id="serviceApplicationModal" tabindex="-1" role="dialog" aria-labelledby="serviceApplicationModal">
+<div class="modal fade" id="serviceApplicationModal" role="dialog" aria-labelledby="serviceApplicationModal">
 	<div class="modal-dialog modal-lg">
 		<form id="ServiceReportForm" name="ServiceReportForm" action="<?php echo site_url('services/save_application') ?>" enctype="multipart/form-data">
 			<div class="modal-content" id="modal-content">
@@ -45,6 +45,43 @@
 			            <br>
 			            <div class="error_messages no-border-radius alert alert-danger small" role="alert"></div>
 			         </div>
+
+			        <?php if (isset($violations)) { ?>
+			        <div class="additional-violation-box post-items bg-white padding-10 hide">
+						<h2 class="text-cyan text-bold offset-bottom-10">Additional Violations</h2>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="box">
+									<div class="row">
+										<div class="col-12">
+											<div class="col-xs-12" id="added-violation-list">
+								            </div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xs-12">
+											<div class="input-group">
+												<select class="form-control" id="violation-list-items">
+													<option value=""></option>
+													<?php
+													foreach ($violations as $c) {
+														echo '<optgroup label="'.$c['category'].'">';
+														foreach ($c['items'] as $v) {
+															echo '<option value="'.$v['Code'].'">' . $v['MenuName'] . ' - Fee: P' . number_format($v['Fee']) . '</option>\n';
+														}
+														echo '</optgroup>';
+													}
+													?>
+												</select>
+												<span class="input-group-addon" style="padding: 0;"><button type="button" class="add-violation-item btn btn-sm btn-primary">Add</button></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php } ?>
 					
 					<div class="post-items bg-white padding-10 hide">
 						<h2 class="text-cyan text-bold offset-bottom-10">Reporter Info</h2>

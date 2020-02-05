@@ -259,8 +259,10 @@ class Mgovdb extends CI_Model {
 					sa.FunctionProcessedCount,
 					sa.LastUpdate LastUpdate,
 					sa.Status saStatus,
+					sa.Draft,
 					sa.DateCompleted,
 					sa.ExtraFields,
+					sa.AddedViolations,
 					sf.FuntionFor,
 					sf.FunctionTypeID,
 					lft.Value FunctionName
@@ -348,6 +350,7 @@ class Mgovdb extends CI_Model {
 							sa.Status saStatus,
 							sa.DateCompleted,
 							sa.ExtraFields,
+							sa.AddedViolations,
 							sf.FuntionFor,
 							sf.FunctionTypeID,
 							lft.Value FunctionName
@@ -476,7 +479,7 @@ class Mgovdb extends CI_Model {
 		);
 
 		$keywordFilter = '';
-		if (trim($params['keyword']) != '') {
+		if (isset($params['keyword']) && trim($params['keyword']) != '') {
 			$keyword = trim($params['keyword']);
 			$keyword = $this->db->escape_like_str(trim($params['keyword']));
 			$keywordFilter = 'AND (so.Keyword LIKE ? OR so.MenuName LIKE ? OR ss.Name LIKE ? OR ss.Description LIKE ?)';
@@ -486,7 +489,12 @@ class Mgovdb extends CI_Model {
 			$queryParams[] = "%$keyword%";
 		}
 
-		$sql = "SELECT ss.id,ss.Code,ss.Name,ss.Logo,COUNT(sa.id) AS Applications,so.MenuName,so.Category,so.Keyword,ss.LastUpdate FROM Service_Services ss
+		if (isset($params['serviceType']) && $params['serviceType'] != '') {
+			$keywordFilter .= ' AND ss.ServiceType = ?';
+			$queryParams[] = $params['serviceType'];
+		}
+
+		$sql = "SELECT ss.id,ss.Code,ss.Name,ss.Logo,COUNT(sa.id) AS Applications,so.MenuName,so.Category,so.Keyword,ss.LastUpdate,ss.ServiceType,ss.Fee,ss.Description FROM Service_Services ss
                 JOIN UserAccountInformation ua ON (
                 ua.id = ? AND (
                     (ss.LocationScopeID = 1) OR

@@ -934,6 +934,76 @@ function Mgovph() {
             $('#gov_performance_report_cont').LoadingOverlay('hide');
         });
     }
+
+    this.get_service_summary_report = function(form)
+    {
+        var formData = new FormData(form);
+        // prenvet multiple calls
+        if ($(form).data('running')) {
+            return false;
+        }
+
+        $(form).data('running', true);
+        $(form).find('input').blur();
+
+        $('#gov_performance_report_cont').LoadingOverlay('show');
+        $.ajax({
+            url: window.public_url('statistics/get_service_summary_data'),
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                console.log(response);
+                if (response.status) {
+                    var pData = response.data;
+                    var rows = '<tr class="treegrid-' + pData.code + '">';
+                            rows += '<td class="text-green text-bold">' + pData.name + '</td>';
+                            rows += '<td>' + pData.services + '</td>';
+                            rows += '<td>' + pData.counts.transactions + '</td>';
+                            rows += '<td>' + pData.counts.processed + '</td>';
+                            rows += '<td>' + pData.counts.approved + '</td>';
+                            rows += '<td>' + pData.counts.denied + '</td>';
+                            rows += '<td>' + pData.counts.pending + '</td>';
+                        rows += '</tr>';
+
+                    $.each(pData.cities, function(i, cData){
+                        rows += '<tr class="treegrid-' + cData.code + ' treegrid-parent-' + pData.code + '">';
+                            rows += '<td class="text-cyan">' + cData.name + '</td>';
+                            rows += '<td>' + cData.services + '</td>';
+                            rows += '<td>' + cData.counts.transactions + '</td>';
+                            rows += '<td>' + cData.counts.processed + '</td>';
+                            rows += '<td>' + cData.counts.approved + '</td>';
+                            rows += '<td>' + cData.counts.denied + '</td>';
+                            rows += '<td>' + cData.counts.pending + '</td>';
+                        rows += '</tr>';
+
+                        $.each(cData.barangay, function(i, bData){
+                            rows += '<tr class="treegrid-' + bData.code + ' treegrid-parent-' + cData.code + '">';
+                                rows += '<td>' + bData.name + '</td>';
+                                rows += '<td>' + bData.services + '</td>';
+                                rows += '<td>' + bData.counts.transactions + '</td>';
+                                rows += '<td>' + bData.counts.processed + '</td>';
+                                rows += '<td>' + bData.counts.approved + '</td>';
+                                rows += '<td>' + bData.counts.denied + '</td>';
+                                rows += '<td>' + bData.counts.pending + '</td>';
+                            rows += '</tr>';
+                        });
+                    });
+
+                    $('#gov_performance_report_cont').find('table tbody').html(rows);
+                    $('#gov_performance_report_cont').find('table').treegrid({
+                        initialState: 'expanded'
+                    });
+                }
+            },
+            complete: function() {
+                $(form).data('running', false);
+                $('#gov_performance_report_cont').LoadingOverlay('hide');
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    }
 }
 
 

@@ -18,6 +18,7 @@
 				         			<h2><span class="text-bold text-bold DeptName">Department name</span></h2>
 						            <h2><span class="text-bold text-green ServiceName">Service name</span></h2>
 						            <span class="ServiceDesc" style="font-family:Trebuchet MS; font-size:12px;">Service description</span>
+						            <span class="ServiceFee hide" style="font-family:Trebuchet MS; font-size:12px;"><br>Fee: <span class="fee-amount text-orange"></span><br></span>
 						            <h5><span class="text-blue ServiceZone" style="font-family:Trebuchet MS; font-size:10px;">Zone</span></h5>
 				         		</div>
 				         		<div class="col-xs-8 col-sm-12">
@@ -40,6 +41,22 @@
 		            <br>
 		            <div class="error_messages no-border-radius alert alert-danger small" role="alert"></div>
 		         </div>
+
+		         <div class="additional-violation-box post-items bg-white padding-10 hide">
+					<h2 class="text-cyan text-bold offset-bottom-10">Additional Violations</h2>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="box">
+								<div class="row">
+									<div class="col-12">
+										<div class="col-xs-12" id="added-violation-list">
+							            </div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 				
 				<div class="post-items bg-white padding-10">
 					<h2 class="text-cyan text-bold offset-bottom-10">Application Form</h2>

@@ -4,6 +4,8 @@ function Organization() {
     var self = this;
 
     this.selectedService;
+    this.services = {};
+    this.selectedViolations = {};
 
     /**
      * Initialize events
@@ -29,6 +31,15 @@ function Organization() {
         $('#projectForm').submit(function(e){
             e.preventDefault();
             self.saveProject(this);
+        });
+
+        $('.add-violation-item').click(function(){
+            self.addViolation();
+        });
+
+        $('#added-violation-list').on('click', '.remove_violation', function() {
+            delete self.selectedViolations[$(this).data('id')];
+            self.updateViolationList();
         });
     }
 
@@ -84,6 +95,8 @@ function Organization() {
                                             <div class='name'>${k.MenuName}</div>
                                         </div>
                                     </div>`;
+
+                            self.services[k.Code] = k;
                         });
 
                         tpl += '</div></div></div>';
@@ -132,6 +145,11 @@ function Organization() {
     */
     this.openServiceApplication = function(code)
     {
+        self.selectedViolations = {};
+        self.updateViolationList();
+        self.selectedService = code;
+        $('#violation-list-items').val('').trigger('change');
+
         $.LoadingOverlay("show", {zIndex: 999});
         $.ajax({
             url: window.base_url('services/view/' + code),
@@ -172,6 +190,12 @@ function Organization() {
                     $.each(v.Tags, function(i, e) {
                         serviceTemplate.find('.ServiceTags').append(' <label class="label label-'+Utils.getRandomItem(['info','success','danger','warning','primary'])+'">' + e + '</label> ');
                     });
+
+                    if (v.ServiceType == 13) {
+                        $('#serviceApplicationModal').find('div.additional-violation-box').removeClass('hide');
+                    } else {
+                        $('#serviceApplicationModal').find('div.additional-violation-box').addClass('hide');
+                    }
 
                     // reset input erros
                     $.each($('#ServiceReportForm').find('input'), function(i,e){
@@ -282,6 +306,35 @@ function Organization() {
     }
 
     /**
+    * add violation to current application
+    */
+    this.addViolation = function()
+    {
+        var selected = $('#violation-list-items').val();
+        if (selected != '' && selected != self.selectedService && !(selected in self.selectedViolations)) {
+            self.selectedViolations[selected] = self.services[selected];
+            self.updateViolationList();
+        }
+    }
+
+    this.updateViolationList = function()
+    {
+        var tpl = '';
+        $.each(self.selectedViolations, function(i,v) {
+            tpl += `<div class="padding-5">
+                        <button style="color: red; font-weight: bold" type="button" data-id="${v.Code}" class="close remove_violation" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h2><span class="text-bold text-green">${v.Name} - ${v.MenuName}</span></h2>
+                        <span style="font-family:Trebuchet MS; font-size:12px;">${v.Description}</span>
+                        <span style="font-family:Trebuchet MS; font-size:12px;">
+                            <br>Fee: <span class="fee-amount text-orange">P${v.Fee}</span>
+                        </span>
+                    </div>`;
+        });
+
+        $('#added-violation-list').html(tpl);
+    }
+
+    /**
     * save application
     */
     this.submitServiceApplication = function(form)
@@ -296,6 +349,8 @@ function Organization() {
         $(form).LoadingOverlay("show");
 
         var formData = new FormData(form);
+
+        formData.append('addon-violation', Object.keys(self.selectedViolations));
         
         // reset input erros
         $.each($(form).find('input, select'), function(i,e){
