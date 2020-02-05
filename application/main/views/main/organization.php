@@ -48,3 +48,14 @@
 
   });
 </script>
+<style type="text/css">
+  .select2-selection--single {
+    height: 100% !important;
+    min-height: 34px;
+  }
+  .select2-selection__rendered{
+    word-wrap: break-word !important;
+    text-overflow: inherit !important;
+    white-space: normal !important;
+  }
+</style>
