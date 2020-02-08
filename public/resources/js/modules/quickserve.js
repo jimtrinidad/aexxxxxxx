@@ -335,10 +335,11 @@ function Quickserve() {
 
             var rows = ''
             $.each(pinfo.collections, function(i, e){
+                // <td><input type="text" autocomplete="off" name="collectionName[]" class="form-control input-sm" value="${e.name}"></td>
                 rows += `<tr>
-                            <td><input type="text" autocomplete="off" name="collectionName[]" class="form-control input-sm" value="${e.name}"></td>
-                            <td><input type="text" autocomplete="off" name="collectionCode[]" class="form-control input-sm"  value="${e.code}"></td>
-                            <td><input type="number" step=".01" autocomplete="off" name="collectionAmount[]" class="form-control input-sm" value="${e.amount}"></td>
+                            <td><textarea rows="2" autocomplete="off" name="collectionName[]" class="form-control input-sm">${e.name}</textarea></td>
+                            <td style="vertical-align: middle;"><input type="text" autocomplete="off" name="collectionCode[]" class="form-control input-sm"  value="${e.code}"></td>
+                            <td style="vertical-align: middle;"><input type="number" step=".01" autocomplete="off" name="collectionAmount[]" class="form-control input-sm" value="${e.amount}"></td>
                             <td style="vertical-align:middle;"></td>
                         </tr>`;
             });
@@ -369,21 +370,23 @@ function Quickserve() {
             if (data.Fee) {
                 amount = data.Fee;
             }
-
+            
+            // <td><input type="text" autocomplete="off" name="collectionName[]" class="form-control input-sm" value="${data.ServiceName}"></td>
             var row = `<tr>
-                            <td><input type="text" autocomplete="off" name="collectionName[]" class="form-control input-sm" value="${data.ServiceName}"></td>
-                            <td><input type="text" autocomplete="off" name="collectionCode[]" class="form-control input-sm"  value=""></td>
-                            <td><input type="number" step=".01" autocomplete="off" name="collectionAmount[]" class="form-control input-sm" value="${amount}"></td>
+                            
+                            <td><textarea rows="2" autocomplete="off" name="collectionName[]" class="form-control input-sm">${data.ServiceName}</textarea></td>
+                            <td style="vertical-align: middle;"><input type="text" autocomplete="off" name="collectionCode[]" class="form-control input-sm"  value=""></td>
+                            <td style="vertical-align: middle;"><input type="number" step=".01" autocomplete="off" name="collectionAmount[]" class="form-control input-sm" value="${amount}"></td>
                             <td style="vertical-align:middle;"></td>
                         </tr>`;
 
             if ('added_violations' in data) {
                 $.each(data.added_violations, function(i, e) {
-                    console.log(e);
+                    // <td><input type="text" autocomplete="off" name="collectionName[]" class="form-control input-sm" value="${e.name}"></td>
                     row += `<tr>
-                            <td><input type="text" autocomplete="off" name="collectionName[]" class="form-control input-sm" value="${e.name}"></td>
-                            <td><input type="text" autocomplete="off" name="collectionCode[]" class="form-control input-sm"  value=""></td>
-                            <td><input type="number" step=".01" autocomplete="off" name="collectionAmount[]" class="form-control input-sm" value="${e.fee}"></td>
+                            <td><textarea rows="2" autocomplete="off" name="collectionName[]" class="form-control input-sm">${e.name}</textarea></td>
+                            <td style="vertical-align: middle;"><input type="text" autocomplete="off" name="collectionCode[]" class="form-control input-sm"  value=""></td>
+                            <td style="vertical-align: middle;"><input type="number" step=".01" autocomplete="off" name="collectionAmount[]" class="form-control input-sm" value="${e.fee}"></td>
                             <td style="vertical-align:middle;"></td>
                         </tr>`;
                 });
@@ -478,6 +481,7 @@ function Quickserve() {
     {
         var clone = $('#paymentForm #collectionBody').find('tr:eq(0)').clone();
         clone.find('input').val('');
+        clone.find('textarea').val('');
         $('#paymentForm #collectionBody').append(clone);
         if ($('#paymentForm #collectionBody tr').length > 1) {
             $.each($('#paymentForm #collectionBody tr'), function(i,e) {

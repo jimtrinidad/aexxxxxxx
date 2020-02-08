@@ -56,7 +56,7 @@ view('reports/cttmo/navigation');
 		      <tr class="text-bold">
 		        <th width="30">No</th>
 		        <th style="max-width: 80px;">Report #</th>
-		        <th>Violation</th>
+		        <th style="min-width: 120px;">Violation</th>
 		        <?php
 		        	foreach ($fields as $k => $l) {
 		        		echo '<th style="max-width: 200px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">' . $l . '</th>';

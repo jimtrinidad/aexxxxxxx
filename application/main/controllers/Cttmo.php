@@ -43,6 +43,7 @@ class Cttmo extends CI_Controller
 
         $records = $this->statisticsdb->organizationMonthlyViolationReport($where, $params);
 
+
         $items = array();
         $per_month_count = array();
         $month_total = array();
@@ -57,6 +58,24 @@ class Cttmo extends CI_Controller
 
             $per_month_count[$item['id']][$item['month']] = $item['applicationCount'];
             $month_total[$item['month']] = (isset($month_total[$item['month']]) ? ($month_total[$item['month']] + $item['applicationCount']) : $item['applicationCount']);
+
+            if ($item['added_violations']) {
+                $ids = explode(',', $item['added_violations']);
+                $ids = '"'.implode('","', $ids).'"';
+                $added = $this->statisticsdb->getServicesByID($ids);
+                foreach ($added as $added_item) {
+                    if (!array_key_exists($added_item['id'], $items)) {
+                        $items[$added_item['id']] = array(
+                            'Code'  => $added_item['Code'],
+                            'Name'  => $added_item['Name'],
+                            'CommonName'    => $added_item['MenuName']
+                        );
+                    }
+
+                    $per_month_count[$added_item['id']][$item['month']] = (isset($per_month_count[$added_item['id']][$item['month']]) ? $per_month_count[$added_item['id']][$item['month']] + 1 : 1);
+                    $month_total[$item['month']] = (isset($month_total[$item['month']]) ? ($month_total[$item['month']] + 1) : 1);
+                }
+            }
         }
 
         ksort($month_total);
@@ -125,6 +144,24 @@ class Cttmo extends CI_Controller
 
             $per_day_count[$item['id']][$item['day']] = $item['applicationCount'];
             $day_total[$item['day']] = (isset($day_total[$item['day']]) ? ($day_total[$item['day']] + $item['applicationCount']) : $item['applicationCount']);
+
+            if ($item['added_violations']) {
+                $ids = explode(',', $item['added_violations']);
+                $ids = '"'.implode('","', $ids).'"';
+                $added = $this->statisticsdb->getServicesByID($ids);
+                foreach ($added as $added_item) {
+                    if (!array_key_exists($added_item['id'], $items)) {
+                        $items[$added_item['id']] = array(
+                            'Code'  => $added_item['Code'],
+                            'Name'  => $added_item['Name'],
+                            'CommonName'    => $added_item['MenuName']
+                        );
+                    }
+
+                    $per_day_count[$added_item['id']][$item['day']] = (isset($per_day_count[$added_item['id']][$item['day']])  ? $per_day_count[$added_item['id']][$item['day']] + 1 : 1);
+                    $day_total[$item['day']] = (isset($day_total[$item['day']]) ? ($day_total[$item['day']] + 1) : 1);
+                }
+            }
         }
 
         ksort($day_total);
@@ -249,6 +286,15 @@ class Cttmo extends CI_Controller
                 }
             }
 
+            if ($record['added_violations']) {
+                $ids = explode(',', $record['added_violations']);
+                $ids = '"'.implode('","', $ids).'"';
+                $added = $this->statisticsdb->getServicesByID($ids);
+                foreach ($added as $added_item) {
+                    $record['MenuName'] .= ',<br>' . $added_item['MenuName'];
+                }
+            }
+
         }
 
         $viewData = array(
@@ -304,6 +350,21 @@ class Cttmo extends CI_Controller
             $per_month_amount[$item['id']][$item['month']] = $item['Total'];
             $month_total[$item['month']] = (isset($month_total[$item['month']]) ? ($month_total[$item['month']] + $item['applicationCount']) : $item['applicationCount']);
             $month_total_amount[$item['month']] = (isset($month_total_amount[$item['month']]) ? ($month_total_amount[$item['month']] + $item['Total']) : $item['Total']);
+
+            if ($item['added_violations']) {
+                $ids = explode(',', $item['added_violations']);
+                $ids = '"'.implode('","', $ids).'"';
+                $added = $this->statisticsdb->getServicesByID($ids);
+                foreach ($added as $added_item) {
+                    if (!array_key_exists($added_item['id'], $items)) {
+                        $items[$added_item['id']] = array(
+                            'Code'  => $added_item['Code'],
+                            'Name'  => $added_item['Name'],
+                            'CommonName'    => $added_item['MenuName']
+                        );
+                    }
+                }
+            }
         }
 
         ksort($month_total);
