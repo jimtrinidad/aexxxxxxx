@@ -109,6 +109,8 @@ class Quickserve extends CI_Controller
                             'desc'  => trim($serviceData->Description),
                             'fee'   => $serviceData->Fee
                         );
+
+                        $item['ServiceName'] .= ',<br>' . $serviceData->Name;
                     }
                 }
             }
