@@ -31,6 +31,10 @@
   </div>
   <?php }} ?>
   <div class="col-md-12 top-gov-services offset-top-10 hide" id="trending-service-cont">
+    <h2>COVID-19 UPDATES</h2>
+    <iframe class="embed-responsive-item" src="https://dohph.maps.arcgis.com/apps/opsdashboard/index.html#/a21336cf215744e198ae5e90df7264af" style="min-height: 500px;width: 100%"></iframe>
+  </div>
+  <div class="col-md-12 top-gov-services offset-top-10 hide" id="trending-service-cont">
     <h2>Trending: TOP GOV SERVICES</h2>
     <ul id="trending-service-items">
     </ul>
