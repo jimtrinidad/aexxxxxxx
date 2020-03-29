@@ -6,6 +6,7 @@ function Mgovph() {
     this.feedTimeout;
     this.selectedService;
     this.preSelectedService; // via url params 'v'
+    this.searchingService = false;
 
     /**
      * Initialize events
@@ -402,120 +403,129 @@ function Mgovph() {
     */
     this.getServices = function(selectedService = false)
     {
-        var params = {
-            'keyword'    : $('#searchForm #keyword').val(),
-            'department' : $('#searchForm #DepartmentID').val(),
-            'locScope'   : $('#searchForm #LocationScopeID').val()
-        };
-
-        $('#LoadMainBody').html(''); //reset content
-        $('#LoadMainBody').css('min-height', '70px').LoadingOverlay("show", {
-            backgroundClass: 'bg-grey', 
-            text: 'Loading services...', 
-            textClass: 'text-gray',
-            textResizeFactor: 1,
-            imageResizeFactor: 2,
-            size: 20,
-            fade: [400, 50],
-            zIndex: 9999
-        });
-
-        var url_string = window.location.href;
-        var url = new URL(url_string);
-        var v        = url.searchParams.get("v");
-        var category = url.searchParams.get("c");
         
-        if (v) {
-            params.code = v;
-            self.preSelectedService = v;
-        } else {
-            self.preSelectedService = null;
-        }
+        if (!self.searchingService) {
+            self.searchingService = true;
+            var params = {
+                'keyword'    : $('#searchForm #keyword').val(),
+                'department' : $('#searchForm #DepartmentID').val(),
+                'locScope'   : $('#searchForm #LocationScopeID').val()
+            };
 
-        if (category) {
-            params.category = category;
-        }
+            $('#LoadMainBody').html(''); //reset content
+            $('#LoadMainBody').css('min-height', '70px').LoadingOverlay("show", {
+                backgroundClass: 'bg-grey', 
+                text: 'Loading services...', 
+                textClass: 'text-gray',
+                textResizeFactor: 1,
+                imageResizeFactor: 2,
+                size: 20,
+                fade: [400, 50],
+                zIndex: 9999
+            });
 
-        $.ajax({
-            url  : window.base_url('get/services'),
-            type : 'post',
-            data : params,
-            success : function(response) {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var v        = url.searchParams.get("v");
+            var category = url.searchParams.get("c");
+            
+            if (v) {
+                params.code = v;
+                self.preSelectedService = v;
+            } else {
+                self.preSelectedService = null;
+            }
 
-                $('#LoadMainBody').LoadingOverlay("hide");
+            if (category) {
+                params.category = category;
+            }
 
-                if (response.status) {
+            $.ajax({
+                url  : window.base_url('get/services'),
+                type : 'post',
+                data : params,
+                success : function(response) {
 
-                    if (selectedService) {
-                        $('#LoadMainBody').hide();
-                    }
+                    $('#LoadMainBody').LoadingOverlay("hide");
 
-                    setTimeout(function(){
+                    if (response.status) {
 
-                        $.each(response.data, function(i, e){
+                        if (selectedService) {
+                            $('#LoadMainBody').hide();
+                        }
 
-                            var serviceTemplate = $('.templates-container .serviceItem').clone();
-                            serviceTemplate.find('img.DepartmentLogo').prop('src', e.Logo);
-                            serviceTemplate.find('h2.DepartmentName').text(e.Name);
+                        setTimeout(function(){
 
-                            var servicesContainer   = serviceTemplate.find('.DepartmentServices');
-                            var serviceItemCopy     = servicesContainer.find('.DepartmentService').clone();
-                            servicesContainer.html(''); // reset
-                            $.each(e.services, function(k,v) {
-                                var serviceItem         = serviceItemCopy.clone();
+                            $.each(response.data, function(i, e){
 
-                                serviceItem.data('id', v.id);
-                                serviceItem.data('code', v.Code);
-                                serviceItem.prop('id', 'service-item-' + v.Code);
-                                serviceItem.find('span.ServiceName').text(v.Name + ' - ' + $global.location_scope[v.LocationScopeID]);
-                                serviceItem.find('span.ServiceDesc').text(v.Description);
-                                serviceItem.find('span.ServiceZone').text(v.AddressInfo.join(' > '));
-                                serviceItem.find('span.ServiceCode').text(v.Code);
-                                serviceItem.find('span.serviceProvided').text(e.serviceProvided);
-                                serviceItem.find('img.serviceLogo').prop('src', v.Logo);
-                                serviceItem.find('div.transaction-provider-pic').html('');
-                                $.each(Utils.shuffle(v.serviceProvider).slice(0, 3), function(j,k){
-                                    serviceItem.find('div.transaction-provider-pic').append('<img title="'+k.Name+'" src="'+k.Photo+'">');
+                                var serviceTemplate = $('.templates-container .serviceItem').clone();
+                                serviceTemplate.find('img.DepartmentLogo').prop('src', e.Logo);
+                                serviceTemplate.find('h2.DepartmentName').text(e.Name);
+
+                                var servicesContainer   = serviceTemplate.find('.DepartmentServices');
+                                var serviceItemCopy     = servicesContainer.find('.DepartmentService').clone();
+                                servicesContainer.html(''); // reset
+                                $.each(e.services, function(k,v) {
+                                    var serviceItem         = serviceItemCopy.clone();
+
+                                    serviceItem.data('id', v.id);
+                                    serviceItem.data('code', v.Code);
+                                    serviceItem.prop('id', 'service-item-' + v.Code);
+                                    serviceItem.find('span.ServiceName').text(v.Name + ' - ' + $global.location_scope[v.LocationScopeID]);
+                                    serviceItem.find('span.ServiceDesc').text(v.Description);
+                                    serviceItem.find('span.ServiceZone').text(v.AddressInfo.join(' > '));
+                                    serviceItem.find('span.ServiceCode').text(v.Code);
+                                    serviceItem.find('span.serviceProvided').text(e.serviceProvided);
+                                    serviceItem.find('img.serviceLogo').prop('src', v.Logo);
+                                    serviceItem.find('div.transaction-provider-pic').html('');
+                                    $.each(Utils.shuffle(v.serviceProvider).slice(0, 3), function(j,k){
+                                        serviceItem.find('div.transaction-provider-pic').append('<img title="'+k.Name+'" src="'+k.Photo+'">');
+                                    });
+
+                                    servicesContainer.append(serviceItem);
                                 });
 
-                                servicesContainer.append(serviceItem);
+                                $('#LoadMainBody').append(serviceTemplate);
+                                serviceTemplate.hide().removeClass('hide').fadeIn('slow');
+
                             });
 
-                            $('#LoadMainBody').append(serviceTemplate);
-                            serviceTemplate.hide().removeClass('hide').fadeIn('slow');
+                        }, 50);
 
-                        });
+                        if (selectedService) {
+                            setTimeout(function(){
+                                $('#LoadMainBody').hide();
+                                $('#service-item-' + selectedService).click();
+                            }, 100);
+                        }
 
-                    }, 50);
-
-                    if (selectedService) {
-                        setTimeout(function(){
-                            $('#LoadMainBody').hide();
-                            $('#service-item-' + selectedService).click();
-                        }, 100);
+                    } else {
+                        // clear content, add empty message
+                        $('#LoadMainBody').html('<div class="feedItem post-items bg-grey padding-20"> \
+                                                   <div class="row"> \
+                                                      <div class="col-xs-12 padding-20"> \
+                                                        <h2 class="text-bold text-white">No record found</h2> \
+                                                      </div> \
+                                                    </div> \
+                                                </div> \
+                                                      ');
                     }
 
-                } else {
-                    // clear content, add empty message
-                    $('#LoadMainBody').html('<div class="feedItem post-items bg-grey padding-20"> \
-                                               <div class="row"> \
-                                                  <div class="col-xs-12 padding-20"> \
-                                                    <h2 class="text-bold text-white">No record found</h2> \
-                                                  </div> \
-                                                </div> \
-                                            </div> \
-                                                  ');
-                }
+                    if (params.keyword) {
+                        $('#side-bar-content').addClass('visible-md-block visible-lg-block');
+                    }
 
-            },
-            complete : function() {
-                setTimeout(function(){
-                    $('#LoadMainBody').LoadingOverlay("hide");
-                    
-                    self.moveSidebar();
-                }, 200);
-            }
-        });
+                },
+                complete : function() {
+                    setTimeout(function(){
+                        $('#LoadMainBody').LoadingOverlay("hide");
+                        
+                        self.moveSidebar();
+                    }, 200);
+                    self.searchingService = false;
+                }
+            });
+        }
     }
 
     /**
