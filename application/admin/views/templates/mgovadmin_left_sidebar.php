@@ -24,11 +24,13 @@
       </a>
       <ul class="treeview-menu">
         <li class="<?php echo (is_current_url('accounts') ? 'active' : ''); ?>"><a href="<?php echo site_url('accounts') ?>"><i class="fa fa-users"></i> Accounts</a></li>
-        <li class="<?php echo (is_current_url('department', 'index') ? 'active' : ''); ?>"><a href="<?php echo site_url('department') ?>"><i class="fa fa-university"></i> Department</a></li>
-        <li class="<?php echo (is_current_url('department', 'officers') ? 'active' : ''); ?>"><a href="<?php echo site_url('department/officers') ?>"><i class="fa fa-sitemap"></i> Activation of mGov Locations</a></li>
-        <li class="<?php echo (is_current_url('services') ? 'active' : ''); ?>"><a href="<?php echo site_url('services') ?>"><i class="fa fa-exchange"></i> Services</a></li>
-        <li class="<?php echo (is_current_url('documents') ? 'active' : ''); ?>"><a href="<?php echo site_url('documents') ?>"><i class="fa fa-file-text"></i> Digital Documents</a></li>
-        <li class="<?php echo (is_current_url('zones') ? 'active' : ''); ?>"><a href="<?php echo site_url('zones') ?>"><i class="fa fa-globe"></i> Zones</a></li>
+        <?php if ($this->session->userdata('alevel') >= 13) { ?>
+          <li class="<?php echo (is_current_url('department', 'index') ? 'active' : ''); ?>"><a href="<?php echo site_url('department') ?>"><i class="fa fa-university"></i> Department</a></li>
+          <li class="<?php echo (is_current_url('department', 'officers') ? 'active' : ''); ?>"><a href="<?php echo site_url('department/officers') ?>"><i class="fa fa-sitemap"></i> Activation of mGov Locations</a></li>
+          <li class="<?php echo (is_current_url('services') ? 'active' : ''); ?>"><a href="<?php echo site_url('services') ?>"><i class="fa fa-exchange"></i> Services</a></li>
+          <li class="<?php echo (is_current_url('documents') ? 'active' : ''); ?>"><a href="<?php echo site_url('documents') ?>"><i class="fa fa-file-text"></i> Digital Documents</a></li>
+          <li class="<?php echo (is_current_url('zones') ? 'active' : ''); ?>"><a href="<?php echo site_url('zones') ?>"><i class="fa fa-globe"></i> Zones</a></li>
+        <?php } ?>
       </ul>
     </li>
   </ul>

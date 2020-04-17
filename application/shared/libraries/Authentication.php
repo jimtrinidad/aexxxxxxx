@@ -99,7 +99,7 @@ class Authentication
 
         // Select user details
         $this->ci->db
-            ->select($this->identifier_field . ' as identifier, ' . $this->username_field . ' as username, ' . $this->password_field . ' as password')
+            ->select($this->identifier_field . ' as identifier, ' . $this->username_field . ' as username, ' . $this->password_field . ' as password, AccountTypeID, AccountLevelID')
             ->where($this->username_field, $username)
             ->where('deletedAt', NULL)
             ->where_in('StatusID', array(1,2));
@@ -132,6 +132,8 @@ class Authentication
                 $this->ci->session->set_userdata(array(
                     'identifier' => $user_details->identifier,
                     'username'   => $user_details->username,
+                    'atype'      => $user_details->AccountTypeID,
+                    'alevel'     => $user_details->AccountLevelID,
                     'logged_in'  => $_SERVER['REQUEST_TIME'],
                 ));
 

@@ -23,13 +23,13 @@ class Account extends CI_Controller
 
         // die(compute_expiration_date($this->uri->segment(3)));
 
-        // $accountData = $this->mgovdb->getRowObject('UserAccountInformation', 66, 'id');
-        // $emailTemplateData = array(
-        //                 'account'   => $accountData,
-        //                 'password'  => random_password()
-        //             );
+        $accountData = $this->mgovdb->getRowObject('UserAccountInformation', 66, 'id');
+        $emailTemplateData = array(
+                        'account'   => $accountData,
+                        'password'  => random_password()
+                    );
 
-        // echo view('email_templates/account_approval', $emailTemplateData, null, true); exit;
+        echo view('email_templates/account_approval', $emailTemplateData, null, true); exit;
         
         //             $emailData = array(
         //                 'from'      => array('info@mgov.ph', 'MGov Info'),

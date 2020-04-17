@@ -13,6 +13,10 @@ class Department extends CI_Controller
         // require login
         check_authentication();
 
+        if ($this->session->userdata('alevel') < 13) {
+            show_404();
+        }
+
         $this->load->model('departmentdb');
     }
 

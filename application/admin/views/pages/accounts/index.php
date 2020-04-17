@@ -26,6 +26,7 @@
                 ?>
               </select>
             </div>
+            <?php if ($this->session->userdata('alevel') >= 13) { ?>
             <div class="form-group">
               <select id="search_account_city" name="search_account_city" class="form-control input-sm">
                   <option value="">City Or Municipal&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
@@ -36,6 +37,7 @@
                   ?>
               </select>
             </div>
+            <?php } ?>
             <div class="form-group">
               <input type="text" autocomplete="off" id="search_mid" name="search_mid" value="<?php echo $search_mid ?>" class="form-control input-sm" placeholder="Mabuhay ID">
             </div>

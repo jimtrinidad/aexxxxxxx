@@ -29,6 +29,9 @@ class Accounts extends CI_Controller
             ),
         );
 
+        // print_r($this->session->userdata());
+        // print_data($viewData['accountInfo']);
+
         $page_limit = 50;
         $page_start = (int) $this->uri->segment(3);
 
@@ -78,6 +81,23 @@ class Accounts extends CI_Controller
                 $where['MunicipalityCityID']  = $search_account_city;
             } 
 
+            // account level limitation filter
+            // only lower or same level of the user
+            $user_account_level = $viewData['accountInfo']->AccountLevelID;
+            $where['AccountLevelID <= '] = $user_account_level;
+
+            // only show users on the same brangay if barangay level            
+            // only show user on city/muni if muni city level
+            // and so on upto regional level
+            if ($user_account_level == 8) {
+                $where['BarangayID'] = $viewData['accountInfo']->BarangayID;
+            } else if ($user_account_level == 9 || $user_account_level == 10) {
+                $where['MunicipalityCityID'] = $viewData['accountInfo']->MunicipalityCityID;
+            } else if ($user_account_level == 11) {
+                $where['ProvincialID'] = $viewData['accountInfo']->ProvincialID;
+            } else if ($user_account_level == 12) {
+                $where['RegionalID'] = $viewData['accountInfo']->RegionalID;
+            }
 
             // search params
             $viewData[$filter] = $$filter;
@@ -103,7 +123,12 @@ class Accounts extends CI_Controller
 
         $viewData['accounts']   = $accounts;
         $viewData['pagination'] = paginate($paginationConfig);
-        $viewData['account_levels'] = lookup_db('UserAccountLevel', false, false, false);
+        $levels = lookup_db('UserAccountLevel', false, false, false);
+        foreach ($levels as $k => $v) {
+            if ($k <= $this->session->userdata('alevel')) {
+                $viewData['account_levels'][$k] = $v;
+            }
+        }
 
         // echo '<pre>';print_r($viewData['account_levels']);exit;
 
