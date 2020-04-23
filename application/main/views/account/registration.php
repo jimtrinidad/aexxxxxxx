@@ -241,14 +241,14 @@
                         <div class="col-xs-12 col-sm-6">
                           <div class="input-group mb-3">
                             <div class="custom-file padding-5">
-                              <input type="file" class="custom-file-input" id="valid_id_one" name="file[valid_id_one]" accept="image/*" capture="camera">
+                              <input type="file" class="custom-file-input" id="valid_id_one" name="file[valid_id_one]" accept="image/*">
                             </div>
                           </div>
                         </div>
                         <div class="col-xs-12 col-sm-6">
                           <div class="input-group mb-3">
                             <div class="custom-file padding-5">
-                              <input type="file" class="custom-file-input" id="valid_id_two" name="file[valid_id_two]" accept="image/*" capture="camera">
+                              <input type="file" class="custom-file-input" id="valid_id_two" name="file[valid_id_two]" accept="image/*">
                             </div>
                           </div>
                         </div>

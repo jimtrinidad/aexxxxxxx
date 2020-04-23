@@ -23,6 +23,10 @@
 				</div>
 			</div>
 
+			<div class=" text-white">
+				<p class="lh-20"><a class="btn btn-sm btn-warning text-bold open-emergency-id" href="javascript:;">Emergency ID</a></p>
+			</div>
+
 			<!-- Mak ID -->
 			<div>
 				<!-- <img src="<?php echo public_url(); ?>resources/images/mak-id-2.png" class="img-responsive" /> -->
