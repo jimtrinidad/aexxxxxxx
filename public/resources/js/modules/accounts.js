@@ -272,6 +272,16 @@ function Accounts() {
             );
             $('#AccountApprovalForm .accountInfoCont').removeClass('hidden');
 
+            $('#AccountApprovalForm .accountRequirements').html('');
+            $.each(data.uploads, function(i,e) {
+                var tpl = `<div class="col-xs-6 col-sm-4 padding-top-5 text-center">
+                            <a href="${window.public_url() + "assets/uploads/" + e}" data-toggle="lightbox" data-gallery="example-gallery">
+                              <img src="${window.public_url() + "assets/uploads/" + e}" class="img-fluid" style="max-width: 120px;height: auto;margin: 10px auto;border: 1px solid gray;">
+                            </a>
+                          </div>`;
+                $('#AccountApprovalForm .accountRequirements').append(tpl);
+            });
+
             self.setLevelOptions('#AccountApprovalForm #AccountTypeID');
 
             $('#approveAccountModal').modal({

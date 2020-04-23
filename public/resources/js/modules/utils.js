@@ -62,6 +62,11 @@ function Utils() {
         });
 
 
+        $('.open-emergency-id').click(function(){
+            $('.id-overlay').show();
+            $('#emergency-id').show();
+        });
+
         $('.open-mak-id').click(function(){
             $('.id-overlay').show();
             $('#mak-id').show();
@@ -70,6 +75,7 @@ function Utils() {
         $('.id-overlay').click(function(){
             $(this).hide();
             $('#mak-id').hide();
+            $('#emergency-id').hide();
         });
 
         $("input, textarea").attr('autocomplete', 'off');

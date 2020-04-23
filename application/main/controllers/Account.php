@@ -200,16 +200,20 @@ class Account extends CI_Controller
 
             $registrationID = $this->input->post('RegistrationID');
 
+            $this->load->library('upload');
+
             // validate file upload
-            $this->load->library('upload', array(
+            $config = array(
                 'upload_path'   => PHOTO_DIRECTORY,
                 'allowed_types' => 'gif|jpg|png',
-                'max_size'      => '2000', // 2mb
-                'max_width'     => '1024',
-                'max_height'    => '768',
+                // 'max_size'      => '2000', // 2mb
+                // 'max_width'     => '1024',
+                // 'max_height'    => '768',
                 'overwrite'     => true,
                 'file_name'     => md5($registrationID)
-            ));
+            );
+
+            $this->upload->initialize($config);
 
             if (!empty($_FILES['avatarFile']['name']) && $this->upload->do_upload('avatarFile') == false) {
                 $return_data = array(
@@ -219,53 +223,107 @@ class Account extends CI_Controller
                 );
             } else {
 
-                // do save
+                $profile_filename = $this->upload->data('file_name');
 
-                $fields         = $this->mgovdb->tableColumns('UserAccountInformation');
-                $locInfo        = $this->mgovdb->getRowObject('UtilLocBrgy', $this->input->post('BarangayID'), 'brgyCode');
+                $upload_status = true;
+                $uploadData    = array();
+                $upload_errors = array();
 
-                $mabuhayID      = generate_mabuhay_id(get_post('LastName'));
+                foreach ($_FILES['file']['name'] as $i => $name) {
 
-                $insertData     = array(
-                    'MabuhayID'         => $mabuhayID,
-                    'Username'          => $mabuhayID, // copy mabuhay id, used it as username for login
-                    'BirthDate'         => date('Y-m-d', strtotime($this->input->post('BirthDate'))),
-                    'NationalZoneID'    => '',
-                    'RegionalID'        => ($locInfo ? $locInfo->regCode : ''),
-                    'ProvincialID'      => ($locInfo ? $locInfo->provCode : ''),
-                    'GovernmentID'      => json_encode($this->input->post('GovernmentID')),
-                    'Photo'             => (!empty($_FILES['avatarFile']['name']) ? $this->upload->data('file_name') : ''),
-                    'RegistrationDate'   => date('Y-m-d H:i:s')
-                );
+                    $randomname = md5(random_letters());
 
-                foreach ($fields as $field) {
-                    if (!array_key_exists($field, $insertData) && $this->input->post($field)) {
-                        $insertData[$field] = $this->input->post($field);
+                    // validate file upload
+                    $config = array(
+                        'upload_path'   => UPLOADS_DIRECTORY,
+                        'allowed_types' => 'gif|jpg|png',
+                        // 'max_size'      => '1000', // 1mb
+                        // 'max_width'     => '1024',
+                        // 'max_height'    => '768',
+                        'overwrite'     => true,
+                        'file_name'     => $randomname
+                    );
+
+                    $this->upload->initialize($config);
+
+                    $_FILES['userFile']['name']         = $_FILES['file']['name'][$i];
+                    $_FILES['userFile']['type']         = $_FILES['file']['type'][$i];
+                    $_FILES['userFile']['tmp_name']     = $_FILES['file']['tmp_name'][$i];
+                    $_FILES['userFile']['error']        = $_FILES['file']['error'][$i];
+                    $_FILES['userFile']['size']         = $_FILES['file']['size'][$i];
+
+                    if ($this->upload->do_upload('userFile') == false) {
+                        $upload_errors[$i] = $this->upload->display_errors('','');
+                        $upload_status = false;
+                    } else {
+                        $fileData = $this->upload->data();
+                        $uploadData[$i] = $fileData['file_name'];
+
+                        compress_image(UPLOADS_DIRECTORY . $fileData['file_name']);
                     }
+
                 }
 
-                if ($this->mgovdb->getRowObject('UserAccountInformation', $mabuhayID, 'MabuhayID') === false) {
+                if ($upload_status) {
 
-                    if (($ID = $this->mgovdb->saveData('UserAccountInformation', $insertData))) {
-                        $return_data = array(
-                            'status'    => true,
-                            'message'   => 'Account registration successful. You will received an email upon approval with your Mabuhay ID and Password.',
-                            'id'        => $ID
-                        );
+                    // do save
+
+                    $fields         = $this->mgovdb->tableColumns('UserAccountInformation');
+                    $locInfo        = $this->mgovdb->getRowObject('UtilLocBrgy', $this->input->post('BarangayID'), 'brgyCode');
+
+                    $mabuhayID      = generate_mabuhay_id(get_post('LastName'));
+
+                    $insertData     = array(
+                        'MabuhayID'         => $mabuhayID,
+                        'Username'          => $mabuhayID, // copy mabuhay id, used it as username for login
+                        'BirthDate'         => date('Y-m-d', strtotime($this->input->post('BirthDate'))),
+                        'NationalZoneID'    => '',
+                        'RegionalID'        => ($locInfo ? $locInfo->regCode : ''),
+                        'ProvincialID'      => ($locInfo ? $locInfo->provCode : ''),
+                        'GovernmentID'      => json_encode($this->input->post('GovernmentID')),
+                        'Uploads'           => json_encode($uploadData),
+                        'Photo'             => (!empty($_FILES['avatarFile']['name']) ? $profile_filename : ''),
+                        'RegistrationDate'   => date('Y-m-d H:i:s')
+                    );
+
+                    foreach ($fields as $field) {
+                        if (!array_key_exists($field, $insertData) && $this->input->post($field)) {
+                            $insertData[$field] = $this->input->post($field);
+                        }
+                    }
+
+                    compress_image(PHOTO_DIRECTORY . $insertData['Photo']);
+
+                    if ($this->mgovdb->getRowObject('UserAccountInformation', $mabuhayID, 'MabuhayID') === false) {
+
+                        if (($ID = $this->mgovdb->saveData('UserAccountInformation', $insertData))) {
+                            $return_data = array(
+                                'status'    => true,
+                                'message'   => 'Account registration successful. You will received an email upon approval with your Mabuhay ID and Password.',
+                                'id'        => $ID
+                            );
+                        } else {
+                            $return_data = array(
+                                'status'    => false,
+                                'message'   => 'Registration failed. Please try again later.'
+                            );
+                            @unlink($this->upload->data('full_name'));
+                        }
+
                     } else {
                         $return_data = array(
                             'status'    => false,
-                            'message'   => 'Registration failed. Please try again later.'
+                            'message'   => 'Account already exists.'
                         );
                         @unlink($this->upload->data('full_name'));
                     }
 
                 } else {
                     $return_data = array(
-                        'status'    => false,
-                        'message'   => 'Account already exists.'
-                    );
-                    @unlink($this->upload->data('full_name'));
+                                'status'    => false,
+                                'message'   => 'Uploading id image failed.',
+                                'fields'    => $upload_errors
+                            );
                 }
 
             }

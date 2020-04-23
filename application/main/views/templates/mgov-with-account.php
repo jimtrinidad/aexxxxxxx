@@ -54,6 +54,10 @@
 					<div class="padding-top-10">
 						<img src="<?php echo public_url() . 'assets/qr/' . $accountInfo->QR ?>" style="width: 100%;max-width: 60px;background: white;">
 					</div>
+
+					<div class="padding-top-10 text-white">
+						<p class="lh-20"><a class="btn btn-warning text-bold open-emergency-id" href="javascript:;">Emergency ID</a></p>
+					</div>
 					
 					<!-- Mak ID -->
 					<div>
@@ -88,6 +92,7 @@
 	    <!-- END FOOTER -->
 
 	    <?php view('templates/mabuhay_id'); ?>
+	    <?php view('templates/emergency_id'); ?>
 	    <?php view('snippets/chat'); ?>
 	    <?php view('modals/account-modals'); ?>
 

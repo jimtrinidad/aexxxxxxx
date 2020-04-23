@@ -109,7 +109,14 @@ class Accounts extends CI_Controller
         // prepare account data
         $accounts = array();
         foreach ($paginatationData['data'] as $item) {
-            $accounts[] = prepare_account_data($item);
+            $account_data = prepare_account_data($item);
+
+            $account_data['uploads'] = array();
+            $uploads = (array) @json_decode($item->Uploads, true);
+            foreach ($uploads as $u) {
+                $account_data['uploads'][] = uploads_filename($u);
+            }
+            $accounts[]   = $account_data;
         }
 
         // echo '<pre>';print_r($accounts);exit;

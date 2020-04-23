@@ -38,7 +38,7 @@
                       <div class="image-upload-container padding-top-20">
                         <img class="image-preview" src="<?php echo public_url(); ?>assets/profile/avatar_default.jpg" alt="...">
                         <span class="hiddenFileInput hide">
-                          <input type="file" accept="image/*" class="image-upload-input" id="avatarFile" name="avatarFile"/>
+                          <input type="file" accept="image/*" capture="camera" class="image-upload-input" id="avatarFile" name="avatarFile"/>
                         </span>
                       </div>
                     </div>
@@ -209,33 +209,51 @@
                       <div class="row">
                         <div class="col-md-3 col-xs-6">
                           <div class="checkbox text-white">
-                            <label>
+                            <label class="text-white">
                               <input name="GovernmentID[]" value="1" type="checkbox"> Voters ID
                             </label>
                           </div>
                         </div>
                         <div class="col-md-3 col-xs-6">
                           <div class="checkbox text-white">
-                            <label>
+                            <label class="text-white">
                               <input name="GovernmentID[]" value="2" type="checkbox"> BIR
                             </label>
                           </div>
                         </div>
                         <div class="col-md-3 col-xs-6">
                           <div class="checkbox text-white">
-                            <label>
+                            <label class="text-white">
                               <input name="GovernmentID[]" value="3" type="checkbox"> SSS
                             </label>
                           </div>
                         </div>
                         <div class="col-md-3 col-xs-6">
                           <div class="checkbox text-white">
-                            <label>
+                            <label class="text-white">
                               <input name="GovernmentID[]" value="4" type="checkbox"> DRIVERS
                             </label>
                           </div>
                         </div>
                       </div>
+
+                      <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                          <div class="input-group mb-3">
+                            <div class="custom-file padding-5">
+                              <input type="file" class="custom-file-input" id="valid_id_one" name="file[valid_id_one]" accept="image/*" capture="camera">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                          <div class="input-group mb-3">
+                            <div class="custom-file padding-5">
+                              <input type="file" class="custom-file-input" id="valid_id_two" name="file[valid_id_two]" accept="image/*" capture="camera">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                     </div>
                     
                   </div>

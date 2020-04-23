@@ -427,6 +427,66 @@ ul#horizontal, #horizontal ul  {
 #mak-id .mak-id-data .sub-data{position:absolute; bottom: 68px; left: 15px; }
 #mak-id .mak-id-data p strong{ color: #fff; }
 
+
+#emergency-id {
+	background: url('../images/emergencyidback.jpg'); 
+	background-size: 480px; 
+	background-repeat: no-repeat; 
+	width: 480px; 
+	height: 300px; 
+	position:fixed; 
+	z-index: 9999; 
+	left: 50%; 
+	top: 50%; 
+	margin-left: -240px; 
+	margin-top: -150px;
+	display: none;
+}
+#emergency-id .left-logo{ position:absolute; top: 15px; left: 10px;width: 380px;}
+#emergency-id .left-logo img {width: 50px;float: left;}
+#emergency-id .left-logo .txt {font-weight: bolder;font-size: 26px;font-family: "Arial Black";text-transform: uppercase;line-height: 21px;vertical-align: top;margin-left: 52px;display: block;}
+#emergency-id .left-logo .m {
+	color:#0b5a9c;    
+	text-shadow: 1px 0 #0b5a9c;
+	letter-spacing:1px;
+	display: block;
+}
+#emergency-id .left-logo .c {
+	color:#e93324;    
+	text-shadow: 1px 0 #e93324;
+	letter-spacing:1px;
+	display: block;
+}
+#emergency-id .left-logo .i {
+	font-weight: bold;
+    color: #171616;
+    text-decoration: none;
+    font-family: "HelveticaNeue-Medium", sans-serif;
+    font-size: 9px;
+    display: block;
+    margin-top: 1px;
+    padding-left: 2px;
+    transform: scale(1, 1.5);
+    -webkit-transform: scale(1, 1.5); 
+	  -moz-transform: scale(1, 1.5); 
+	  -ms-transform: scale(1, 1.5); 
+	  -o-transform: scale(1, 1.5); 
+}
+
+#emergency-id .right-logo{ position:absolute; top: 5px; right: 10px; width: 75px; text-align:center; color: #171616; font-size: 9px;}
+#emergency-id .profile-photo{  width: 70px; position:absolute; top: 117px; left: 10px;}
+#emergency-id .profile-photo img.avatar{border: 3px solid #171616; width: 70px;height: 70px}
+#emergency-id .qr-code{position:absolute; bottom: 70px; right: 20px;text-align: right;}
+#emergency-id .qr-code .qr-img {display: block; background: #ffffff;width: 50px;}
+#emergency-id .qr-code .qr-flag {margin-top: -8px;margin-bottom: -10px;margin-right: 2px;display: none}
+#emergency-id .mak-id-data {color: #171616;}
+#emergency-id .mak-id-data p{ font-size: 12px; }
+#emergency-id .mak-id-data .main-data{position:absolute; bottom: 110px; left: 85px; font-size: 18px; font-weight:bold; margin-bottom: 5px; display: inline-block; color: #171616;font-family: "Century Gothic", monospace;}
+#emergency-id .mak-id-data .sub-data{position:absolute; bottom: 75px; left: 15px; }
+#emergency-id .mak-id-data p strong{ color: #171616; }
+
+#emergency-id .redx-box{position:absolute; bottom: 137px; right: 20px;text-align: right;}
+
 /* line height */
 .lh-20{ line-height: 20px;}
 
