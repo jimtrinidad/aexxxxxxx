@@ -469,6 +469,18 @@ function user_account_details($id = false, $field = 'id', $publicData = true)
 		$accountData->PublicOffice = lookup_row('PublicOffices', $accountData->CityData->psgcCode, 'PSGC');
 	}
 
+	$accountData->organizationData = false;
+	if ($accountData->OrganizationID) {
+		$organizationData = $ci->mgovdb->getRowObject('Dept_ChildDepartment', $accountData->OrganizationID);
+		if ($organizationData) {
+			$accountData->organizationData = (object) array(
+				'Name'	=> $organizationData->Name,
+				'Code'	=> $organizationData->Code,
+				'Logo'	=> logo_filename($organizationData->Logo)
+			);
+		}
+	}
+
 	return $accountData;
 }
 

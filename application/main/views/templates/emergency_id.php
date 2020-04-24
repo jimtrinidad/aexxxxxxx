@@ -51,9 +51,11 @@
 			Organization: <strong class="text-bold"><?php echo ($accountInfo->OrganizationID ? lookup_db('Dept_ChildDepartment', 'Name', $accountInfo->OrganizationID) : 'n/a') ?></strong>
 		</p>
 	</div>
+	<?php if ($accountInfo->organizationData) { ?>
 	<div class="redx-box">
-		<img src="<?php echo public_url() . 'resources/images/redcross.png'; ?>" width="50" class="redx-img" />
+		<img src="<?php echo public_url(); ?>assets/logo/<?php echo $accountInfo->organizationData->Logo; ?>" width="50" class="redx-img" />
 	</div>
+	<?php } ?>
 	<div class="qr-code">
 		<!-- <img src="<?php echo public_url(); ?>resources/images/qr-code.png" width="75" /> -->
 		<img src="<?php echo public_url() . 'assets/qr/' . $accountInfo->QR ?>" width="75" class="qr-img" />

@@ -205,8 +205,8 @@
                   </div>
                   <div class="row padding-top-10">
                     <div class="col-md-12">
-                      <strong class="text-cyan">Please enter checked two valid government ID to be presented in your barangay to validate your registration.</strong>
-                      <div class="row">
+                      <strong class="text-cyan" style="color: cyan;">Please upload 2 Valid ID's to process your registration.</strong>
+                      <!-- <div class="row">
                         <div class="col-md-3 col-xs-6">
                           <div class="checkbox text-white">
                             <label class="text-white">
@@ -235,20 +235,22 @@
                             </label>
                           </div>
                         </div>
-                      </div>
+                      </div> -->
 
                       <div class="row">
                         <div class="col-xs-12 col-sm-6">
+                          <label class="text-white">Valid Government ID.</label>
                           <div class="input-group mb-3">
                             <div class="custom-file padding-5">
-                              <input type="file" class="custom-file-input" id="valid_id_one" name="file[valid_id_one]" accept="image/*">
+                              <input type="file" class="custom-file-input text-white" id="valid_id_one" name="file[valid_id_one]" accept="image/*">
                             </div>
                           </div>
                         </div>
                         <div class="col-xs-12 col-sm-6">
+                          <label class="text-white">Any Primary ID.</label>
                           <div class="input-group mb-3">
                             <div class="custom-file padding-5">
-                              <input type="file" class="custom-file-input" id="valid_id_two" name="file[valid_id_two]" accept="image/*">
+                              <input type="file" class="custom-file-input text-white" id="valid_id_two" name="file[valid_id_two]" accept="image/*">
                             </div>
                           </div>
                         </div>

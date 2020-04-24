@@ -280,7 +280,7 @@ class Account extends CI_Controller
                         'NationalZoneID'    => '',
                         'RegionalID'        => ($locInfo ? $locInfo->regCode : ''),
                         'ProvincialID'      => ($locInfo ? $locInfo->provCode : ''),
-                        'GovernmentID'      => json_encode($this->input->post('GovernmentID')),
+                        'GovernmentID'      => '',// json_encode($this->input->post('GovernmentID')),
                         'Uploads'           => json_encode($uploadData),
                         'Photo'             => (!empty($_FILES['avatarFile']['name']) ? $profile_filename : ''),
                         'RegistrationDate'   => date('Y-m-d H:i:s')
