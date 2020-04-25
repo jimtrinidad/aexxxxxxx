@@ -24,7 +24,10 @@
 			</div>
 
 			<div class=" text-white">
-				<p class="lh-20"><a class="btn btn-sm btn-warning text-bold open-emergency-id" href="javascript:;">Emergency ID</a></p>
+				<p class="lh-20">
+					<a class="btn btn-sm btn-info text-bold open-mak-id" href="javascript:;">Mabuhay ID</a>
+					<a class="btn btn-sm btn-warning text-bold open-emergency-id" href="javascript:;">Emergency ID</a>
+				</p>
 			</div>
 
 			<!-- Mak ID -->

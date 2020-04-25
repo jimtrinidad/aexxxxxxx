@@ -475,9 +475,9 @@ ul#horizontal, #horizontal ul  {
 
 #emergency-id .right-logo{ position:absolute; top: 5px; right: 10px; width: 75px; text-align:center; color: #171616; font-size: 9px;}
 #emergency-id .profile-photo{  width: 70px; position:absolute; top: 117px; left: 10px;}
-#emergency-id .profile-photo img.avatar{border: 3px solid #171616; width: 70px;height: 70px}
+#emergency-id .profile-photo img.avatar{border: 3px solid #e1dbe0; width: 70px;height: 70px}
 #emergency-id .qr-code{position:absolute; bottom: 70px; right: 20px;text-align: right;}
-#emergency-id .qr-code .qr-img {display: block; background: #ffffff;width: 50px;}
+#emergency-id .qr-code .qr-img {display: block; background: #ffffff;width: 65px;}
 #emergency-id .qr-code .qr-flag {margin-top: -8px;margin-bottom: -10px;margin-right: 2px;display: none}
 #emergency-id .mak-id-data {color: #171616;}
 #emergency-id .mak-id-data p{ font-size: 12px; }
@@ -485,7 +485,7 @@ ul#horizontal, #horizontal ul  {
 #emergency-id .mak-id-data .sub-data{position:absolute; bottom: 75px; left: 15px; }
 #emergency-id .mak-id-data p strong{ color: #171616; }
 
-#emergency-id .redx-box{position:absolute; bottom: 137px; right: 20px;text-align: right;}
+#emergency-id .redx-box{position:absolute; bottom: 140px; right: 27px;text-align: right;}
 
 /* line height */
 .lh-20{ line-height: 20px;}
