@@ -330,22 +330,28 @@ class Get extends CI_Controller
 
                 $filename = strtoupper(user_full_name($userData, 0) . ' - ' . lookup_db('Doc_Templates', 'Name', $doc->DocumentID));
 
-                $mpdf = new \Mpdf\Mpdf(array('format' => 'Letter', 'mode' => 'utf-8', 'margin_footer' => 2));
+                $options = lookup_mpdf_config($doc->DocumentID);
+                $mpdf = new \Mpdf\Mpdf($options);
 
                 $mpdf->SetWatermarkText('DRAFT');
                 $mpdf->showWatermarkText = true;
 
                 $content = str_replace("\xc2\xa0",'&nbsp;',$doc->DocumentDraft);
 
-                $mpdf->WriteHTML('<style>@page {margin: 30px;}</style>' . $content);
-                $mpdf->SetHTMLFooter('
+                // do not break page for id, and do not add footer
+                if (isset($options['autoPageBreak']) && $options['autoPageBreak'] == false) {
+                    $mpdf->autoPageBreak = false;
+                } else {
+                    $mpdf->SetHTMLFooter('
                         <table width="100%" style="font-size:8px;">
                             <tr>
                                 <td width="70%" align="left" valign="bottom">This is a system generated document. If you have any question, ask the nearest officer in your area.</td>
                                 <td width="30%" align="right"><img style="width:60px;height:60px;" src="'.$qrparams['savename'].'"></td>
                             </tr>
                         </table>');
+                }
 
+                $mpdf->WriteHTML($content);
                 
                 // overwrite html title
                 $mpdf->SetTitle($filename);
@@ -396,18 +402,25 @@ class Get extends CI_Controller
 
                 $filename = strtoupper(user_full_name($userData, 0) . ' - ' . lookup_db('Doc_Templates', 'Name', $doc->DocumentID));
 
-                $mpdf = new \Mpdf\Mpdf(array('format' => 'Letter', 'mode' => 'utf-8', 'margin_footer' => 2));
+                $options = lookup_mpdf_config($doc->DocumentID);
+                $mpdf = new \Mpdf\Mpdf($options);
 
                 $content = str_replace("\xc2\xa0",'&nbsp;',$doc->DocumentContent);
 
-                $mpdf->WriteHTML('<style>@page {margin: 30px;}</style>' . $content);
-                $mpdf->SetHTMLFooter('
-                        <table width="100%" style="font-size:8px;">
-                            <tr>
-                                <td width="70%" align="left" valign="bottom">This is a system generated document. If you have any question, ask the nearest officer in your area.</td>
-                                <td width="30%" align="right"><img style="width:60px;height:60px;" src="'.$qrparams['savename'].'"></td>
-                            </tr>
-                        </table>');
+                // do not break page for id, and do not add footer
+                if (isset($options['autoPageBreak']) && $options['autoPageBreak'] == false) {
+                    $mpdf->autoPageBreak = false;
+                } else {
+                    $mpdf->SetHTMLFooter('
+                            <table width="100%" style="font-size:8px;">
+                                <tr>
+                                    <td width="70%" align="left" valign="bottom">This is a system generated document. If you have any question, ask the nearest officer in your area.</td>
+                                    <td width="30%" align="right"><img style="width:60px;height:60px;" src="'.$qrparams['savename'].'"></td>
+                                </tr>
+                            </table>');
+                }
+
+                $mpdf->WriteHTML($content);
 
                 
                 // overwrite html title

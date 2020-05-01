@@ -482,3 +482,48 @@ function lookup_dbp_billers()
 
     return false;
 }
+
+
+
+/**
+* mpdf document page configuration
+*/
+function lookup_mpdf_config($document_id)
+{
+
+    $ci =& get_instance();
+    $docData = $ci->mgovdb->getRowObject('Doc_Templates', $document_id);
+
+    if ($docData) {
+        $options = array(
+            'mode'          => 'utf-8',
+            'orientation'   => $docData->Orientation,
+            'format'        => lookup('document_size', $docData->Size),
+            'margin_left'   => $docData->Margin,
+            'margin_right'  => $docData->Margin,
+            'margin_top'    => $docData->Margin,
+            'margin_bottom' => $docData->Margin,
+            'margin_header' => $docData->Margin,
+            'margin_footer' => $docData->Margin
+        );
+
+        // if document type is ID. do not break page
+        if ($docData->Type == 12) {
+            $options['autoPageBreak'] = false;
+        }
+
+    } else {
+        $options = array(
+            'mode'          => 'utf-8',
+            'format'        => 'Letter', 
+            'margin_left'   => 10,
+            'margin_right'  => 10,
+            'margin_top'    => 10,
+            'margin_bottom' => 10,
+            'margin_header' => 10,
+            'margin_footer' => 10
+        );            
+    }
+
+    return $options;
+}

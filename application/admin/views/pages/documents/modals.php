@@ -84,6 +84,43 @@
                   <span class="help-block hidden"></span>
                 </div>
               </div>
+              <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                  <label class="control-label" for="Size">Size <small>(in)</small></label>
+                  <select id="Size" name="Size" class="form-control">
+                    <?php
+                    foreach (lookup('document_size') as $k => $v) {
+                      echo "<option value='{$k}'>{$k}</option>";
+                    }
+                    ?>
+                  </select>
+                  <span class="help-block hidden"></span>
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                  <label class="control-label" for="Margin">Margin <small>(mm)</small></label>
+                  <select id="Margin" name="Margin" class="form-control">
+                    <option>0</option>
+                    <option>5</option>
+                    <option>10</option>
+                    <option>15</option>
+                    <option>20</option>
+                    <option>25</option>
+                  </select>
+                  <span class="help-block hidden"></span>
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label class="control-label" for="Orientation">Orientation</label>
+                  <select id="Orientation" name="Orientation" class="form-control">
+                    <option value="P">Portrait</option>
+                    <option value="L">Landscape</option>
+                  </select>
+                  <span class="help-block hidden"></span>
+                </div>
+              </div>
             </div>
           </div>
           <input type="hidden" id="id" name="id">

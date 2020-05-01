@@ -108,6 +108,13 @@ $config['document_validity'] = array(
 	6 => 'end of the current year',
 );
 
+$config['document_size'] = array(
+	'8x11'	=> array(215.9,279.4),
+	'8x13'	=> array(215.9,330.2),
+	'5x7'	=> array(127,177.8),
+	'2x3'	=> array(50.8,76.2)
+);
+
 
 $config['location_scope'] = array(
 	1 => 'National',

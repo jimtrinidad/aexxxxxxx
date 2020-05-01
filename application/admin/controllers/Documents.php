@@ -139,6 +139,7 @@ class Documents extends CI_Controller
                     $insertData['DateAdded'] = date('Y-m-d H:i:s');
                 }
 
+
                 if (($ID = $this->mgovdb->saveData('Doc_Templates', $insertData))) {
                     $return_data = array(
                         'status'    => true,
@@ -373,13 +374,21 @@ class Documents extends CI_Controller
             $content = get_post('template_html');
         }
 
+        $docData = $this->mgovdb->getRowObject('Doc_Templates', get_post('doc_id'), 'Code');
+
+        $options = lookup_mpdf_config(($docData->id ?? null));
+
         if ($content != '') {
 
             $filename = "Template Preview";
 
             if ($type == 'pdf') {
 
-                $mpdf = new \Mpdf\Mpdf(array('format' => 'Letter', 'mode' => 'utf-8'));
+                $mpdf = new \Mpdf\Mpdf($options);
+
+                if (isset($options['autoPageBreak']) && $options['autoPageBreak'] == false) {
+                    $mpdf->autoPageBreak = false;
+                }
 
                 $mpdf->SetWatermarkText('TEMPLATE');
                 $mpdf->showWatermarkText = true;

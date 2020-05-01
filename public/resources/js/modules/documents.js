@@ -128,6 +128,11 @@ function Documents() {
             $('#DocumentForm #Name').val(data.Name);
             $('#DocumentForm #Description').val(data.Description);
             $('#DocumentForm #Validity').val(data.Validity);
+
+            $('#DocumentForm #Size').val(data.Size);
+            $('#DocumentForm #Margin').val(data.Margin);
+            $('#DocumentForm #Orientation').val(data.Orientation);
+
             if (data.SubDepartment) {
                 $('#DocumentForm #DepartmentID').val(data.DepartmentID + '-' + data.SubDepartmentID);
             } else {
@@ -397,8 +402,9 @@ function Documents() {
     this.openTemplatePreview = function(type)
     {
         var templatehtml = tinyMCE.get('document_template').getContent();
+        var doc_id = $('#document-code').val();
         if (type == 'pdf_preview') {
-            $('<form action="'+window.base_url('documents/template_preview/pdf/')+'" method="post" target="_blank"><textarea name="template_html">'+templatehtml+'</textarea></form>').appendTo('body').submit().remove();
+            $('<form action="'+window.base_url('documents/template_preview/pdf/')+'" method="post" target="_blank"><input type="hidden" name="doc_id" value="'+doc_id+'"><textarea name="template_html">'+templatehtml+'</textarea></form>').appendTo('body').submit().remove();
         } else if (type == 'html_preview') {
             $('<form action="'+window.base_url('documents/template_preview/html/')+'" method="post" target="_blank"><textarea name="template_html">'+templatehtml+'</textarea></form>').appendTo('body').submit().remove();
         }
