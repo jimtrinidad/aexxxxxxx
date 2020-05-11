@@ -342,7 +342,7 @@ if (count($host_parts) > 0) {
 	}
 }
 defined('SUBDOMAIN') OR define('SUBDOMAIN', $subdomain);
-
+var_dump(SUBDOMAIN);
 
 /*
  * --------------------------------------------------------------------
