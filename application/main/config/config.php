@@ -32,7 +32,7 @@ if (SUBDOMAIN == 'localhost') {
 } else {
 	$config['base_url'] = 'https://mgov.cloud/';
 }
-
+echo $config['base_url'];
 /*
 |--------------------------------------------------------------------------
 | Index File
