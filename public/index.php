@@ -325,7 +325,7 @@ $allowed_subdomains = array(
 );
 
 $host_parts = explode('.', strtolower($_SERVER['HTTP_HOST']));
-if (count($host_parts) > 0) {
+if (count($host_parts) > 2) {
 	$sub_domain = $host_parts[0];
 	if (strlen($sub_domain) > 0) {
 		$found = false;
