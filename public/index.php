@@ -339,6 +339,9 @@ if (count($host_parts) > 0) {
 			$subdomain = $sub_domain;
 		}
 	}
+	if ($subdomain == false) {
+		header('Location: https://mgov.cloud/');
+	}
 }
 defined('SUBDOMAIN') OR define('SUBDOMAIN', $subdomain);
 
