@@ -346,6 +346,7 @@ if (count($host_parts) > 0) {
 
 		// redirect to root if subdomain is invalid
 		if ($found == false) {
+			var_dump($sub_domain);exit;
 			header('Location: https://mgov.cloud/');
 		}
 	}
