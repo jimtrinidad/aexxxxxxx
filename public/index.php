@@ -37,29 +37,6 @@
  * @filesource
  */
 
-/**
-* GET SUBDOMAIN THAT WILL BE USE ON DEFINING BASE URL
-*/
-$subdomain = false;
-$allowed_subdomains = array(
-	'davaocity',
-	'bk',
-	'dbp',
-	'caap',
-	'coa',
-	'cttmo',
-	'localhost'
-);
-
-$host_parts = explode('.', strtolower($_SERVER['HTTP_HOST']));
-if (count($host_parts) > 0) {
-	$sub_domain = $host_parts[0];
-	if (in_array($sub_domain, $allowed_subdomains)) {
-		$subdomain = $sub_domain;
-	}
-}
-defined('SUBDOMAIN') OR define('SUBDOMAIN', $subdomain);
-
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
@@ -328,6 +305,44 @@ switch (ENVIRONMENT)
 	}
 
 	define('VIEWPATH', $view_folder.DIRECTORY_SEPARATOR);
+
+
+
+// PREPARE SUBDOMAIN
+
+/**
+* GET SUBDOMAIN THAT WILL BE USE ON DEFINING BASE URL
+*/
+$subdomain = false;
+$allowed_subdomains = array(
+	'davaocity',
+	'bk',
+	'dbp',
+	'caap',
+	'coa',
+	'cttmo',
+	'localhost'
+);
+
+$host_parts = explode('.', strtolower($_SERVER['HTTP_HOST']));
+if (count($host_parts) > 0) {
+	$sub_domain = $host_parts[0];
+	echo $sub_domain;
+	if (in_array($sub_domain, $allowed_subdomains)) {
+		$subdomain = $sub_domain;
+	} else {
+		// check if subdomainwas setup on public offices
+		require_once APPPATH . 'config/database.php';
+		$db 	= $db['default'];
+		$conn 	= new mysqli($db['hostname'], $db['username'], $db['password'], $db['database']);
+		$result = $conn->query("SELECT id, Domain FROM PublicOffices WHERE Domain = '{$sub_domain}'");
+		if ($result->num_rows) {
+			$subdomain = $sub_domain;
+		}
+	}
+}
+defined('SUBDOMAIN') OR define('SUBDOMAIN', $subdomain);
+
 
 /*
  * --------------------------------------------------------------------

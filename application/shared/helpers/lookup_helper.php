@@ -444,7 +444,25 @@ function lookup_business_data($businessID, $include_seller_info = false)
     return false;
 }
 
+/**
+* find domain data from zone setup
+*/
+function lookup_domain($domain)
+{
+    $ci = &get_instance();
+    $record = $ci->mgovdb->getRowObject('PublicOffices', $domain, 'Domain');
+    if ($record) {
+        return (object) array(
+            'psgc'    => $record->PSGC,
+            'name'    => $record->Name,
+            'domain'  => $record->Domain,
+            'address' => $record->Address,
+            'id'      => $record->id
+        );
+    }
 
+    return false;
+}
 
 /**
 * DBP billers

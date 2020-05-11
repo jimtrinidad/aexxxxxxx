@@ -30,7 +30,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="Domain">Domain</label>
-                                            <input type="text" class="form-control" name="Domain" id="Domain" placeholder="Domain" value="<?php echo ($currentData ? $currentData->Domain : '')?>">
+                                            <input type="text" class="form-control" name="Domain" maxlength="30" id="Domain" placeholder="Domain" value="<?php echo ($currentData ? $currentData->Domain : '')?>">
                                         </div>
                                         <div class="form-group">
                                             <label for="Email">Email</label>

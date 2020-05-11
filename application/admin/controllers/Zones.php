@@ -365,28 +365,51 @@ class Zones extends CI_Controller
                         $updateData['PSGC'] = $zonepsgc;
                     }
 
-                    if (($ID = $this->mgovdb->saveData('PublicOffices', $updateData))) {
-                        $return_data = array(
-                            'status'    => true,
-                            'message'   => 'Public office setup has been saved successfully.',
-                            'id'        => $ID,
-                            'data'      => $updateData
-                        );
-
-                        // delete old logo if edited
-                        foreach ($this->todelete as $item) {
-                            @unlink(PUBLIC_DIRECTORY . 'assets/etc/' . $item);
+                    $domain_exists = false;
+                    if ($updateData['Domain']) {
+                        $domain_record = lookup_domain($updateData['Domain']);
+                        if ($domain_record !== false) {
+                            if ($publicOfficeData) {
+                                // if edit, ignore if same
+                                if ($domain_record->id != $publicOfficeData->id) {
+                                    $domain_exists = true;
+                                }
+                            } else {
+                                $domain_exists = true;
+                            }
                         }
+                    }
 
+                    if (!$domain_exists) {
+                        if (($ID = $this->mgovdb->saveData('PublicOffices', $updateData))) {
+                            $return_data = array(
+                                'status'    => true,
+                                'message'   => 'Public office setup has been saved successfully.',
+                                'id'        => $ID,
+                                'data'      => $updateData
+                            );
+
+                            // delete old logo if edited
+                            foreach ($this->todelete as $item) {
+                                @unlink(PUBLIC_DIRECTORY . 'assets/etc/' . $item);
+                            }
+
+                        } else {
+                            $return_data = array(
+                                'status'    => false,
+                                'message'   => 'Saving public office setup failed. Please try again.'
+                            );
+                            // delete uploaded
+                            foreach ($this->uploaded as $uploadedfile) {
+                                @unlink($uploadedfile);
+                            }
+                        }
                     } else {
                         $return_data = array(
                             'status'    => false,
-                            'message'   => 'Saving public office setup failed. Please try again.'
+                            'message'   => 'Domain name already exists.',
+                            'fields'     => array('Domain' => 'Please use a different subdomain name.')
                         );
-                        // delete uploaded
-                        foreach ($this->uploaded as $uploadedfile) {
-                            @unlink($uploadedfile);
-                        }
                     }
 
                 }
