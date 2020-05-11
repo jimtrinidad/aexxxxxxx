@@ -327,7 +327,6 @@ $allowed_subdomains = array(
 $host_parts = explode('.', strtolower($_SERVER['HTTP_HOST']));
 if (count($host_parts) > 0) {
 	$sub_domain = $host_parts[0];
-	echo $sub_domain;
 	if (in_array($sub_domain, $allowed_subdomains)) {
 		$subdomain = $sub_domain;
 	} else {
@@ -342,7 +341,6 @@ if (count($host_parts) > 0) {
 	}
 }
 defined('SUBDOMAIN') OR define('SUBDOMAIN', $subdomain);
-var_dump(SUBDOMAIN);
 
 /*
  * --------------------------------------------------------------------
