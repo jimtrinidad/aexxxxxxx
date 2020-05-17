@@ -9,7 +9,7 @@ class Livefeed extends CI_Controller
         parent::__construct();
 
         // require login
-        check_authentication();
+        // check_authentication();
     }
 
     public function index()

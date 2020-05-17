@@ -45,7 +45,7 @@
 $(document).ready(function(){
 
 	Mgovph.set_gov_report_province_selector('#gov_report_region_selector', function(){
-		$('#gov_report_province_selector').val('<?php echo $accountInfo->ProvincialID ?>').change();
+		$('#gov_report_province_selector').val('<?php echo $accountInfo->ProvincialID ?? '' ?>').change();
 	});
 
     /* load provinces

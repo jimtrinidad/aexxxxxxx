@@ -61,7 +61,7 @@ class Get extends CI_Controller
     public function feeds()
     {
         // require authentication
-        check_authentication();
+        // check_authentication();
 
         $where = array(
             'sa.Status = 2'
@@ -136,7 +136,7 @@ class Get extends CI_Controller
     {
 
         // require authentication
-        check_authentication();
+        // check_authentication();
 
         $accountData = user_account_details();
 
@@ -207,19 +207,19 @@ class Get extends CI_Controller
                 $clean_services = array();
                 foreach ($department_services as $department_service) {
                     if ($department_service['LocationScopeID'] == 6) {
-                        if ($department_service['LocationCode'] == $accountData->BarangayID) {
+                        if ($accountData && $department_service['LocationCode'] == $accountData->BarangayID) {
                             $clean_services[] = $department_service;
                         }
                     } else if ($department_service['LocationScopeID'] == 5 || $department_service['LocationScopeID'] == 4) {
-                        if ($department_service['LocationCode'] == $accountData->MunicipalityCityID) {
+                        if ($accountData && $department_service['LocationCode'] == $accountData->MunicipalityCityID) {
                             $clean_services[] = $department_service;
                         }
                     } else if ($department_service['LocationScopeID'] == 3) {
-                        if ($department_service['LocationCode'] == $accountData->ProvincialID) {
+                        if ($accountData && $department_service['LocationCode'] == $accountData->ProvincialID) {
                             $clean_services[] = $department_service;
                         }
                     } else if ($department_service['LocationScopeID'] == 2) {
-                        if ($department_service['LocationCode'] == $accountData->RegionalID) {
+                        if ($accountData && $department_service['LocationCode'] == $accountData->RegionalID) {
                             $clean_services[] = $department_service;
                         }
                     } else {

@@ -84,8 +84,12 @@
 	    </div>
 	    <!-- END FOOTER -->
 
-	    <?php view('templates/mabuhay_id'); ?>
-	    <?php view('snippets/chat'); ?>
+	    <?php
+	    if ($accountInfo) {
+	    	view('templates/mabuhay_id');	
+	    	view('snippets/chat');
+	    }
+	    ?>
 
 	</body>
 

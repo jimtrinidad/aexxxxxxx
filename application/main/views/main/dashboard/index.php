@@ -93,7 +93,7 @@
       <a href="<?php echo site_url('dashboard/services') ?>" style="text-decoration: none;">
       <div class="menu-img-box" style="background: #efeeee">
         <span class="helper"></span>
-        <img src="<?php echo public_url() . (file_exists(LOGO_DIRECTORY . $accountInfo->CityData->logo) ? 'assets/logo/' . $accountInfo->CityData->logo : 'resources/images/rp.png') ?>"/>
+        <img src="<?php echo public_url() . ($accountInfo && file_exists(LOGO_DIRECTORY . $accountInfo->CityData->logo) ? 'assets/logo/' . $accountInfo->CityData->logo : 'resources/images/rp.png') ?>"/>
       </div>
       <div class="menu-box-label">
         All Gov't Services

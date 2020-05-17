@@ -1,6 +1,7 @@
 function Utils() {
     // because this is overwritten on jquery events
     var self = this;
+    var urlParams;
 
     /**
      * Initialize events
@@ -18,6 +19,8 @@ function Utils() {
         if (sessionStorage.scrollTop != "undefined") {
             $(window).scrollTop(sessionStorage.scrollTop);
         }
+
+        urlParams = new URLSearchParams(window.location.search);
 
     },
 
@@ -233,6 +236,10 @@ function Utils() {
 
     this.numberWithCommas = function (x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    this.getUrlParams = function(key) {
+        return urlParams.get(key);
     }
 }
 

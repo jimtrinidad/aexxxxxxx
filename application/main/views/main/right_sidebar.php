@@ -7,7 +7,7 @@
     </p>
   </div>
   <?php 
-  if ($accountInfo->PublicOffice) {
+  if ($accountInfo && $accountInfo->PublicOffice) {
     $servants = json_decode($accountInfo->PublicOffice->PublicServants, true);
     $firstOfficer = reset($servants);
     if ($firstOfficer && $accountInfo->PublicOffice->Message) {
@@ -32,7 +32,9 @@
   <?php }} ?>
   <div class="col-md-12 top-gov-services offset-top-10 hide" id="trending-service-cont">
     <h2>COVID-19 UPDATES</h2>
-    <iframe class="embed-responsive-item" src="https://who.maps.arcgis.com/apps/opsdashboard/index.html#/31ba38ba24924aaeb940f15b5e95a1e6" style="min-height: 500px;width: 100%"></iframe>
+    <!-- <iframe class="embed-responsive-item" src="https://who.maps.arcgis.com/apps/opsdashboard/index.html#/31ba38ba24924aaeb940f15b5e95a1e6" style="min-height: 500px;width: 100%"></iframe> -->
+    <div class="bingwidget" data-type="covid19_stats" data-location-id="/Philippines" data-market="en-us" data-language="en-us"></div>
+    <script src="//www.bing.com/widget/bootstrap.answer.js" async=""></script>
   </div>
   <div class="col-md-12 top-gov-services offset-top-10 hide" id="trending-service-cont">
     <h2>Trending: TOP GOV SERVICES</h2>

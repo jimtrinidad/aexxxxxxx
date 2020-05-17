@@ -1,6 +1,6 @@
 <!-- Main Header -->
 <div class="wrapper padding-top-20 padding-bottom-20">
-  <?php if ($accountInfo->PublicOffice): ?>
+  <?php if ($accountInfo && $accountInfo->PublicOffice): ?>
     <div class="row">
       <div class="col-sm-6 logo-holder">
         <a href="<?php echo site_url()?>"><img style="width: 40%;margin-left: 10px;" src="<?php echo public_url(); ?>resources/images/mak-logo.png"/></a>
@@ -43,6 +43,7 @@
       </div>
       <div class="col-md-5 col-sm-6">
         <div class="row gutter-0">
+          <?php if ($accountInfo) { ?>
           <div class="mak-id col-sm-9 col-xs-8">
             <div class="col-md-4 hidden-xs hidden-sm text-right" style="padding: 0;"><span>Mabuhay ID</span></div>
             <div class="col-md-8 col-xs-12 text-left open-mak-id" style="cursor: pointer;padding: 0 0 0 10px;">
@@ -50,24 +51,32 @@
               <?php echo $accountInfo->MabuhayID; ?> <!--16-000-000-106--> 
             </div>
           </div>
+          <?php } else { ?>
+            <div class="col-sm-9 col-xs-8">
+              <a class="text-bold" href="<?php echo site_url('account/signin') ?>">Sign in</a> your account or
+              <a class="text-bold" href="<?php echo site_url('account/signup') ?>">Register</a>.
+            </div>
+          <?php } ?>
           <div class="col-sm-3 col-xs-4 mak-settings">
             <a href="<?php echo site_url() ?>"><i class="fa fa-university text-blue" aria-hidden="true"></i></a>
             <?php
-              if (in_array($accountInfo->AccountTypeID, array(2,3,4))) {
+              if ($accountInfo && in_array($accountInfo->AccountTypeID, array(2,3,4))) {
                 echo '<a class="text-bold" href="' . site_url('quickserve') .'">QS</a>';
               }
             ?>
             <?php
-              if (in_array($accountInfo->AccountTypeID, array(2,3,4)) && isset($accountInfo->OrganizationID) && in_array($accountInfo->OrganizationID, lookup('cttmo_organizations'))) {
+              if ($accountInfo && in_array($accountInfo->AccountTypeID, array(2,3,4)) && isset($accountInfo->OrganizationID) && in_array($accountInfo->OrganizationID, lookup('cttmo_organizations'))) {
                 echo '<a class="text-bold" href="' . site_url('cttmo/monthlyvreports') .'"><i class="fa fa-bar-chart text-blue" aria-hidden="true"></i></a>';
               }
-              if (in_array($accountInfo->AccountTypeID, array(2,3,4)) && isset($accountInfo->OrganizationID) && in_array($accountInfo->OrganizationID, lookup('coa_organizations'))) {
+              if ($accountInfo && in_array($accountInfo->AccountTypeID, array(2,3,4)) && isset($accountInfo->OrganizationID) && in_array($accountInfo->OrganizationID, lookup('coa_organizations'))) {
                 echo '<a class="text-bold" href="' . site_url('coa/report') .'"><i class="fa fa-bar-chart text-blue" aria-hidden="true"></i></a>';
               }
             ?>
             <!-- <a href="<?php echo site_url('statistics/govt_performance') ?>"><i class="fa fa-bar-chart text-blue" aria-hidden="true"></i></a> -->
             <!-- <i class="fa fa-wrench text-blue offset-right-5 hide" aria-hidden="true"></i> -->
-            <a href="<?php echo site_url('account/logout') ?>"><i class="fa fa-power-off text-blue" aria-hidden="true"></i></a>
+            <?php if ($accountInfo) { ?>
+              <a href="<?php echo site_url('account/logout') ?>"><i class="fa fa-power-off text-blue" aria-hidden="true"></i></a>
+            <?php } ?>
           </div>
         </div>
       </div>

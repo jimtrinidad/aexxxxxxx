@@ -46,6 +46,7 @@
 			            <div class="error_messages no-border-radius alert alert-danger small" role="alert"></div>
 			         </div>
 					
+					<?php if ($accountInfo) { ?>
 					<div class="post-items bg-white padding-10">
 						<h2 class="text-cyan text-bold offset-bottom-10">Application Form</h2>
 						<div class="row">
@@ -59,7 +60,7 @@
 													<td align="left" rowspan="3">
 														<img style="height: 80px;width: 80px;" src="<?php echo public_url(); ?>assets/profile/<?php echo $accountInfo->Photo ?>">
 													</td>
-													<th style="width:120px;">Mabuhay ID</th>
+													<th style="width:120px;">MGOV ID</th>
 													<td colspan="2" style="width:300px;"><?php echo $accountInfo->MabuhayID ?></td>
 													<td></td>
 												</tr>
@@ -117,18 +118,45 @@
 						</div>
 						
 					</div>
+					<?php } ?>
 					
+					<?php if ($accountInfo) { ?>
 					<div id="serviceAdditionalFieldsCont" style="font-size:12px;"></div>
 					
 					<div id="documentAdditionalFieldsCont" style="font-size:12px;"></div>
 					
 					<input type="hidden" id="ServiceCode" name="ServiceCode" value="">
+					<?php } else { ?>
+						<div class="post-items bg-orange padding-20">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="box text-center">
+										<p class="text-white text-bold">You'll have to login your account first to apply.</p>
+										<br>
+										<p>
+											<a class="btn btn-success sign_in_url">Signin</a>
+										</p>
+										<br>
+										<p class="text-white">or</p>
+										<br>
+										<p>
+											<a class="btn btn-info sign_up_url">Create a new account.</a>
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					<?php } ?>
 					
 				</div>
+				
 				<div class="modal-footer">
 					<button type="button" class="btn bg-cyan btn-sm text-white" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+					<?php if ($accountInfo) { ?>
 					<button type="submit" class="btn bg-green btn-sm text-white"><i class="fa fa-save"></i> Submit</button>
+					<?php } ?>
 				</div>
+				
 			</div>
 
 		</form>

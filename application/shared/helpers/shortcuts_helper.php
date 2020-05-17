@@ -453,35 +453,41 @@ function user_account_details($id = false, $field = 'id', $publicData = true)
 		$id = $ci->session->userdata('identifier');
 	}
 
-	$accountData = $ci->mgovdb->getUserAccount($id, $field);
-	$accountData->Photo = photo_filename($accountData->Photo);
-	$accountData->QR = get_qr_file($accountData->MabuhayID);
+	if ($id) {
 
-	$accountData->Businesses = false;
-	$business = $ci->db->select('id, Code')->from('Businesses')->where('OwnerID', $id)->get()->row_array();
-	if ($business && count($business)) {
-		$accountData->Businesses = $business;
-	}
+		$accountData = $ci->mgovdb->getUserAccount($id, $field);
+		$accountData->Photo = photo_filename($accountData->Photo);
+		$accountData->QR = get_qr_file($accountData->MabuhayID);
 
-	if ($publicData) {
-		// get public office data base on user city
-		$accountData->CityData = lookup_row('UtilLocCityMun', $accountData->MunicipalityCityID, 'citymunCode');
-		$accountData->PublicOffice = lookup_row('PublicOffices', $accountData->CityData->psgcCode, 'PSGC');
-	}
-
-	$accountData->organizationData = false;
-	if ($accountData->OrganizationID) {
-		$organizationData = $ci->mgovdb->getRowObject('Dept_ChildDepartment', $accountData->OrganizationID);
-		if ($organizationData) {
-			$accountData->organizationData = (object) array(
-				'Name'	=> $organizationData->Name,
-				'Code'	=> $organizationData->Code,
-				'Logo'	=> logo_filename($organizationData->Logo)
-			);
+		$accountData->Businesses = false;
+		$business = $ci->db->select('id, Code')->from('Businesses')->where('OwnerID', $id)->get()->row_array();
+		if ($business && count($business)) {
+			$accountData->Businesses = $business;
 		}
+
+		if ($publicData) {
+			// get public office data base on user city
+			$accountData->CityData = lookup_row('UtilLocCityMun', $accountData->MunicipalityCityID, 'citymunCode');
+			$accountData->PublicOffice = lookup_row('PublicOffices', $accountData->CityData->psgcCode, 'PSGC');
+		}
+
+		$accountData->organizationData = false;
+		if ($accountData->OrganizationID) {
+			$organizationData = $ci->mgovdb->getRowObject('Dept_ChildDepartment', $accountData->OrganizationID);
+			if ($organizationData) {
+				$accountData->organizationData = (object) array(
+					'Name'	=> $organizationData->Name,
+					'Code'	=> $organizationData->Code,
+					'Logo'	=> logo_filename($organizationData->Logo)
+				);
+			}
+		}
+
+		return $accountData;
+
 	}
 
-	return $accountData;
+	return false;
 }
 
 function photo_filename($filename)

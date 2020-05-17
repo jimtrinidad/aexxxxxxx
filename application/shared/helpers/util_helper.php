@@ -39,6 +39,13 @@ function current_method()
     return $ci->router->fetch_method();
 }
 
+function get_current_url()
+{
+    $CI =& get_instance();
+    $url = $CI->config->site_url($CI->uri->uri_string());
+    return $_SERVER['QUERY_STRING'] ? $url.'?'.$_SERVER['QUERY_STRING'] : $url;
+}
+
 function is_current_url($controller, $method = false)
 {
     if (current_controller() != $controller) {

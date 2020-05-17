@@ -13,7 +13,6 @@ function Mgovph() {
      */
     this._init = function() 
     {
-
         self.set_events();
         self.set_configs();
         self.load_govt_ranking();
@@ -771,6 +770,9 @@ function Mgovph() {
             } else {
                 $('#serviceApplicationModal #documentAdditionalFieldsCont').html('');
             }
+
+            $('#ServiceApplicationForm').find('.sign_in_url').attr('href', window.base_url('account/signin/?s=' + v.Code));
+            $('#ServiceApplicationForm').find('.sign_up_url').attr('href', window.base_url('account/signup/?s=' + v.Code));
 
             //clean error box
             $('#ServiceApplicationForm').find('#error_message_box .error_messages').html('');

@@ -9,7 +9,7 @@ class Services extends CI_Controller
         parent::__construct();
 
         // require login
-        check_authentication();
+        // check_authentication();
 
         $this->load->model('servicesdb');
     }
@@ -36,6 +36,7 @@ class Services extends CI_Controller
         if ($service) {
             $serviceData = prepare_service_data($service, true);
 
+            $serviceData['hasPending'] = 0;
             // check if there's an existing application
             // check if no active application
             // $pending_application = lookup_all('Service_Applications', array(
@@ -43,35 +44,36 @@ class Services extends CI_Controller
             //     'ApplicantID'   => current_user(),
             //     'Status'        => 0
             // ));
-            $pending_application = $this->db->where('ServiceID', $service->id)
-                                            ->where('ApplicantID', current_user())
-                                            ->where_in('Status', array(0,1))
-                                            ->get('Service_Applications')
-                                            ->result_array();
 
-            if (count($pending_application)) {
-                $serviceData['hasPending'] = 1;
+            if (current_user()) {
+                $pending_application = $this->db->where('ServiceID', $service->id)
+                                                ->where('ApplicantID', current_user())
+                                                ->where_in('Status', array(0,1))
+                                                ->get('Service_Applications')
+                                                ->result_array();
 
-                $pending_application = $pending_application[0];
-                // get requirement status
-                $application_requirements = lookup_all('Service_Application_Requirements', array(
-                    'ServiceID'     => $service->id,
-                    'ApplicationID' => $pending_application['id'],
-                    'ApplicantID'   => current_user()
-                ), 'id', false);
-                foreach ($application_requirements as $application_requirement)
-                {
-                    foreach ($serviceData['Requirements'] as &$service_requirement) {
-                        if ($application_requirement['RequirementID'] == $service_requirement->id) {
-                            $service_requirement->status        = lookup('service_application_status', $application_requirement['Status']);
-                            $service_requirement->last_updated  = date('Y-m-d', strtotime(($application_requirement['LastUpdate'] ? $application_requirement['LastUpdate'] : $application_requirement['DateApplied'])));
-                            $service_requirement->app_req       = $application_requirement['Code'];
-                            continue 1;
+                if (count($pending_application)) {
+                    $serviceData['hasPending'] = 1;
+
+                    $pending_application = $pending_application[0];
+                    // get requirement status
+                    $application_requirements = lookup_all('Service_Application_Requirements', array(
+                        'ServiceID'     => $service->id,
+                        'ApplicationID' => $pending_application['id'],
+                        'ApplicantID'   => current_user()
+                    ), 'id', false);
+                    foreach ($application_requirements as $application_requirement)
+                    {
+                        foreach ($serviceData['Requirements'] as &$service_requirement) {
+                            if ($application_requirement['RequirementID'] == $service_requirement->id) {
+                                $service_requirement->status        = lookup('service_application_status', $application_requirement['Status']);
+                                $service_requirement->last_updated  = date('Y-m-d', strtotime(($application_requirement['LastUpdate'] ? $application_requirement['LastUpdate'] : $application_requirement['DateApplied'])));
+                                $service_requirement->app_req       = $application_requirement['Code'];
+                                continue 1;
+                            }
                         }
                     }
                 }
-            } else {
-                $serviceData['hasPending'] = 0;
             }
 
             $serviceData['serviceProvided'] = get_department_service_provided($serviceData['DepartmentID']);
@@ -93,6 +95,9 @@ class Services extends CI_Controller
 
     public function save_application()
     {   
+
+        check_authentication();
+        
         $sCode    = get_post('ServiceCode');
         $service = $this->mgovdb->getRowObject('Service_Services', $sCode, 'Code');
         if ($service) {
