@@ -33,7 +33,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-loading-overlay/2.1.6/loadingoverlay.min.js"></script>
-	<script type="text/javascript" src="<?php echo public_url(); ?>resources/js/modules/utils.js"></script>
+	<script type="text/javascript" src="<?php echo public_url(); ?>resources/js/modules/utils.js?<?php echo time()?>"></script>
 	<script type="text/javascript" src="<?php echo public_url(); ?>resources/js/modules/account.js?<?php echo time()?>"></script>
 
 	<script type="text/javascript">
