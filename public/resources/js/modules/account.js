@@ -151,7 +151,7 @@ function Account() {
 
         $('.modal-content').LoadingOverlay("show", {
             background              : "rgba(255, 255, 255, 0.7)"
-        })
+        });
 
         var formData = new FormData(e);
         
@@ -200,10 +200,11 @@ function Account() {
 
                     $('#RegistrationForm #error_message_box .error_messages').html(errors);
                     $('#RegistrationForm #error_message_box').removeClass('hide');
+
+                    $('.modal-content').LoadingOverlay("hide");
                 }
             },
             complete: function() {
-                $('.modal-content').LoadingOverlay("hide");
                 $(e).data('running', false);
             },
             cache: false,
