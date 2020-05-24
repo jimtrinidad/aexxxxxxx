@@ -266,6 +266,6 @@
   <?php view('snippets/service-item'); ?>
 </div>
 
-<?php //view('modals/service-application'); ?>
+<?php view('modals/service-application'); ?>
 
 <?php view('main/wallet/modal'); ?>
