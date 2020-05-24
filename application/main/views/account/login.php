@@ -21,7 +21,7 @@
 									// echo '<img src="' . public_url() . 'resources/images/davaocity-logo.png" class="img-responsive" />';
 								} else {
 									echo '<p class="text-muted text-center">';
-										echo '<img src="' . public_url() . 'resources/images/mak-logo.png" class="img-responsive" />';
+										echo '<a href="'. site_url() .'"><img src="' . public_url() . 'resources/images/mak-logo.png" class="img-responsive" /></a>';
 									echo '<p>';
 								}
 								?>

@@ -150,7 +150,7 @@ function Account() {
         $(e).data('running', true);
 
         $('.modal-content').LoadingOverlay("show", {
-            background              : "rgba(255, 255, 255, 0.1)"
+            background              : "rgba(255, 255, 255, 0.7)"
         })
 
         var formData = new FormData(e);
@@ -170,15 +170,22 @@ function Account() {
             data: formData,
             success: function (response) {
                 if (response.status) {
-                    $('#error_message_box').addClass('hide');
-                    bootbox.alert(response.message, function(){
-                        window.location = window.base_url('account/signin'); 
-                    });
+                    $('#RegistrationForm #error_message_box').addClass('hide');
+
+                    if (response.service) {
+                        // applied from service form
+                        // open service application after registration
+                        window.location = window.base_url('services/?v=' + response.service + '&n=1'); 
+                    } else {
+                        bootbox.alert(response.message, function(){
+                            window.location = window.base_url('account/signin'); 
+                        });
+                    }
                 } else {
                     // bootbox.alert(response.message);
                     var errors = '';
                     $.each(response.fields, function(i,e){
-                        $('#'+i+',.'+i).prop('title', e).closest('div').addClass('has-error').find('label').removeClass('text-white').addClass('text-danger');
+                        $('#RegistrationForm  #'+i+',.'+i).prop('title', e).closest('div').addClass('has-error').find('label').removeClass('text-white').addClass('text-danger');
                         Utils.popover($('#'+i+',.'+i), {
                             t: 'hover',
                             p: 'top',
@@ -191,8 +198,8 @@ function Account() {
                        errors += '<p>' + response.message + '</p>'; 
                     }
 
-                    $('#error_message_box .error_messages').html(errors);
-                    $('#error_message_box').removeClass('hide');
+                    $('#RegistrationForm #error_message_box .error_messages').html(errors);
+                    $('#RegistrationForm #error_message_box').removeClass('hide');
                 }
             },
             complete: function() {

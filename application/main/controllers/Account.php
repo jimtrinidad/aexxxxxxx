@@ -110,6 +110,8 @@ class Account extends CI_Controller
             redirect();
         }
 
+        $this->session->unset_userdata('temporary_user_id');
+
         $viewData = array(
             'pageTitle' => 'Sign in',
         );
@@ -126,7 +128,7 @@ class Account extends CI_Controller
         if (!isGuest()) {
             redirect();
         }
-
+        
         $username = $this->input->post('username');
         $password = $this->input->post('password');
 
@@ -190,11 +192,34 @@ class Account extends CI_Controller
             redirect();
         }
 
+        // testing
+        // $ID = 66;
+        // $mabuhayID = 'TRINIDAD617773';
+        // $service = false;
+        // if (isset($_POST['ServiceCode']) && $_POST['ServiceCode'] != '') {
+        //     // Registration was requested upon service application, do not auto login user, but store id for service application
+        //     $this->session->set_userdata(array(
+        //         'temporary_user_id' => $ID,
+        //         'temporary_mid'     => $mabuhayID
+        //     ));
+        //     $service = $_POST['ServiceCode'];
+        // }
+
+        // $return_data = array(
+        //     'status'    => true,
+        //     'message'   => 'Account registration successful. You will received an email upon approval with your Mabuhay ID and Password.',
+        //     'id'        => $ID,
+        //     'service'   => $service
+        // );
+        // response_json($return_data);
+        // return;
+
     	if (validate('account_registration') == FALSE) {
             $return_data = array(
             	'status'	=> false,
             	'message'	=> 'Some fields have errors.',
-            	'fields'	=> validation_error_array()
+            	'fields'	=> validation_error_array(),
+                'data'      => $_POST
             );
         } else {
 
@@ -297,10 +322,22 @@ class Account extends CI_Controller
                     if ($this->mgovdb->getRowObject('UserAccountInformation', $mabuhayID, 'MabuhayID') === false) {
 
                         if (($ID = $this->mgovdb->saveData('UserAccountInformation', $insertData))) {
+
+                            $service = false;
+                            if (isset($_POST['ServiceCode']) && $_POST['ServiceCode'] != '') {
+                                // Registration was requested upon service application, do not auto login user, but store id for service application
+                                $this->session->set_userdata(array(
+                                    'temporary_user_id' => $ID,
+                                    'temporary_mid'     => $mabuhayID
+                                ));
+                                $service = $_POST['ServiceCode'];
+                            }
+
                             $return_data = array(
                                 'status'    => true,
                                 'message'   => 'Account registration successful. You will received an email upon approval with your Mabuhay ID and Password.',
-                                'id'        => $ID
+                                'id'        => $ID,
+                                'service'   => $service
                             );
                         } else {
                             $return_data = array(
@@ -458,6 +495,8 @@ class Account extends CI_Controller
      */
     public function logout()
     {
+        // Remove userdata
+        $this->session->unset_userdata('temporary_user_id');
         $this->authentication->logout();
         redirect();
     }

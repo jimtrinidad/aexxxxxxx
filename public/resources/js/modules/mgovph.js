@@ -13,6 +13,13 @@ function Mgovph() {
      */
     this._init = function() 
     {
+
+        if (Utils.getUrlParams('v') && Utils.getUrlParams('n') == 1) {
+            $('body').LoadingOverlay("show", {
+                background              : "rgba(255, 255, 255, 0.8)"
+            });
+        }
+    
         self.set_events();
         self.set_configs();
         self.load_govt_ranking();
@@ -614,8 +621,10 @@ function Mgovph() {
 
                     self.moveSidebar();
 
-                    // auto trigger apply, teporary!!!
-                    // self.openServiceApplication(serviceTemplate.find('button'));
+                    // auto trigger apply
+                    if (Utils.getUrlParams('n')) {
+                        self.openServiceApplication(serviceTemplate.find('button'));
+                    }
                 }
             },
             complete: function() {
@@ -771,19 +780,25 @@ function Mgovph() {
                 $('#serviceApplicationModal #documentAdditionalFieldsCont').html('');
             }
 
-            $('#ServiceApplicationForm').find('.sign_in_url').attr('href', window.base_url('account/signin/?s=' + v.Code));
+            $('#serviceApplicationModal').find('.sign_in_url').attr('href', window.base_url('account/signin/?s=' + v.Code));
             $('#ServiceApplicationForm').find('.sign_up_url').attr('href', window.base_url('account/signup/?s=' + v.Code));
 
             //clean error box
-            $('#ServiceApplicationForm').find('#error_message_box .error_messages').html('');
-            $('#ServiceApplicationForm').find('#error_message_box').addClass('hide');
+            $('#serviceApplicationModal').find('#error_message_box .error_messages').html('');
+            $('#serviceApplicationModal').find('#error_message_box').addClass('hide');
 
-            $('#ServiceApplicationForm #ServiceCode').val(v.Code);
+            $('#serviceApplicationModal #ServiceCode').val(v.Code);
 
             $('#serviceApplicationModal').modal({
                 backdrop : 'static',
                 keyboard : false
-            });
+            }).on('shown.bs.modal', function (e) {
+                if (typeof Account != 'undefined') {
+                    Account.showhide_registration_elem();
+                }
+
+                $('body').LoadingOverlay("hide");
+            })
         }
     }
 
@@ -835,8 +850,9 @@ function Mgovph() {
                         size: null,
                         message: msgtpl, 
                         callback: function() {
-                            self.openServiceDetails('<div data-code="'+$(form).find('#ServiceCode').val()+'"></div>');
-                            $('#serviceApplicationModal').modal('hide');
+                            // self.openServiceDetails('<div data-code="'+$(form).find('#ServiceCode').val()+'"></div>');
+                            // $('#serviceApplicationModal').modal('hide');
+                            window.location = window.base_url('services/?v=' + $('#serviceApplicationModal #ServiceCode').val()); 
                         }
                     });
                 } else {

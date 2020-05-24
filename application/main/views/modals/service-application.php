@@ -1,6 +1,10 @@
-<div class="modal fade" id="serviceApplicationModal" tabindex="-1" role="dialog" aria-labelledby="serviceApplicationModal">
+<style type="text/css">
+	#serviceApplicationModal .text-white {
+		color: #aaa;
+	}
+</style>
+<div class="modal fade" id="serviceApplicationModal" role="dialog" aria-labelledby="serviceApplicationModal">
 	<div class="modal-dialog modal-lg">
-		<form id="ServiceApplicationForm" name="ServiceApplicationForm" action="<?php echo site_url('services/save_application') ?>" enctype="multipart/form-data">
 			<div class="modal-content" id="modal-content">
 				<div class="modal-header bg-cyan text-white">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -41,124 +45,358 @@
 					</div>
 					<!-- Post Items End-->
 
-					<div id="error_message_box" class="hide row small" style="margin-bottom: -10px;margin-top: -10px;">
-			            <br>
-			            <div class="error_messages no-border-radius alert alert-danger small" role="alert"></div>
-			         </div>
-					
-					<?php if ($accountInfo) { ?>
-					<div class="post-items bg-white padding-10">
-						<h2 class="text-cyan text-bold offset-bottom-10">Application Form</h2>
-						<div class="row">
-							<div class="col-xs-12">
-								<div class="box">
-									<!-- /.box-header -->
-									<div class="box-body table-responsive no-padding">
-										<table class="table" style="font-size:12px;">
-											<thead>
-												<tr>
-													<td align="left" rowspan="3">
-														<img style="height: 80px;width: 80px;" src="<?php echo public_url(); ?>assets/profile/<?php echo $accountInfo->Photo ?>">
-													</td>
-													<th style="width:120px;">MGOV ID</th>
-													<td colspan="2" style="width:300px;"><?php echo $accountInfo->MabuhayID ?></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th>Name</th>
-													<td colspan="2"><?php echo user_full_name($accountInfo, false); ?></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th>Birth Date</th>
-													<td colspan="2"><?php echo $accountInfo->BirthDate ?></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th>Civil Status</th>
-													<td>:</td>
-													<td><?php echo lookup('marital_status', $accountInfo->MaritalStatusID) ?></td>
-													<th>Gender</th>
-													<td>:</td>
-													<td><?php echo lookup('gender', $accountInfo->GenderID) ?></td>
-												</tr>
-												<tr>
-													<th>Email Address</th>
-													<td>:</td>
-													<td><?php echo $accountInfo->EmailAddress ?></td>
-													<th>Contact Number</th>
-													<td>:</td>
-													<td><?php echo $accountInfo->ContactNumber ?></td>
-												</tr>
-												<tr>
-													<th>Educational&nbsp;Attainment</th>
-													<td>:</td>
-													<td><?php echo lookup('education', $accountInfo->EducationalAttainmentID) ?></td>
-													<th>Nature&nbsp;of&nbsp;Livelihood</th>
-													<td>:</td>
-													<td><?php echo lookup('livelihood', $accountInfo->LivelihoodStatusID) ?></td>
-												</tr>
-												<tr>    
-													<th>Address</th>
-													<td style="border-bottom: 1px solid #ddd;">:</td>
-													<td style="border-bottom: 1px solid #ddd;" colspan="4">
-														<?php echo ucwords(strtolower(user_full_address($accountInfo, true))); ?>
-													</td>
-												</tr>
-												
-											</thead>
-										</table>
+					<div id="ServiceApplicationContainer" class="post-items <?php echo $accountInfo || $tmpUser ? '' : 'hide' ?>">
+						<form id="ServiceApplicationForm" name="ServiceApplicationForm" action="<?php echo site_url('services/save_application') ?>" enctype="multipart/form-data">
+							<div class="post-items bg-white padding-10">
+								<h2 class="text-cyan text-bold offset-bottom-10">Application Form</h2>
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="box">
+											<!-- /.box-header -->
+											<div class="box-body table-responsive no-padding">
+												<table class="table" style="font-size:12px;">
+													<thead>
+														<tr>
+															<td align="left" rowspan="3">
+																<img class="s_info_photo" style="height: 80px;width: 80px;" src="<?php echo $applicantData->profile ?? 'avatar_default.jpg' ?>">
+															</td>
+															<th style="width:120px;">MGOV ID</th>
+															<td colspan="2" class="s_info_mid" style="width:300px;"><?php echo $applicantData->mid ?? '' ?></td>
+															<td></td>
+														</tr>
+														<tr>
+															<th>Name</th>
+															<td colspan="2" class="s_info_name"><?php echo $applicantData->name ?? ''; ?></td>
+															<td></td>
+															<td></td>
+														</tr>
+														<tr>
+															<th>Birth Date</th>
+															<td colspan="2" class="s_info_bday"><?php echo $applicantData->birthday ?? '' ?></td>
+															<td></td>
+															<td></td>
+														</tr>
+														<tr>
+															<th>Civil Status</th>
+															<td>:</td>
+															<td class="s_info_civil"><?php echo $applicantData->martial ?? '' ?></td>
+															<th>Gender</th>
+															<td>:</td>
+															<td class="s_info_gender"><?php echo $applicantData->gender ?? '' ?></td>
+														</tr>
+														<tr>
+															<th>Email Address</th>
+															<td>:</td>
+															<td class="s_info_email"><?php echo $applicantData->email ?? '' ?></td>
+															<th>Contact Number</th>
+															<td>:</td>
+															<td class="s_info_contact"><?php echo $applicantData->contact ?? '' ?></td>
+														</tr>
+														<tr>
+															<th>Educational&nbsp;Attainment</th>
+															<td>:</td>
+															<td class="s_info_education"><?php echo $applicantData->education?? '' ?></td>
+															<th>Nature&nbsp;of&nbsp;Livelihood</th>
+															<td>:</td>
+															<td class="s_info_livelihood"><?php echo $applicantData->livelihood ?? '' ?></td>
+														</tr>
+														<tr>    
+															<th>Address</th>
+															<td style="border-bottom: 1px solid #ddd;">:</td>
+															<td style="border-bottom: 1px solid #ddd;" colspan="4" class="s_info_address">
+																<?php echo $applicantData->address ?? '' ?>
+															</td>
+														</tr>
+														
+													</thead>
+												</table>
+											</div>
+											<!-- /.box-body -->
+										</div>
+										<!-- /.box -->
 									</div>
-									<!-- /.box-body -->
 								</div>
-								<!-- /.box -->
+								
 							</div>
-						</div>
-						
+
+							<div id="error_message_box" class="hide row small" style="margin-bottom: -10px;margin-top: -10px;">
+					            <br>
+					            <div class="error_messages no-border-radius alert alert-danger small" role="alert"></div>
+					         </div>
+
+							<div id="serviceAdditionalFieldsCont" style="font-size:12px;"></div>
+							
+							<div id="documentAdditionalFieldsCont" style="font-size:12px;"></div>
+							
+							<input type="hidden" id="ServiceCode" name="ServiceCode" value="">
+							<input type="hidden" id="MID" name="MID" value="<?php echo $applicantData->mid ?? '' ?>">
+							
+							<div class="modal-footer padding-bottom-5">
+								<button type="button" class="btn btn-warning btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+								<button type="submit" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Submit</button>
+							</div>
+						</form>
 					</div>
-					<?php } ?>
-					
-					<?php if ($accountInfo) { ?>
-					<div id="serviceAdditionalFieldsCont" style="font-size:12px;"></div>
-					
-					<div id="documentAdditionalFieldsCont" style="font-size:12px;"></div>
-					
-					<input type="hidden" id="ServiceCode" name="ServiceCode" value="">
-					<?php } else { ?>
-						<div class="post-items bg-orange padding-20">
+					<?php if (!$accountInfo && !$tmpUser) { ?>
+						<div class="post-items bg-white padding-20" id="ServiceRegistrationContainer">
 							<div class="row">
 								<div class="col-xs-12">
 									<div class="box text-center">
-										<p class="text-white text-bold">You'll have to login your account first to apply.</p>
+										<p class="text-orange text-bold">You'll have to login your account first to apply.</p>
 										<br>
 										<p>
 											<a class="btn btn-success sign_in_url">Signin</a>
 										</p>
 										<br>
-										<p class="text-white">or</p>
+										<p class="text-orange">or fill up registration form</p>
 										<br>
 										<p>
-											<a class="btn btn-info sign_up_url">Create a new account.</a>
+											<!-- <a class="btn btn-info sign_up_url">Create a new account.</a> -->
+											<form id="RegistrationForm" action="<?php echo site_url('account/register') ?>" enctype="multipart/form-data" >
+							                  <div class="row gutter-5 padding-top-10">
+
+								                  <div id="error_message_box" class="hide row margin-top-20">
+								                    <br>
+								                    <div class="error_messages alert alert-danger" role="alert"></div>
+								                  </div>
+
+								                <input type="hidden" id="RegistrationID" name="RegistrationID" class="form-control" value="<?php echo microsecID(); ?>">
+
+							                    <div class="col-md-3 col-md-push-9 col-xs-6 col-xs-push-6">
+							                      <div class="image-upload-container padding-top-20">
+							                        <img class="image-preview" src="<?php echo public_url(); ?>assets/profile/avatar_default.jpg" alt="...">
+							                        <span class="hiddenFileInput hide">
+							                          <input type="file" accept="image/*" capture="camera" class="image-upload-input" id="avatarFile" name="avatarFile"/>
+							                        </span>
+							                      </div>
+							                    </div>
+
+							                    <div class="col-md-9 col-md-pull-3 col-xs-6 col-xs-pull-6">
+							                        <div class="row gutter-5">
+							                          <div class="col-md-4 col-xs-12">
+							                            <label class="text-white padding-bottom-5">First Name</label>
+							                            <input type="text" id="FirstName" name="FirstName" class="form-control" placeholder="">
+							                          </div>
+							                          <div class="col-md-4 col-xs-12">
+							                            <label class="text-white padding-bottom-5">Middle Name</label>
+							                            <input type="text" id="MiddleName" name="MiddleName" class="form-control has-error" placeholder="">
+							                          </div>
+							                          <div class="col-md-4 col-xs-12">
+							                            <label class="text-white padding-bottom-5">Last Name</label>
+							                            <input type="text" id="LastName" name="LastName" class="form-control" placeholder="">
+							                          </div>
+							                        </div>
+
+							                        <div class="row gutter-5 hidden-xs hidden-sm showonmd">
+
+							                          <div class="col-md-4 col-xs-6">
+							                            <label class="text-white padding-bottom-5">Gender</label>
+							                            <select id="GenderID" name="GenderID" class="form-control GenderID">
+							                              <option value="">--</option>
+							                              <?php
+							                                foreach (lookup('gender') as $k => $v) {
+							                                  echo "<option value='{$k}'>{$v}</option>";
+							                                }
+							                              ?>
+							                            </select>
+							                          </div>
+
+							                          <div class="col-md-4 col-xs-6">
+							                            <label class="text-white padding-bottom-5">Birth Date</label>
+							                            <input type="text" autocomplete="off" id="BirthDate" name="BirthDate" class="form-control BirthDate" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask>
+							                          </div>
+
+							                          <div class="col-md-4 col-xs-6">
+							                            <label class="text-white padding-bottom-5">Contact Number</label>
+							                            <input type="text" id="ContactNumber" name="ContactNumber" class="form-control ContactNumber" placeholder="">
+							                          </div>
+
+							                          <div class="col-md-12 col-xs-6">
+							                            <label class="text-white padding-bottom-5">Email Address</label>
+							                            <input type="text" id="EmailAddress" name="EmailAddress" class="form-control EmailAddress" placeholder="">
+							                          </div>
+
+							                        </div>
+
+							                    </div>
+
+							                  </div>
+
+							                  <div class="row gutter-5 hidden-md hidden-lg">
+							                    <div class="col-md-9 col-xs-12">
+							                        <div class="row gutter-5 showonsm">
+
+							                          <div class="col-md-4 col-xs-6">
+							                            <label class="text-white padding-bottom-5">Gender</label>
+							                            <select id="GenderID" name="GenderID" class="form-control GenderID">
+							                              <option value="">--</option>
+							                              <?php
+							                                foreach (lookup('gender') as $k => $v) {
+							                                  echo "<option value='{$k}'>{$v}</option>";
+							                                }
+							                              ?>
+							                            </select>
+							                          </div>
+
+							                          <div class="col-md-4 col-xs-6">
+							                            <label class="text-white padding-bottom-5">Birth Date</label>
+							                            <input type="text" autocomplete="off" id="BirthDate" name="BirthDate" class="form-control BirthDate" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask>
+							                          </div>
+
+							                          <div class="col-md-4 col-xs-6">
+							                            <label class="text-white padding-bottom-5">Contact Number</label>
+							                            <input type="text" id="ContactNumber" name="ContactNumber" class="form-control ContactNumber" placeholder="">
+							                          </div>
+
+							                          <div class="col-md-12 col-xs-6">
+							                            <label class="text-white padding-bottom-5">Email Address</label>
+							                            <input type="text" id="EmailAddress" name="EmailAddress" class="form-control EmailAddress" placeholder="">
+							                          </div>
+
+							                        </div>
+							                    </div>
+							                  </div>
+
+							                  <div class="row gutter-5">
+							                    <div class="col-md-4 col-xs-6">
+							                      <label class="text-white padding-bottom-5">Marital Status</label>
+							                      <select id="MaritalStatusID" name="MaritalStatusID" class="form-control">
+							                        <option value="">--</option>
+							                        <?php
+							                          foreach (lookup('marital_status') as $k => $v) {
+							                            echo "<option value='{$k}'>{$v}</option>";
+							                          }
+							                        ?>
+							                      </select>
+							                    </div>
+							                    <div class="col-md-4 col-xs-6">
+							                      <label class="text-white padding-bottom-5">Educational Attainment</label>
+							                      <select id="EducationalAttainmentID" name="EducationalAttainmentID" class="form-control">
+							                        <option value="">--</option>
+							                        <?php
+							                          foreach (lookup('education') as $k => $v) {
+							                            echo "<option value='{$k}'>{$v}</option>";
+							                          }
+							                        ?>
+							                      </select>
+							                    </div>
+							                    <div class="col-md-4 col-xs-6">
+							                      <label class="text-white padding-bottom-5"><span class="hidden-xs">Present</span> Livelihood Status</label>
+							                      <select id="LivelihoodStatusID" name="LivelihoodStatusID" class="form-control">
+							                        <option value="">--</option>
+							                        <?php
+							                          foreach (lookup('livelihood') as $k => $v) {
+							                            echo "<option value='{$k}'>{$v}</option>";
+							                          }
+							                        ?>
+							                      </select>
+							                    </div>
+							                    <div class="col-md-12 col-xs-6">
+							                      <label class="text-white padding-bottom-5">City or Municipality</label>
+							                      <select id="MunicipalityCityID" name="MunicipalityCityID" class="form-control" onChange="Account.loadBarangayOptions(BarangayID, this)">
+							                        <option value="">--</option>
+							                        <?php
+							                          foreach (lookup_muni_city(null, false) as $v) {
+							                            echo "<option value='" . $v['citymunCode'] . "'>" . $v['provDesc'] . ' | ' . $v['citymunDesc'] . "</option>";
+							                          }
+							                        ?>
+							                      </select>
+							                    </div>
+							                    <div class="col-md-12 col-xs-6" id="LoadBarangay">
+							                      <label class="text-white padding-bottom-5">Barangay</label>
+							                      <select id="BarangayID" disabled="disabled" name="BarangayID" class="form-control">
+							                        <option value="">--</option>
+							                      </select>
+							                    </div>
+							                    <div class="col-md-12 col-xs-6">
+							                      <label class="text-white padding-bottom-5">Building, Street, etc..</label>
+							                      <input type="text" id="StreetPhase" name="StreetPhase" class="form-control">
+							                    </div>
+							                    <div class="col-md-12 col-xs-12">
+							                      <label class="text-white padding-bottom-5">Organization</label>
+							                      <select id="OrganizationID" name="OrganizationID" class="form-control">
+							                        <option value="">--</option>
+							                        <?php
+							                           foreach(lookup_all('Dept_Departments', false, 'Name') as $item) {
+							                            $orgs = lookup_all('Dept_ChildDepartment', array('Type' => 3, 'DepartmentID' => $item['id']), 'Name');
+							                            if (count($orgs)) {
+							                              echo '<optgroup label="'.$item['Name'].'">';
+							                              foreach ($orgs as $org) {
+							                                echo '<option value="'. $org['id'] .'" data-logo="'. logo_filename($org['Logo']) .'">' . $org['Name'] . '</option>';
+							                              }
+							                              echo '</optgroup>';
+							                            }
+							                           }
+							                        ?>
+							                      </select>
+							                    </div>
+							                  </div>
+							                  <div class="row padding-top-10">
+							                    <div class="col-md-12">
+							                      <strong class="text-cyan" style="color: cyan;">Please upload 2 Valid ID's to process your registration.</strong>
+
+							                      <div class="row">
+							                        <div class="col-xs-12 col-sm-6">
+							                          <label class="text-white">Valid Government ID.</label>
+							                          <div class="input-group mb-3">
+							                            <div class="custom-file padding-5">
+							                              <input type="file" class="custom-file-input text-white" id="valid_id_one" name="file[valid_id_one]" accept="image/*">
+							                            </div>
+							                          </div>
+							                        </div>
+							                        <div class="col-xs-12 col-sm-6">
+							                          <label class="text-white">Any Primary ID.</label>
+							                          <div class="input-group mb-3">
+							                            <div class="custom-file padding-5">
+							                              <input type="file" class="custom-file-input text-white" id="valid_id_two" name="file[valid_id_two]" accept="image/*">
+							                            </div>
+							                          </div>
+							                        </div>
+							                      </div>
+
+							                    </div>
+							                    
+							                  </div>
+
+							                  	<input type="hidden" id="ServiceCode" name="ServiceCode" value="">
+
+							                  	<div class="modal-footer padding-bottom-5">
+													<button type="button" class="btn btn-warning btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+													<button type="submit" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Continue</button>
+												</div>
+
+							              </form>
 										</p>
 									</div>
 								</div>
 							</div>
+						
+
+							<!-- Select2 -->
+							<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
+							<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.8/css/alt/AdminLTE-select2.min.css" />
+							<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
+							<!-- InputMask -->
+							<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.min.js"></script>
+							<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/bindings/inputmask.binding.min.js"></script>
+
+							<script type="text/javascript" src="<?php echo public_url(); ?>resources/js/modules/account.js?<?php echo time()?>"></script>
+
+							<script type="text/javascript">
+							  $(document).ready(function(){
+							    $('#MunicipalityCityID').select2({
+							        width: '100%'
+							    });
+							  });
+							</script>
+
 						</div>
+
 					<?php } ?>
 					
 				</div>
 				
-				<div class="modal-footer">
-					<button type="button" class="btn bg-cyan btn-sm text-white" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-					<?php if ($accountInfo) { ?>
-					<button type="submit" class="btn bg-green btn-sm text-white"><i class="fa fa-save"></i> Submit</button>
-					<?php } ?>
-				</div>
-				
 			</div>
 
-		</form>
 	</div>
 </div>

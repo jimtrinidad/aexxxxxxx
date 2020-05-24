@@ -16,14 +16,43 @@ class Services extends CI_Controller
 
     public function index()
     {
+        $accountInfo = user_account_details($this->session->userdata('identifier'));
         $viewData = array(
             'pageTitle'     => 'Services',
-            'accountInfo'   => user_account_details($this->session->userdata('identifier'))
+            'accountInfo'   => user_account_details($this->session->userdata('identifier')),
+            'tmpUser'       => false
         );        
 
         if (get_post('c') && lookup('service_categories', get_post('c'))) {
             $viewData['pageTitle'] .= ' - ' . lookup('service_categories', get_post('c'));
         }
+
+        // var_dump($this->session->userdata('temporary_user_id'));
+        // if user was not login, check temporary registered user
+        if (!$accountInfo) {
+            $accountInfo = user_account_details($this->session->userdata('temporary_user_id'));
+            if ($accountInfo) {
+                $viewData['tmpUser'] = true;
+            }
+        }
+
+        if ($accountInfo) {
+            $applicantData = (object) array(
+                'mid'           => $accountInfo->MabuhayID,
+                'profile'       => public_url() . 'assets/profile/' . $accountInfo->Photo,
+                'name'          => user_full_name($accountInfo, false),
+                'birthday'      => $accountInfo->BirthDate,
+                'martial'       => lookup('marital_status', $accountInfo->MaritalStatusID),
+                'gender'        => lookup('gender', $accountInfo->GenderID),
+                'email'         => $accountInfo->EmailAddress,
+                'contact'       => $accountInfo->ContactNumber,
+                'education'     => lookup('education', $accountInfo->EducationalAttainmentID),
+                'livelihood'    => lookup('livelihood', $accountInfo->LivelihoodStatusID),
+                'address'       => ucwords(strtolower(user_full_address($accountInfo, true)))
+            );
+        }
+
+        $viewData['applicantData'] = $applicantData ?? false;
 
         // echo '<pre>';print_r($viewData);echo '</pre>';
         view('main/services', $viewData, 'templates/mgov');
@@ -45,9 +74,15 @@ class Services extends CI_Controller
             //     'Status'        => 0
             // ));
 
-            if (current_user()) {
+            if (isGuest() && $this->session->userdata('temporary_user_id')) {
+                $applicant_id = $this->session->userdata('temporary_user_id');
+            } else {
+                $applicant_id = current_user();
+            }
+
+            if ($applicant_id) {
                 $pending_application = $this->db->where('ServiceID', $service->id)
-                                                ->where('ApplicantID', current_user())
+                                                ->where('ApplicantID', $applicant_id)
                                                 ->where_in('Status', array(0,1))
                                                 ->get('Service_Applications')
                                                 ->result_array();
@@ -60,7 +95,7 @@ class Services extends CI_Controller
                     $application_requirements = lookup_all('Service_Application_Requirements', array(
                         'ServiceID'     => $service->id,
                         'ApplicationID' => $pending_application['id'],
-                        'ApplicantID'   => current_user()
+                        'ApplicantID'   => $applicant_id
                     ), 'id', false);
                     foreach ($application_requirements as $application_requirement)
                     {
@@ -96,7 +131,12 @@ class Services extends CI_Controller
     public function save_application()
     {   
 
-        check_authentication();
+        if (isGuest() && $this->session->userdata('temporary_user_id')) {
+            $applicant_id = $this->session->userdata('temporary_user_id');
+        } else {
+            check_authentication();
+            $applicant_id = current_user();
+        }
         
         $sCode    = get_post('ServiceCode');
         $service = $this->mgovdb->getRowObject('Service_Services', $sCode, 'Code');
@@ -105,7 +145,7 @@ class Services extends CI_Controller
             // check if no active application
             $pending_application = lookup_all('Service_Applications', array(
                 'ServiceID'     => $service->id,
-                'ApplicantID'   => current_user(),
+                'ApplicantID'   => $applicant_id,
                 'Status'        => 0
             ));
 
@@ -121,14 +161,14 @@ class Services extends CI_Controller
 
                     // prepare needed data
                     $applicationCode    = microsecID();
-                    $userData           = user_account_details(current_user());
+                    $userData           = user_account_details($applicant_id);
                     $serviceProcessData = get_service_process_order($serviceData['id']);
 
                     $serviceApplicationData = array(
                         'ServiceID'     => $serviceData['id'],
                         'ServiceCode'   => $serviceData['Code'],
                         'Code'          => $applicationCode,
-                        'ApplicantID'   => current_user(),
+                        'ApplicantID'   => $applicant_id,
                         'ExtraFields'   => json_encode($validation['fields']),
                         'UploadedFiles' => json_encode($validation['uploads']),
                         'ProcessOrder'  => json_encode($serviceProcessData['orderedProcess']),
@@ -164,9 +204,9 @@ class Services extends CI_Controller
                     $applicationRequirements = array();
                     foreach ($serviceData['Requirements'] as $requirement) {
                         $applicationRequirements[] = array(
-                            'Code'          => md5($serviceData['id'] . current_user() . $requirement->id . microsecID()),
+                            'Code'          => md5($serviceData['id'] . $applicant_id . $requirement->id . microsecID()),
                             'ServiceID'     => $serviceData['id'],
-                            'ApplicantID'   => current_user(),
+                            'ApplicantID'   => $applicant_id,
                             'RequirementID' => $requirement->id,
                             'DocumentID'    => $requirement->DocumentID,
                             'FunctionCount' => $serviceProcessData['requirementFunctionCount'][$requirement->id],
@@ -185,7 +225,7 @@ class Services extends CI_Controller
                     $firstFunction = $serviceProcessData['orderedProcess'][0];
                     $applicationFunctionData = array(
                         'ServiceID'     => $serviceData['id'],
-                        'ApplicantID'   => current_user(),
+                        'ApplicantID'   => $applicant_id,
                         'FunctionID'    => $firstFunction['id'],
                         'DateAdded'     => date('Y-m-d H:i:s')
                     );

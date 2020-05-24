@@ -419,9 +419,26 @@ class Mgovdb extends CI_Model {
 	public function getServicesForUser($params)
 	{
 
-		$queryParams = array(
-			$params['userID'],
-		);
+		$queryParams = array();
+
+		$userquery = '';
+		$nationalq = '';
+
+		if ($params['userID']) {
+			$queryParams[] = $params['userID'];
+
+			$userquery = " JOIN UserAccountInformation ua ON (
+			                ua.id = ? AND (
+			                    (ss.LocationScopeID = 1) OR
+			                    (ss.RegionalID = ua.RegionalID AND ss.LocationScopeID = 2) OR 
+			                    (ss.ProvincialID = ua.ProvincialID AND ss.LocationScopeID = 3) OR
+			                    (ss.MunicipalityCityID = ua.MunicipalityCityID AND (ss.LocationScopeID = 4 OR ss.LocationScopeID = 5)) OR
+			                    (ss.BarangayID = ua.BarangayID AND ss.LocationScopeID = 6)
+			                    )
+			                ) ";
+		} else {
+			$nationalq = " AND ss.LocationScopeID = 1 ";
+		}
 
 		$keywordFilter = '';
 		if (trim($params['keyword']) != '') {
@@ -433,16 +450,9 @@ class Mgovdb extends CI_Model {
 		}
 
 		$sql = "SELECT ss.id,ss.Code,ss.Name,ss.ShortName,ss.Logo,ss.CategoryID,ss.LastUpdate FROM Service_Services ss
-                JOIN UserAccountInformation ua ON (
-                ua.id = ? AND (
-                    (ss.LocationScopeID = 1) OR
-                    (ss.RegionalID = ua.RegionalID AND ss.LocationScopeID = 2) OR 
-                    (ss.ProvincialID = ua.ProvincialID AND ss.LocationScopeID = 3) OR
-                    (ss.MunicipalityCityID = ua.MunicipalityCityID AND (ss.LocationScopeID = 4 OR ss.LocationScopeID = 5)) OR
-                    (ss.BarangayID = ua.BarangayID AND ss.LocationScopeID = 6)
-                    )
-                )
+                {$userquery}
                 WHERE ss.deletedAt IS NULL
+                {$nationalq}
                 AND ss.Status = 1
                 AND ss.InOrganization = 0
                 {$keywordFilter}
