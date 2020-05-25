@@ -16,7 +16,8 @@ class Livefeed extends CI_Controller
     {
         $viewData = array(
             'pageTitle'     => 'Livefeed',
-            'accountInfo'   => user_account_details()
+            'accountInfo'   => user_account_details(),
+            'tmpUser'       => false,
         );        
 
         view('main/livefeed', $viewData, 'templates/mgov');
