@@ -280,27 +280,30 @@ function wordMatch($str1, $str2)
 
 function compress_image($file)
 {
-    $im = new Imagick($file);
 
-    $size = filesize($file);
-    // greater then 50KB
-    if ($size > 50000) {
-        // Optimize the image layers
-        $im->optimizeImageLayers();
-        // Compression and quality
-        $im->setImageCompression(Imagick::COMPRESSION_JPEG);
-        $im->setImageCompressionQuality(25);
+    if (file_exists($file) && !is_dir($file)) {
+        $im = new Imagick($file);
 
-        syslog(LOG_INFO, basename($file) . ' - scale down size: ' . $size);
+        $size = filesize($file);
+        // greater then 50KB
+        if ($size > 50000) {
+            // Optimize the image layers
+            $im->optimizeImageLayers();
+            // Compression and quality
+            $im->setImageCompression(Imagick::COMPRESSION_JPEG);
+            $im->setImageCompressionQuality(25);
+
+            syslog(LOG_INFO, basename($file) . ' - scale down size: ' . $size);
+        }
+
+        $width = $im->getImageWidth();
+        if ($width > 1000) {
+            $im->scaleImage(1000, 0);
+            syslog(LOG_INFO, basename($file) . ' - scale down width: ' . $width);
+        }
+
+        // Write the image back
+        $im->writeImages($file, true);
     }
-
-    $width = $im->getImageWidth();
-    if ($width > 1000) {
-        $im->scaleImage(1000, 0);
-        syslog(LOG_INFO, basename($file) . ' - scale down width: ' . $width);
-    }
-
-    // Write the image back
-    $im->writeImages($file, true);
 
 }
