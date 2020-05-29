@@ -54,7 +54,8 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+	// define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+	define('ENVIRONMENT', 'production');
 
 /*
  *---------------------------------------------------------------
@@ -339,10 +340,12 @@ if ($sub_domain == 'localhost') {
 			require_once APPPATH . 'config/database.php';
 			$db 	= $db['default'];
 			$conn 	= new mysqli($db['hostname'], $db['username'], $db['password'], $db['database']);
-			$result = $conn->query("SELECT id, Domain FROM PublicOffices WHERE Domain = '{$sub_domain}'");
-			if ($result->num_rows) {
-				$subdomain = $sub_domain;
-				$found = true;
+			if ($conn) {
+				$result = $conn->query("SELECT id, Domain FROM PublicOffices WHERE Domain = '{$sub_domain}'");
+				if ($result && $result->num_rows) {
+					$subdomain = $sub_domain;
+					$found = true;
+				}
 			}
 		}
 
