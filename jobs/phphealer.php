@@ -1,7 +1,8 @@
 <?php
 
 $services       = array(
-                '/var/www/mgovph/jobs/send_email_queue.php'
+                '/var/www/mgovph/jobs/send_email_queue.php',
+                '/var/www/mgovph/jobs/data_importer_exec.php'
         );
 
 exec("ps aux | awk '!/grep/ && /php/ {print $12,$13,$14}'", $running_process);

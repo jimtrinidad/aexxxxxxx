@@ -20,8 +20,16 @@ class Account extends CI_Controller
         // );
         // print_r($data);
         // send_email($data, false);exit;
-
+(
         // die(compute_expiration_date($this->uri->segment(3)));
+
+        $match = lookup_imported_items(array(
+            'FirstName' => 'gabino',
+            'LastName'  => 'adamos',
+            'MiddleName'=> 'reyes'
+        )));
+        var_dump($match);
+        exit;
 
         $accountData = $this->mgovdb->getRowObject('UserAccountInformation', 66, 'id');
         $emailTemplateData = array(
@@ -333,12 +341,65 @@ class Account extends CI_Controller
                                 $service = $_POST['ServiceCode'];
                             }
 
-                            $return_data = array(
-                                'status'    => true,
-                                'message'   => 'Account registration successful. You will received an email upon approval with your Mabuhay ID and Password.',
-                                'id'        => $ID,
-                                'service'   => $service
-                            );
+                            // look for imported data to auto approve
+                            $imported_match = lookup_imported_items($insertData);
+                            $approved       = false;
+                            if ($imported_match) {
+
+                                $random_password = random_password();
+                                $approveData = array(
+                                    'ApprovedBy'        => 68, // ka jaynie user id
+                                    'ApprovedDate'      => date('Y-m-d H:i:s'),
+                                    'LastUpdate'        => date('Y-m-d H:i:s'),
+                                    'AccountTypeID'     => 1,
+                                    'AccountLevelID'    => 1,
+                                    'StatusID'          => 1, // active id
+                                    'Password'          => $this->authentication->hash_password($random_password),
+                                    'id'                => $ID
+                                );
+
+                                if ($this->mgovdb->saveData('UserAccountInformation', $approveData)) {
+
+                                    // send approval email
+                                    $accountData = (object) $insertData;
+                                    $emailTemplateData = array(
+                                        'account'   => $accountData,
+                                        'password'  => $random_password
+                                    );
+                                    $emailData = array(
+                                        'from'      => array('info@mgov.ph', 'MGov Info'),
+                                        'to'        => array($accountData->EmailAddress),
+                                        'subject'   => 'Welcome to MGOV',
+                                        'message'   => view('email_templates/account_approval', $emailTemplateData, null, true)
+                                    );
+                                    send_email($emailData, true);
+
+                                    $approved = true;
+
+                                    // set imported item as used
+                                    $this->db->set(array('status' => 2))
+                                            ->where_in('id', $imported_match['ids'])
+                                            ->update('migration_items');
+
+                                }
+                            }
+
+                            if ($approved) {
+                                $return_data = array(
+                                    'status'    => true,
+                                    'message'   => 'Account registration successful. You will received an email with your MGOV ID and Password.',
+                                    'id'        => $ID,
+                                    'service'   => $service
+                                );
+                            } else {
+                                $return_data = array(
+                                    'status'    => true,
+                                    'message'   => 'Account registration successful. You will received an email upon approval with your MGOV ID and Password.',
+                                    'id'        => $ID,
+                                    'service'   => $service
+                                );
+                            }
+
                         } else {
                             $return_data = array(
                                 'status'    => false,

@@ -177,3 +177,10 @@ $config['send_eload'] = array(
 	array('Number', 'Mobile number', 'trim|required|numeric|min_length[11]|max_length[11]'),
 	array('Amount', 'Load amount', 'trim|required|numeric'),
 );
+
+
+$config['save_import_group'] = array(
+	array('name', 'Name', 'trim|required|alpha_numeric_spaces'),
+	array('service', 'Service Code', 'trim|numeric'),
+	array('scope', 'Scope', 'trim|required|integer'),
+);

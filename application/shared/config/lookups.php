@@ -612,6 +612,19 @@ $config['mobile_service_provider'] = array(
 );
 
 
+$config['data_importer_status'] = array(
+    1 => 'Pending',
+    2 => 'Processing',
+    3 => 'Completed',
+    4 => 'No valid record found.',
+    5 => 'Missing file'
+);
+
+$config['data_imported_item_status'] = array(
+    1 => 'Unuse',
+    2 => 'Used'
+);
+
 
 /* DEFAULTS */
 

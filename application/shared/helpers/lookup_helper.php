@@ -545,3 +545,59 @@ function lookup_mpdf_config($document_id)
 
     return $options;
 }
+
+
+/**
+* lookup pre registered match from imported data
+*/
+function lookup_imported_items($params)
+{
+    $ci =& get_instance();
+    $fn = $params['FirstName'];
+    $ln = $params['LastName'];
+    $mi = substr($params['MiddleName'], 0, 1);
+
+    $formats = array(
+        "$ln, $fn $mi", // lastname first with dot
+        "$ln, $fn $mi.", // lastname first without dot
+        "$fn $mi. $ln", // first mi lastname with dot
+        "$fn $mi $ln", // first mi lastname without dot
+        "$fn $ln", // firstname lastname without mi
+    );
+
+    $fq = array();
+    foreach ($formats as $format) {
+        $fq[] = "fullname = '{$format}'";
+    }
+
+    $fullname_query = implode(' OR ', $fq);
+
+    $sql = "SELECT * FROM migration_items
+            WHERE ({$fullname_query})";
+
+    $results = $ci->db->query($sql)->result_array();
+    if (count($results)) {
+        $ids      = array();
+        $services = array();
+        foreach ($results as $r) {
+            // get group
+            $group = $ci->mgovdb->getRowObject('migration_groups', $r['group_id']);
+            if ($group) {
+                if ($group->service) {
+                    $services[] = $group->service;
+                }
+
+                $ids[] = $r['id'];
+            }
+        }
+
+        if (count($ids)) {
+            $r['services'] = $services;
+            $r['ids']      = $ids;
+
+            return $r;
+        }
+    }
+
+    return false;
+}

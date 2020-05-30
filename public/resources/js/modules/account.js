@@ -121,7 +121,7 @@ function Account() {
                 // $('html').css('background', 'white').find('.modal-overs').remove();
                 $('#error_message_box').text(response.message).addClass('hide');
                 if (Utils.getUrlParams('s')) {
-                    window.location = window.base_url('services/?v=' + Utils.getUrlParams('s')); 
+                    window.location = window.base_url('services/?v=' + Utils.getUrlParams('s') + '&n=1'); 
                 } else {
                     window.location = window.base_url(); 
                 }

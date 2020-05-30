@@ -307,3 +307,8 @@ function compress_image($file)
     }
 
 }
+
+function datetime()
+{
+    return date('Y-m-d H:i:s');
+}
