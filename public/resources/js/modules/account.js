@@ -177,6 +177,7 @@ function Account() {
                         // open service application after registration
                         window.location = window.base_url('services/?v=' + response.service + '&n=1'); 
                     } else {
+                        $('.modal-content').LoadingOverlay("hide");
                         bootbox.alert(response.message, function(){
                             window.location = window.base_url('account/signin'); 
                         });
