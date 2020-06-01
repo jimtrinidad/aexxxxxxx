@@ -13,27 +13,29 @@
       <div class="box-body table-responsive no-padding">
         <table class="table table-bordered">
           <thead>
-            <!-- <th style="width: 20px;"></th> -->
-            <th>Fullname</th>
-            <th>Test Facility</th>
-            <th>Test Date</th>
-            <th>Release Date</th>
-            <th>Region</th>
-            <th>Province</th>
-            <th>City</th>
+            <th style="width: 20px;">ControlNo</th>
+            <th>Surname</th>
+            <th>Firstname</th>
+            <th>Middlename</th>
+            <th>CityMuni</th>
+            <th>Barangay</th>
+            <th>Email</th>
+            <th>Contact</th>
+            <th>Status</th>
           </thead>
           <tbody>
            <?php
               foreach ($items as $item) {
                 echo "<tr class='text-left'>";
-                // echo '<td>' . $item['ctr'] . '</td>';
-                echo '<td>' . $item['fullname'] . '</td>';
-                echo '<td>' . $item['testing_facility'] . '</td>';
-                echo '<td>' . $item['testing_date_taken'] . '</td>';
-                echo '<td>' . $item['testing_date_release'] . '</td>';
-                echo '<td>' . $item['region'] . '</td>';
-                echo '<td>' . $item['province'] . '</td>';
-                echo '<td>' . $item['city'] . '</td>';
+                echo '<td>' . $item['ControlNumber'] . '</td>';
+                echo '<td>' . $item['Surname'] . '</td>';
+                echo '<td>' . $item['Firstname'] . '</td>';
+                echo '<td>' . $item['Middlename'] . '</td>';
+                echo '<td>' . $item['CityMuni'] . '</td>';
+                echo '<td>' . $item['Barangay'] . '</td>';
+                echo '<td>' . $item['Email'] . '</td>';
+                echo '<td>' . $item['MobileNumber'] . '</td>';
+                echo '<td>' . lookup('data_imported_item_status', $item['status']) . '</td>';
               echo '</tr>';
               }
             ?>

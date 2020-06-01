@@ -25,7 +25,7 @@
           <tbody>
            <?php
               foreach ($groups as $item) {
-                echo "<tr class='text-left'>";
+                echo "<tr class='text-left' id='group_item_".$item['code']."'>";
                 echo '<td>' . $item['name'] . '</td>';
                 echo '<td>' . $item['scope'] . '</td>';
                 echo '<td>' . $item['location'] . '</td>';

@@ -168,7 +168,7 @@ class Importer extends CI_Controller
             $where = array(
                 'group_id'  => $record->id
             );
-            $order = 'fullname';
+            $order = 'Surname';
 
             $paginatationData = $this->mgovdb->getPaginationData('migration_items', $page_limit, $page_start, $where, $order);
 
@@ -199,6 +199,35 @@ class Importer extends CI_Controller
         }
     }
 
+    public function delete_group($code)
+    {
+
+        check_authentication();
+        $record = $this->mgovdb->getRowObject('migration_groups', $code, 'code');
+        if ($record) {
+            if ($this->mgovdb->deleteData('migration_groups', $record->id)) {
+                // delete items
+                $this->db->where('group_id', $record->id)->delete('migration_items');
+                $return_data = array(
+                    'status'    => true,
+                    'message'   => 'Imported group has been removed.'
+                );
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Removing imported group failed.'
+                );
+            }
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Invalid group.'
+            );
+        }
+
+        response_json($return_data);
+    }
+
     public function reader()
     {
 
@@ -208,81 +237,93 @@ class Importer extends CI_Controller
 
         $to_process = $this->mgovdb->getRecords('migration_groups', array('status' => 1));
         $status     = 1;
-        foreach ($to_process as $item) {
-            $input_file = UPLOADS_DIRECTORY . $item['file'];
 
-            if (file_exists($input_file)) {
+        if (count($to_process)) {
+            
+            $fields = $this->mgovdb->tableColumns('migration_items');
 
-                // set status to processing
-                $this->mgovdb->saveData('migration_groups', array('id' => $item['id'], 'status' => 2, 'last_update' => datetime()));
-                $processed_count = $item['count'];
+            foreach ($to_process as $item) {
+                $input_file = UPLOADS_DIRECTORY . $item['file'];
 
-                $input_type = ucfirst(pathinfo($input_file, PATHINFO_EXTENSION));
+                if (file_exists($input_file)) {
 
-                /**  Create a new Reader of the type defined in $inputFileType  **/
-                $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($input_type);
-                
-                // Define how many rows we want to read for each "chunk"
-                $chunkSize = 200;
-                // Create a new Instance of our Read Filter
-                $chunkFilter = new ChunkReadFilter();
+                    // set status to processing
+                    $this->mgovdb->saveData('migration_groups', array('id' => $item['id'], 'status' => 2, 'last_update' => datetime()));
+                    $processed_count = $item['count'];
 
-                // Tell the Reader that we want to use the Read Filter that we've Instantiated
-                $reader->setReadFilter($chunkFilter);
+                    $input_type = ucfirst(pathinfo($input_file, PATHINFO_EXTENSION));
 
-                // Loop to read our worksheet in "chunk size" blocks
-                for ($startRow = 1; $startRow <= 100000; $startRow += $chunkSize) {
-                    syslog(LOG_INFO, 'Processing migration ['.$item['name'].'] from rows ' . $startRow . ' to ' . ($startRow + $chunkSize - 1));
-                    // Tell the Read Filter, the limits on which rows we want to read this iteration
-                    $chunkFilter->setRows($startRow, $chunkSize);
-                    // Load only the rows that match our filter from $inputFileName to a PhpSpreadsheet Object
-                    $spreadsheet = $reader->load($input_file);
+                    /**  Create a new Reader of the type defined in $inputFileType  **/
+                    $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($input_type);
+                    
+                    // Define how many rows we want to read for each "chunk"
+                    $chunkSize = 200;
+                    // Create a new Instance of our Read Filter
+                    $chunkFilter = new ChunkReadFilter();
 
-                    // Do some processing here
+                    // Tell the Reader that we want to use the Read Filter that we've Instantiated
+                    $reader->setReadFilter($chunkFilter);
 
-                    $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
-                    array_shift($sheetData);
-                    foreach ($sheetData as $row) {
-                        // name is not empty
-                        if (isset($row['B']) && !empty($row['B'])) {
-                            $saveData = array(
-                                'group_id'  => $item['id'],
-                                'fullname'  => $row['B'],
-                                'testing_facility'      => $row['D'] ?? '',
-                                'testing_date_taken'    => $row['E'] ?? '',
-                                'testing_date_release'  => $row['F'] ?? '',
-                                'region'                => $row['J'] ?? '',
-                                'province'              => $row['I'] ?? '',
-                                'city'                  => $row['K'] ?? '',
-                                'status'                => 1,
-                                'last_update'           => date('Y-m-d H:i:s')
-                            );
-                            if ($this->mgovdb->saveData('migration_items', $saveData)) {
-                                $processed_count++;
+                    // Loop to read our worksheet in "chunk size" blocks
+                    for ($startRow = 1; $startRow <= 100000; $startRow += $chunkSize) {
+                        syslog(LOG_INFO, 'Processing migration ['.$item['name'].'] from rows ' . $startRow . ' to ' . ($startRow + $chunkSize - 1));
+                        // Tell the Read Filter, the limits on which rows we want to read this iteration
+                        $chunkFilter->setRows($startRow, $chunkSize);
+                        // Load only the rows that match our filter from $inputFileName to a PhpSpreadsheet Object
+                        $spreadsheet = $reader->load($input_file);
+
+                        // Do some processing here
+
+                        $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+
+                        $header = array_shift($sheetData);
+                        $keys   = array();
+                        foreach ($header as $k => $f) {
+                            $f = str_replace(' ', '', $f);
+                            if (in_array(strtolower($f), array_map('strtolower', $fields))) {
+                                $keys[$k] = $f;
                             }
+                        }
+
+                        foreach ($sheetData as $row) {
+                            // name is not empty
+                            if (isset($row['B']) && !empty($row['B'])) {
+                                $saveData = array(
+                                    'group_id'  => $item['id'],
+                                    'status'                => 1,
+                                    'last_update'           => date('Y-m-d H:i:s')
+                                );
+                                foreach ($keys as $k => $f) {
+                                    $saveData[$f] = ($row[$k] ?? '');
+                                }
+
+                                if ($this->mgovdb->saveData('migration_items', $saveData)) {
+                                    $processed_count++;
+                                }
+                            }
+                        }
+
+                        // update count every chuck
+                        $this->mgovdb->saveData('migration_groups', array('id' => $item['id'], 'count' => $processed_count, 'last_update' => datetime()));
+
+                        if ((count($sheetData) + 1) < $chunkSize) {
+                            break;
                         }
                     }
 
-                    // update count every chuck
-                    $this->mgovdb->saveData('migration_groups', array('id' => $item['id'], 'count' => $processed_count, 'last_update' => datetime()));
-
-                    if ((count($sheetData) + 1) < $chunkSize) {
-                        break;
+                    if ($processed_count) {
+                        // completed with records
+                        $this->mgovdb->saveData('migration_groups', array('id' => $item['id'], 'status' => 3, 'last_update' => datetime()));
+                    } else {
+                        // no record found
+                        $this->mgovdb->saveData('migration_groups', array('id' => $item['id'], 'status' => 4, 'last_update' => datetime()));
                     }
-                }
 
-                if ($processed_count) {
-                    // completed with records
-                    $this->mgovdb->saveData('migration_groups', array('id' => $item['id'], 'status' => 3, 'last_update' => datetime()));
+
                 } else {
-                    // no record found
-                    $this->mgovdb->saveData('migration_groups', array('id' => $item['id'], 'status' => 4, 'last_update' => datetime()));
+                    // set status to 5 - missing file
+                    $this->mgovdb->saveData('migration_groups', array('id' => $item['id'], 'status' => 5, 'last_update' => datetime()));
                 }
-
-
-            } else {
-                // set status to 5 - missing file
-                $this->mgovdb->saveData('migration_groups', array('id' => $item['id'], 'status' => 5, 'last_update' => datetime()));
             }
         }
 

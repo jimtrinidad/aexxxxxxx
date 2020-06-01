@@ -555,27 +555,15 @@ function lookup_imported_items($params)
     $ci =& get_instance();
     $fn = $params['FirstName'];
     $ln = $params['LastName'];
-    $mi = substr($params['MiddleName'], 0, 1);
-
-    $formats = array(
-        "$ln, $fn $mi", // lastname first with dot
-        "$ln, $fn $mi.", // lastname first without dot
-        "$fn $mi. $ln", // first mi lastname with dot
-        "$fn $mi $ln", // first mi lastname without dot
-        "$fn $ln", // firstname lastname without mi
-    );
-
-    $fq = array();
-    foreach ($formats as $format) {
-        $fq[] = "fullname = '{$format}'";
-    }
-
-    $fullname_query = implode(' OR ', $fq);
+    $mn = $params['MiddleName'];
 
     $sql = "SELECT * FROM migration_items
-            WHERE ({$fullname_query})";
+            WHERE Surname = ?
+            AND Firstname = ?
+            AND MiddleName = ?
+            AND status = ?";
 
-    $results = $ci->db->query($sql)->result_array();
+    $results = $ci->db->query($sql, array($ln,$fn,$mn, 1))->result_array();
     if (count($results)) {
         $ids      = array();
         $services = array();

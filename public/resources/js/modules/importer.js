@@ -69,13 +69,14 @@ function Importer() {
     */
     this.deleteGroup = function(id)
     {   
-        var data = self.getDepartment(id);
-        if (data) {
-            bootbox.confirm('Are you sure you want to <label class="label label-danger">delete</label> ' + data.name, function(r){
+        var row = $('#group_item_' + id);
+
+        if (row.length > 0) {
+            bootbox.confirm('Are you sure you want to <label class="label label-danger">delete</label> <b>' + row.find('td:nth(0)').text() + '</b> group?', function(r){
                 if (r) {
                     $.LoadingOverlay("show", {zIndex: 999});
                     $.ajax({
-                        url: window.base_url('department/delete_department/' + id),
+                        url: window.base_url('importer/delete_group/' + id),
                         type: 'GET',
                         success: function (response) {
                             if (response.status) {
