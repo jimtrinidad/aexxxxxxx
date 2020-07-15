@@ -56,7 +56,8 @@ class Dashboard extends CI_Controller
 
         $viewData = array(
             'pageTitle'     => 'Dashboard',
-            'accountInfo'   => user_account_details()
+            'accountInfo'   => user_account_details(),
+            'tmpUser'       => false
         );
 
         $viewData['categories'] = $results;
