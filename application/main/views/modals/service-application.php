@@ -1,3 +1,22 @@
+<?php
+$applicantData = false;
+if ($accountInfo) {
+	 $applicantData = (object) array(
+        'mid'           => $accountInfo->MabuhayID,
+        'profile'       => public_url() . 'assets/profile/' . $accountInfo->Photo,
+        'name'          => user_full_name($accountInfo, false),
+        'birthday'      => $accountInfo->BirthDate,
+        'martial'       => lookup('marital_status', $accountInfo->MaritalStatusID),
+        'gender'        => lookup('gender', $accountInfo->GenderID),
+        'email'         => $accountInfo->EmailAddress,
+        'contact'       => $accountInfo->ContactNumber,
+        'education'     => lookup('education', $accountInfo->EducationalAttainmentID),
+        'livelihood'    => lookup('livelihood', $accountInfo->LivelihoodStatusID),
+        'address'       => ucwords(strtolower(user_full_address($accountInfo, true)))
+    );
+}
+?>
+
 <style type="text/css">
 	#serviceApplicationModal .text-white {
 		color: #aaa;

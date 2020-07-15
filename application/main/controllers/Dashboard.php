@@ -14,14 +14,17 @@ class Dashboard extends CI_Controller
 
     public function index()
     {
+
+        $accountInfo = user_account_details($this->session->userdata('identifier'));
+
         $viewData = array(
             'pageTitle'     => 'Dashboard',
-            'accountInfo'   => user_account_details(),
+            'accountInfo'   => $accountInfo,
             'tmpUser'       => false,
             'jsModules'         => array(
                 'wallet',
             ),
-        );        
+        );
 
         // print_data(lookup_dbp_billers());
         view('main/dashboard/index', $viewData, 'templates/mgov');
