@@ -525,8 +525,8 @@ function lookup_mpdf_config($document_id)
             'margin_footer' => $docData->Margin
         );
 
-        if (is_array($options['format'])) {
-            $options['format'] = 'Letter';
+        if (!$options['format']) {
+            $options['format'] = 'Letter'
         }
         // if document type is ID. do not break page
         if ($docData->Type == 12) {
