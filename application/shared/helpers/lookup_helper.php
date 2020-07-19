@@ -526,7 +526,7 @@ function lookup_mpdf_config($document_id)
         );
 
         if (!$options['format']) {
-            $options['format'] = 'Letter'
+            $options['format'] = 'Letter';
         }
         // if document type is ID. do not break page
         if ($docData->Type == 12) {
