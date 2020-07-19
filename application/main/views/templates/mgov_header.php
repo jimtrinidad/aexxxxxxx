@@ -44,23 +44,24 @@
       <div class="col-md-5 col-sm-6">
         <div class="row gutter-0">
           <?php if ($accountInfo) { ?>
-          <div class="mak-id col-sm-9 col-xs-8">
-            <div class="col-md-4 hidden-xs hidden-sm text-right" style="padding: 0;"><span>Mabuhay ID</span></div>
+          <div class="mak-id col-sm-8 col-xs-8">
+            <div class="col-md-4 hidden-xs hidden-sm text-right" style="padding: 0;"><span>MGOV ID</span></div>
             <div class="col-md-8 col-xs-12 text-left open-mak-id" style="cursor: pointer;padding: 0 0 0 10px;">
               <span class="visible-xs-inline visible-sm-inline" style="padding-right: 20px;">ID</span>
               <?php echo $accountInfo->MabuhayID; ?> <!--16-000-000-106--> 
             </div>
           </div>
           <?php } else { ?>
-            <div class="col-sm-9 col-xs-8">
+            <div class="col-sm-8 col-xs-8">
               <a class="text-bold" href="<?php echo site_url('account/signin') ?>">Sign in</a> your account or
               <a class="text-bold" href="<?php echo site_url('account/signup') ?>">Register</a>.
             </div>
           <?php } ?>
-          <div class="col-sm-3 col-xs-4 mak-settings">
+          <div class="col-sm-4 col-xs-4 mak-settings">
             <a href="<?php echo site_url() ?>"><i class="fa fa-university text-blue" aria-hidden="true"></i></a>
             <?php
               if ($accountInfo && in_array($accountInfo->AccountTypeID, array(2,3,4))) {
+                // echo '<a class="text-bold" onclick="Mgovph.verifyDocument()" href="javascript:;"><i class="fa fa-search text-blue" aria-hidden="true"></i></a>';
                 echo '<a class="text-bold" href="' . site_url('quickserve') .'">QS</a>';
               }
             ?>
@@ -84,3 +85,9 @@
   </div>
 </div>
 <!-- Main Header End-->
+
+<?php
+  if ($accountInfo && in_array($accountInfo->AccountTypeID, array(2,3,4))) {
+    // view('modals/verify-document-modal');
+  }
+?>

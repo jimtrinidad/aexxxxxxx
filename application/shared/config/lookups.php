@@ -109,10 +109,10 @@ $config['document_validity'] = array(
 );
 
 $config['document_size'] = array(
-	'8x11'	=> array(215.9,279.4),
-	'8x13'	=> array(215.9,330.2),
+	'8x11'	=> array(203.2,279.4),
+	'8x13'	=> array(203.2,330.2),
 	'5x7'	=> array(127,177.8),
-	'2x3'	=> array(50.8,76.2)
+	'2.125x3.37'	=> array(53.975,85.598)
 );
 
 
