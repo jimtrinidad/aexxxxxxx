@@ -1032,6 +1032,21 @@ function Mgovph() {
             processData: false
         });
     }
+
+
+    /**
+    * document verifiation
+    */
+    // openmodal
+    this.verifyDocument = function()
+    {   
+
+        $('#verifyDocModal').modal({
+            backdrop : 'static',
+            keyboard : false
+        });
+
+    }
 }
 
 
