@@ -113,7 +113,10 @@
 		                	});
 		                    $('#verifyDocModal').modal('hide');
 		                } else {
-		                	bootbox.alert(response.message);
+		                	bootbox.alert(response.message, {
+								size: 'medium',
+								message: response.message
+							});
 		                	html5QrcodeScanner.stop();
 		                }
 		            },

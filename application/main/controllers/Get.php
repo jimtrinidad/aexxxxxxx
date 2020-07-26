@@ -473,7 +473,7 @@ class Get extends CI_Controller
             } else {
                 $return_data = array(
                     'status'    => false,
-                    'message'   => 'Document does not exist.'
+                    'message'   => 'Document does not exists. qr data: <strong style="font-weight: bold;">' . trim($code) . '</strong>'
                 );
             }
 
