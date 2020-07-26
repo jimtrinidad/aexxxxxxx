@@ -56,7 +56,10 @@
 				</div>
 				<div class="modal-footer">
 					<div class="pull-right">
-						<button type="button" class="btn bg-cyan btn-sm text-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+						<button type="button" class="btn bg-cyan btn-sm text-white" data-dismiss="modal" onclick="Mgovph.verifyDocument()"><i class="fa fa-search"></i> Scan Again</button>
+					</div>
+					<div class="pull-left">
+						<button type="button" class="btn bg-red btn-sm text-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
 					</div>
 				</div>
 			</div>
