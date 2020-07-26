@@ -967,6 +967,36 @@ class Html5QrcodeScanner {
         }
     }
 
+    /**
+    * jim
+    * trigger stop button click
+    */
+    stop() {
+        const $this = this;
+
+        if (this.currentScanType == Html5QrcodeScanner.SCAN_TYPE_CAMERA) {
+            var stopb = document.getElementById(this.__getCameraScanStopId());
+            var startb = document.getElementById(this.__getCameraScanStartId());
+            
+            stopb.disabled = true;
+                $this.html5Qrcode.stop()
+                    .then(_ => {
+                        $this._showHideScanTypeSwapLink(true);
+                        document.getElementById(this.__getCameraSelectionId()).disabled = false;
+                        startb.disabled = false;
+                        stopb.style.display = "none";
+                        startb.style.display = "inline-block";
+                        $this.__setStatus("IDLE");
+                        $this.__insertCameraScanImageToScanRegion();
+                    }).catch(error => {
+                        stopb.disabled = false;
+                        $this.__setStatus("ERROR", Html5QrcodeScanner.STATUS_WARNING);
+                        $this.__setHeaderMessage(
+                            error, Html5QrcodeScanner.STATUS_WARNING);
+                    });
+        }
+    }
+
     //#region private control methods
     __createBasicLayout(parent) {
         parent.style.position = "relative";
@@ -1133,12 +1163,15 @@ class Html5QrcodeScanner {
         scpCameraScanRegion.style.textAlign = "center";
 
         const cameraSelectionContainer = document.createElement("span");
-        cameraSelectionContainer.innerHTML
-            = `Select Camera (${cameras.length}) &nbsp;`;
+        // cameraSelectionContainer.innerHTML = `Select Camera (${cameras.length}) &nbsp;`;
         cameraSelectionContainer.style.marginRight = "10px";
 
         const cameraSelectionSelect = document.createElement("select");
         cameraSelectionSelect.id = this.__getCameraSelectionId();
+        cameraSelectionSelect.classList.add("form-control");
+        cameraSelectionSelect.classList.add("input-sm");
+        cameraSelectionSelect.style.display = "inline";
+        cameraSelectionSelect.style.width = "60%";
         for (var i = 0; i < cameras.length; i++) {
             const camera = cameras[i];
             const value = camera.id;
@@ -1153,13 +1186,21 @@ class Html5QrcodeScanner {
 
         const cameraActionContainer = document.createElement("span");
         const cameraActionStartButton = document.createElement("button");
+        cameraActionStartButton.id = this.__getCameraScanStartId();
         cameraActionStartButton.innerHTML = "Start Scanning";
+        cameraActionStartButton.classList.add("btn");
+        cameraActionStartButton.classList.add("btn-sm");
+        cameraActionStartButton.classList.add("btn-primary");
         cameraActionContainer.appendChild(cameraActionStartButton);
 
         const cameraActionStopButton = document.createElement("button");
+        cameraActionStopButton.id = this.__getCameraScanStopId();
         cameraActionStopButton.innerHTML = "Stop Scanning";
         cameraActionStopButton.style.display = "none";
         cameraActionStopButton.disabled = true;
+        cameraActionStopButton.classList.add("btn");
+        cameraActionStopButton.classList.add("btn-sm");
+        cameraActionStopButton.classList.add("btn-warning");
         cameraActionContainer.appendChild(cameraActionStopButton);
 
         scpCameraScanRegion.appendChild(cameraActionContainer);
@@ -1195,6 +1236,7 @@ class Html5QrcodeScanner {
         });
 
         cameraActionStopButton.addEventListener('click', _ => {
+            console.log('stop function');
             cameraActionStopButton.disabled = true;
             $this.html5Qrcode.stop()
                 .then(_ => {
@@ -1217,13 +1259,14 @@ class Html5QrcodeScanner {
     __createSectionSwap() {
         const $this = this;
         const TEXT_IF_CAMERA_SCAN_SELECTED
-            = "Scan an Image File";
+            = "Or Scan an Image File";
         const TEXT_IF_FILE_SCAN_SELECTED
             = "Scan using camera directly";
 
         const section = document.getElementById(this.__getDashboardSectionId());
         const switchContainer = document.createElement("div");
         switchContainer.style.textAlign = "center";
+        switchContainer.style.marginTop = "3px";
         const swithToFileBasedLink = document.createElement("a");
         swithToFileBasedLink.style.textDecoration = "underline";
         swithToFileBasedLink.id = this.__getDashboardSectionSwapLinkId();
@@ -1425,6 +1468,14 @@ class Html5QrcodeScanner {
 
     __getCameraSelectionId() {
         return `${this.elementId}__camera_selection`;
+    }
+
+    __getCameraScanStartId() {
+        return `${this.elementId}__start_scan_button`;
+    }
+
+    __getCameraScanStopId() {
+        return `${this.elementId}__stop_scan_button`;
     }
 
     __getCameraScanRegion() {
