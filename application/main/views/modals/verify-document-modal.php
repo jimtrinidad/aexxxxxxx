@@ -113,7 +113,7 @@
 		                	});
 		                    $('#verifyDocModal').modal('hide');
 		                } else {
-		                	bootbox.alert(response.message, {
+		                	bootbox.alert({
 								size: 'medium',
 								message: response.message
 							});
