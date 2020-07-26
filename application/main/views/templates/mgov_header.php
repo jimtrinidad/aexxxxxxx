@@ -61,9 +61,9 @@
             <a href="<?php echo site_url() ?>"><i class="fa fa-university text-blue" aria-hidden="true"></i></a>
             <?php
               if ($accountInfo && in_array($accountInfo->AccountTypeID, array(2,3,4))) {
-                if ($accountInfo->id == 66) {
+                // if ($accountInfo->id == 66) {
                   echo '<a class="text-bold" onclick="Mgovph.verifyDocument()" href="javascript:;"><i class="fa fa-search text-blue" aria-hidden="true"></i></a>';
-                }
+                // }
                 echo '<a class="text-bold" href="' . site_url('quickserve') .'">QS</a>';
               }
             ?>
@@ -89,9 +89,9 @@
 <!-- Main Header End-->
 
 <?php
-  if ($accountInfo->id == 66) {
+  // if ($accountInfo->id == 66) {
     if ($accountInfo && in_array($accountInfo->AccountTypeID, array(2,3,4))) {
       view('modals/verify-document-modal');
     }
-  }
+  // }
 ?>
