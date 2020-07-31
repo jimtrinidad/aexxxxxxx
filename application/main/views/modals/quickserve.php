@@ -173,6 +173,53 @@
 					</div>
 				</div>
 
+				<div id="pendingAppCont" class="post-items bg-white padding-10">
+					<h2 class="text-cyan text-bold offset-bottom-10">Pending Applications</h2>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="table-responsive">
+								<table class="table">
+									<thead>
+										<tr>
+											<th style="width: 100px;"></th>
+											<th>Name</th>
+											<th>Type</th>
+											<th>Date Applied</th>
+										</tr>
+									</thead>
+									<tbody class="items">
+										
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div id="completedAppCont" class="post-items bg-white padding-10">
+					<h2 class="text-cyan text-bold offset-bottom-10">Completed Services And Documents</h2>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="table-responsive">
+								<table class="table">
+									<thead>
+										<tr>
+											<th style="width: 100px;"></th>
+											<th>Name</th>
+											<th>Type</th>
+											<th>Date Applied</th>
+											<th>Date Completed</th>
+										</tr>
+									</thead>
+									<tbody class="items">
+										
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+
 				<div class="pull-right">
 					<button type="button" class="btn bg-orange btn-sm text-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
 				</div>

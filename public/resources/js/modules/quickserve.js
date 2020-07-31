@@ -183,6 +183,41 @@ function Quickserve() {
                         detailsCont.find('#requirementsCont').hide();
                     }
 
+                    if (response.data.pending.length) {
+                        var pending_tpl = '';
+                        detailsCont.find('#pendingAppCont').find('tbody.items').html('');
+                        $.each(response.data.pending, function(i, e) {
+                            pending_tpl += '<tr valign="center">' +
+                                        '<td><img class="img-responsive" src="'+  e.logo +'" style="max-width: 50px;"></td>' +
+                                        '<td>' + e.name + '</td>' +
+                                        '<td>' + e.type + '</td>' +
+                                        '<td>' + e.dateapplied + '</td>' +
+                                    '</tr>';
+                        });
+                        detailsCont.find('#pendingAppCont').find('tbody.items').html(pending_tpl);
+                        detailsCont.find('#pendingAppCont').show();
+                    } else {
+                        detailsCont.find('#pendingAppCont').hide();
+                    }
+
+                    if (response.data.completed.length) {
+                        var completed_tpl = '';
+                        detailsCont.find('#completedAppCont').find('tbody.items').html('');
+                        $.each(response.data.completed, function(i, e) {
+                            completed_tpl += '<tr valign="center">' +
+                                        '<td><img class="img-responsive" src="'+  e.logo +'" style="max-width: 50px;"></td>' +
+                                        '<td>' + e.name + '</td>' +
+                                        '<td>' + e.type + '</td>' +
+                                        '<td>' + e.dateapplied + '</td>' +
+                                        '<td>' + e.datecomplete + '</td>' +
+                                    '</tr>';
+                        });
+                        detailsCont.find('#completedAppCont').find('tbody.items').html(completed_tpl);
+                        detailsCont.find('#completedAppCont').show();
+                    } else {
+                        detailsCont.find('#completedAppCont').hide();
+                    }
+
                     $('#detailsModal').modal({
                         backdrop : 'static',
                         keyboard : false

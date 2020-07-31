@@ -253,6 +253,9 @@ class Quickserve extends CI_Controller
     */
     public function details($applicationCode)
     {
+
+        is_valid_ajax_call();
+
         $applicationData = $this->mgovdb->getRowObject('Service_Applications', $applicationCode, 'Code');
         if ($applicationData) {
 
@@ -308,6 +311,41 @@ class Quickserve extends CI_Controller
             $userData->Livelihood = lookup('livelihood', $userData->LivelihoodStatusID);
             $userData->Address    = ucwords(strtolower(user_full_address($userData, true)));
 
+            $pending_applications_raw = $this->mgovdb->getServiceApplications(array(
+                'ApplicantID'   => $userData->id,
+                'sa.Status'     => 0
+            ));
+
+            $completed_applications_raw = $this->mgovdb->getServiceApplications(array(
+                'ApplicantID'   => $userData->id,
+                'sa.Status'     => 2
+            ), 'sa.DateCompleted DESC');
+
+            $pending_applications = array();
+            foreach ($pending_applications_raw as $p) {
+                if (!in_array($p['ServiceType'], lookup('report_service_type'))) {
+                    $pending_applications[] = array(
+                        'name'  => $p['ServiceName'],
+                        'type'  => lookup('service_type', $p['ServiceType']),
+                        'dateapplied'   => date('F d, Y', strtotime($p['DateApplied'])),
+                        'logo'  => (public_url() . 'assets/logo/' . logo_filename($p['sLogo']))
+                    );
+                }
+            }
+
+            $completed_applications = array();
+            foreach ($completed_applications_raw as $p) {
+                if (!in_array($p['ServiceType'], lookup('report_service_type'))) {
+                    $completed_applications[] = array(
+                        'name'  => $p['ServiceName'],
+                        'type'  => lookup('service_type', $p['ServiceType']),
+                        'dateapplied'   => date('F d, Y', strtotime($p['DateApplied'])),
+                        'datecomplete'  => date('F d, Y', strtotime($p['DateCompleted'])),
+                        'logo'  => public_url() . 'assets/logo/' . logo_filename($p['sLogo']),
+                    );
+                }
+            }
+
             $return_data = array(
                 'status'    => true,
                 'data'      => array(
@@ -316,7 +354,9 @@ class Quickserve extends CI_Controller
                     'application'   => array(
                         'otherFields'       => $otherFields,
                         'requirements'      => $requirements
-                    )
+                    ),
+                    'pending'   => $pending_applications,
+                    'completed' => $completed_applications
                 )
             );
         } else {
@@ -338,6 +378,9 @@ class Quickserve extends CI_Controller
     */
     public function approve()
     {
+
+        is_valid_ajax_call();
+
         $safID = get_post('safID');
         if ($safID) {
             $safData = $this->mgovdb->getRowObject('Service_Application_Functions', $safID, 'id');
@@ -727,6 +770,9 @@ class Quickserve extends CI_Controller
     */
     public function decline()
     {
+
+        is_valid_ajax_call();
+
         $safID = get_post('safID');
         if ($safID) {
 
@@ -857,6 +903,9 @@ class Quickserve extends CI_Controller
     */
     public function payment()
     {
+
+        is_valid_ajax_call();
+
         $safID = get_post('safID');
         if ($safID) {
 
@@ -984,6 +1033,9 @@ class Quickserve extends CI_Controller
     */
     public function user_feedbacks()
     {
+
+        is_valid_ajax_call();
+
         $mid = get_post('mID');
         $user = $this->mgovdb->getRowObject('UserAccountInformation', $mid, 'MabuhayID');
         if ($user) {
@@ -1019,6 +1071,9 @@ class Quickserve extends CI_Controller
 
     public function add_feedback()
     {   
+
+        is_valid_ajax_call();
+
         $mid = get_post('mID');
         $user = $this->mgovdb->getRowObject('UserAccountInformation', $mid, 'MabuhayID');
         if ($user) {
@@ -1090,6 +1145,9 @@ class Quickserve extends CI_Controller
 
     public function remove_feedback($id = null)
     {
+
+        is_valid_ajax_call();
+
         $item = $this->mgovdb->getRowObject('UserFeedbacks', $id);
         if ($item) {
             if ($item->PostedBy == current_user()) {

@@ -393,6 +393,7 @@ class Mgovdb extends CI_Model {
 					sa.DateApplied,
 					ss.Name ServiceName,
 					ss.Logo sLogo,
+					ss.ServiceType,
                     dd.id ddID,
                     dd.Name ddName,
                     dd.Logo ddLogo,

@@ -68,6 +68,22 @@ function is_setting_page()
     return false;
 }
 
+/**
+* check if request came from mgov and if it was ajax request
+*/
+function is_valid_ajax_call($exit = true)
+{
+    if (@isset($_SERVER['HTTP_REFERER']) && stripos($_SERVER['HTTP_REFERER'], base_url()) !== false && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+        return true;
+    } else {
+        if ($exit) {
+            show_404();
+        }
+    }
+
+    return false;
+}
+
 function random_number($length)
 {
     return join('', array_map(function($value) { return mt_rand(0, 9); }, range(1, $length)));

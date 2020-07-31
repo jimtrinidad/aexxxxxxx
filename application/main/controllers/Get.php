@@ -443,44 +443,42 @@ class Get extends CI_Controller
 
     public function document_qr_scan()
     {
-        if(@isset($_SERVER['HTTP_REFERER']) && stripos($_SERVER['HTTP_REFERER'], base_url()) !== false && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
-            $code = get_post('code');
-            $doc  = $this->mgovdb->getRowObject('UserDocuments', $code, 'Code');
-            if ($doc) {
+        is_valid_ajax_call();
 
-                $userData  = user_account_details($doc->AccountID, 'id', false);
-                $docData   = $this->mgovdb->getRowObject('Doc_Templates', $doc->DocumentID);
-                $appliData = $this->mgovdb->getRowObject('Service_Applications', $doc->ApplicationID);
+        $code = get_post('code');
+        $doc  = $this->mgovdb->getRowObject('UserDocuments', $code, 'Code');
+        if ($doc) {
 
-                $data = array(
-                    'id'        => $userData->id,
-                    'mid'       => $userData->MabuhayID,
-                    'name'      => user_full_name($userData),
-                    'email'     => $userData->EmailAddress,
-                    'contact'   => $userData->ContactNumber,
-                    'photo'     => public_url() . 'assets/profile/' . photo_filename($userData->Photo),
-                    'docname'   => $docData->Name,
-                    'doccode'   => $doc->Code,
-                    'date'      => date('F d, Y', strtotime($doc->DateAdded)),
-                    'expire'    => date('F d, Y', strtotime($doc->ExpirationDate)),
-                );
+            $userData  = user_account_details($doc->AccountID, 'id', false);
+            $docData   = $this->mgovdb->getRowObject('Doc_Templates', $doc->DocumentID);
+            $appliData = $this->mgovdb->getRowObject('Service_Applications', $doc->ApplicationID);
 
-                $return_data = array(
-                    'status'    => true,
-                    'data'      => $data
-                );
+            $data = array(
+                'id'        => $userData->id,
+                'mid'       => $userData->MabuhayID,
+                'name'      => user_full_name($userData),
+                'email'     => $userData->EmailAddress,
+                'contact'   => $userData->ContactNumber,
+                'photo'     => public_url() . 'assets/profile/' . photo_filename($userData->Photo),
+                'docname'   => $docData->Name,
+                'doccode'   => $doc->Code,
+                'date'      => date('F d, Y', strtotime($doc->DateAdded)),
+                'expire'    => date('F d, Y', strtotime($doc->ExpirationDate)),
+            );
 
-            } else {
-                $return_data = array(
-                    'status'    => false,
-                    'message'   => ('Document does not exists. qr data: <strong style="font-weight: bold;">' . trim($code) . '</strong>')
-                );
-            }
+            $return_data = array(
+                'status'    => true,
+                'data'      => $data
+            );
 
-            response_json($return_data);
         } else {
-            show_404();
+            $return_data = array(
+                'status'    => false,
+                'message'   => ('Document does not exists. qr data: <strong style="font-weight: bold;">' . trim($code) . '</strong>')
+            );
         }
+
+        response_json($return_data);
     }
 
 
