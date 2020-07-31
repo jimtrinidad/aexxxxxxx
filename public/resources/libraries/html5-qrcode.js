@@ -1180,6 +1180,7 @@ class Html5QrcodeScanner {
             option.value = value;
             option.innerHTML = name;
             cameraSelectionSelect.appendChild(option);
+            cameraSelectionSelect.value = value;
         }
         cameraSelectionContainer.appendChild(cameraSelectionSelect);
         scpCameraScanRegion.appendChild(cameraSelectionContainer);
@@ -1236,7 +1237,7 @@ class Html5QrcodeScanner {
         });
 
         cameraActionStopButton.addEventListener('click', _ => {
-            console.log('stop function');
+            // console.log('stop function');
             cameraActionStopButton.disabled = true;
             $this.html5Qrcode.stop()
                 .then(_ => {

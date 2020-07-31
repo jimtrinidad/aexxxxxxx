@@ -67,7 +67,7 @@
 </div>
 
 <script type="text/javascript" src="<?php echo public_url(); ?>resources/libraries/qrcode.min.js"></script>
-<script type="text/javascript" src="<?php echo public_url(); ?>resources/libraries/html5-qrcode.js"></script>
+<script type="text/javascript" src="<?php echo public_url(); ?>resources/libraries/html5-qrcode.js?1"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 
