@@ -14,5 +14,5 @@ while (true) {
 	}
 
 	$i++;
-	sleep(60);
+	sleep(30);
 }
