@@ -12,23 +12,23 @@ class Account extends CI_Controller
     public function test() {
         // echo generate_mabuhay_id('De Guzman');
         // var_dump(lookup('function_type'));
-        // $data = array(
-        //     'from'  => array('info@mgov.ph', 'MGov Info'),
-        //     'to'    => array('jimtrinidad002@gmail.com'),
-        //     'subject'   => 'This another is a test ' . date('Y-m-d H:i:s'),
-        //     'message'   => 'This is a new <b>test</b> message from info smtp'
-        // );
-        // print_r($data);
-        // send_email($data, false);exit;
-(
+        $data = array(
+            'from'  => array('info@mgov.ph', 'MGov Info'),
+            'to'    => array('jimtrinidad002@gmail.com'),
+            'subject'   => 'This another is a test ' . date('Y-m-d H:i:s'),
+            'message'   => 'This is a new <b>test</b> message from info smtp'
+        );
+        print_r($data);
+        send_email($data, false);exit;
+
         // die(compute_expiration_date($this->uri->segment(3)));
 
-        $match = lookup_imported_items(array(
-            'FirstName' => 'gabino',
-            'LastName'  => 'adamos',
-            'MiddleName'=> 'reyes'
-        )));
-        var_dump($match);
+        // $match = lookup_imported_items(array(
+        //     'FirstName' => 'gabino',
+        //     'LastName'  => 'adamos',
+        //     'MiddleName'=> 'reyes'
+        // ));
+        // var_dump($match);
         exit;
 
         $accountData = $this->mgovdb->getRowObject('UserAccountInformation', 66, 'id');
