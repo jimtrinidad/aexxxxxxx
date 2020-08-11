@@ -149,7 +149,7 @@ function paginate($config)
 * @param smtp config to use
 *
 */
-function send_email($emailParams, $background = true, $smtpConfig = 'info')
+function send_email($emailParams, $background = true, $smtpConfig = 'info', $debug = false)
 {
 	$ci =& get_instance();
 
@@ -174,7 +174,9 @@ function send_email($emailParams, $background = true, $smtpConfig = 'info')
 
 		$ci->email->send(!$background);
 
-		// var_dump($ci->email->print_debugger());
+		if ($debug) {
+			var_dump($ci->email->print_debugger());
+		}
 	}
 }
 

@@ -19,7 +19,7 @@ class Account extends CI_Controller
             'message'   => 'This is a new <b>test</b> message from info smtp'
         );
         print_r($data);
-        send_email($data, false);exit;
+        send_email($data, false, 'info', true);exit;
 
         // die(compute_expiration_date($this->uri->segment(3)));
 
