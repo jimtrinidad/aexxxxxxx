@@ -1,5 +1,5 @@
 <?php
-ini_set('memory_limit', '-1');
+// ini_set('memory_limit', 100);
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Statistics extends CI_Controller
@@ -95,7 +95,8 @@ class Statistics extends CI_Controller
 
             $return_data = array(
                 'status'    => true,
-                'data'      => $proviceData
+                'data'      => $proviceData,
+                'service'   => $this->total_services()
             );
 
         } else {
@@ -152,6 +153,81 @@ class Statistics extends CI_Controller
 
     }
 
+    private function total_services($params = array())
+    {
+        $summary = array();
+        $sub_group = array(
+            'today' => ' AND DATE(DateAdded) = DATE(NOW()) ',
+            'week'  => ' AND YEARWEEK(DateAdded) = YEARWEEK(NOW()) ',
+            'month' => ' AND DATE(DateAdded) >= DATE_FORMAT(NOW(), "%Y-%m-01") ',
+            'year'  => ' AND YEAR(DateAdded) = YEAR(NOW()) ',
+            'all'   => ''
+        );
+        foreach (lookup('service_categories') as $k => $v) {
+            $grouping = array();
+            $group_total = array();
+            foreach ($sub_group as $group => $subQ) {
+                
+                $andQuery  = '';
+                $sqlParams = array(
+                                    $k, 
+                                    get_post('provinceCode')
+                            );
+
+                if (get_post('citymunCode')) {
+                    $andQuery .= ' AND sa.MunicipalityCityID = ? ';
+                    $sqlParams[] = get_post('citymunCode');
+                }
+
+                $sql = "SELECT ss.id, ServiceID, ss.Name ServiceName,COUNT(*) as Total
+                                FROM Service_Applications sa
+                                JOIN Service_Services ss ON sa.ServiceID = ss.id
+                                WHERE ss.CategoryID = ?
+                                AND sa.ProvincialID = ?
+                                {$subQ}
+                                {$andQuery}
+                                GROUP BY ss.id";
+
+                // $grouping[$group] = $sql;
+                $result   = $this->db->query($sql, $sqlParams)->result_array();
+                foreach ($result as $r) {
+                    // $grouping[$r['ServiceName']][$group] = $r['Total'];
+                    if (!isset($grouping[$r['ServiceID']])) {
+                        $grouping[$r['ServiceID']] = array(
+                            'id'    => $r['ServiceID'],
+                            'name'  => $r['ServiceName']
+                        );
+                    }
+                    $grouping[$r['ServiceID']][$group] = $r['Total'];
+                }
+            }
+
+            // PROVIDE DEFAULT DATA
+            foreach ($grouping as $sid => $g) {
+                foreach ($sub_group as $sg => $sv) {
+                    if (!isset($grouping[$sid][$sg])) {
+                        $grouping[$sid][$sg] = 0;
+                    }
+                    if (!isset($group_total[$sg])) {
+                        $group_total[$sg] = 0;
+                    }
+                    $group_total[$sg] += $grouping[$sid][$sg];
+                }
+            }
+
+            if (array_sum($group_total)) {
+                $summary[] = array(
+                        'category'      => $v,
+                        'category_id'   => $k,
+                        'groups'        => $grouping,
+                        'total'         => $group_total
+                    );
+            }
+        }
+
+        return $summary;
+    }
+
 
     public function service_summary()
     {
@@ -184,7 +260,7 @@ class Statistics extends CI_Controller
             $datefrom  = $daterange[0] . ' 00:00:00';
             $dateto    = $daterange[1] . ' 23:59:59';
 
-            if ($category == 'null') {
+            if (!$category) {
                 $categoryQuery = '(CategoryID = 0 OR CategoryID IS NULL)';
             } else {
                 $categoryQuery = 'CategoryID = ' . (int) $category;
@@ -218,7 +294,7 @@ class Statistics extends CI_Controller
             $breakdown      = $this->breakdown_transaction($applications);
 
             $proviceData    = array(
-                'name'  => $category == 'null' ? 'Uncategorized' : lookup('service_categories', $category),
+                'name'  => $category == false ? 'Uncategorized' : lookup('service_categories', $category),
                 'code'  => $category,
                 'logo'  => '',
                 'services'  => count($services),

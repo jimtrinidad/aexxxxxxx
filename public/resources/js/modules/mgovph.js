@@ -915,12 +915,43 @@ function Mgovph() {
     */
     this.get_gov_province_performance_report = function(obj)
     {
-        $('#gov_performance_report_cont').LoadingOverlay('show');
+        $('#reports-cont').LoadingOverlay('show');
         var target = '#gov_report_province_selector';
         $.get(window.public_url('statistics/get_province_transactions'), {'provinceCode' : $(obj).val()}).done(function(response) {
             if (response.status) {
+
+                $('#service_total_report_cont').find('.sub_title').text(response.data.name);
+
+                var rows = '';
+                $.each(response.service, function(x, sData) {
+                    rows += '<tr class="treegrid-cat' + sData.category_id + '">';
+                            rows += '<td class="text-green text-bold">' + sData.category + '</td>';
+                            rows += '<td class="text-green text-bold">' + sData.total.today + '</td>';
+                            rows += '<td class="text-green text-bold">' + sData.total.week + '</td>';
+                            rows += '<td class="text-green text-bold">' + sData.total.month + '</td>';
+                            rows += '<td class="text-green text-bold">' + sData.total.year + '</td>';
+                            rows += '<td class="text-green text-bold">' + sData.total.all + '</td>';
+                        rows += '</tr>';
+
+                    $.each(sData.groups, function(i, cData){
+                        rows += '<tr class="treegrid-service-' + cData.id + ' treegrid-parent-cat' + sData.category_id + '">';
+                            rows += '<td class="text-cyan">' + cData.name + '</td>';
+                            rows += '<td>' + cData.today + '</td>';
+                            rows += '<td>' + cData.week + '</td>';
+                            rows += '<td>' + cData.month + '</td>';
+                            rows += '<td>' + cData.year + '</td>';
+                            rows += '<td>' + cData.all + '</td>';
+                        rows += '</tr>';
+                    });
+                });
+
+                $('#service_total_report_cont').find('table tbody').html(rows);
+                $('#service_total_report_cont').find('table').treegrid({
+                    initialState: 'collapsed'
+                });
+
                 var pData = response.data;
-                var rows = '<tr class="treegrid-' + pData.code + '">';
+                rows = '<tr class="treegrid-' + pData.code + '">';
                         rows += '<td class="text-green text-bold">' + pData.name + '</td>';
                         rows += '<td>' + pData.services + '</td>';
                         rows += '<td>' + pData.counts.transactions + '</td>';
@@ -959,7 +990,7 @@ function Mgovph() {
                     initialState: 'expanded'
                 });
             }
-            $('#gov_performance_report_cont').LoadingOverlay('hide');
+            $('#reports-cont').LoadingOverlay('hide');
         });
     }
 

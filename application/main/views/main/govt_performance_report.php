@@ -19,22 +19,45 @@
 		</div>
 	</div>
 </div>
-<!-- Government Table Report -->
-<div class="table-report table-responsive bg-white padding-10" id="gov_performance_report_cont">
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Province</th>
-				<th>Services</th>
-				<th>Transactions</th>
-				<th>Processed</th>
-				<th>Approved</th>
-				<th>Denied</th>
-				<th>Pending</th>
-			</tr>
-		</thead>
-		<tbody></tbody>
-	</table>
+<br>
+
+<div id="reports-cont">
+	<!-- Government Table Report -->
+	<div class="table-report table-responsive bg-white padding-10" id="service_total_report_cont">
+		<h2 class="text-center text-bold text-cyan"><span class="sub_title"></span> TOTAL TRANSACTIONS</h2>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Services</th>
+					<th>Today</th>
+					<th>This Week</th>
+					<th>This Month</th>
+					<th>This Year</th>
+					<th>All Time</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+	</div>
+	<br><br>
+	<!-- Government Table Report -->
+	<div class="table-report table-responsive bg-white padding-10" id="gov_performance_report_cont">
+		<h2 class="text-center text-bold text-cyan">REALTIME TRANSASCTION PROCESSING</h2>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Province</th>
+					<th>Services</th>
+					<th>Transactions</th>
+					<th>Processed</th>
+					<th>Approved</th>
+					<th>Denied</th>
+					<th>Pending</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+	</div>
 </div>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treegrid/0.2.0/css/jquery.treegrid.min.css" />
