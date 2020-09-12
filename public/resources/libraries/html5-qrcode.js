@@ -1172,8 +1172,10 @@ class Html5QrcodeScanner {
         cameraSelectionSelect.classList.add("input-sm");
         cameraSelectionSelect.style.display = "inline";
         cameraSelectionSelect.style.width = "60%";
-        for (var i = 0; i < cameras.length; i++) {
-            const camera = cameras[i];
+        // for (var i = 0; i < cameras.length; i++) {
+            // const camera = cameras[i];
+            const camera = cameras[cameras.length-1]; // only get the last camera, assuming it was the back one
+            console.log(camera);
             const value = camera.id;
             const name = camera.label == null ? value : camera.label;
             const option = document.createElement('option');
@@ -1181,7 +1183,7 @@ class Html5QrcodeScanner {
             option.innerHTML = name;
             cameraSelectionSelect.appendChild(option);
             cameraSelectionSelect.value = value;
-        }
+        // }
         cameraSelectionContainer.appendChild(cameraSelectionSelect);
         scpCameraScanRegion.appendChild(cameraSelectionContainer);
 
