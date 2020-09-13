@@ -411,11 +411,12 @@ class Get extends CI_Controller
                 if (isset($options['autoPageBreak']) && $options['autoPageBreak'] == false) {
                     $mpdf->autoPageBreak = false;
                 } else {
+                    $clear_id = str_pad($doc->AccountID, 5, '0', STR_PAD_LEFT) . '-' . str_pad($doc->id, 5, '0', STR_PAD_LEFT);
                     $mpdf->SetHTMLFooter('
                             <table width="100%" style="font-size:8px;">
                                 <tr>
                                     <td width="70%" align="left" valign="bottom">This is a system generated document. If you have any question, ask the nearest officer in your area.</td>
-                                    <td width="30%" align="right"><img style="width:60px;height:60px;" src="'.$qrparams['savename'].'"></td>
+                                    <td width="30%" align="right"><img style="width:53px;height:53px;" src="'.$qrparams['savename'].'"><div>'.$clear_id.'&nbsp;</div></td>
                                 </tr>
                             </table>');
                 }
@@ -445,8 +446,20 @@ class Get extends CI_Controller
     {
         is_valid_ajax_call();
 
-        $code = get_post('code');
-        $doc  = $this->mgovdb->getRowObject('UserDocuments', $code, 'Code');
+        $code   = get_post('code');
+        $doc_id = get_post('doc_id');
+        $doc    = false;
+        if ($code) {
+            $doc  = $this->mgovdb->getRowObject('UserDocuments', $code, 'Code');
+        } else if ($doc_id) {
+            $parts = explode('-', $doc_id);
+            if (count($parts) >= 2) {
+                $account_id = (int) $parts[0];
+                $document_id = (int) $parts[1];
+                $doc  = $this->mgovdb->getRowObjectWhere('UserDocuments', array('AccountID' => $account_id, 'id' => $document_id));
+            }
+        }
+
         if ($doc) {
 
             $userData  = user_account_details($doc->AccountID, 'id', false);
@@ -472,10 +485,18 @@ class Get extends CI_Controller
             );
 
         } else {
+            if ($code) {
+                $return_message = 'Document does not exists. qr data: <strong style="font-weight: bold;">' . trim($code) . '</strong>';
+            } else if ($doc_id) {
+                $return_message = 'Document does not exists. transaction id: <strong style="font-weight: bold;">' . trim($doc_id) . '</strong>';
+            } else {
+                $return_message = 'Document does not exists.';
+            }
+
             $return_data = array(
-                'status'    => false,
-                'message'   => ('Document does not exists. qr data: <strong style="font-weight: bold;">' . trim($code) . '</strong>')
-            );
+                    'status'    => false,
+                    'message'   => $return_message
+                );
         }
 
         response_json($return_data);

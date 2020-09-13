@@ -7,6 +7,14 @@
 				</div>
 				<div class="modal-body" id="modal-body">
 					<div id="qr-reader"></div>
+					<hr>
+					<label class="control-label text-bold" for="search_doc_id">Or enter transaction number.</label>
+					<div class="input-group">
+					   <input type="text" id="search_doc_id" name="search_doc_id" class="form-control">
+					   <span class="input-group-btn">
+					        <button class="btn btn-primary" id="search_doc_btn" type="button">Verify</button>
+					   </span>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<div class="pull-right">
@@ -143,65 +151,54 @@
 			html5QrcodeScanner.clear();
 		});
 
-		// const html5QrCode = new Html5Qrcode("qr-reader");
 
-  //       $('#verifyDocModal').on('show.bs.modal', function (e) {
-  //       	// $('#verifyDocModal').LoadingOverlay('show');
-  //       }).on('shown.bs.modal', function (e) {
-  //           // This method will trigger user permissions
-  //           Html5Qrcode.getCameras().then(devices => {
-  //             /**
-  //              * devices would be an array of objects of type:
-  //              * { id: "id", label: "label" }
-  //              */
-  //               console.log(devices);
-  //             if (devices && devices.length) {
+		$('#search_doc_btn').click(function(){
+			var doc_id = $('#search_doc_id').val();
+			if (doc_id != '') {
+				if (!requesting) {
+					requesting = true;
 
-  //               var camera      = devices[0];
-  //               var cameraID    = camera.id
-  //               var cameraLabel = camera.label;
-  //               // .. use this to start scanning.
-
-  //               html5QrCode.start(
-  //                 cameraID,     // retreived in the previous step.
-  //                 {
-  //                   fps: 10,    // sets the framerate to 10 frame per second
-  //                   qrbox: 250  // sets only 250 X 250 region of viewfinder to
-  //                               // scannable, rest shaded.
-  //                 },
-  //                 qrCodeMessage => {
-  //                   // do something when code is read. For example:
-  //                   console.log(`QR Code detected: ${qrCodeMessage}`);
-  //                 },
-  //                 errorMessage => {
-  //                   // parse error, ideally ignore it. For example:
-  //                   // console.log(`QR Code no longer in front of camera.`);
-  //                 })
-  //               .catch(err => {
-  //                 // Start failed, handle it. For example,
-  //                 console.log(`Unable to start scanning, error: ${err}`);
-  //               });
-
-  //               // $('#verifyDocModal').LoadingOverlay('hide');
-
-  //             }
-
-  //           }).catch(err => {
-  //             bootbox.alert('Unable to find camera to use for scanning.')
-  //           });
-
-  //       }).on('hide.bs.modal', function (e) {
-  //           console.log('close');
-  //           html5QrCode.stop().then(ignore => {
-  //             // QR Code scanning is stopped.
-  //             console.log("QR Code scanning stopped.");
-  //             html5QrCode.clear();
-  //           }).catch(err => {
-  //             // Stop failed, handle it.
-  //             console.log("Unable to stop scanning." + err);
-  //           });
-
-  //           $('#verifyDocModal #qr-reader').html()
-  //       });
+					$('body').LoadingOverlay('show');
+			        $.ajax({
+			            url: window.public_url('get/document_qr_scan'),
+			            type: 'GET',
+			            data: jQuery.param({
+			            	doc_id: doc_id
+			            }),
+			            success: function (response) {
+			                // console.log(response);
+			                if (response.status) {
+			                	d = response.data;
+			                	$('#verifiedDocumentModal').find('.verified-photo').prop('src', d.photo);
+			                	$('#verifiedDocumentModal').find('.verified-name').text(d.mid + ' - ' + d.name);
+			                	$('#verifiedDocumentModal').find('.verified-email').text(d.email);
+			                	$('#verifiedDocumentModal').find('.verified-contact').text(d.contact);
+			                	$('#verifiedDocumentModal').find('.verified-docname').text(d.docname);
+			                	$('#verifiedDocumentModal').find('.verified-date').text(d.date);
+			                	$('#verifiedDocumentModal').find('.verified-expiration').text(d.expire);
+			                	$('#verifiedDocumentModal').find('.verified-document_link').prop('href',window.public_url('get/document/' + d.doccode + '/' + d.id));
+			                	$('#verifiedDocumentModal').modal({
+			                		backdrop : 'static',
+		            				keyboard : false
+			                	});
+			                    $('#verifyDocModal').modal('hide');
+			                } else {
+			                	bootbox.alert({
+									size: 'medium',
+									message: response.message
+								});
+			                }
+			            },
+			            complete: function() {
+			                $('body').LoadingOverlay('hide');
+			                requesting = false;
+			            },
+			            cache: false,
+			            contentType: false,
+			            processData: false
+			        });
+				}
+			}
+		});
 	})
 </script>
