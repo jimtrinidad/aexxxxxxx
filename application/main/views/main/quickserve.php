@@ -37,7 +37,8 @@
           </div>
           <div class="col-md-2">
             <label class="text-white text-bold padding-bottom-5">Date Applied</label>
-            <input type="text" name="date" class="datepicker form-control input-sm" value="<?php echo get_post('date')?>">
+            <!-- <input type="text" name="date" class="datepicker form-control input-sm" value="<?php echo get_post('date')?>"> -->
+            <input type="text" name="date" class="form-control daterangeinput input-sm" value="<?php echo $date ?? ''; ?>">
           </div>
           <div class="col-md-2">
             <label class="text-white text-bold padding-bottom-5">Transaction #</label>
@@ -51,7 +52,7 @@
             <label class="text-white text-bold padding-bottom-5">Status</label>
             <select class="form-control input-sm" name="status">
               <option value="" <?php echo get_post('status') == '' ? 'selected="selected"' : ''?>></option>
-              <option value="0" <?php echo get_post('status') == '0' || get_post('status') === null ? 'selected="selected"' : ''?>>New</option>
+              <option value="0" <?php echo get_post('status') == '0' || get_post('status') === null ? 'selected="selected"' : ''?>>Pending</option>
               <option value="1" <?php echo get_post('status') == '1' ? 'selected="selected"' : ''?>>Processing</option>
               <option value="2" <?php echo get_post('status') == '2' ? 'selected="selected"' : ''?>>Completed</option>
             </select>
@@ -187,14 +188,45 @@
 <?php view('modals/quickserve') ?>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/autosize.js/4.0.2/autosize.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.min.css" />
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.min.css" /> -->
 
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.3/daterangepicker.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.3/daterangepicker.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.daterangeinput').daterangepicker({
+      maxDate: moment(),
+      autoApply: true,
+      autoUpdateInput: false,
+      locale: {
+          format: 'YYYY-MM-DD'
+        },
+        opens: "left",
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+            'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+        }
+    }).on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+    }).on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('');
+    });
+
+  });
+</script>
 
 <script type="text/javascript">
   $(document).ready(function(){
     Quickserve.items = <?php echo json_encode($items, JSON_HEX_TAG);?>;
-    $('.datepicker').datepicker();
+    // $('.datepicker').datepicker();
   });
 </script>
 <style type="text/css">

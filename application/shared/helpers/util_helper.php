@@ -202,9 +202,14 @@ function time_ago($from, $until = 'now', $format = 'string')
             $str .= '%dd, ';
         }
         if ($diff['h']) {
-            $str .= '%hh, ';
+            $str .= '%hh and ';
         }
-        $str .= '%imin';
+
+        if ($str == '' && $diff['i'] == 0) {
+            $str .= '%s seconds';
+        } else {
+            $str .= '%imin';
+        }
 
         return $interval->format($str);
     }

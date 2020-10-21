@@ -30,6 +30,12 @@ class Quickserve extends CI_Controller
             'sfo.AccountID = ' . current_user()
         );
 
+        if (get_post('date')) {
+            $date = get_post('date');
+        } else {
+            $date = date('Y-m-d') . ' - ' . date('Y-m-d');
+        }
+
         if (get_post('mabuhayID')) {
             $where[] = 'uai.MabuhayID = ?';
             $params[] = get_post('mabuhayID');
@@ -42,11 +48,13 @@ class Quickserve extends CI_Controller
             $where[] = 'saf.Status = ?';
             $params[] = (int) get_post('status');
         }
-        if (get_post('date')) {
+        if (trim($date) != '') {
+            $daterange = explode(' - ', $date);
+            $datefrom  = $daterange[0];
+            $dateto    = $daterange[1];
             $where[] = '(saf.DateAdded BETWEEN ? AND ?)';
-            $date = date('Y-m-d', strtotime(get_post('date')));
-            $params[] = $date . ' 00:00:00';
-            $params[] = $date . ' 23:59:59';
+            $params[] = date('Y-m-d 00:00:00', strtotime($datefrom));
+            $params[] = date('Y-m-d 00:00:00', strtotime($dateto));
         }
         if (get_post('service')) {
             $where[] = "(ss.Name LIKE ? OR ss.Description LIKE ? OR ss.Code LIKE ?)";
@@ -128,6 +136,7 @@ class Quickserve extends CI_Controller
 
         // print_data($items);
 
+        $viewData['date']  = $date;
         $viewData['items'] = $items;
 
         view('main/quickserve', $viewData, 'templates/mgov');
@@ -149,6 +158,12 @@ class Quickserve extends CI_Controller
         $params = array();
         $where  = array();
 
+        if (get_post('date')) {
+            $date = get_post('date');
+        } else {
+            $date = date('Y-m-d') . ' - ' . date('Y-m-d');
+        }
+
         if (get_post('mabuhayID')) {
             $where[] = 'uai.MabuhayID = ?';
             $params[] = get_post('mabuhayID');
@@ -163,11 +178,13 @@ class Quickserve extends CI_Controller
         } else {
             $_POST['status'] = '';
         }
-        if (get_post('date')) {
+        if (trim($date) != '') {
+            $daterange = explode(' - ', $date);
+            $datefrom  = $daterange[0];
+            $dateto    = $daterange[1];
             $where[] = '(saf.DateAdded BETWEEN ? AND ?)';
-            $date = date('Y-m-d', strtotime(get_post('date')));
-            $params[] = $date . ' 00:00:00';
-            $params[] = $date . ' 23:59:59';
+            $params[] = date('Y-m-d 00:00:00', strtotime($datefrom));
+            $params[] = date('Y-m-d 00:00:00', strtotime($dateto));
         }
         if (get_post('service')) {
             $where[] = "(ss.Name LIKE ? OR ss.Description LIKE ? OR ss.Code LIKE ?)";
@@ -196,7 +213,7 @@ class Quickserve extends CI_Controller
 
             // completed function
             if ($item['safStatus'] >= 2) {
-                $item['duration']           = time_ago($item['StartedTime'], $item['EndedTime']);
+                $item['duration']           = 'completed after ' . time_ago($item['StartedTime'], $item['EndedTime']);
             } else {
                 $item['duration']           = time_ago($item['StartedTime']);    
             }
@@ -240,6 +257,7 @@ class Quickserve extends CI_Controller
 
         // print_data($items, true);
 
+        $viewData['date']  = $date;
         $viewData['items'] = $items;
 
         view('main/quickserve', $viewData, 'templates/mgov');
