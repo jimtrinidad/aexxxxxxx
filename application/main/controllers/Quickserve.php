@@ -30,10 +30,11 @@ class Quickserve extends CI_Controller
             'sfo.AccountID = ' . current_user()
         );
 
+        $date   = '';
         if (get_post('date')) {
             $date = get_post('date');
         } else {
-            $date = date('Y-m-d') . ' - ' . date('Y-m-d');
+            // $date = date('Y-m-d') . ' - ' . date('Y-m-d');
         }
 
         if (get_post('mabuhayID')) {
@@ -158,10 +159,11 @@ class Quickserve extends CI_Controller
         $params = array();
         $where  = array();
 
+        $date   = '';
         if (get_post('date')) {
             $date = get_post('date');
         } else {
-            $date = date('Y-m-d') . ' - ' . date('Y-m-d');
+            // $date = date('Y-m-d') . ' - ' . date('Y-m-d');
         }
 
         if (get_post('mabuhayID')) {
