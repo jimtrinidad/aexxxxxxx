@@ -31,8 +31,8 @@ class Quickserve extends CI_Controller
         );
 
         $date   = '';
-        if (get_post('date')) {
-            $date = get_post('date');
+        if (get_post('daterange')) {
+            $date = get_post('daterange');
         } else {
             // $date = date('Y-m-d') . ' - ' . date('Y-m-d');
         }
@@ -160,8 +160,8 @@ class Quickserve extends CI_Controller
         $where  = array();
 
         $date   = '';
-        if (get_post('date')) {
-            $date = get_post('date');
+        if (get_post('daterange')) {
+            $date = get_post('daterange');
         } else {
             // $date = date('Y-m-d') . ' - ' . date('Y-m-d');
         }

@@ -28,7 +28,7 @@
     </div>
     
     <!-- Form -->
-    <form method="">
+    <form method="post">
       <div class="form offset-top-10">
         <div class="row gutter-5">
           <div class="col-md-2">
@@ -38,7 +38,8 @@
           <div class="col-md-2">
             <label class="text-white text-bold padding-bottom-5">Date Applied</label>
             <!-- <input type="text" name="date" class="datepicker form-control input-sm" value="<?php echo get_post('date')?>"> -->
-            <input type="text" name="date" class="form-control daterangeinput input-sm" value="<?php echo $date ?? ''; ?>">
+            <input type="text" readonly="readonly" name="datepicker" class="form-control daterangeinput input-sm" value="<?php echo get_post('datepicker')?>">
+            <input type="hidden" id="daterange" name="daterange" value="<?php echo $date ?? ''; ?>">
           </div>
           <div class="col-md-2">
             <label class="text-white text-bold padding-bottom-5">Transaction #</label>
@@ -208,6 +209,9 @@
         ranges: {
             'Today': [moment(), moment()],
             'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'More Than 3 Days': ['2000-01-01', moment().subtract(3, 'days')],
+            'More Than 14 Days': ['2000-01-01', moment().subtract(14, 'days')],
+            'More Than 20 Days': ['2000-01-01', moment().subtract(20, 'days')],
             'Last 7 Days': [moment().subtract(6, 'days'), moment()],
             'Last 30 Days': [moment().subtract(29, 'days'), moment()],
             'This Month': [moment().startOf('month'), moment().endOf('month')],
@@ -215,7 +219,14 @@
             'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
         }
     }).on('apply.daterangepicker', function (ev, picker) {
-        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+      // console.log(picker);
+        if (picker.chosenLabel == 'Custom Range') {
+          $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+        } else {
+          $(this).val(picker.chosenLabel);
+        }
+        $('#daterange').val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+        
     }).on('cancel.daterangepicker', function (ev, picker) {
         $(this).val('');
     });
