@@ -163,16 +163,16 @@ function Utils() {
             var file = input.files[0];
             var ValidImageTypes = ["image/gif", "image/jpeg", "image/png"];
             if ($.inArray(file.type, ValidImageTypes) >= 0) {
-                if(file.size>2097152) {
-                    bootbox.alert('File size is larger than 2MB!');
-                    this.resetPreviewImageFile(input);
-                } else {
+                // if(file.size>2097152) {
+                //     bootbox.alert('File size is larger than 2MB!');
+                //     this.resetPreviewImageFile(input);
+                // } else {
                     var reader = new FileReader();
                     reader.onload = function(e) {
                         $(input).closest('.image-upload-container').find('img.image-preview').attr('src', e.target.result);
                     }
                     reader.readAsDataURL(input.files[0]);
-                }
+                // }
             } else {
                 bootbox.alert('Invalid file type.');
                 this.resetPreviewImageFile(input);
