@@ -75,7 +75,7 @@
 
                           <div class="col-md-4 col-xs-6">
                             <label class="text-white padding-bottom-5">Birth Date</label>
-                            <input type="text" autocomplete="off" id="BirthDate" name="BirthDate" class="form-control BirthDate" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask>
+                            <input type="date" autocomplete="off" id="BirthDate" name="BirthDate" class="form-control BirthDate">
                           </div>
 
                           <div class="col-md-4 col-xs-6">
@@ -112,7 +112,7 @@
 
                           <div class="col-md-4 col-xs-6">
                             <label class="text-white padding-bottom-5">Birth Date</label>
-                            <input type="text" autocomplete="off" id="BirthDate" name="BirthDate" class="form-control BirthDate" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask>
+                            <input type="date" autocomplete="off" id="BirthDate" name="BirthDate" class="form-control BirthDate">
                           </div>
 
                           <div class="col-md-4 col-xs-6">
