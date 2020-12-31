@@ -32,6 +32,7 @@
       ?>
     </div>
 
+    <?php if (count($banners) > 1) { ?>
     <!-- Controls -->
     <a class="left carousel-control" href="#carouselFade" role="button" data-slide="prev">
         <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
@@ -41,8 +42,18 @@
         <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
         <span class="sr-only">Next</span>
     </a>
+    <?php } ?>
 </div>
-<?php }} ?>
+<?php }} else { ?>
+<div id="carouselFade" class="carousel slide carousel-fade" data-ride="carousel" style="margin-top: -15px;">
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+          <div class="item active">
+            <img class="d-block w-100" src="<?php echo public_url(); ?>resources/images/default-banner.png">
+          </div>
+    </div>
+</div>
+<?php } ?>
 <!-- Banners end -->
 
 <!-- Primary Navigation -->
@@ -73,11 +84,15 @@
         <li><a href="<?php echo site_url('businesses'); ?>"><img src="<?php echo public_url(); ?>resources/images/negico.png" class="nav-icon"> My Negosyo</a></li>
       <?php //endif;?>
     <?php if (isset($accountInfo->OrganizationID) && $accountInfo->OrganizationID): ?>
-      <li><a href="<?php echo site_url('organization'); ?>"><img src="<?php echo public_url(); ?>resources/images/orgico.png" class="nav-icon"> My Organization</a></li>
-      <?php if (in_array($accountInfo->OrganizationID, lookup('coa_organizations')) && in_array($accountInfo->AccountTypeID, array(2,3,4))):?>
-      <li><a href="<?php echo site_url('coa/projects'); ?>"><img src="<?php echo public_url(); ?>resources/images/packico.png" class="nav-icon"> Projects</a></li>
-      <li><a href="<?php echo site_url('coa/procurement'); ?>"><img src="<?php echo public_url(); ?>resources/images/proc.png" class="nav-icon"><!-- <i class="fa fa-shopping-basket bg-cyan" aria-hidden="true"></i> --> Procurements</a></li>
-      <?php endif; ?>
+      <?php if (false && in_array($accountInfo->OrganizationID, lookup('collector_organizations'))) { ?>
+        <li><a href="<?php echo site_url('collections'); ?>"><img src="<?php echo public_url(); ?>resources/images/orgico.png" class="nav-icon"> Payments</a></li>
+      <?php } else { ?>
+        <li><a href="<?php echo site_url('organization'); ?>"><img src="<?php echo public_url(); ?>resources/images/orgico.png" class="nav-icon"> My Organization</a></li>
+        <?php if (in_array($accountInfo->OrganizationID, lookup('coa_organizations')) && in_array($accountInfo->AccountTypeID, array(2,3,4))):?>
+        <li><a href="<?php echo site_url('coa/projects'); ?>"><img src="<?php echo public_url(); ?>resources/images/packico.png" class="nav-icon"> Projects</a></li>
+        <li><a href="<?php echo site_url('coa/procurement'); ?>"><img src="<?php echo public_url(); ?>resources/images/proc.png" class="nav-icon"><!-- <i class="fa fa-shopping-basket bg-cyan" aria-hidden="true"></i> --> Procurements</a></li>
+        <?php endif; ?>
+      <?php } ?>
     <?php endif;?>
     <li><a href="<?php echo site_url('marketplace'); ?>"><img src="<?php echo public_url(); ?>resources/images/marketico.png" class="nav-icon"> Marketplace</a></li>
     <!-- <li><a href="<?php echo site_url('trabaho'); ?>"><i class="fa fa-graduation-cap bg-cyan" aria-hidden="true"></i> Profile</a></li> -->
