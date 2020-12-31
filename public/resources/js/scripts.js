@@ -48,5 +48,8 @@ $(document).ready(function(){
  		$(this).next('.child-row').show();
  	});
 
-
+    $('#privacy-policy-a').click(function(e){
+        e.preventDefault();
+        $('#privacyPolicyModal').modal({});
+    });
 });

@@ -260,6 +260,12 @@
                     
                   </div>
 
+                  <div class="row">
+                    <div class="col-xs-12 text-white">
+                      By signing up, you agree to the <a href="javascript:;" id="privacy-policy-a">terms and conditions and policy</a>
+                    </div>
+                  </div>
+
                 <div class="row padding-top-10">
                   <div class="col-xs-6" style="padding-right:1px;">
                     <a class="btn btn-sm btn-danger btn-block" href="<?php echo site_url('account/signin')?>" ><i class="fa fa-ban"></i> CANCEL</a>
@@ -301,7 +307,7 @@
 <!-- InputMask -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/bindings/inputmask.binding.min.js"></script>
-
+<script type="text/javascript" src="<?php echo public_url(); ?>resources/js/scripts.js?<?php echo time()?>"></script>
 <script type="text/javascript">
   $(document).ready(function(){
     $('#MunicipalityCityID').select2({
@@ -309,3 +315,5 @@
     });
   });
 </script>
+
+<?php view('modals/privacy-policy'); ?>

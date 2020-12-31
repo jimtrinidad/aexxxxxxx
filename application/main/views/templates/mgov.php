@@ -89,6 +89,8 @@
 	    	view('templates/mabuhay_id');	
 	    	view('snippets/chat');
 	    }
+
+	    view('modals/privacy-policy');	
 	    ?>
 
 	</body>
