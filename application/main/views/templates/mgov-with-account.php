@@ -98,6 +98,7 @@
 	    <?php view('templates/emergency_id'); ?>
 	    <?php view('snippets/chat'); ?>
 	    <?php view('modals/account-modals'); ?>
+	    <?php view('modals/privacy-policy'); ?>
 
 	</body>
 
