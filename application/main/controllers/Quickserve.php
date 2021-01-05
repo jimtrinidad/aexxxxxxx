@@ -55,7 +55,7 @@ class Quickserve extends CI_Controller
             $dateto    = $daterange[1];
             $where[] = '(saf.DateAdded BETWEEN ? AND ?)';
             $params[] = date('Y-m-d 00:00:00', strtotime($datefrom));
-            $params[] = date('Y-m-d 00:00:00', strtotime($dateto));
+            $params[] = date('Y-m-d 23:59:59', strtotime($dateto));
         }
         if (get_post('service')) {
             $where[] = "(ss.Name LIKE ? OR ss.Description LIKE ? OR ss.Code LIKE ?)";
@@ -186,7 +186,7 @@ class Quickserve extends CI_Controller
             $dateto    = $daterange[1];
             $where[] = '(saf.DateAdded BETWEEN ? AND ?)';
             $params[] = date('Y-m-d 00:00:00', strtotime($datefrom));
-            $params[] = date('Y-m-d 00:00:00', strtotime($dateto));
+            $params[] = date('Y-m-d 23:59:59', strtotime($dateto));
         }
         if (get_post('service')) {
             $where[] = "(ss.Name LIKE ? OR ss.Description LIKE ? OR ss.Code LIKE ?)";
