@@ -140,8 +140,10 @@ ul#horizontal, #horizontal ul  {
 
 .post-items .control-label {
 	white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /*overflow: hidden;
+    text-overflow: ellipsis;*/
+    /*scroll text*/
+    overflow: scroll;
 }
 
 .list-requirements .req-form{ color: #145598; font-size: 13px; font-weight: bold; }
