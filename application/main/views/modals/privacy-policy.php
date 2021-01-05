@@ -2,13 +2,13 @@
 	<div class="modal-dialog modal-lg" style="width: 90%;max-width: 1200px;height: auto;">
 		<style type="text/css">
     @page {  }
-    table { border-collapse:collapse; border-spacing:0; empty-cells:show }
-    td, th { vertical-align:top; font-size:12pt;}
-    h1, h2, h3, h4, h5, h6 { clear:both;}
-    ol, ul { margin:0; padding:0;}
-    li { list-style: none; margin:0; padding:0;}
+    #privacyPolicyModal table { border-collapse:collapse; border-spacing:0; empty-cells:show }
+    #privacyPolicyModal td, #privacyPolicyModal th { vertical-align:top; font-size:12pt;}
+    #privacyPolicyModal h1, #privacyPolicyModal h2, #privacyPolicyModal h3, #privacyPolicyModal h4, #privacyPolicyModal h5, #privacyPolicyModal h6 { clear:both;}
+    #privacyPolicyModal ol, #privacyPolicyModal ul { margin:0; padding:0;}
+    #privacyPolicyModal li { list-style: none; margin:0; padding:0;}
     /* "li span.odfLiEnd" - IE 7 issue*/
-    li span. { clear: both; line-height:0; width:0; height:0; margin:0; padding:0; }
+    #privacyPolicyModal li span. { clear: both; line-height:0; width:0; height:0; margin:0; padding:0; }
     span.footnodeNumber { padding-right:1em; }
     span.annotation_style_by_filter { font-size:95%; font-family:Arial; background-color:#fff000;  margin:0; border:0; padding:0;  }
     span.heading_numbering { margin-right: 0.8rem; }* { margin:0;}
