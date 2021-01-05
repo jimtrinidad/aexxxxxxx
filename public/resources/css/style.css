@@ -340,7 +340,7 @@ ul#horizontal, #horizontal ul  {
 @media (min-width: 768px) {
   #otherDataCont .dl-horizontal dt {
     float: left;
-    min-width: 160px;
+    min-width: 200px;
     overflow: hidden;
     clear: left;
     text-align: left;
