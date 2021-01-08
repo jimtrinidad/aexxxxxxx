@@ -58,7 +58,8 @@
 					<div class="padding-top-10 text-white">
 						<p class="lh-20">
 							<a class="btn btn-info text-bold open-mak-id" href="javascript:;">Mabuhay ID</a>
-							<a class="btn btn-warning text-bold open-emergency-id" href="javascript:;">Emergency ID</a>
+							<a class="btn btn-warning text-bold open-rc-id" href="javascript:;">Citizen ID</a>
+							<!-- <a class="btn btn-warning text-bold open-emergency-id" href="javascript:;">Emergency ID</a> -->
 						</p>
 					</div>
 					
@@ -95,7 +96,8 @@
 	    <!-- END FOOTER -->
 
 	    <?php view('templates/mabuhay_id'); ?>
-	    <?php view('templates/emergency_id'); ?>
+	    <?php view('templates/registered_citizen_id'); ?>
+	    <?php //view('templates/emergency_id'); ?>
 	    <?php view('snippets/chat'); ?>
 	    <?php view('modals/account-modals'); ?>
 	    <?php view('modals/privacy-policy'); ?>

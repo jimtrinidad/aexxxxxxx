@@ -10,6 +10,13 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: "Orbitron";
+    src: url('../fonts/Orbitron/static/Orbitron-SemiBold.ttf');
+    font-style: normal;
+}
+
+
 body { font-family: 'Open Sans', sans-serif; margin: 0px; padding: 0px; background: #101928 url('../images/bg.png') no-repeat; background-size: cover}
 html, body { height: 100%; margin: 0; font-size: 14px;}
 
@@ -505,6 +512,48 @@ ul#horizontal, #horizontal ul  {
 #emergency-id .mak-id-data p strong{ color: #171616; }
 
 #emergency-id .redx-box{position:absolute; bottom: 140px; right: 27px;text-align: right;}
+
+
+#rc-id{
+	background: url('../images/rc-id-bg.png'); 
+	background-size: 480px; 
+	background-repeat: no-repeat; 
+	width: 480px; 
+	height: 300px; 
+	position:fixed; 
+	z-index: 9999; 
+	left: 50%; 
+	top: 50%; 
+	margin-left: -240px; 
+	margin-top: -150px; 
+	-webkit-border-radius: 30px 30px 30px 30px; 
+	border-radius: 30px 30px 30px 30px; 
+	display: none;
+}
+
+/* Update This Section Style */
+#rc-id .left-logo{ position:absolute; top: 15px; left: 10px;}
+#rc-id .right-logo{ position:absolute; top: 15px; right: 28px; width: 50px; text-align:center; color: #12404a; font-size: 11px;}
+#rc-id .profile-photo{  width: 100px; position:absolute; top: 150px; right: 15px;}
+#rc-id .profile-photo img.avatar{}
+#rc-id .profile-photo .pre-label{ font-weight:bold; text-transform: uppercase; color: #01416d; font-size: 11px; font-family: arial;}
+#rc-id .profile-photo .prov-label{ font-weight:bold; text-transform: uppercase; color: #e1072b; font-size: 15px; font-family: arial;}
+#rc-id .qr-code{position:absolute; bottom: 25px; left: 20px;}
+#rc-id .rc-id-data{position:absolute; bottom: 40px; left: 105px; text-transform: uppercase;}
+#rc-id .rc-id-data p{ font-size: 12px; width: 260px; font-family: arial;}
+#rc-id .rc-id-data .main-data{ font-size: 18px; font-weight:bold; margin-bottom: 5px; display: inline-block; color: #12404a;}
+#rc-id .rc-id-data p strong{ color: #12404a; font-family: arial;}
+
+#rc-id .rc-id-main-data{position:absolute; top: 158px; left: 20px;}
+#rc-id .rc-id-main-data .main-data{font-size: 18px; font-weight:bold; margin-bottom: 5px; display: inline-block; color: #043c79;}
+#rc-id .rc-id-main-data .main-data span{ color: #c60218; }
+
+#rc-id .center-header-title { color: #fff; text-align: center; padding-top: 20px; }
+#rc-id .center-header-title h1, #rc-id .center-header-title h2, #rc-id .center-header-title h3{ text-transform: uppercase; font-weight: bold; font-family: arial;}
+#rc-id .center-header-title h1{ font-size: 18px;}
+#rc-id .center-header-title h2{ font-size: 14px;}
+#rc-id .center-header-title h3{ font-size: 18px; margin-top:  40px; font-family: 'Orbitron', sans-serif; letter-spacing: 2px;}
+
 
 /* line height */
 .lh-20{ line-height: 20px;}

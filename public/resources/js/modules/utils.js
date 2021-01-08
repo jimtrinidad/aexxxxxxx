@@ -65,9 +65,15 @@ function Utils() {
         });
 
 
-        $('.open-emergency-id').click(function(){
+        // $('.open-emergency-id').click(function(){
+        //     $('.id-overlay').show();
+        //     $('#emergency-id').show();
+        // });
+
+        // registered citizen
+        $('.open-rc-id').click(function(){
             $('.id-overlay').show();
-            $('#emergency-id').show();
+            $('#rc-id').show();
         });
 
         $('.open-mak-id').click(function(){
@@ -79,6 +85,7 @@ function Utils() {
             $(this).hide();
             $('#mak-id').hide();
             $('#emergency-id').hide();
+            $('#rc-id').hide();
         });
 
         $("input, textarea").attr('autocomplete', 'off');
