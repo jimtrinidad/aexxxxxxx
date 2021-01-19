@@ -772,4 +772,15 @@ class Get extends CI_Controller
         }
     }
 
+    public function map()
+    {
+        $viewData = array(
+            'pageTitle'     => 'Maps',
+            'accountInfo'   => user_account_details(),
+            'fullwidth'     => true,
+            'nosidebar'     => true
+        );
+        view('main/map', $viewData);
+    }
+
 }
