@@ -407,6 +407,7 @@ ul#horizontal, #horizontal ul  {
 #mak-id .mak-id-data p strong{ color: #12404a; }
 */
 
+/*
 .id-overlay{background-color: rgba(0, 0, 0, 0.8); position:fixed; top: 0; width: 100%; height: 100%; z-index: 999; display: none;}
 #mak-id{background: url('../images/bg-id3.png'); background-size: 480px; background-repeat: no-repeat; width: 480px; height: 300px; position:fixed; z-index: 9999; left: 50%; top: 50%; margin-left: -240px; margin-top: -150px; 
 -webkit-border-radius: 30px 30px 30px 30px; border-radius: 30px 30px 30px 30px; display: none;}
@@ -452,7 +453,40 @@ ul#horizontal, #horizontal ul  {
 #mak-id .mak-id-data .main-data{position:absolute; bottom: 103px; left: 85px; font-size: 18px; font-weight:bold; margin-bottom: 5px; display: inline-block; color: #fff;font-family: monospace;}
 #mak-id .mak-id-data .sub-data{position:absolute; bottom: 68px; left: 15px; }
 #mak-id .mak-id-data p strong{ color: #fff; }
+*/
 
+.id-overlay{background-color: rgba(0, 0, 0, 0.8); position:fixed; width: 100%; height: 100%; z-index: 999; display: none;}
+#mak-id{background: url('../images/bg-id4.png'); background-size: 480px; background-repeat: no-repeat; width: 480px; height: 300px; position:fixed; z-index: 9999; left: 50%; top: 50%; margin-left: -240px; margin-top: -150px; 
+-webkit-border-radius: 30px 30px 30px 30px; border-radius: 30px 30px 30px 30px; display: none;}
+
+/* Update This Section Style */
+#mak-id .left-logo{ position:absolute; top: 15px; left: 20px;}
+#mak-id .right-logo{ position:absolute; top: 15px; right: 28px; width: 50px; text-align:center; color: #12404a; font-size: 11px;}
+#mak-id .profile-photo{  width: 100px; position:absolute; top: 120px; left: 15px;}
+#mak-id .watermark-profile-photo{width: 60px; position:absolute; top: 120px; left: 115px;}
+#mak-id .watermark-profile-photo img {
+    -webkit-filter: brightness(300%) grayscale(100%); /* Safari 6.0 - 9.0 */
+    filter: brightness(300%) grayscale(100%);
+}
+#mak-id .profile-photo .pre-label{ font-weight:bold; text-transform: uppercase; color: #000; font-size: 11px; font-family: arial;}
+#mak-id .profile-photo .prov-label{ font-weight:bold; text-transform: uppercase; color: #000; font-size: 10px; font-family: arial;}
+#mak-id .qr-code{position:absolute; bottom: 25px; right: 20px;}
+#mak-id .mak-id-data{position:absolute; top: 110px; left: 166px; }
+#mak-id .mak-id-data p{ font-size: 12px; width: 260px; font-family: arial; line-height:16px;}
+#mak-id .mak-id-data .main-data{ font-size: 18px; font-weight:bold; margin-bottom: 5px; display: inline-block; color: #000;}
+#mak-id .mak-id-data p strong{ color: #000; font-family: arial; text-transform: uppercase; font-size: 15px;}
+#mak-id .mak-id-address{ margin-top: 5px;}
+
+#mak-id .mak-id-main-data{position:absolute; top: 84px; left: 15px;}
+#mak-id .mak-id-main-data .main-data{font-size: 14px; font-weight:bold; margin-bottom: 5px; display: inline-block; color: #000;}
+#mak-id .mak-id-main-data .main-data span{ color: #c60218; }
+
+#mak-id .center-header-title { color: #000; text-align: center; padding-top: 20px; }
+#mak-id .center-header-title h1, #mak-id .center-header-title h2, #mak-id .center-header-title h3{ text-transform: uppercase; font-family: arial;}
+#mak-id .center-header-title h1{ font-size: 18px; font-weight: bold;}
+#mak-id .center-header-title h2{ font-size: 14px; }
+#mak-id .center-header-title h3{ font-size: 18px; margin-top:  0px; font-family: 'arial', sans-serif; letter-spacing: -1px; font-weight: bold;}
+/* Update This Section Style End */
 
 #emergency-id {
 	background: url('../images/emergencyidback.jpg'); 
