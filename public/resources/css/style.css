@@ -466,7 +466,7 @@ ul#horizontal, #horizontal ul  {
 #mak-id .watermark-profile-photo{width: 60px; position:absolute; top: 120px; left: 115px;}
 #mak-id .watermark-profile-photo img {
     -webkit-filter: brightness(150%) grayscale(100%); /* Safari 6.0 - 9.0 */
-    filter: brightness(300%) grayscale(100%);
+    filter: brightness(150%) grayscale(100%);
 }
 #mak-id .profile-photo .pre-label{ font-weight:bold; text-transform: uppercase; color: #000; font-size: 11px; font-family: arial;}
 #mak-id .profile-photo .prov-label{ font-weight:bold; text-transform: uppercase; color: #000; font-size: 10px; font-family: arial;}
