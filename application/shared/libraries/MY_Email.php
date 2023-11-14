@@ -234,7 +234,7 @@ class MY_Email extends CI_Email
         $this->subject('Email Test');
         $this->message('Testing the email.');
 
-        $this->send();
+        $this->send(true);
         var_dump($this->print_debugger());
 
         // $this->phpmailer_send();
