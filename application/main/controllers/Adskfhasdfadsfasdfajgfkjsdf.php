@@ -33,4 +33,9 @@ class Adskfhasdfadsfasdfajgfkjsdf extends CI_Controller
 	{
 		$this->email->retry_queue();
 	}
+
+	public function test()
+	{
+		$this->email->test();
+	}
 }

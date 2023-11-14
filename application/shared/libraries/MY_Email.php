@@ -10,6 +10,13 @@
  * @link    http://www.meau.com.br/
  * @license http://www.opensource.org/licenses/mit-license.html
  */
+
+// CI built-in email is not working anymore on current smtp server
+// use phpmailer instead
+require_once APPPATH.'third_party/phpmailer/Exception.php';
+require_once APPPATH.'third_party/phpmailer/PHPMailer.php';
+require_once APPPATH.'third_party/phpmailer/SMTP.php';
+
 class MY_Email extends CI_Email
 {
     // DB table
@@ -208,5 +215,58 @@ class MY_Email extends CI_Email
         $subject = $this->_prep_q_encoding($subject);
         $this->set_header('Subject', $subject);
         return $this;
+    }
+
+    public function test()
+    {
+        // $this->CI->load->config('email');
+        // $config = $this->CI->config->item('email');
+        // $this->initialize($config['info']);
+        // $this->from('info.mgov.ph', 'Your Name');
+        // $this->to('jimtrinidad002@gmail.com');
+        // $this->subject('Email Test');
+        // $this->message('Testing the email.');
+
+        // $this->send();
+        // var_dump($this->print_debugger());
+
+        $this->phpmailer_send();
+    }
+
+    public function phpmailer_send()
+    {
+
+        $this->CI->load->config('email');
+        $config = $this->CI->config->item('email');
+        $config = $config['info'];
+
+        try {
+            //Server settings
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+            $mail->isSMTP();                                            //Send using SMTP
+            $mail->Host       = $config['smtp_host'];                     //Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+            $mail->Username   = $config['smtp_user'];                     //SMTP username
+            $mail->Password   = $config['smtp_pass'];                               //SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+            $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+        
+            //Recipients
+            $mail->setFrom('information@mgov.net', 'Mailer');
+            $mail->addAddress('jimtrinidad002@gmail.com', 'Joe User');     //Add a recipient
+            $mail->addReplyTo('information@mgov.net', 'Information');
+        
+        
+            //Content
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->Subject = 'Here is the subject';
+            $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+        
+            $mail->send();
+            echo 'Message has been sent';
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
     }
 }
