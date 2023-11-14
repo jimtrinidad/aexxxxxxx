@@ -183,7 +183,7 @@ class MY_Email extends CI_Email
                 $status = 'failed';
             }
 
-            $this->print_debugger();
+            var_dump($this->print_debugger());
 
             $this->CI->db->where('id', $email->id);
 
