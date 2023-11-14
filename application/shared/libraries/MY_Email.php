@@ -13,6 +13,11 @@
 
 // CI built-in email is not working anymore on current smtp server
 // use phpmailer instead
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
 require_once APPPATH.'third_party/phpmailer/Exception.php';
 require_once APPPATH.'third_party/phpmailer/PHPMailer.php';
 require_once APPPATH.'third_party/phpmailer/SMTP.php';
