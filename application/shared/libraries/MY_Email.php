@@ -240,6 +240,8 @@ class MY_Email extends CI_Email
         $config = $this->CI->config->item('email');
         $config = $config['info'];
 
+        $mail = new PHPMailer(true);
+
         try {
             //Server settings
             $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
