@@ -325,7 +325,7 @@ $allowed_subdomains = array(
 	'localhost'
 );
 
-$host_parts = explode('.', strtolower($_SERVER['HTTP_HOST'] ?? 'localhost'));
+$host_parts = explode('.', strtolower($_SERVER['HTTP_HOST']));
 $sub_domain = $host_parts[0];
 if ($sub_domain == 'localhost') {
 	$subdomain = $sub_domain;
