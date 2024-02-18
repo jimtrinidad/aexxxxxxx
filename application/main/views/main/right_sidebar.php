@@ -31,15 +31,6 @@
   </div>
   <?php }} ?>
   <div class="col-md-12 top-gov-services offset-top-10 hide" id="trending-service-cont">
-    <h2>COVID-19 UPDATES</h2>
-    <!-- <iframe class="embed-responsive-item" src="https://who.maps.arcgis.com/apps/opsdashboard/index.html#/31ba38ba24924aaeb940f15b5e95a1e6" style="min-height: 500px;width: 100%"></iframe> -->
-    <div class="bingwidget" data-type="covid19_stats" data-location-id="/Philippines" data-market="en-us" data-language="en-us"></div>
-    <script src="//www.bing.com/widget/bootstrap.answer.js" async=""></script>
-  </div>
-  <div class="col-md-12 top-gov-services offset-top-10" id="trending-service-cont" style="padding: 1px;">
-    <a href="<?php echo site_url('cicc')?>"><img src="<?php echo public_url() . 'resources/images/cicc.jpg' ?>" style="width: 100%;height: auto;"></a>
-  </div>
-  <div class="col-md-12 top-gov-services offset-top-10 hide" id="trending-service-cont">
     <h2>Trending: TOP GOV SERVICES</h2>
     <ul id="trending-service-items">
     </ul>
