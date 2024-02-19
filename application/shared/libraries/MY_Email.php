@@ -18,7 +18,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-$main_tp_path = dirname(APPPATH) . 'main/';
+$main_tp_path = dirname(APPPATH) . '/main/';
 require_once $main_tp_path .'third_party/phpmailer/Exception.php';
 require_once $main_tp_path .'third_party/phpmailer/PHPMailer.php';
 require_once $main_tp_path .'third_party/phpmailer/SMTP.php';
