@@ -18,9 +18,10 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-require_once APPPATH.'third_party/phpmailer/Exception.php';
-require_once APPPATH.'third_party/phpmailer/PHPMailer.php';
-require_once APPPATH.'third_party/phpmailer/SMTP.php';
+$main_tp_path = dirname(APPPATH) . 'main/';
+require_once $main_tp_path .'third_party/phpmailer/Exception.php';
+require_once $main_tp_path .'third_party/phpmailer/PHPMailer.php';
+require_once $main_tp_path .'third_party/phpmailer/SMTP.php';
 
 class MY_Email extends CI_Email
 {
