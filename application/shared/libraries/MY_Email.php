@@ -230,7 +230,7 @@ class MY_Email extends CI_Email
         $this->CI->load->config('email');
         $config = $this->CI->config->item('email');
         $this->initialize($config['info']);
-        $this->from('info.mgov.ph', 'Your Name');
+        $this->from('info@mgov.cloud', 'MGov');
         $this->to('jimtrinidad002@gmail.com');
         $this->subject('Email Test');
         $this->message('Testing the email.');
