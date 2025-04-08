@@ -227,18 +227,18 @@ class MY_Email extends CI_Email
 
     public function test()
     {
-        $this->CI->load->config('email');
-        $config = $this->CI->config->item('email');
-        $this->initialize($config['info']);
-        $this->from('info@mgov.cloud', 'MGov');
-        $this->to('jimtrinidad002@gmail.com');
-        $this->subject('Email Test');
-        $this->message('Testing the email.');
+        // $this->CI->load->config('email');
+        // $config = $this->CI->config->item('email');
+        // $this->initialize($config['info']);
+        // $this->from('info@mgov.cloud', 'MGov');
+        // $this->to('jimtrinidad002@gmail.com');
+        // $this->subject('Email Test');
+        // $this->message('Testing the email.');
 
-        $this->send(true);
-        var_dump($this->print_debugger());
+        // $this->send(true);
+        // var_dump($this->print_debugger());
 
-        // $this->phpmailer_send();
+        $this->phpmailer_send();
     }
 
     public function phpmailer_send()
@@ -262,7 +262,7 @@ class MY_Email extends CI_Email
             $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
         
             //Recipients
-            $mail->setFrom('information@mgov.net', 'Mailer');
+            $mail->setFrom('info@mgov.cloud', 'MGov Test');
             $mail->addAddress('jimtrinidad002@gmail.com', 'Joe User');     //Add a recipient
             $mail->addReplyTo('information@mgov.net', 'Information');
         
