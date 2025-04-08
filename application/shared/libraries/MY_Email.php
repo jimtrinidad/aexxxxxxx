@@ -227,16 +227,17 @@ class MY_Email extends CI_Email
 
     public function test()
     {
-        // $this->CI->load->config('email');
-        // $config = $this->CI->config->item('email');
-        // $this->initialize($config['info']);
-        // $this->from('info@mgov.cloud', 'MGov');
-        // $this->to('jimtrinidad002@gmail.com');
-        // $this->subject('Email Test');
-        // $this->message('Testing the email.');
+        $this->CI->load->config('email');
+        $config = $this->CI->config->item('email');
+        $this->initialize($config['info']);
+        $this->set_newline("\r\n");
+        $this->from('information@mgov.net', 'MGov');
+        $this->to('jimtrinidad002@gmail.com');
+        $this->subject('Email Test');
+        $this->message('Testing the email.');
 
-        // $this->send(true);
-        // var_dump($this->print_debugger());
+        $this->send(true);
+        var_dump($this->print_debugger());
 
         $this->phpmailer_send();
     }
