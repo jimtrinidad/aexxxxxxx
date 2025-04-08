@@ -262,7 +262,7 @@ class MY_Email extends CI_Email
             $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
         
             //Recipients
-            $mail->setFrom('mail@mmgov.net', 'MGov Test');
+            $mail->setFrom('information@mgov.net', 'MGov Test');
             $mail->addAddress('jimtrinidad002@gmail.com', 'Joe User');     //Add a recipient
             $mail->addReplyTo('information@mgov.net', 'Information');
         
