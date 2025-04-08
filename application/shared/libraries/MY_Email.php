@@ -167,6 +167,9 @@ class MY_Email extends CI_Email
 
             $this->_headers = unserialize($email->headers);
 
+            // fixed to this verified email address
+            $this->from('information@mgov.net', 'MGov.ph');
+
             $this->to($recipients);
             $this->cc($cc);
             $this->bcc($bcc);
